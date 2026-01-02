@@ -16,9 +16,23 @@ _The “Instructions” section should mention all the needed prerequisites (sof
 tools, versions, configuration like .env setup, etc.), and step-by-step
 instructions to run the project._
 
+### Release build in container
+
+Tested with Docker TODO DOCKER VERSION
+
 - `cp .env.example .env` and edit `.env`
-- `docker compose build`
 - `docker compose up`
+
+### Development
+
+#### In ./www/
+
+Tested with Deno v2.6.3
+
+- `cp .env.example .env` and edit `.env`
+- `deno task dev`
+
+TODO DATABASE IN DEV ENVIRONMENT
 
 ## Resources
 
