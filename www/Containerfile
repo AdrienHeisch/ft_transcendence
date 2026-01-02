@@ -4,17 +4,26 @@ COPY deno.json .
 COPY deno.lock .
 RUN deno install
 COPY . .
-COPY .env.example .env
+RUN mv .env.example .env
+# --- TODO move checks to continuous integration
 RUN deno task prepare
-RUN deno fmt --check && deno check && deno task sv-check
+RUN deno fmt --check
+RUN deno check
+RUN deno task sv-check
+# ---
 RUN deno task build
 
 FROM denoland/deno:2.6.3
 WORKDIR /app
 RUN chown deno: /app
+COPY container-entrypoint.sh .
+RUN chown deno: container-entrypoint.sh
+ENTRYPOINT /app/container-entrypoint.sh
 USER deno
-COPY --from=builder /app/deno.json .
-COPY --from=builder /app/deno.lock .
+COPY deno.json .
+RUN sed -i '/nodeModulesDir/d' deno.json
+COPY deno.lock .
+COPY drizzle.config.ts .
+RUN deno install
 COPY --from=builder /app/.deno-deploy /app/.deno-deploy
-RUN deno cache .deno-deploy/server.ts
 CMD ["deno", "task", "run"]

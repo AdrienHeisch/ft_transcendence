@@ -21,7 +21,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "run": "deno run -A .deno-deploy/server.ts",
+    "run": "deno run -A --env-file=.env .deno-deploy/server.ts",
     "prepare": "svelte-kit sync || echo ''",
     "sv-check": "svelte-kit sync && svelte-check",
     "sv-check:watch": "svelte-kit sync && svelte-check --watch",

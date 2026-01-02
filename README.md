@@ -16,7 +16,9 @@ _The “Instructions” section should mention all the needed prerequisites (sof
 tools, versions, configuration like .env setup, etc.), and step-by-step
 instructions to run the project._
 
-_TODO_
+- `cp .env.example .env` and edit `.env`
+- `docker compose build`
+- `docker compose up`
 
 ## Resources
 
