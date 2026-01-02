@@ -1,6 +1,7 @@
 <script lang="ts">
   let showLogin = false;
   let isAdminMode = false;
+  let sidebarOpen = true;
 
   // Les bestiaux
   const animals = [
@@ -127,6 +128,12 @@
     <div class="container mx-auto px-4 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
+          <button 
+            onclick={() => sidebarOpen = !sidebarOpen}
+            class="md:hidden bg-amber-600 p-2 rounded hover:bg-amber-700 transition"
+          >
+            ☰
+          </button>
           <span class="text-4xl drop-shadow-md">🐄</span>
           <div>
             <h1 class="text-3xl font-bold" style="font-family: 'Georgia', serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">La Ferme à Bibi</h1>
@@ -157,6 +164,116 @@
       </div>
     </div>
   </header>
+
+  <!-- Layout avec sidebar -->
+  <div class="flex relative">
+    <!-- Bouton pour ouvrir la sidebar quand elle est fermée -->
+    {#if !sidebarOpen}
+      <button
+        onclick={() => sidebarOpen = true}
+        class="fixed left-0 top-1/2 -translate-y-1/2 bg-gradient-to-r from-amber-600 to-orange-700 text-white px-2 py-6 rounded-r-lg font-bold hover:from-amber-700 hover:to-orange-800 transition shadow-lg border-2 border-amber-800 z-40"
+        style="writing-mode: vertical-rl;"
+      >
+        ☰ MENU
+      </button>
+    {/if}
+
+    <!-- Sidebar gauche -->
+    <aside 
+      class="bg-gradient-to-b from-amber-100 to-amber-200 border-r-4 border-amber-700 shadow-xl transition-all duration-300 sticky top-[88px] h-[calc(100vh-88px)] overflow-y-auto"
+      class:hidden={!sidebarOpen}
+      class:block={sidebarOpen}
+      class:w-64={sidebarOpen}
+      style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a574' fill-opacity='0.1'%3E%3Cpath d='M0 0h20L0 20z'/%3E%3C/g%3E%3C/svg%3E&quot;);"
+    >
+      <div class="p-6">
+        <!-- Bouton toggle pour desktop -->
+        <div class="flex justify-end mb-4">
+          <button 
+            onclick={() => sidebarOpen = !sidebarOpen}
+            class="bg-amber-600 text-white px-3 py-1 rounded text-sm hover:bg-amber-700 transition"
+          >
+            ◀
+          </button>
+        </div>
+
+        <!-- Menu Navigation -->
+          <div class="mb-8">
+            <nav class="space-y-2">
+              <a href="#accueil" class="flex items-center gap-3 p-3 rounded hover:bg-amber-300 transition text-amber-900 font-semibold border-2 border-transparent hover:border-amber-600">
+                🏠 Accueil
+              </a>
+              <a href="#coup-de-coeur" class="flex items-center gap-3 p-3 rounded hover:bg-amber-300 transition text-amber-900 font-semibold border-2 border-transparent hover:border-amber-600">
+                ❤️coup de cœur 
+              </a>
+              <a href="#actualites" class="flex items-center gap-3 p-3 rounded hover:bg-amber-300 transition text-amber-900 font-semibold border-2 border-transparent hover:border-amber-600">
+                📰 Actualités
+              </a>
+              <a href="#adoption" class="flex items-center gap-3 p-3 rounded hover:bg-amber-300 transition text-amber-900 font-semibold border-2 border-transparent hover:border-amber-600">
+                💚 Adopter
+              </a>
+              <a href="#benevole" class="flex items-center gap-3 p-3 rounded hover:bg-amber-300 transition text-amber-900 font-semibold border-2 border-transparent hover:border-amber-600">
+                🤝 Bénévolat
+              </a>
+              <a href="#contact" class="flex items-center gap-3 p-3 rounded hover:bg-amber-300 transition text-amber-900 font-semibold border-2 border-transparent hover:border-amber-600">
+                📧 Contact
+              </a>
+            </nav>
+          </div>
+
+          <!-- Infos pratiques -->
+          <div class="mb-8 bg-white/50 rounded-lg p-4 border-2 border-amber-600">
+            <h3 class="text-lg font-bold text-amber-900 mb-3 flex items-center gap-2" style="font-family: 'Georgia', serif;">
+              📍 Infos Pratiques
+            </h3>
+            <div class="space-y-2 text-sm text-amber-900">
+              <p class="flex items-start gap-2">
+                <span>🕒</span>
+                <span><strong>Horaires:</strong><br/>Dim: 9h-10h</span>
+              </p>
+              <p class="flex items-start gap-2">
+                <span>📞</span>
+                <span>01 01 01 01 01</span>
+              </p>
+              <p class="flex items-start gap-2">
+                <span>📧</span>
+                <span>laferme@fermiere.fr</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Stats ferme -->
+          <div class="bg-gradient-to-br from-orange-100 to-amber-100 rounded-lg p-4 border-2 border-amber-700 shadow-md">
+            <h3 class="text-lg font-bold text-amber-900 mb-3 flex items-center gap-2" style="font-family: 'Georgia', serif;">
+              📊 La Ferme en chiffres
+            </h3>
+            <div class="space-y-3 text-sm">
+              <div class="flex justify-between items-center border-b border-amber-400 pb-2">
+                <span class="text-amber-800">🐄 Animaux accueillis</span>
+                <span class="font-bold text-amber-900">152</span>
+              </div>
+              <div class="flex justify-between items-center border-b border-amber-400 pb-2">
+                <span class="text-amber-800">💚 Adoptions</span>
+                <span class="font-bold text-amber-900">89</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-amber-800">👥 Bénévoles</span>
+                <span class="font-bold text-amber-900">24</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Appel à l'action -->
+          <div class="mt-6">
+            <button class="w-full bg-gradient-to-r from-rose-500 to-rose-600 text-white py-3 rounded-lg font-bold hover:from-rose-600 hover:to-rose-700 transition shadow-lg border-2 border-rose-800">
+              ❤️ Nous soutenir
+            </button>
+          </div>
+      </div>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main class="flex-1">
 
   <!-- Panneau de connexion -->
   {#if showLogin}
@@ -196,7 +313,7 @@
     </div>
   {/if}
 
-  <!-- Section Hero -->
+  <!-- Section-->
   <section
     class="bg-gradient-to-r from-orange-300 via-amber-200 to-yellow-200 text-amber-900 py-20"
   >
@@ -238,12 +355,11 @@
           class="bg-amber-50 rounded-lg shadow-xl hover:shadow-2xl transition overflow-hidden border-4 border-amber-700 transform hover:-translate-y-1"
           style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a574' fill-opacity='0.06'%3E%3Cpath d='M0 0h30L0 30z'/%3E%3C/g%3E%3C/svg%3E&quot;);"
         >
-          <!-- Badge style vintage -->
           <div class="bg-gradient-to-r from-amber-800 to-orange-900 text-center py-2 border-b-2 border-amber-900">
             <span class="text-amber-100 font-bold text-sm tracking-wider" style="font-family: 'Georgia', serif;">★ DISPONIBLE ★</span>
           </div>
 
-          <!-- Image de l'animal avec cadre bois -->
+          <!-- Image de l'animal -->
           <div class="p-4">
             <div
               class="bg-gradient-to-br from-orange-200 via-yellow-100 to-amber-200 h-48 flex items-center justify-center text-8xl rounded border-8 border-amber-800 shadow-inner"
@@ -253,7 +369,6 @@
             </div>
           </div>
 
-          <!-- Contenu de la carte style ancien -->
           <div class="px-4 pb-4">
             <div class="bg-amber-100 rounded p-3 border-2 border-amber-600 shadow-md mb-3">
               <div class="flex justify-between items-start mb-2">
@@ -266,8 +381,7 @@
               <p class="text-amber-800 text-sm mb-2">📅 {animal.age}</p>
               <p class="text-gray-800 text-sm leading-relaxed italic">"{animal.description}"</p>
             </div>
-
-            <!-- Actions style rustique -->
+        
             <div class="flex gap-2">
               <button
                 class="flex-1 bg-gradient-to-b from-rose-400 to-rose-600 text-white py-2 rounded font-bold hover:from-rose-500 hover:to-rose-700 transition shadow-md border-2 border-rose-800"
@@ -286,7 +400,7 @@
     </div>
   </section>
 
-  <!-- Section Actualités / Feed -->
+  <!-- Section Actualités-->
   <section class="bg-gradient-to-b from-yellow-50 to-amber-50 py-16">
     <div class="container mx-auto px-4">
       <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">
@@ -312,7 +426,7 @@
             <!-- Contenu du post -->
             <p class="text-gray-700 mb-3">{post.content}</p>
 
-            <!-- Actions Facebook-like -->
+            <!-- Facebook like -->
             <div
               class="flex items-center gap-4 pt-3 border-t border-amber-100 text-sm text-amber-700"
             >
@@ -332,11 +446,11 @@
     </div>
   </section>
 
-  <!-- Footer -->
+
   <footer class="bg-gradient-to-r from-amber-800 to-orange-900 text-amber-50 py-12">
     <div class="container mx-auto px-4">
       <div class="grid md:grid-cols-3 gap-8 mb-8">
-        <!-- A propos -->
+      
         <div>
           <h4 class="text-xl font-bold mb-4 flex items-center gap-2">
             <span class="text-2xl">🐾</span> Refuge de la ferme
@@ -388,4 +502,6 @@
       </div>
     </div>
   </footer>
+    </main>
+  </div>
 </div>
