@@ -1,0 +1,58 @@
+{
+  "unstable": [
+    "fmt-component"
+  ],
+  "permissions": {
+    "default": {}
+  },
+  "fmt": {},
+  "lint": {
+    "include": [
+      "src/**/*.{ts,js,svelte}"
+    ],
+    "rules": {
+      "tags": [
+        "recommended"
+      ]
+    }
+  },
+  "type": "module",
+  "tasks": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "run": "deno run -A .deno-deploy/server.ts",
+    "prepare": "svelte-kit sync || echo ''",
+    "sv-check": "svelte-kit sync && svelte-check",
+    "sv-check:watch": "svelte-kit sync && svelte-check --watch",
+    "db:start": "docker compose up",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "nodeModulesDir": "auto",
+  "imports": {
+    "@deno/svelte-adapter": "npm:@deno/svelte-adapter@^0.1.0",
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.6",
+    "@sveltejs/kit": "npm:@sveltejs/kit@^2.49.2",
+    "@sveltejs/vite-plugin-svelte": "npm:@sveltejs/vite-plugin-svelte@^6.2.1",
+    "svelte": "npm:svelte@^5.46.0",
+    "svelte-check": "npm:svelte-check@^4.3.5",
+    "vite": "npm:vite@^7.3.0",
+    "tailwindcss": "npm:tailwindcss@^4.1.17",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.17",
+    "postgres": "npm:postgres@^3.4.7",
+    "drizzle-kit": "npm:drizzle-kit@^0.31.8",
+    "drizzle-orm": "npm:drizzle-orm@^0.45.0",
+    "@oslojs/crypto": "npm:@oslojs/crypto@^1.0.1",
+    "@oslojs/encoding": "npm:@oslojs/encoding@^1.1.0",
+    "@node-rs/argon2": "npm:@node-rs/argon2@^2.0.2"
+  },
+  "exclude": [
+    "node_modules",
+    ".svelte-kit",
+    ".vite",
+    ".deno-deploy"
+  ]
+}

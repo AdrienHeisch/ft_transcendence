@@ -1,0 +1,33 @@
+name: ft-transcendence
+
+version: "3"
+services:
+  www:
+    image: ft-transcendence_www
+    build: ./www/
+    networks:
+      - www-db
+    environment:
+      DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
+    ports:
+      - "8000:8000"
+  db:
+    image: postgres
+    restart: always
+    networks:
+      - www-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: local
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
+
+networks:
+  www-db:
+    driver: bridge

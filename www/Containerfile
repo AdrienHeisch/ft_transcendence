@@ -1,0 +1,20 @@
+FROM denoland/deno:2.6.3 AS builder
+WORKDIR /app
+COPY deno.json .
+COPY deno.lock .
+RUN deno install
+COPY . .
+COPY .env.example .env
+RUN deno task prepare
+RUN deno fmt --check && deno check && deno task sv-check
+RUN deno task build
+
+FROM denoland/deno:2.6.3
+WORKDIR /app
+RUN chown deno: /app
+USER deno
+COPY --from=builder /app/deno.json .
+COPY --from=builder /app/deno.lock .
+COPY --from=builder /app/.deno-deploy /app/.deno-deploy
+RUN deno cache .deno-deploy/server.ts
+CMD ["deno", "task", "run"]
