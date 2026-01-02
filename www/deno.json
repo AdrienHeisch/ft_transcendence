@@ -8,11 +8,16 @@
   "fmt": {},
   "lint": {
     "include": [
-      "src/**/*.{ts,js,svelte}"
+      "./src/**/*.ts",
+      "./src/**/*.svelte"
     ],
     "rules": {
       "tags": [
         "recommended"
+      ],
+      "exclude": [
+        "no-sloppy-imports",
+        "no-empty-interface"
       ]
     }
   },
