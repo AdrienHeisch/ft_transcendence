@@ -7,6 +7,8 @@ services:
     build:
       context: ./www
       dockerfile: Containerfile
+    depends_on:
+      - db
     networks:
       - www-db
     environment:
