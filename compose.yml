@@ -1,10 +1,11 @@
 name: ft-transcendence
 
-version: "3"
 services:
   www:
     image: ft-transcendence_www
-    build: ./www/
+    build:
+      context: ./www/
+      dockerfile: Containerfile
     networks:
       - www-db
     environment:
