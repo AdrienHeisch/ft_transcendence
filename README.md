@@ -25,6 +25,8 @@ Tested with Docker TODO DOCKER VERSION
 
 ### Development
 
+`./install-hooks.sh` to get automatic formatting and checks
+
 #### In ./www/
 
 Tested with Deno v2.6.3
