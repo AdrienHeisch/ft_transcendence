@@ -7,10 +7,15 @@ services:
     build:
       context: ./www
       dockerfile: Containerfile
+    restart: always
     depends_on:
       - db
+      - storage
     networks:
-      - www-db
+      - db
+      - storage
+    volumes:
+      - api-keys:/tmp/api-keys
     environment:
       DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
     ports:
@@ -19,7 +24,7 @@ services:
     image: postgres:18
     restart: always
     networks:
-      - www-db
+      - db
     ports:
       - 5432:5432
     environment:
@@ -27,11 +32,35 @@ services:
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: local
     volumes:
-      - pgdata:/var/lib/postgresql
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+  storage:
+    image: ft-transcendence_garage
+    build:
+      context: ./garage
+      dockerfile: Containerfile
+    restart: always
+    networks:
+      - storage
+    ports:
+      - 3900:3900
+    volumes:
+      - ./garage/config.toml:/etc/garage.toml:ro
+      - storage-meta:/var/lib/garage/meta
+      - storage-data:/var/lib/garage/data
+      - api-keys:/tmp/api-keys
+    healthcheck:
+      test: ["CMD", "garage", "status"]
 
 volumes:
-  pgdata:
+  db-data:
+  storage-meta:
+  storage-data:
+  api-keys:
 
 networks:
-  www-db:
+  db:
+    driver: bridge
+  storage:
     driver: bridge
