@@ -13,6 +13,10 @@ s3_region = "garage"
 api_bind_addr = "[::]:3900"
 root_domain = ".s3.garage"
 
+[s3_web]
+bind_addr = "[::]:3902"
+root_domain = ".web.garage"
+
 [admin]
 api_bind_addr = "[::]:3902"
 admin_token = "z1jIUG2o7+x2u6jz9ldPVrzi1Hxqop+HvpjSjizHfK8="

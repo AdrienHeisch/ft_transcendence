@@ -9,14 +9,13 @@ services:
       - www
       - storage
     ports:
-      - "8000:443"
+      - "8000:80"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
   www:
-    image: ft-transcendence_www
-    build:
-      context: ./www
-      dockerfile: Containerfile
+    image: denoland/deno:2.6.3
+    working_dir: /app
+    command: deno task dev
     restart: always
     depends_on:
       - db
@@ -26,7 +25,8 @@ services:
       - db
       - storage
     volumes:
-      - api-keys:/tmp/api-keys
+      - ./www:/app
+      - api-keys:/tmp/api-keys:ro
     # env_file: ./www/.env
     environment:
       DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
@@ -57,8 +57,8 @@ services:
     networks:
       - storage
     # ports:
-    #   - 3900:3900
-    #   - 3902:3902
+    # - 3900:3900
+    # - 3902:3902
     volumes:
       - ./garage/config.toml:/etc/garage.toml:ro
       - storage-meta:/var/lib/garage/meta

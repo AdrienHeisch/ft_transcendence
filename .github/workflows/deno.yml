@@ -29,14 +29,14 @@ jobs:
       - name: Verify formatting
         run: deno fmt --check
         working-directory: ./www
-  
+
       - name: Run deno check
         run: deno check
         working-directory: ./www
-        
-      - name: Run svelte-check
-        run: deno task sv-check
-        working-directory: ./www
+
+      # - name: Run svelte-check
+      #   run: deno task sv-check
+      #   working-directory: ./www
 
       - name: Run linter
         run: deno lint

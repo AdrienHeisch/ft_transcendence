@@ -9,4 +9,7 @@ export default defineConfig({
     sveltekit(),
     deno(),
   ],
+  server: {
+    port: 8000,
+  },
 });

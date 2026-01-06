@@ -1,0 +1,17 @@
+:80, :443 {
+  log {
+    output file /var/log/caddy/access.log {
+      roll_size 1Mib
+      roll_keep 1
+    }
+  }
+
+  handle_path /public/* {
+    request_header Host public.web.garage
+    reverse_proxy storage:3902
+  }
+
+  handle {
+    reverse_proxy www:8000
+  }
+}

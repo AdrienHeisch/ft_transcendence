@@ -7,18 +7,25 @@ exec "$@" &
 
 sleep 1
 
-if [[ "$(garage layout show | tail -n 1 | awk '{print $5}')" == "0" ]]; then
-  NODE_ID=$(garage status | sed '3q;d' | awk '{print $1}')
+if [[ "$(garage layout show | tail -n 1 | awk '{printf $5}')" == "0" ]]; then
+  NODE_ID=$(garage status | sed '3q;d' | awk '{printf $1}')
   garage layout assign -z dc1 -c 1G $NODE_ID
   garage layout apply --version 1
 fi
 
 if [[ $(garage bucket list | wc -l) -lt 2 ]]; then
-  garage bucket create www
+  KEY_NAME=www-key
+  garage key create $KEY_NAME
+  API_KEY_ID=$(garage key list | sed '2q;d' | awk '{printf $1}')
+  garage key info $API_KEY_ID | sed '2q;d' | awk '{printf $3}' >/tmp/api-keys/storage-id
+  garage key info $API_KEY_ID --show-secret | sed '4q;d' | awk '{printf $3}' >/tmp/api-keys/storage-secret
 
-  API_KEY=$(garage key create www-key | sed '4q;d' | awk '{print $3}')
-  echo $API_KEY >/tmp/api-keys/storage-www
-  garage bucket allow --read --write --owner www --key www-key
+  garage bucket create private
+  garage bucket allow --read --write --owner private --key $KEY_NAME
+
+  garage bucket create public
+  garage bucket allow --read --write --owner public --key $KEY_NAME
+  garage bucket website --allow public
 fi
 
 cleanup() {

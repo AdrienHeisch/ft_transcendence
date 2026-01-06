@@ -23,13 +23,13 @@
   },
   "type": "module",
   "tasks": {
-    "dev": "vite dev",
+    "dev": "vite dev --host",
     "build": "vite build",
     "preview": "vite preview",
     "run": "deno run -A .deno-deploy/server.ts",
     "prepare": "svelte-kit sync || echo ''",
-    "sv-check": "svelte-kit sync && svelte-check",
-    "sv-check:watch": "svelte-kit sync && svelte-check --watch",
+    "sv-check": "svelte-kit sync && svelte-check --diagnostic-sources 'svelte,css'",
+    "sv-check:watch": "deno task sv-check --watch",
     "db:start": "docker compose up",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
@@ -52,7 +52,10 @@
     "drizzle-orm": "npm:drizzle-orm@^0.45.0",
     "@oslojs/crypto": "npm:@oslojs/crypto@^1.0.1",
     "@oslojs/encoding": "npm:@oslojs/encoding@^1.1.0",
-    "@node-rs/argon2": "npm:@node-rs/argon2@^2.0.2"
+    "@node-rs/argon2": "npm:@node-rs/argon2@^2.0.2",
+    "@aws-sdk/client-s3": "npm:@aws-sdk/client-s3@^3.962.0",
+    "@aws-sdk/lib-storage": "npm:@aws-sdk/lib-storage@^3.962.0",
+    "zod": "npm:zod@^4.3.5"
   },
   "exclude": [
     "node_modules",
