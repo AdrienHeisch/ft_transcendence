@@ -19,6 +19,7 @@ RUN sed -i '/nodeModulesDir/d' deno.json
 COPY deno.lock .
 COPY drizzle.config.ts .
 COPY ./src/lib/server/db/schema.ts ./src/lib/server/db/schema.ts
+COPY ./lib /app/lib
 RUN deno install
 COPY --from=builder /app/.deno-deploy /app/.deno-deploy
 CMD ["deno", "task", "run"]

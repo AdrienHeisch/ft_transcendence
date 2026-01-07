@@ -38,7 +38,9 @@
   },
   "nodeModulesDir": "auto",
   "imports": {
-    "@deno/svelte-adapter": "npm:@deno/svelte-adapter@^0.1.0",
+    "@deno/svelte-adapter": "./lib/svelte-adapter/src/index.ts",
+    "@deno/svelte-adapter/__internal": "./lib/svelte-adapter/src/__internal.ts",
+    "@deno/experimental-route-config": "npm:@deno/experimental-route-config@^0.0.5",
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.6",
     "@sveltejs/kit": "npm:@sveltejs/kit@^2.49.2",
     "@sveltejs/vite-plugin-svelte": "npm:@sveltejs/vite-plugin-svelte@^6.2.1",
@@ -61,6 +63,7 @@
     "node_modules",
     ".svelte-kit",
     ".vite",
-    ".deno-deploy"
+    ".deno-deploy",
+    "lib"
   ]
 }

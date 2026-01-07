@@ -3,7 +3,7 @@
   "specifiers": {
     "npm:@aws-sdk/client-s3@^3.962.0": "3.962.0",
     "npm:@aws-sdk/lib-storage@^3.962.0": "3.962.0_@aws-sdk+client-s3@3.962.0",
-    "npm:@deno/svelte-adapter@0.1": "0.1.0_@sveltejs+kit@2.49.2__@sveltejs+vite-plugin-svelte@6.2.1___svelte@5.46.0____acorn@8.15.0___vite@7.3.0____picomatch@4.0.3__svelte@5.46.0___acorn@8.15.0__vite@7.3.0___picomatch@4.0.3__acorn@8.15.0_@sveltejs+vite-plugin-svelte@6.2.1__svelte@5.46.0___acorn@8.15.0__vite@7.3.0___picomatch@4.0.3_svelte@5.46.0__acorn@8.15.0_vite@7.3.0__picomatch@4.0.3",
+    "npm:@deno/experimental-route-config@^0.0.5": "0.0.5",
     "npm:@deno/vite-plugin@^1.0.6": "1.0.6_vite@7.3.0__picomatch@4.0.3",
     "npm:@node-rs/argon2@^2.0.2": "2.0.2",
     "npm:@oslojs/crypto@^1.0.1": "1.0.1",
@@ -588,13 +588,6 @@
       "integrity": "sha512-0PN4qij3sC3Qm8WbiOBGlOQz8WtB0AENGkzsTHOYyPenf40iW7OGFid8QT3L8lGApnz3t6ufET0c2XgagV8Jjw==",
       "dependencies": [
         "urlpattern-polyfill"
-      ]
-    },
-    "@deno/svelte-adapter@0.1.0_@sveltejs+kit@2.49.2__@sveltejs+vite-plugin-svelte@6.2.1___svelte@5.46.0____acorn@8.15.0___vite@7.3.0____picomatch@4.0.3__svelte@5.46.0___acorn@8.15.0__vite@7.3.0___picomatch@4.0.3__acorn@8.15.0_@sveltejs+vite-plugin-svelte@6.2.1__svelte@5.46.0___acorn@8.15.0__vite@7.3.0___picomatch@4.0.3_svelte@5.46.0__acorn@8.15.0_vite@7.3.0__picomatch@4.0.3": {
-      "integrity": "sha512-fx4Kj1lSx1rJvjtPr3cXO7qKveI1vUyGW8jX+clJHQEqEeIDnEcBW0FpMZEVORPlay2SGydQWSGbwh4j2iENzg==",
-      "dependencies": [
-        "@deno/experimental-route-config",
-        "@sveltejs/kit"
       ]
     },
     "@deno/vite-plugin@1.0.6_vite@7.3.0__picomatch@4.0.3": {
@@ -2436,11 +2429,19 @@
       "integrity": "sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g=="
     }
   },
+  "redirects": {
+    "https://denopkg.com/denoland/svelte-adapter/src/index.ts": "https://denopkg.com/denoland/svelte-adapter@master/src/index.ts"
+  },
+  "remote": {
+    "https://denopkg.com/denoland/svelte-adapter@5bfee7242a0e0fc619e2c6fb4ed0acdcfdbfaf66/src/index.ts": "d71b98d52e8971e499780acaac3c6f6eac46d6304354851aa6ca9d929fdc07b7",
+    "https://denopkg.com/denoland/svelte-adapter@master/src/index.ts": "d71b98d52e8971e499780acaac3c6f6eac46d6304354851aa6ca9d929fdc07b7",
+    "https://denopkg.com/denoland/svelte-adapter@release_0.2.0/src/index.ts": "d71b98d52e8971e499780acaac3c6f6eac46d6304354851aa6ca9d929fdc07b7"
+  },
   "workspace": {
     "dependencies": [
       "npm:@aws-sdk/client-s3@^3.962.0",
       "npm:@aws-sdk/lib-storage@^3.962.0",
-      "npm:@deno/svelte-adapter@0.1",
+      "npm:@deno/experimental-route-config@^0.0.5",
       "npm:@deno/vite-plugin@^1.0.6",
       "npm:@node-rs/argon2@^2.0.2",
       "npm:@oslojs/crypto@^1.0.1",

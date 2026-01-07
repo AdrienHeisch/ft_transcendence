@@ -1,0 +1,51 @@
+{
+  "name": "@deno/svelte-adapter",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denoland/svelte-adapter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/denoland/svelte-adapter/issues"
+  },
+  "author": "the Deno authors",
+  "license": "MIT",
+  "description": "Official Deno adapter for SvelteKit",
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./__internal": {
+      "types": "./dist/__internal.d.ts",
+      "default": "./dist/__internal.js"
+    }
+  },
+  "scripts": {
+    "fixture-deps": "cd test/fixture && npm install && npm run build",
+    "test": "npm run build && npm run fixture-deps && deno test -A",
+    "build": "tsc && node tools/build.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "Deno",
+    "Svelte",
+    "SvelteKit"
+  ],
+  "files": [
+    "dist/"
+  ],
+  "peerDependencies": {
+    "@sveltejs/kit": "2.x"
+  },
+  "devDependencies": {
+    "@types/deno": "^2.0.0",
+    "@types/node": "^22.10.7",
+    "expect": "^29.7.0",
+    "linkedom": "^0.18.6",
+    "typescript": "^5.7.3",
+    "urlpattern-polyfill": "^10.0.0"
+  }
+}
