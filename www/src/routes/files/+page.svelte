@@ -17,7 +17,7 @@
 <form enctype="multipart/form-data" {...remote.postFile}>
   <div class="group">
     <label for="file">Upload your file</label>
-    <input type="file" id="file" name="file" required />
+    <input type="file" id="file" name="file" bind:files required />
   </div>
 
   <button type="submit">Submit !</button>
