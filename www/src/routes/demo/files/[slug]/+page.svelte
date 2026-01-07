@@ -2,4 +2,4 @@
   let { data } = $props();
 </script>
 
-<img alt="nice" src={data.imageSrc} width="600" />
+<img alt="nice" src={data.src} width="600" />

@@ -1,8 +1,8 @@
-import { fromPublicStorage } from "$lib/assets";
+import * as storage from "$lib/storage/public";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = ({ params }) => {
   return {
-    imageSrc: fromPublicStorage(params.slug),
+    src: storage.url(params.slug),
   };
 };
