@@ -15,7 +15,7 @@ services:
   www:
     image: denoland/deno:2.6.3
     working_dir: /app
-    command: deno task dev
+    command: ./container-entrypoint.sh deno task dev
     restart: always
     depends_on:
       - db
