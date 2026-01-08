@@ -1,8 +1,8 @@
-import * as storage from "$lib/storage/public";
-import type { PageLoad } from "./$types";
+import * as storage from "$lib/storage";
+import type { PageServerLoad } from "./$types";
 
-export const load: PageLoad = ({ params }) => {
+export const load: PageServerLoad = ({ params }) => {
   return {
-    src: storage.url(params.slug),
+    src: storage.url(storage.Bucket.Public, `demo/${params.slug}`),
   };
 };

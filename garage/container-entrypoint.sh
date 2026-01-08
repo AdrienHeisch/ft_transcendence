@@ -20,9 +20,6 @@ if [[ $(garage bucket list | wc -l) -lt 2 ]]; then
   garage key info $API_KEY_ID | sed '2q;d' | awk '{printf $3}' >/tmp/api-keys/storage-id
   garage key info $API_KEY_ID --show-secret | sed '4q;d' | awk '{printf $3}' >/tmp/api-keys/storage-secret
 
-  garage bucket create private
-  garage bucket allow --read --write --owner private --key $KEY_NAME
-
   garage bucket create public
   garage bucket allow --read --write --owner public --key $KEY_NAME
   garage bucket website --allow public

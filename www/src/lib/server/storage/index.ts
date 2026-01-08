@@ -1,6 +1,9 @@
 import { building } from "$app/environment";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
+import { Bucket } from "$lib/storage";
+
+export { Bucket };
 
 const client = await (async () => {
   // TODO this looks like a hack
@@ -25,13 +28,13 @@ const client = await (async () => {
   });
 })();
 
-export function get(bucket: string, key: string) {
+export function getObject(bucket: Bucket, key: string) {
   return client.send(
     new GetObjectCommand({ Bucket: bucket, Key: key }),
   );
 }
 
-export function upload(bucket: string, key: string, file: File) {
+export function upload(bucket: Bucket, key: string, file: File) {
   return new Upload({
     client: client,
     params: {
