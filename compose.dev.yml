@@ -13,9 +13,9 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
   www:
-    image: denoland/deno:2.6.3
+    image: oven/bun:1.3.5-debian
     working_dir: /app
-    command: ./container-entrypoint.sh deno task dev
+    command: ./container-entrypoint.sh bun run -b dev
     restart: always
     depends_on:
       - db

@@ -12,6 +12,6 @@
   }
 
   handle {
-    reverse_proxy www:8000
+    reverse_proxy www:3000
   }
 }

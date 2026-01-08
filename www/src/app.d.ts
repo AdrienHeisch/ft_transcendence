@@ -1,7 +1,6 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 
-/// <reference lib="deno.ns" />
 /// <reference path="../.svelte-kit/ambient.d.ts" />
 
 declare global {

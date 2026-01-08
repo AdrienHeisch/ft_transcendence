@@ -9,8 +9,8 @@ const client = await (async () => {
   // TODO this looks like a hack
   let accessKeyId = "", secretAccessKey = "";
   try {
-    accessKeyId = await Deno.readTextFile("/tmp/api-keys/storage-id");
-    secretAccessKey = await Deno.readTextFile("/tmp/api-keys/storage-secret");
+    accessKeyId = await Bun.file("/tmp/api-keys/storage-id").text();
+    secretAccessKey = await Bun.file("/tmp/api-keys/storage-secret").text();
   } catch (e) {
     if (!building) {
       console.error(e);
