@@ -11,7 +11,7 @@
     "ts:check": "tsc --noEmit",
     "sv:prepare": "svelte-kit sync || echo ''",
     "sv:check": "svelte-kit sync && svelte-check",
-    "sv:check:watch": "bun run sv-check --watch",
+    "sv:check:watch": "svelte-kit sync && svelte-check --watch",
     "db:start": "docker compose up",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
