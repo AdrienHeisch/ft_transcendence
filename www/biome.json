@@ -18,7 +18,8 @@
     "enabled": true,
     "rules": {
       "recommended": true
-    }
+    },
+    "includes": ["./src/**/*.ts"]
   },
   "javascript": {
     "formatter": {

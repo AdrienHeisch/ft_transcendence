@@ -1,6 +1,6 @@
 <script lang="ts">
-  let { data } = $props();
-  $effect(() => console.log(data.src));
+const { data } = $props();
+$effect(() => console.log(data.src));
 </script>
 
 <img alt="nice" src={data.src} width="600" />

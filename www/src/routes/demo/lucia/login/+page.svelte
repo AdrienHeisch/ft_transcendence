@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
-  import type { ActionData } from "./$types";
+import { enhance } from "$app/forms";
+import type { ActionData } from "./$types";
 
-  export let form: ActionData;
+export let form: ActionData;
 </script>
 
 <h1>Login/Register</h1>

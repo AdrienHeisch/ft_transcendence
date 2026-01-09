@@ -1,17 +1,17 @@
 <script lang="ts">
-  import * as remote from "./files.remote";
+import * as remote from "./files.remote";
 
-  let files = $state<FileList>();
+let files = $state<FileList>();
 
-  $effect(() => {
-    if (files) {
-      console.log(files);
+$effect(() => {
+  if (files) {
+    console.log(files);
 
-      for (const file of files) {
-        console.log(`${file.name}: ${file.size} bytes`);
-      }
+    for (const file of files) {
+      console.log(`${file.name}: ${file.size} bytes`);
     }
-  });
+  }
+});
 </script>
 
 <form enctype="multipart/form-data" {...remote.postFile}>

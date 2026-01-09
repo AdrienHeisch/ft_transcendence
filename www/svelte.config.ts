@@ -1,5 +1,6 @@
 import adapter from "@sveltejs/adapter-node";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+
 type Config = import("@sveltejs/kit").Config;
 
 const config: Config = {
