@@ -7,8 +7,9 @@
   }
 
   handle_path /public/* {
-    request_header Host public.web.garage
-    reverse_proxy storage:3902
+    reverse_proxy storage:3902 {
+      header_up Host public.web.garage
+    }
   }
 
   handle {

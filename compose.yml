@@ -30,6 +30,8 @@ services:
     # env_file: ./www/.env
     environment:
       DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
+      ORIGIN: https://localhost:8000
+      BODY_SIZE_LIMIT: 5M
     # ports:
     #   - "8000:8000"
   db:
