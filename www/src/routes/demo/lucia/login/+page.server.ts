@@ -2,6 +2,7 @@ import { hash, verify } from "@node-rs/argon2";
 import { encodeBase32LowerCase } from "@oslojs/encoding";
 import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
+import z from "zod";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as table from "$lib/server/db/schema";
@@ -17,10 +18,10 @@ export const load: PageServerLoad = (event) => {
 export const actions: Actions = {
   login: async (event) => {
     const formData = await event.request.formData();
-    const username = formData.get("username");
+    const email = formData.get("email");
     const password = formData.get("password");
 
-    if (!validateUsername(username)) {
+    if (!validateEmail(email)) {
       return fail(400, {
         message:
           "Invalid username (min 3, max 31 characters, alphanumeric only)",
@@ -35,7 +36,7 @@ export const actions: Actions = {
     const results = await db
       .select()
       .from(table.user)
-      .where(eq(table.user.username, username));
+      .where(eq(table.user.email, email));
 
     const existingUser = results.at(0);
     if (!existingUser) {
@@ -60,10 +61,10 @@ export const actions: Actions = {
   },
   register: async (event) => {
     const formData = await event.request.formData();
-    const username = formData.get("username");
+    const email = formData.get("email");
     const password = formData.get("password");
 
-    if (!validateUsername(username)) {
+    if (!validateEmail(email)) {
       return fail(400, { message: "Invalid username" });
     }
     if (!validatePassword(password)) {
@@ -81,13 +82,17 @@ export const actions: Actions = {
 
     try {
       await db.insert(table.user).values({
-        id: userId,
-        username,
+        email,
         passwordHash,
+        firstName: "",
+        lastName: "",
+        bio: "",
+        hasAvatar: false,
+        online: false,
       });
 
       const sessionToken = auth.generateSessionToken();
-      const session = await auth.createSession(sessionToken, userId);
+      const session = await auth.createSession(sessionToken, 0); // TODO use UUID or SERIAL ?
       auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
     } catch {
       return fail(500, { message: "An error has occurred" });
@@ -103,13 +108,8 @@ function generateUserId() {
   return id;
 }
 
-function validateUsername(username: unknown): username is string {
-  return (
-    typeof username === "string" &&
-    username.length >= 3 &&
-    username.length <= 31 &&
-    /^[a-z0-9_-]+$/.test(username)
-  );
+function validateEmail(username: unknown): username is string {
+  return typeof username === "string" && z.email().safeParse(username).success;
 }
 
 function validatePassword(password: unknown): password is string {
