@@ -63,7 +63,7 @@ _TODO_
 - Caddy (reverse proxy)
 - Postgres (database)
 - Garage (object storage)
-- Deno (web application server)
+- Bun (web application server)
 - SvelteKit (full-stack framework)
 - TailwindCSS (CSS framework)
 - Drizzle (ORM)
