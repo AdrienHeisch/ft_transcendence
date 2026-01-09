@@ -15,7 +15,7 @@ services:
   www:
     image: oven/bun:1.3.5-debian
     working_dir: /app
-    command: ./container-entrypoint.sh bun run -b dev
+    command: sh -c "bun ci && bun run sv:prepare && ./container-entrypoint.sh bun run -b dev"
     restart: always
     depends_on:
       - db
@@ -30,15 +30,15 @@ services:
     # env_file: ./www/.env
     environment:
       DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
-    # ports:
-    #   - "8000:8000"
+    ports:
+      - "8080:8000"
   db:
     image: postgres:18
     restart: always
     networks:
       - db
-    # ports:
-    #   - 5432:5432
+    ports:
+      - 5432:5432
     # env_file: ./db/.env
     environment:
       POSTGRES_USER: root
@@ -56,9 +56,9 @@ services:
     restart: always
     networks:
       - storage
-    # ports:
-    # - 3900:3900
-    # - 3902:3902
+    ports:
+    - 3900:3900
+    - 3902:3902
     volumes:
       - ./garage/config.toml:/etc/garage.toml:ro
       - storage-meta:/var/lib/garage/meta
