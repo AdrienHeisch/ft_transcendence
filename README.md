@@ -65,7 +65,7 @@ _TODO_
 - Garage (object storage)
 - Deno (web application server)
 - SvelteKit (full-stack framework)
-  - TailwindCSS (CSS framework)
+- TailwindCSS (CSS framework)
 - Drizzle (ORM)
 
 ## Database Schema
