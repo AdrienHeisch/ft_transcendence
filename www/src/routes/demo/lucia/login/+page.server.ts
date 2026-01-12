@@ -1,5 +1,5 @@
 import { hash, verify } from "@node-rs/argon2";
-import { encodeBase32LowerCase } from "@oslojs/encoding";
+// import { encodeBase32LowerCase } from "@oslojs/encoding";
 import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import z from "zod";
@@ -82,6 +82,7 @@ export const actions: Actions = {
 
     try {
       await db.insert(table.user).values({
+        id: userId,
         email,
         passwordHash,
         firstName: "",
@@ -92,7 +93,7 @@ export const actions: Actions = {
       });
 
       const sessionToken = auth.generateSessionToken();
-      const session = await auth.createSession(sessionToken, 0); // TODO use UUID or SERIAL ?
+      const session = await auth.createSession(sessionToken, userId);
       auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
     } catch {
       return fail(500, { message: "An error has occurred" });
@@ -102,10 +103,12 @@ export const actions: Actions = {
 };
 
 function generateUserId() {
+  return crypto.randomUUID();
+
   // ID with 120 bits of entropy, or about the same as UUID v4.
-  const bytes = crypto.getRandomValues(new Uint8Array(15));
-  const id = encodeBase32LowerCase(bytes);
-  return id;
+  // const bytes = crypto.getRandomValues(new Uint8Array(15));
+  // const id = encodeBase32LowerCase(bytes);
+  // return id;
 }
 
 function validateEmail(username: unknown): username is string {
