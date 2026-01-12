@@ -54,7 +54,7 @@ export const chatMessage = pgTable("chat_message", {
   }).notNull(),
 });
 
-export type ChatMessage = typeof chatMessage.$inferInsert;
+export type ChatMessage = typeof chatMessage.$inferSelect;
 
 export const post = pgTable("post", {
   id: uuid("id").primaryKey(),
@@ -66,4 +66,4 @@ export const post = pgTable("post", {
   }).notNull(),
 });
 
-export type Post = typeof post.$inferInsert;
+export type Post = typeof post.$inferSelect;
