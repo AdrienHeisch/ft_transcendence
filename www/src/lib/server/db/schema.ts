@@ -57,7 +57,7 @@ export const chatMessage = pgTable("chat_message", {
 export type ChatMessage = typeof chatMessage.$inferInsert;
 
 export const post = pgTable("post", {
-  id: uuid("id").primaryKey().unique(),
+  id: uuid("id").primaryKey(),
   author: uuid("author").notNull(),
   content: text("content").notNull(),
   postedAt: timestamp("posted_at", {
