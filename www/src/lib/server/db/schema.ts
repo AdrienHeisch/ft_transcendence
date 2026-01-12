@@ -1,8 +1,8 @@
-import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const session = pgTable("session", {
-  id: text("id").primaryKey(),
-  userId: serial("user_id")
+  id: uuid("id").primaryKey(),
+  userId: uuid("user_id")
     .notNull()
     .references(() => user.id),
   expiresAt: timestamp("expires_at", {
@@ -14,7 +14,7 @@ export const session = pgTable("session", {
 export type Session = typeof session.$inferSelect;
 
 export const user = pgTable("user", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   firstName: text("first_name").notNull(),
@@ -27,8 +27,8 @@ export const user = pgTable("user", {
 export type User = typeof user.$inferSelect;
 
 export const pet = pgTable("pet", {
-  id: serial("id").primaryKey(),
-  ownerId: serial("owner_id").notNull(),
+  id: uuid("id").primaryKey(),
+  ownerId: uuid("owner_id").notNull(),
   name: text("name").notNull(),
   species: text("species").notNull(),
   breed: text("breed").notNull(),
@@ -37,16 +37,16 @@ export const pet = pgTable("pet", {
 export type Pet = typeof user.$inferSelect;
 
 export const friendsPair = pgTable("friends_pair", {
-  id: serial("id").primaryKey(),
-  left: serial("left").notNull(),
-  right: serial("right").notNull(),
+  id: uuid("id").primaryKey(),
+  left: uuid("left").notNull(),
+  right: uuid("right").notNull(),
 });
 
 export type FriendsPair = typeof friendsPair.$inferSelect;
 
 export const chatMessage = pgTable("chat_message", {
-  id: serial("id").primaryKey(),
-  friends_id: serial("friends_id").notNull(),
+  id: uuid("id").primaryKey(),
+  friends_id: uuid("friends_id").notNull(),
   content: text("content").notNull(),
   sentAt: timestamp("sent_at", {
     withTimezone: true,
