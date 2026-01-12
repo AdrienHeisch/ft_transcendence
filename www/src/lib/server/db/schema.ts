@@ -1,7 +1,7 @@
 import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const session = pgTable("session", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().unique(),
   userId: uuid("user_id")
     .notNull()
     .references(() => user.id),
@@ -14,7 +14,7 @@ export const session = pgTable("session", {
 export type Session = typeof session.$inferSelect;
 
 export const user = pgTable("user", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().unique(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   firstName: text("first_name").notNull(),
@@ -27,7 +27,7 @@ export const user = pgTable("user", {
 export type User = typeof user.$inferSelect;
 
 export const pet = pgTable("pet", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().unique(),
   ownerId: uuid("owner_id").notNull(),
   name: text("name").notNull(),
   species: text("species").notNull(),
@@ -37,7 +37,7 @@ export const pet = pgTable("pet", {
 export type Pet = typeof user.$inferSelect;
 
 export const friendsPair = pgTable("friends_pair", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().unique(),
   left: uuid("left").notNull(),
   right: uuid("right").notNull(),
 });
@@ -45,7 +45,7 @@ export const friendsPair = pgTable("friends_pair", {
 export type FriendsPair = typeof friendsPair.$inferSelect;
 
 export const chatMessage = pgTable("chat_message", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().unique(),
   friends_id: uuid("friends_id").notNull(),
   content: text("content").notNull(),
   sentAt: timestamp("sent_at", {
