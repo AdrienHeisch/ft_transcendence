@@ -1,7 +1,7 @@
 import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const session = pgTable("session", {
-  id: uuid("id").primaryKey(),
+  id: text("id").primaryKey(),
   userId: uuid("user_id")
     .notNull()
     .references(() => user.id),

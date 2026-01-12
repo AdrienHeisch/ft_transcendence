@@ -23,8 +23,7 @@ export const actions: Actions = {
 
     if (!validateEmail(email)) {
       return fail(400, {
-        message:
-          "Invalid username (min 3, max 31 characters, alphanumeric only)",
+        message: "Invalid email",
       });
     }
     if (!validatePassword(password)) {
@@ -111,8 +110,8 @@ function generateUserId() {
   // return id;
 }
 
-function validateEmail(username: unknown): username is string {
-  return typeof username === "string" && z.email().safeParse(username).success;
+function validateEmail(email: unknown): email is string {
+  return typeof email === "string" && z.email().safeParse(email).success;
 }
 
 function validatePassword(password: unknown): password is string {
