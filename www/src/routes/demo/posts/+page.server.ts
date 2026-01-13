@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import type { PageServerLoad } from "./$types";
@@ -12,6 +12,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     posts: db
       .select()
       .from(schema.post)
-      .leftJoin(schema.user, eq(schema.user.id, schema.post.author)),
+      .leftJoin(schema.user, eq(schema.user.id, schema.post.author))
+      .orderBy(desc(schema.post.postedAt)),
   };
 };
