@@ -28,7 +28,9 @@ export type User = typeof user.$inferSelect;
 
 export const pet = pgTable("pet", {
   id: uuid("id").primaryKey(),
-  ownerId: uuid("owner_id").notNull(),
+  ownerId: uuid("owner_id")
+    .notNull()
+    .references(() => user.id),
   name: text("name").notNull(),
   species: text("species").notNull(),
   breed: text("breed").notNull(),
@@ -38,15 +40,24 @@ export type Pet = typeof user.$inferSelect;
 
 export const friendsPair = pgTable("friends_pair", {
   id: uuid("id").primaryKey(),
-  left: uuid("left").notNull(),
-  right: uuid("right").notNull(),
+  left: uuid("left")
+    .notNull()
+    .references(() => user.id),
+  right: uuid("right")
+    .notNull()
+    .references(() => user.id),
 });
 
 export type FriendsPair = typeof friendsPair.$inferSelect;
 
 export const chatMessage = pgTable("chat_message", {
   id: uuid("id").primaryKey(),
-  friends_id: uuid("friends_id").notNull(),
+  friends_id: uuid("friends_id")
+    .notNull()
+    .references(() => friendsPair.id),
+  author: uuid("author")
+    .notNull()
+    .references(() => user.id),
   content: text("content").notNull(),
   sentAt: timestamp("sent_at", {
     withTimezone: true,
@@ -58,7 +69,9 @@ export type ChatMessage = typeof chatMessage.$inferSelect;
 
 export const post = pgTable("post", {
   id: uuid("id").primaryKey(),
-  author: uuid("author").notNull(),
+  author: uuid("author")
+    .notNull()
+    .references(() => user.id),
   content: text("content").notNull(),
   postedAt: timestamp("posted_at", {
     withTimezone: true,
