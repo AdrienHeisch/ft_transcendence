@@ -1,5 +1,5 @@
 #!/bin/bash
 
-bun run db:push
+bun db:push
 
 exec "$@"

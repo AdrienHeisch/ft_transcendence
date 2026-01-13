@@ -7,7 +7,7 @@
     "dev": "vite dev --host",
     "build": "vite build",
     "preview": "vite preview",
-    "run": "bun run -b build/index.js",
+    "run": "bun run build/index.js",
     "ts:check": "tsc --noEmit",
     "sv:prepare": "svelte-kit sync || echo ''",
     "sv:check": "svelte-kit sync && svelte-check",
