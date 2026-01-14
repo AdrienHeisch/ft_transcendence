@@ -39,7 +39,8 @@ services:
     image: ft-transcendence_ws
     build:
       context: ./www
-      dockerfile: ws.Containerfile
+      dockerfile: Containerfile
+      target: ws
     restart: always
     depends_on:
       - db

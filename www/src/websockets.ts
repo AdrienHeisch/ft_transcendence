@@ -5,6 +5,8 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./lib/server/db/schema";
 
+const PORT = 3000;
+
 type WebSocketData = {
   user: schema.User;
   chatId: string;
@@ -15,8 +17,9 @@ const client = postgres(process.env.DATABASE_URL);
 const db = drizzle(client, { schema });
 
 const server = Bun.serve({
+  port: PORT,
   routes: {
-    "/": async (req, server) => {
+    "/:id": async (req, server) => {
       const sessionToken = req.cookies.get(sessionCookieName);
       if (!sessionToken) {
         return new Response("Not authenticated", { status: 403 });
@@ -27,17 +30,12 @@ const server = Bun.serve({
         return new Response("Not authenticated", { status: 403 });
       }
 
-      const chatId = new URL(req.url).searchParams.get("id");
-      if (!chatId) {
-        return new Response("Invalid chat id", { status: 404 });
-      }
-
       const [chat] = await db
         .select()
         .from(schema.friendsPair)
         .where(
           and(
-            eq(schema.friendsPair.id, chatId),
+            eq(schema.friendsPair.id, req.params.id),
             or(
               eq(schema.friendsPair.left, user.id),
               eq(schema.friendsPair.right, user.id),
@@ -48,7 +46,7 @@ const server = Bun.serve({
         return new Response("Not part of this chat", { status: 403 });
       }
 
-      if (server.upgrade(req, { data: { user, chatId } })) {
+      if (server.upgrade(req, { data: { user, chatId: req.params.id } })) {
         return; // Success !
       }
       return new Response("Upgrade failed", { status: 500 });
@@ -75,6 +73,7 @@ const server = Bun.serve({
     },
   },
 });
+console.log(`Websocket server listening on port ${PORT}...`)
 
 // TODO everything below is copy pasted from ./lib/server/auth.ts !
 
