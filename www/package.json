@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "run": "bun run build/index.js",
+    "run:ws": "bun run src/websockets.ts",
     "ts:check": "tsc --noEmit",
     "sv:prepare": "svelte-kit sync || echo ''",
     "sv:check": "svelte-kit sync && svelte-check",

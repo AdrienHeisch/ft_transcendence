@@ -7,6 +7,7 @@ services:
     restart: always
     networks:
       - www
+      - ws
       - storage
     ports:
       - "8000:443"
@@ -34,6 +35,20 @@ services:
       BODY_SIZE_LIMIT: 5M
     # ports:
     #   - "8000:8000"
+  ws:
+    image: ft-transcendence_ws
+    build:
+      context: ./www
+      dockerfile: ws.Containerfile
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - ws
+      - db
+    # env_file: ./www/.env
+    environment:
+      DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
   db:
     image: postgres:18
     restart: always
@@ -77,6 +92,8 @@ volumes:
 
 networks:
   www:
+    driver: bridge
+  ws:
     driver: bridge
   db:
     driver: bridge

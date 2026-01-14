@@ -12,6 +12,10 @@
     }
   }
 
+  handle_path /ws {
+    reverse_proxy ws:3000
+  }
+
   handle {
     reverse_proxy www:3000
   }
