@@ -52,7 +52,7 @@ export type FriendsPair = typeof friendsPair.$inferSelect;
 
 export const chatMessage = pgTable("chat_message", {
   id: uuid("id").primaryKey(),
-  friends_id: uuid("friends_id")
+  friendsId: uuid("friends_id")
     .notNull()
     .references(() => friendsPair.id),
   author: uuid("author")

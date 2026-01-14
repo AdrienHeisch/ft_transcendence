@@ -60,7 +60,7 @@ const server = Bun.serve({
     async message(ws, content) {
       const message = {
         id: crypto.randomUUID(),
-        friends_id: ws.data.chatId,
+        friendsId: ws.data.chatId,
         author: ws.data.user.id,
         content: content.toString(),
         sentAt: new Date(),
