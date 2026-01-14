@@ -73,7 +73,7 @@ const server = Bun.serve({
     },
   },
 });
-console.log(`Websocket server listening on port ${PORT}...`)
+console.log(`Websocket server listening on port ${PORT}...`);
 
 // TODO everything below is copy pasted from ./lib/server/auth.ts !
 

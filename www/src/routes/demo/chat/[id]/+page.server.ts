@@ -25,6 +25,7 @@ export const load: PageServerLoad = ({ params, locals }) => {
             eq(schema.friendsPair.right, locals.user.id),
           ),
         ),
-      ).orderBy(desc(schema.chatMessage.sentAt)),
+      )
+      .orderBy(desc(schema.chatMessage.sentAt)),
   };
 };

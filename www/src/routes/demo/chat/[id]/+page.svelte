@@ -1,6 +1,8 @@
 <script lang="ts">
 const { data } = $props();
-$effect(() => { data.messages.then(console.log); });
+$effect(() => {
+  data.messages.then(console.log);
+});
 // TODO websockets
 </script>
 
