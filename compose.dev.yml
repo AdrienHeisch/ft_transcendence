@@ -40,6 +40,7 @@ services:
     restart: always
     depends_on:
       - db
+      - www
     networks:
       - db
     volumes:
@@ -55,6 +56,7 @@ services:
     command: bun db:seed
     depends_on:
       - db
+      - www
     networks:
       - db
     volumes:
