@@ -43,6 +43,9 @@ export const pet = pgTable("pet", {
   name: text("name").notNull(),
   species: text("species").notNull(),
   breed: text("breed").notNull(),
+  age: text("age"),
+  description: text("description"),
+  photo: text("photo"),
 });
 
 export type Pet = typeof user.$inferSelect;
