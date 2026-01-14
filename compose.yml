@@ -33,8 +33,6 @@ services:
       DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
       ORIGIN: https://localhost:8000
       BODY_SIZE_LIMIT: 5M
-    # ports:
-    #   - "8000:8000"
   ws:
     image: ft-transcendence_ws
     build:
@@ -55,8 +53,6 @@ services:
     restart: always
     networks:
       - db
-    # ports:
-    #   - 5432:5432
     # env_file: ./db/.env
     environment:
       POSTGRES_USER: root
@@ -65,7 +61,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD", "pg_isready"]
+      test: ["CMD", "pg_isready", "-d", "local"]
   storage:
     image: ft-transcendence_garage
     build:
@@ -74,9 +70,6 @@ services:
     restart: always
     networks:
       - storage
-    # ports:
-    #   - 3900:3900
-    #   - 3902:3902
     volumes:
       - ./garage/config.toml:/etc/garage.toml:ro
       - storage-meta:/var/lib/garage/meta

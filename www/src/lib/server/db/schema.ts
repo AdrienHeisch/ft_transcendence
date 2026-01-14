@@ -1,4 +1,13 @@
-import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { lt } from "drizzle-orm";
+import {
+  boolean,
+  check,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
@@ -38,15 +47,22 @@ export const pet = pgTable("pet", {
 
 export type Pet = typeof user.$inferSelect;
 
-export const friendsPair = pgTable("friends_pair", {
-  id: uuid("id").primaryKey(),
-  left: uuid("left")
-    .notNull()
-    .references(() => user.id),
-  right: uuid("right")
-    .notNull()
-    .references(() => user.id),
-});
+export const friendsPair = pgTable(
+  "friends_pair",
+  {
+    id: uuid("id").unique(),
+    left: uuid("left")
+      .notNull()
+      .references(() => user.id),
+    right: uuid("right")
+      .notNull()
+      .references(() => user.id),
+  },
+  (table) => [
+    primaryKey({ columns: [table.left, table.right] }),
+    check("ids_order", lt(table.left, table.right)),
+  ],
+);
 
 export type FriendsPair = typeof friendsPair.$inferSelect;
 
