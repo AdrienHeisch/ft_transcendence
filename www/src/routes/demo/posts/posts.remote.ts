@@ -11,14 +11,12 @@ export const sendPost = form(
   async ({ content }) => {
     const user = requireLogin();
     try {
-      await db
-        .insert(schema.post)
-        .values({
-          id: crypto.randomUUID(),
-          author: user.id,
-          content,
-          postedAt: new Date(),
-        });
+      await db.insert(schema.post).values({
+        id: crypto.randomUUID(),
+        author: user.id,
+        content,
+        postedAt: new Date(),
+      });
     } catch {
       error(500, "Failed to post");
     }
