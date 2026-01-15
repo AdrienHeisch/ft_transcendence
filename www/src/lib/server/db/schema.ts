@@ -50,7 +50,7 @@ export type Pet = typeof user.$inferSelect;
 export const friendsPair = pgTable(
   "friends_pair",
   {
-    id: uuid("id").unique(),
+    id: uuid("id").notNull().unique(),
     left: uuid("left")
       .notNull()
       .references(() => user.id),
