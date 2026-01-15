@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { and, desc, eq, or } from "drizzle-orm";
+import { and, desc, eq, getTableColumns, or } from "drizzle-orm";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import type { PageServerLoad } from "./$types";
@@ -11,7 +11,7 @@ export const load: PageServerLoad = ({ params, locals }) => {
   console.log(`chat: ${params.id}, user: ${locals.user.id}`);
   return {
     messages: db
-      .select()
+      .select({ ...getTableColumns(schema.chatMessage) })
       .from(schema.chatMessage)
       .innerJoin(
         schema.friendsPair,
