@@ -1,37 +1,37 @@
 <script lang="ts">
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  let { data }: { data: PageData } = $props();
 
   // Filtres
-  let searchQuery = "";
-  let selectedEspece = "tous";
-  let sortBy = "nom";
+  let searchQuery = $state("");
+  let selectedEspece = $state("tous");
+  let sortBy = $state("nom");
 
   // Utiliser les données de la base de données
-  $: animaux = data.pets || [];
+  let animaux = $derived(data.pets || []);
 
   // Liste des espèces uniques pour le filtre
-  $: especes = ["tous", ...new Set(animaux.map(a => a.species))];
+  let especes = $derived(["tous", ...new Set(animaux.map(a => a.species))]);
 
   // Filtrage des animaux
-  $: animauxFiltres = animaux.filter(animal => {
+  let animauxFiltres = $derived(animaux.filter(animal => {
     const matchSearch = animal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                        (animal.breed && animal.breed.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchEspece = selectedEspece === "tous" || animal.species === selectedEspece;
     
     return matchSearch && matchEspece;
-  });
+  }));
 
   // Tri des animaux
-  $: animauxTries = [...animauxFiltres].sort((a, b) => {
+  let animauxTries = $derived([...animauxFiltres].sort((a, b) => {
     if (sortBy === "nom") {
       return a.name.localeCompare(b.name);
     } else if (sortBy === "espece") {
       return a.species.localeCompare(b.species);
     }
     return 0;
-  });
+  }));
 </script>
 
 <svelte:head>
