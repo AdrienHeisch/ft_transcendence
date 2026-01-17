@@ -1,7 +1,7 @@
 <script lang="ts">
-  let showLogin = false;
-  let isAdminMode = false;
-  let sidebarOpen = true;
+  let showLogin = $state(false);
+  let isAdminMode = $state(false);
+  let sidebarOpen = $state(true);
 
   // Les bestiaux
   const animals = [
