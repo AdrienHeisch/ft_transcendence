@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  let { data }: { data: PageData } = $props();
 
   // Données de démonstration (à remplacer par les vraies données de l'utilisateur)
-  const user = {
+  let user = $derived({
     username: data.username || "RGDupont",
     firstName: "Roger",
     lastName: "Dupont",
@@ -17,7 +17,7 @@
     posts: 156,
     isCurrentUser: false, // À gérer selon l'utilisateur connecté
     isFriend: false,
-  };
+  });
 
   const passions = [
     { icon: "🐾", name: "Animaux" },
