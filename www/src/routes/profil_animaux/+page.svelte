@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { PageData } from "./$types";
 
-  export let data: PageData;
+  let { data }: { data: PageData } = $props();
 
-  const { animal } = data;
+  // Dérivation automatique de l'animal depuis data
+  let animal = $derived(data.animal);
 
-  //photos animal (exemple : marguerite ma jolie vache)
+  // Photos animal (exemple : marguerite ma jolie vache)
   const animalPhotos = [
     "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
     "https://www.lozere-online.com/wp-content/uploads/2013/09/vache-race-aubrac.jpg",
