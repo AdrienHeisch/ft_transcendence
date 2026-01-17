@@ -2,7 +2,7 @@
   import { enhance } from "$app/forms";
   import type { ActionData } from "./$types";
 
-  export let form: ActionData;
+  let { form }: { form: ActionData } = $props();
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-rose-100 via-amber-100 to-orange-200 flex items-center justify-center p-4 relative overflow-hidden">
