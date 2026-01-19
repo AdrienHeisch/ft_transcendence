@@ -1,85 +1,11 @@
 <script lang="ts">
 // Filtres
+const { data } = $props();
+
 let searchQuery = $state("");
 let selectedRole = $state("tous");
 let selectedCity = $state("toutes");
 let sortBy = $state("lastName");
-
-// Données de démonstration des personnes
-const persons = [
-  {
-    id: 1,
-    lastName: "Dupont",
-    firstName: "Roger",
-    username: "RGDupont",
-    role: "Adoptant",
-    city: "Paris",
-    age: 45,
-    adoptedAnimals: 3,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Roger",
-    description: "Passionné par les animaux de ferme depuis toujours",
-  },
-  {
-    id: 2,
-    lastName: "Martin",
-    firstName: "Sophie",
-    username: "SophieM",
-    role: "Association",
-    city: "Lyon",
-    age: 38,
-    adoptedAnimals: 0,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
-    description: "Présidente de l'association Les Amis de la Ferme",
-  },
-  {
-    id: 3,
-    lastName: "Bernard",
-    firstName: "Jean",
-    username: "JeanB",
-    role: "Adoptant",
-    city: "Marseille",
-    age: 52,
-    adoptedAnimals: 5,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jean",
-    description: "Éleveur à la retraite, adore les vaches",
-  },
-  {
-    id: 4,
-    lastName: "Petit",
-    firstName: "Marie",
-    username: "MariePetit",
-    role: "Bénévole",
-    city: "Toulouse",
-    age: 29,
-    adoptedAnimals: 1,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marie",
-    description: "Vétérinaire bénévole pour les animaux de la ferme",
-  },
-  {
-    id: 5,
-    lastName: "Robert",
-    firstName: "Pierre",
-    username: "PierreR",
-    role: "Adoptant",
-    city: "Paris",
-    age: 41,
-    adoptedAnimals: 2,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pierre",
-    description: "Photographe animalier amateur",
-  },
-  {
-    id: 6,
-    lastName: "Moreau",
-    firstName: "Claire",
-    username: "ClaireM",
-    role: "Association",
-    city: "Lyon",
-    age: 35,
-    adoptedAnimals: 0,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Claire",
-    description: "Coordinatrice de l'association Ferme et Nature",
-  },
-];
 
 // Liste des rôles et villes uniques pour les filtres
 let roles = $derived(["tous", ...new Set(persons.map((p) => p.role))]);
