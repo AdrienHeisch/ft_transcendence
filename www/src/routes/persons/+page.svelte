@@ -1,44 +1,41 @@
 <script lang="ts">
-// Filtres
 const { data } = $props();
 
+// Filters
 let searchQuery = $state("");
 let selectedRole = $state("tous");
 let selectedCity = $state("toutes");
 let sortBy = $state("lastName");
 
-// Liste des rôles et villes uniques pour les filtres
-let roles = $derived(["tous", ...new Set(persons.map((p) => p.role))]);
-let cities = $derived(["toutes", ...new Set(persons.map((p) => p.city))]);
+// Unique roles and cities
+let roles = $derived(["tous", ...new Set(data.persons.map((p) => p.role))]);
+let cities = $derived(["toutes", ...new Set(data.persons.map((p) => p.city))]);
 
-// Filtrage des personnes
-let filteredPersons = $derived(
-  persons.filter((personne) => {
-    const matchSearch =
-      personne.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      personne.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      personne.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      personne.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchRole = selectedRole === "tous" || personne.role === selectedRole;
-    const matchCity =
-      selectedCity === "toutes" || personne.city === selectedCity;
+let persons = $derived(
+  data.persons
+    .filter((persons) => {
+      const matchSearch =
+        persons.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        persons.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        persons.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        persons.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchRole =
+        selectedRole === "tous" || persons.role === selectedRole;
+      const matchCity =
+        selectedCity === "toutes" || persons.city === selectedCity;
 
-    return matchSearch && matchRole && matchCity;
-  }),
-);
-
-// Tri des personnes
-let sortedPersons = $derived(
-  [...filteredPersons].sort((a, b) => {
-    if (sortBy === "lastName") {
-      return a.lastName.localeCompare(b.lastName);
-    } else if (sortBy === "city") {
-      return a.city.localeCompare(b.city);
-    } else if (sortBy === "role") {
-      return a.role.localeCompare(b.role);
-    }
-    return 0;
-  }),
+      return matchSearch && matchRole && matchCity;
+    })
+    .sort((a, b) => {
+      if (sortBy === "lastName") {
+        return a.lastName.localeCompare(b.lastName);
+      } else if (sortBy === "city") {
+        return a.city.localeCompare(b.city);
+      } else if (sortBy === "role") {
+        return a.role.localeCompare(b.role);
+      }
+      return 0;
+    }),
 );
 </script>
 
@@ -148,12 +145,12 @@ let sortedPersons = $derived(
 
       <!-- Résultats -->
       <div class="mt-4 text-orange-900 font-medium">
-        {sortedPersons.length} {sortedPersons.length > 1 ? "personnes trouvées" : "personne trouvée"}
+        {persons.length} {persons.length > 1 ? "personnes trouvées" : "personne trouvée"}
       </div>
     </div>
 
     <!-- Grille de personnes -->
-    {#if sortedPersons.length === 0}
+    {#if persons.length === 0}
       <div class="text-center py-12">
         <div class="text-6xl mb-4">😢</div>
         <h3 class="text-2xl font-bold text-orange-900 mb-2">Aucune personne trouvée</h3>
@@ -161,7 +158,7 @@ let sortedPersons = $derived(
       </div>
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {#each sortedPersons as person (person.id)}
+        {#each persons as person (person.id)}
           <div
             class="bg-white rounded-2xl shadow-lg overflow-hidden border-3 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
