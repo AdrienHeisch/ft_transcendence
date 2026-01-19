@@ -16,23 +16,20 @@ _The “Instructions” section should mention all the needed prerequisites (sof
 tools, versions, configuration like .env setup, etc.), and step-by-step
 instructions to run the project._
 
-### Release build in container
+Tested with Docker (TODO docker version) and Podman 5.7.1. `docker` may be
+replaced with `podman` in the following commands.
 
-Tested with Docker TODO DOCKER VERSION
+- `find -name '.env.example' -execdir cp .env.example .env \;`
+- Edit `.env` files as necessary
 
-- `cp .env.example .env` and edit `.env`
+### Release
+
 - `docker compose up`
 
 ### Development
 
-#### In ./www/
-
-Tested with Deno v2.6.3
-
-- `cp .env.example .env` and edit `.env`
-- `deno task dev`
-
-TODO DATABASE IN DEV ENVIRONMENT
+- `docker compose -f compose.dev.yml up -d`
+- `docker logs --follow ft-transcendence_www_1` to get the dev server's output
 
 ## Resources
 
@@ -62,7 +59,14 @@ _TODO_
 
 ## Technical Stack
 
-_TODO_
+- Docker / Podman (containerization)
+- Caddy (reverse proxy)
+- Postgres (database)
+- Garage (object storage)
+- Bun (web application server)
+- SvelteKit (full-stack framework)
+- TailwindCSS (CSS framework)
+- Drizzle (ORM)
 
 ## Database Schema
 

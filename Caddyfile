@@ -7,11 +7,16 @@
   }
 
   handle_path /public/* {
-    request_header Host public.web.garage
-    reverse_proxy storage:3902
+    reverse_proxy storage:3902 {
+      header_up Host public.web.garage
+    }
+  }
+
+  handle_path /ws/* {
+    reverse_proxy ws:3000
   }
 
   handle {
-    reverse_proxy www:8000
+    reverse_proxy www:3000
   }
 }

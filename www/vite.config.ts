@@ -1,15 +1,10 @@
-import tailwindcss from "@tailwindcss/vite";
-import deno from "@deno/vite-plugin";
 import { sveltekit } from "@sveltejs/kit/vite";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [
-    tailwindcss(),
-    sveltekit(),
-    deno(),
-  ],
+  plugins: [tailwindcss(), sveltekit()],
   server: {
-    port: 8000,
+    port: 3000,
   },
 });

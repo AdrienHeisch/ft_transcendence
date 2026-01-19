@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { resolve } from "$app/paths";
+import { resolve } from "$app/paths";
 </script>
 
-<a href={resolve("/demo/lucia")}>lucia</a>
+<ul>
+  <li>
+    <a href={resolve("/demo/lucia")}>lucia</a>
+  </li>
+  <li>
+    <a href={resolve("/demo/files")}>files</a>
+  </li>
+</ul>
