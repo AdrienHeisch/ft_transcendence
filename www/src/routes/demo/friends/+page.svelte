@@ -4,7 +4,6 @@ import * as remote from "./friends.remote";
 let friendToAdd = $state("");
 
 const friends = $derived(await remote.getFriends());
-$inspect(friends);
 const list = $derived(
   friends.flatMap(({ user, pending }) => {
     if (pending === null) {
