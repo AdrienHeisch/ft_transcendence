@@ -176,8 +176,9 @@ let personnesTriees = $derived(
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Rôle -->
         <div>
-          <label class="block text-sm font-bold text-orange-900 mb-2">Rôle</label>
+          <label class="block text-sm font-bold text-orange-900 mb-2" for="role">Rôle</label>
           <select
+            id="role"
             bind:value={selectedRole}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
@@ -189,8 +190,9 @@ let personnesTriees = $derived(
 
         <!-- Ville -->
         <div>
-          <label class="block text-sm font-bold text-orange-900 mb-2">Ville</label>
+          <label class="block text-sm font-bold text-orange-900 mb-2" for="city">Ville</label>
           <select
+            id="city"
             bind:value={selectedVille}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
@@ -202,8 +204,9 @@ let personnesTriees = $derived(
 
         <!-- Tri -->
         <div>
-          <label class="block text-sm font-bold text-orange-900 mb-2">Trier par</label>
+          <label class="block text-sm font-bold text-orange-900 mb-2" for="sortBy">Trier par</label>
           <select
+            id="sortBy"
             bind:value={sortBy}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
