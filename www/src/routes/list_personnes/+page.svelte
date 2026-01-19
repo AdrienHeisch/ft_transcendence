@@ -2,112 +2,112 @@
 // Filtres
 let searchQuery = $state("");
 let selectedRole = $state("tous");
-let selectedVille = $state("toutes");
-let sortBy = $state("nom");
+let selectedCity = $state("toutes");
+let sortBy = $state("lastName");
 
 // Données de démonstration des personnes
-const personnes = [
+const persons = [
   {
     id: 1,
-    nom: "Dupont",
-    prenom: "Roger",
+    lastName: "Dupont",
+    firstName: "Roger",
     username: "RGDupont",
     role: "Adoptant",
-    ville: "Paris",
+    city: "Paris",
     age: 45,
-    animauxAdoptes: 3,
+    adoptedAnimals: 3,
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Roger",
     description: "Passionné par les animaux de ferme depuis toujours",
   },
   {
     id: 2,
-    nom: "Martin",
-    prenom: "Sophie",
+    lastName: "Martin",
+    firstName: "Sophie",
     username: "SophieM",
     role: "Association",
-    ville: "Lyon",
+    city: "Lyon",
     age: 38,
-    animauxAdoptes: 0,
+    adoptedAnimals: 0,
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
     description: "Présidente de l'association Les Amis de la Ferme",
   },
   {
     id: 3,
-    nom: "Bernard",
-    prenom: "Jean",
+    lastName: "Bernard",
+    firstName: "Jean",
     username: "JeanB",
     role: "Adoptant",
-    ville: "Marseille",
+    city: "Marseille",
     age: 52,
-    animauxAdoptes: 5,
+    adoptedAnimals: 5,
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jean",
     description: "Éleveur à la retraite, adore les vaches",
   },
   {
     id: 4,
-    nom: "Petit",
-    prenom: "Marie",
+    lastName: "Petit",
+    firstName: "Marie",
     username: "MariePetit",
     role: "Bénévole",
-    ville: "Toulouse",
+    city: "Toulouse",
     age: 29,
-    animauxAdoptes: 1,
+    adoptedAnimals: 1,
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marie",
     description: "Vétérinaire bénévole pour les animaux de la ferme",
   },
   {
     id: 5,
-    nom: "Robert",
-    prenom: "Pierre",
+    lastName: "Robert",
+    firstName: "Pierre",
     username: "PierreR",
     role: "Adoptant",
-    ville: "Paris",
+    city: "Paris",
     age: 41,
-    animauxAdoptes: 2,
+    adoptedAnimals: 2,
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pierre",
     description: "Photographe animalier amateur",
   },
   {
     id: 6,
-    nom: "Moreau",
-    prenom: "Claire",
+    lastName: "Moreau",
+    firstName: "Claire",
     username: "ClaireM",
     role: "Association",
-    ville: "Lyon",
+    city: "Lyon",
     age: 35,
-    animauxAdoptes: 0,
+    adoptedAnimals: 0,
     photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Claire",
     description: "Coordinatrice de l'association Ferme et Nature",
   },
 ];
 
 // Liste des rôles et villes uniques pour les filtres
-let roles = $derived(["tous", ...new Set(personnes.map((p) => p.role))]);
-let villes = $derived(["toutes", ...new Set(personnes.map((p) => p.ville))]);
+let roles = $derived(["tous", ...new Set(persons.map((p) => p.role))]);
+let cities = $derived(["toutes", ...new Set(persons.map((p) => p.city))]);
 
 // Filtrage des personnes
-let personnesFiltrees = $derived(
-  personnes.filter((personne) => {
+let filteredPersons = $derived(
+  persons.filter((personne) => {
     const matchSearch =
-      personne.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      personne.prenom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      personne.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      personne.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       personne.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
       personne.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchRole = selectedRole === "tous" || personne.role === selectedRole;
-    const matchVille =
-      selectedVille === "toutes" || personne.ville === selectedVille;
+    const matchCity =
+      selectedCity === "toutes" || personne.city === selectedCity;
 
-    return matchSearch && matchRole && matchVille;
+    return matchSearch && matchRole && matchCity;
   }),
 );
 
 // Tri des personnes
-let personnesTriees = $derived(
-  [...personnesFiltrees].sort((a, b) => {
-    if (sortBy === "nom") {
-      return a.nom.localeCompare(b.nom);
-    } else if (sortBy === "ville") {
-      return a.ville.localeCompare(b.ville);
+let sortedPersons = $derived(
+  [...filteredPersons].sort((a, b) => {
+    if (sortBy === "lastName") {
+      return a.lastName.localeCompare(b.lastName);
+    } else if (sortBy === "city") {
+      return a.city.localeCompare(b.city);
     } else if (sortBy === "role") {
       return a.role.localeCompare(b.role);
     }
@@ -188,16 +188,16 @@ let personnesTriees = $derived(
           </select>
         </div>
 
-        <!-- Ville -->
+        <!-- City -->
         <div>
           <label class="block text-sm font-bold text-orange-900 mb-2" for="city">Ville</label>
           <select
             id="city"
-            bind:value={selectedVille}
+            bind:value={selectedCity}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
-            {#each villes as ville}
-              <option value={ville}>{ville === "toutes" ? "Toutes les villes" : ville}</option>
+            {#each cities as city}
+              <option value={city}>{city === "toutes" ? "Toutes les villes" : city}</option>
             {/each}
           </select>
         </div>
@@ -210,8 +210,8 @@ let personnesTriees = $derived(
             bind:value={sortBy}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
-            <option value="nom">Nom (A-Z)</option>
-            <option value="ville">Ville</option>
+            <option value="lastName">Nom (A-Z)</option>
+            <option value="city">Ville</option>
             <option value="role">Rôle</option>
           </select>
         </div>
@@ -222,12 +222,12 @@ let personnesTriees = $derived(
 
       <!-- Résultats -->
       <div class="mt-4 text-orange-900 font-medium">
-        {personnesTriees.length} {personnesTriees.length > 1 ? "personnes trouvées" : "personne trouvée"}
+        {sortedPersons.length} {sortedPersons.length > 1 ? "personnes trouvées" : "personne trouvée"}
       </div>
     </div>
 
     <!-- Grille de personnes -->
-    {#if personnesTriees.length === 0}
+    {#if sortedPersons.length === 0}
       <div class="text-center py-12">
         <div class="text-6xl mb-4">😢</div>
         <h3 class="text-2xl font-bold text-orange-900 mb-2">Aucune personne trouvée</h3>
@@ -235,7 +235,7 @@ let personnesTriees = $derived(
       </div>
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {#each personnesTriees as personne (personne.id)}
+        {#each sortedPersons as person (person.id)}
           <div
             class="bg-white rounded-2xl shadow-lg overflow-hidden border-3 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
@@ -243,45 +243,45 @@ let personnesTriees = $derived(
             <div class="relative bg-gradient-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
                 <img 
-                  src={personne.photo} 
-                  alt={personne.prenom + ' ' + personne.nom}
+                  src={person.photo} 
+                  alt={person.firstName + ' ' + person.lastName}
                   class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white"
                 />
               </div>
               
               <!-- Badge rôle -->
               <span class="absolute top-3 right-3 px-3 py-1 bg-orange-600 text-white rounded-lg font-bold text-sm shadow-md">
-                {personne.role}
+                {person.role}
               </span>
             </div>
 
             <!-- Informations -->
             <div class="p-5">
               <h3 class="text-2xl font-bold text-orange-900 mb-1" style="font-family: Georgia, serif;">
-                {personne.prenom} {personne.nom}
+                {person.firstName} {person.lastName}
               </h3>
-              <p class="text-orange-700 mb-2">@{personne.username}</p>
+              <p class="text-orange-700 mb-2">@{person.username}</p>
 
               <div class="flex items-center gap-4 mb-3 text-sm text-orange-800">
                 <div class="flex items-center gap-1">
                   <span>📍</span>
-                  <span>{personne.ville}</span>
+                  <span>{person.city}</span>
                 </div>
                 <div class="flex items-center gap-1">
                   <span>🎂</span>
-                  <span>{personne.age} ans</span>
+                  <span>{person.age} ans</span>
                 </div>
               </div>
 
-              {#if personne.animauxAdoptes > 0}
+              {#if person.adoptedAnimals > 0}
                 <div class="mb-3 text-sm text-orange-800 flex items-center gap-1">
                   <span>🐾</span>
-                  <span class="font-semibold">{personne.animauxAdoptes} {personne.animauxAdoptes > 1 ? "animaux adoptés" : "animal adopté"}</span>
+                  <span class="font-semibold">{person.adoptedAnimals} {person.adoptedAnimals > 1 ? "animaux adoptés" : "animal adopté"}</span>
                 </div>
               {/if}
 
               <p class="text-sm text-gray-700 mb-4 line-clamp-2 italic">
-                "{personne.description}"
+                "{person.description}"
               </p>
 
               <!-- Boutons -->
