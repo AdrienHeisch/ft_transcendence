@@ -2,6 +2,7 @@ import { lt } from "drizzle-orm";
 import {
   boolean,
   check,
+  pgEnum,
   pgTable,
   primaryKey,
   text,
@@ -47,6 +48,12 @@ export const pet = pgTable("pet", {
 
 export type Pet = typeof user.$inferSelect;
 
+export const friendsPairAccepted = pgEnum("friends_pair_accepted", [
+  "yes",
+  "left",
+  "right",
+]);
+
 export const friendsPair = pgTable(
   "friends_pair",
   {
@@ -57,6 +64,7 @@ export const friendsPair = pgTable(
     right: uuid("right")
       .notNull()
       .references(() => user.id),
+    accepted: friendsPairAccepted().notNull(),
   },
   (table) => [
     primaryKey({ columns: [table.left, table.right] }),
@@ -70,7 +78,7 @@ export const chatMessage = pgTable("chat_message", {
   id: uuid("id").primaryKey(),
   friendsId: uuid("friends_id")
     .notNull()
-    .references(() => friendsPair.id),
+    .references(() => friendsPair.id, { onDelete: "cascade" }),
   author: uuid("author")
     .notNull()
     .references(() => user.id),

@@ -19,6 +19,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:seed": "bun -e \"import seed from './src/lib/server/db/seed'; await seed();\"",
+    "db:setup": "bun -e \"import setup from './src/lib/server/db/setup'; await setup();\"",
     "biome": "biome check --write",
     "biome:check": "biome check",
     "biome:ci": "biome ci ."
