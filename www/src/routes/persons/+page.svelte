@@ -68,7 +68,7 @@ let persons = $derived(
   </header>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Titre de la page -->
+    <!-- Page title -->
     <div class="text-center mb-8">
       <h2 class="text-4xl md:text-5xl font-bold text-orange-900 mb-4" style="font-family: Georgia, serif;">
         👥 Notre Communauté
@@ -78,14 +78,14 @@ let persons = $derived(
       </p>
     </div>
 
-    <!-- Filtres de recherche -->
+    <!-- Search filters -->
     <div class="bg-white rounded-2xl shadow-xl p-6 border-3 border-orange-400 mb-8">
       <h3 class="text-2xl font-bold text-orange-900 mb-6 flex items-center gap-2">
         <span>🔍</span>
         Rechercher une personne
       </h3>
 
-      <!-- Barre de recherche -->
+      <!-- Search bar -->
       <div class="mb-6">
         <input
           type="text"
@@ -95,9 +95,9 @@ let persons = $derived(
         />
       </div>
 
-      <!-- Filtres -->
+      <!-- Filters -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <!-- Rôle -->
+        <!-- Role -->
         <div>
           <label class="block text-sm font-bold text-orange-900 mb-2" for="role">Rôle</label>
           <select
@@ -125,7 +125,7 @@ let persons = $derived(
           </select>
         </div>
 
-        <!-- Tri -->
+        <!-- Sorting -->
         <div>
           <label class="block text-sm font-bold text-orange-900 mb-2" for="sortBy">Trier par</label>
           <select
@@ -139,17 +139,16 @@ let persons = $derived(
           </select>
         </div>
 
-        <!-- Espace vide pour alignement -->
         <div></div>
       </div>
 
-      <!-- Résultats -->
+      <!-- Results -->
       <div class="mt-4 text-orange-900 font-medium">
         {persons.length} {persons.length > 1 ? "personnes trouvées" : "personne trouvée"}
       </div>
     </div>
 
-    <!-- Grille de personnes -->
+    <!-- Persons -->
     {#if persons.length === 0}
       <div class="text-center py-12">
         <div class="text-6xl mb-4">😢</div>
@@ -162,7 +161,7 @@ let persons = $derived(
           <div
             class="bg-white rounded-2xl shadow-lg overflow-hidden border-3 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
-            <!-- Photo de profil -->
+            <!-- Profile picture -->
             <div class="relative bg-gradient-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
                 <img 
@@ -172,13 +171,13 @@ let persons = $derived(
                 />
               </div>
               
-              <!-- Badge rôle -->
+              <!-- Role badge -->
               <span class="absolute top-3 right-3 px-3 py-1 bg-orange-600 text-white rounded-lg font-bold text-sm shadow-md">
                 {person.role}
               </span>
             </div>
 
-            <!-- Informations -->
+            <!-- Info -->
             <div class="p-5">
               <h3 class="text-2xl font-bold text-orange-900 mb-1" style="font-family: Georgia, serif;">
                 {person.firstName} {person.lastName}
@@ -207,7 +206,7 @@ let persons = $derived(
                 "{person.description}"
               </p>
 
-              <!-- Boutons -->
+              <!-- Buttons -->
               <div class="flex gap-2">
                 <button class="flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
                   👁️ Voir le profil
