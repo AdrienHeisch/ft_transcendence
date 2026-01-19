@@ -41,6 +41,9 @@ export default async function seedDb() {
     },
     friendsPair: {
       count: 20,
+      columns: {
+        accepted: gen.default({ defaultValue: "yes" }),
+      },
       with: {
         chatMessage: [{ weight: 1, count: [10, 20, 30] }],
       },
@@ -90,5 +93,5 @@ export default async function seedDb() {
     })
     .where(eq(schema.user.id, userB.id));
   console.log("Done");
-  db.$client.end();
+  client.end();
 }
