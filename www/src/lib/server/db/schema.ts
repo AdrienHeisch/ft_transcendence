@@ -1,4 +1,14 @@
-import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { lt } from "drizzle-orm";
+import {
+  boolean,
+  check,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
@@ -28,7 +38,9 @@ export type User = typeof user.$inferSelect;
 
 export const pet = pgTable("pet", {
   id: uuid("id").primaryKey(),
-  ownerId: uuid("owner_id").notNull(),
+  ownerId: uuid("owner_id")
+    .notNull()
+    .references(() => user.id),
   name: text("name").notNull(),
   species: text("species").notNull(),
   breed: text("breed").notNull(),
@@ -39,17 +51,40 @@ export const pet = pgTable("pet", {
 
 export type Pet = typeof user.$inferSelect;
 
-export const friendsPair = pgTable("friends_pair", {
-  id: uuid("id").primaryKey(),
-  left: uuid("left").notNull(),
-  right: uuid("right").notNull(),
-});
+export const friendsPairAccepted = pgEnum("friends_pair_accepted", [
+  "yes",
+  "left",
+  "right",
+]);
+
+export const friendsPair = pgTable(
+  "friends_pair",
+  {
+    id: uuid("id").notNull().unique(),
+    left: uuid("left")
+      .notNull()
+      .references(() => user.id),
+    right: uuid("right")
+      .notNull()
+      .references(() => user.id),
+    accepted: friendsPairAccepted().notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.left, table.right] }),
+    check("ids_order", lt(table.left, table.right)),
+  ],
+);
 
 export type FriendsPair = typeof friendsPair.$inferSelect;
 
 export const chatMessage = pgTable("chat_message", {
   id: uuid("id").primaryKey(),
-  friends_id: uuid("friends_id").notNull(),
+  friendsId: uuid("friends_id")
+    .notNull()
+    .references(() => friendsPair.id, { onDelete: "cascade" }),
+  author: uuid("author")
+    .notNull()
+    .references(() => user.id),
   content: text("content").notNull(),
   sentAt: timestamp("sent_at", {
     withTimezone: true,
@@ -61,7 +96,9 @@ export type ChatMessage = typeof chatMessage.$inferSelect;
 
 export const post = pgTable("post", {
   id: uuid("id").primaryKey(),
-  author: uuid("author").notNull(),
+  author: uuid("author")
+    .notNull()
+    .references(() => user.id),
   content: text("content").notNull(),
   postedAt: timestamp("posted_at", {
     withTimezone: true,

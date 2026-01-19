@@ -9,7 +9,7 @@ export let form: ActionData;
 <form method="post" action="?/login" use:enhance>
   <label>
     Username
-    <input name="email" />
+    <input type="email" name="email" />
   </label>
   <label>
     Password

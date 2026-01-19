@@ -1,5 +1,6 @@
 #!/bin/bash
 
-bun run db:push
+bun db:push
+bun db:setup
 
 exec "$@"

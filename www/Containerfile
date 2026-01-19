@@ -1,3 +1,15 @@
+FROM oven/bun:1.3.5-debian AS ws
+WORKDIR /home/bun/app
+COPY package.json .
+COPY bun.lock .
+COPY bunfig.toml .
+COPY svelte.config.js .
+COPY drizzle.config.ts .
+COPY src/lib/server/db/schema.ts ./src/lib/server/db/schema.ts
+COPY src/websockets.ts ./src/websockets.ts
+USER bun
+CMD ["bun", "run", "src/websockets.ts"]
+
 FROM oven/bun:1.3.5-debian AS builder
 WORKDIR /home/bun/app
 COPY package.json .
@@ -7,9 +19,9 @@ COPY svelte.config.js .
 RUN bun ci
 COPY . .
 COPY .env.example .env
-RUN bun run sv:prepare && bun run build
+RUN bun sv:prepare && bun run build
 
-FROM oven/bun:1.3.5-debian
+FROM oven/bun:1.3.5-debian AS www
 WORKDIR /home/bun/app
 COPY container-entrypoint.sh .
 RUN chown bun: container-entrypoint.sh
