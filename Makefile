@@ -31,3 +31,5 @@ seed:
 		-e DATABASE_URL=postgres://root:mysecretpassword@db:5432/local \
 		docker.io/oven/bun:1.3.5-debian \
 		bun db:seed
+
+.PHONY: build up re down dev dev-down reset seed
