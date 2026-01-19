@@ -32,4 +32,20 @@ seed:
 		docker.io/oven/bun:1.3.5-debian \
 		bun db:seed
 
+format:
+	docker run \
+		--rm \
+		-w /app \
+		-v ./www:/app \
+		docker.io/oven/bun:1.3.5-debian \
+		bun biome
+
+check:
+	docker run \
+		--rm \
+		-w /app \
+		-v ./www:/app \
+		docker.io/oven/bun:1.3.5-debian \
+		sh -c "bun sv:check && bun biome:check"
+
 .PHONY: build up re down dev dev-down reset seed
