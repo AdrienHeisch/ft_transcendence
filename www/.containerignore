@@ -9,7 +9,6 @@ compose.yml
 .wrangler
 /.svelte-kit
 /build
-/.deno-deploy
 /.vite
 
 # OS

@@ -1,5 +1,6 @@
 #!/bin/bash
 
-deno task db:push
+bun db:push
+bun db:setup
 
 exec "$@"
