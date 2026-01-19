@@ -1,104 +1,109 @@
 <script lang="ts">
-  // Filtres
-  let searchQuery = $state("");
-  let selectedRole = $state("tous");
-  let selectedVille = $state("toutes");
-  let sortBy = $state("nom");
+// Filtres
+let searchQuery = $state("");
+let selectedRole = $state("tous");
+let selectedVille = $state("toutes");
+let sortBy = $state("nom");
 
-  // Données de démonstration des personnes
-  const personnes = [
-    {
-      id: 1,
-      nom: "Dupont",
-      prenom: "Roger",
-      username: "RGDupont",
-      role: "Adoptant",
-      ville: "Paris",
-      age: 45,
-      animauxAdoptes: 3,
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Roger",
-      description: "Passionné par les animaux de ferme depuis toujours"
-    },
-    {
-      id: 2,
-      nom: "Martin",
-      prenom: "Sophie",
-      username: "SophieM",
-      role: "Association",
-      ville: "Lyon",
-      age: 38,
-      animauxAdoptes: 0,
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
-      description: "Présidente de l'association Les Amis de la Ferme"
-    },
-    {
-      id: 3,
-      nom: "Bernard",
-      prenom: "Jean",
-      username: "JeanB",
-      role: "Adoptant",
-      ville: "Marseille",
-      age: 52,
-      animauxAdoptes: 5,
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jean",
-      description: "Éleveur à la retraite, adore les vaches"
-    },
-    {
-      id: 4,
-      nom: "Petit",
-      prenom: "Marie",
-      username: "MariePetit",
-      role: "Bénévole",
-      ville: "Toulouse",
-      age: 29,
-      animauxAdoptes: 1,
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marie",
-      description: "Vétérinaire bénévole pour les animaux de la ferme"
-    },
-    {
-      id: 5,
-      nom: "Robert",
-      prenom: "Pierre",
-      username: "PierreR",
-      role: "Adoptant",
-      ville: "Paris",
-      age: 41,
-      animauxAdoptes: 2,
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pierre",
-      description: "Photographe animalier amateur"
-    },
-    {
-      id: 6,
-      nom: "Moreau",
-      prenom: "Claire",
-      username: "ClaireM",
-      role: "Association",
-      ville: "Lyon",
-      age: 35,
-      animauxAdoptes: 0,
-      photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Claire",
-      description: "Coordinatrice de l'association Ferme et Nature"
-    },
-  ];
+// Données de démonstration des personnes
+const personnes = [
+  {
+    id: 1,
+    nom: "Dupont",
+    prenom: "Roger",
+    username: "RGDupont",
+    role: "Adoptant",
+    ville: "Paris",
+    age: 45,
+    animauxAdoptes: 3,
+    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Roger",
+    description: "Passionné par les animaux de ferme depuis toujours",
+  },
+  {
+    id: 2,
+    nom: "Martin",
+    prenom: "Sophie",
+    username: "SophieM",
+    role: "Association",
+    ville: "Lyon",
+    age: 38,
+    animauxAdoptes: 0,
+    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
+    description: "Présidente de l'association Les Amis de la Ferme",
+  },
+  {
+    id: 3,
+    nom: "Bernard",
+    prenom: "Jean",
+    username: "JeanB",
+    role: "Adoptant",
+    ville: "Marseille",
+    age: 52,
+    animauxAdoptes: 5,
+    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jean",
+    description: "Éleveur à la retraite, adore les vaches",
+  },
+  {
+    id: 4,
+    nom: "Petit",
+    prenom: "Marie",
+    username: "MariePetit",
+    role: "Bénévole",
+    ville: "Toulouse",
+    age: 29,
+    animauxAdoptes: 1,
+    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marie",
+    description: "Vétérinaire bénévole pour les animaux de la ferme",
+  },
+  {
+    id: 5,
+    nom: "Robert",
+    prenom: "Pierre",
+    username: "PierreR",
+    role: "Adoptant",
+    ville: "Paris",
+    age: 41,
+    animauxAdoptes: 2,
+    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Pierre",
+    description: "Photographe animalier amateur",
+  },
+  {
+    id: 6,
+    nom: "Moreau",
+    prenom: "Claire",
+    username: "ClaireM",
+    role: "Association",
+    ville: "Lyon",
+    age: 35,
+    animauxAdoptes: 0,
+    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Claire",
+    description: "Coordinatrice de l'association Ferme et Nature",
+  },
+];
 
-  // Liste des rôles et villes uniques pour les filtres
-  let roles = $derived(["tous", ...new Set(personnes.map(p => p.role))]);
-  let villes = $derived(["toutes", ...new Set(personnes.map(p => p.ville))]);
+// Liste des rôles et villes uniques pour les filtres
+let roles = $derived(["tous", ...new Set(personnes.map((p) => p.role))]);
+let villes = $derived(["toutes", ...new Set(personnes.map((p) => p.ville))]);
 
-  // Filtrage des personnes
-  let personnesFiltrees = $derived(personnes.filter(personne => {
-    const matchSearch = personne.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                       personne.prenom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                       personne.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                       personne.description.toLowerCase().includes(searchQuery.toLowerCase());
+// Filtrage des personnes
+let personnesFiltrees = $derived(
+  personnes.filter((personne) => {
+    const matchSearch =
+      personne.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      personne.prenom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      personne.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      personne.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchRole = selectedRole === "tous" || personne.role === selectedRole;
-    const matchVille = selectedVille === "toutes" || personne.ville === selectedVille;
-    
-    return matchSearch && matchRole && matchVille;
-  }));
+    const matchVille =
+      selectedVille === "toutes" || personne.ville === selectedVille;
 
-  // Tri des personnes
-  let personnesTriees = $derived([...personnesFiltrees].sort((a, b) => {
+    return matchSearch && matchRole && matchVille;
+  }),
+);
+
+// Tri des personnes
+let personnesTriees = $derived(
+  [...personnesFiltrees].sort((a, b) => {
     if (sortBy === "nom") {
       return a.nom.localeCompare(b.nom);
     } else if (sortBy === "ville") {
@@ -107,7 +112,8 @@
       return a.role.localeCompare(b.role);
     }
     return 0;
-  }));
+  }),
+);
 </script>
 
 <svelte:head>
