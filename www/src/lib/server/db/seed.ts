@@ -42,7 +42,7 @@ export default async function seedDb() {
     friendsPair: {
       count: 20,
       columns: {
-        accepted: gen.default({ defaultValue: "yes" }),
+        pending: gen.default({ defaultValue: null }),
       },
       with: {
         chatMessage: [{ weight: 1, count: [10, 20, 30] }],
