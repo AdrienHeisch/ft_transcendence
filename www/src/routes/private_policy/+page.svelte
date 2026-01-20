@@ -2,9 +2,9 @@
 // Svelte 5 ready - no state needed for this static page
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100">
+<div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
 	<!-- Header -->
-	<header class="bg-gradient-to-r from-orange-600 to-orange-700 text-white shadow-lg">
+	<header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
 		<div class="flex items-center justify-between px-6 py-3">
 			<button
 				onclick={() => (window.location.href = '/')}
@@ -146,7 +146,7 @@
 			<div class="mt-8 pt-6 border-t-2 border-orange-300">
 				<button
 					onclick={() => (window.location.href = '/')}
-					class="px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md"
+					class="px-6 py-3 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md"
 				>
 					← Back to home
 				</button>
