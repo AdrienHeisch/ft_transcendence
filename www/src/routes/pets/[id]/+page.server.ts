@@ -1,13 +1,10 @@
-import type { PageServerLoad } from './$types';
+import { eq } from "drizzle-orm";
+import { db } from "$lib/server/db";
+import * as schema from "$lib/server/db/schema";
+import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = () => {
+export const load: PageServerLoad = ({ params }) => {
   return {
-    animal: {
-      nom: "Marguerite",
-      espece: "Vache",
-      age: 4,
-      description: "Marguerite est une vache tres facile, elle adore le foin, les longues siestes, et ses amis les canards.",
-      adopte: false
-    }
+    pet: db.select().from(schema.pet).where(eq(schema.pet.id, params.id)),
   };
 };

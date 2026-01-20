@@ -2,7 +2,10 @@
   const { data } = $props();
 
   // Dérivation automatique de l'animal depuis data
-  let animal = $derived(data.animal);
+  let [_pet] = $derived(await data.pet);
+
+  // TODO remove fake data
+  const pet = $derived({..._pet, adopted: true});
 
   // Photos animal (exemple : marguerite ma jolie vache)
   const animalPhotos = [
@@ -13,12 +16,12 @@
 </script>
 
 <svelte:head>
-  <title>{animal.nom}'s Profile</title>
+  <title>{pet.name}'s Profile</title>
 </svelte:head>
 
 <div class="min-h-screen bg-[#f5e6d3]">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <a href="/animaux" class="inline-flex items-center gap-2 text-[#8B4513] hover:text-[#A0522D] font-bold transition-colors">
+    <a href="/pets" class="inline-flex items-center gap-2 text-[#8B4513] hover:text-[#A0522D] font-bold transition-colors">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
       </svg>
@@ -31,10 +34,10 @@
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-8 border-4 border-[#8B4513]">
           <div class="flex items-start justify-between mb-6">
             <div>
-              <h1 class="text-4xl font-bold text-[#8B4513] mb-2">{animal.nom}</h1>
-              <p class="text-xl text-[#A0522D] font-medium">{animal.espece}</p>
+              <h1 class="text-4xl font-bold text-[#8B4513] mb-2">{pet.name}</h1>
+              <p class="text-xl text-[#A0522D] font-medium">{pet.species}</p>
             </div>
-            {#if animal.adopte}
+            {#if pet.adopted}
               <span class="px-4 py-2 bg-orange-600 text-white rounded-lg font-medium">
                 Adopted
               </span>
@@ -51,7 +54,7 @@
               <span class="text-2xl">🎂</span>
               <div>
                 <p class="text-sm text-[#A0522D] font-medium">Age</p>
-                <p class="text-lg text-[#8B4513] font-bold">{animal.age} years old</p>
+                <p class="text-lg text-[#8B4513] font-bold">{pet.age} years old</p>
               </div>
             </div>
 
@@ -79,13 +82,13 @@
               Description
             </h2>
             <p class="text-[#8B4513] leading-relaxed bg-[#fef7ed] p-4 rounded-lg border-2 border-[#8B4513]">
-              {animal.description}
+              {pet.bio}
             </p>
           </div>
 
-          {#if !animal.adopte}
+          {#if !pet.adopted}
             <button class="w-full py-4 bg-[#CC5500] text-white rounded-lg font-bold text-lg hover:bg-[#A04000] transition-all duration-200 shadow-md hover:shadow-lg">
-              🏠 Adopt {animal.nom}
+              🏠 Adopt {pet.name}
             </button>
           {:else}
             <button disabled class="w-full py-4 bg-gray-400 text-white rounded-lg font-bold text-lg cursor-not-allowed opacity-60">
@@ -126,7 +129,7 @@
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl overflow-hidden border-4 border-[#8B4513]">
           <img 
             src={animalPhotos[0]} 
-            alt={animal.nom}
+            alt={pet.name}
             class="w-full aspect-video object-cover"
           />
         </div>
@@ -137,7 +140,7 @@
             <div class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 cursor-pointer">
               <img 
                 src={photo} 
-                alt="{animal.nom} - Photo {i + 2}"
+                alt="{pet.name} - Photo {i + 2}"
                 class="w-full aspect-square object-cover"
               />
             </div>
