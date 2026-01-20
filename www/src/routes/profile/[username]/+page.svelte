@@ -236,7 +236,7 @@
                 <p class="font-semibold text-gray-900">{user.firstName} {user.lastName}</p>
                 <p class="text-sm text-gray-600">{post.timestamp}</p>
               </div>
-              <button class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Actions">
                 <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
                 </svg>
@@ -265,7 +265,7 @@
                   </svg>
                   <span class="font-medium">{post.comments}</span>
                 </button>
-                <button class="flex items-center gap-2 text-amber-900 hover:text-orange-700 transition-colors group ml-auto">
+                <button class="flex items-center gap-2 text-amber-900 hover:text-orange-700 transition-colors group ml-auto" aria-label="Share">
                   <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                   </svg>
