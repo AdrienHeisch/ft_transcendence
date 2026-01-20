@@ -6,8 +6,8 @@ let [_pet] = $derived(await data.pet);
 // TODO remove fake data
 const pet = $derived({ ..._pet, adopted: true });
 
-// Photos animal (exemple : marguerite ma jolie vache)
-const animalPhotos = [
+// TODO remove fake data
+const photos = [
   "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
   "https://www.lozere-online.com/wp-content/uploads/2013/09/vache-race-aubrac.jpg",
   "https://cdn.canardware.com/2021/05/05044743/10327-vache-1200x627.jpg",
@@ -127,7 +127,7 @@ const animalPhotos = [
         <!-- Photo principale -->
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl overflow-hidden border-4 border-[#8B4513]">
           <img 
-            src={animalPhotos[0]} 
+            src={photos[0]} 
             alt={pet.name}
             class="w-full aspect-video object-cover"
           />
@@ -135,7 +135,7 @@ const animalPhotos = [
 
         <!-- Galerie de photos -->
         <div class="grid grid-cols-2 gap-4">
-          {#each animalPhotos.slice(1) as photo, i}
+          {#each photos.slice(1) as photo, i}
             <div class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 cursor-pointer">
               <img 
                 src={photo} 
