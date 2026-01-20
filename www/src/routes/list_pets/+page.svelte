@@ -4,6 +4,7 @@ import type { PageData } from "./$types";
 
 const { data }: { data: PageData } = $props();
 
+// TODO avatars
 const getAvatar = (_: Pet) =>
   "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=800";
 
@@ -12,36 +13,32 @@ let searchQuery = $state("");
 let selectedSpecies = $state("all");
 let sortBy = $state("name");
 
-// Use data from database
-let animals = $derived((await data.pets) || []);
+// Unique species
+let species = $derived([
+  "all",
+  ...new Set((await data.pets).map((a) => a.species)),
+]);
 
-// List of unique species for the filter
-let species = $derived(["all", ...new Set(animals.map((a) => a.species))]);
+let pets = $derived(
+  (await data.pets)
+    .filter((pet) => {
+      const matchSearch =
+        pet.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (pet.breed &&
+          pet.breed.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchSpecies =
+        selectedSpecies === "all" || pet.species === selectedSpecies;
 
-// Filtering animals
-let filteredAnimals = $derived(
-  animals.filter((animal) => {
-    const matchSearch =
-      animal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (animal.breed &&
-        animal.breed.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchSpecies =
-      selectedSpecies === "all" || animal.species === selectedSpecies;
-
-    return matchSearch && matchSpecies;
-  }),
-);
-
-// Sorting animals
-let sortedAnimals = $derived(
-  [...filteredAnimals].sort((a, b) => {
-    if (sortBy === "name") {
-      return a.name.localeCompare(b.name);
-    } else if (sortBy === "species") {
-      return a.species.localeCompare(b.species);
-    }
-    return 0;
-  }),
+      return matchSearch && matchSpecies;
+    })
+    .sort((a, b) => {
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name);
+      } else if (sortBy === "species") {
+        return a.species.localeCompare(b.species);
+      }
+      return 0;
+    }),
 );
 </script>
 
@@ -116,12 +113,12 @@ let sortedAnimals = $derived(
 
       <!-- Results -->
       <div class="mt-4 text-[#8B4513] font-medium">
-        {sortedAnimals.length} {sortedAnimals.length > 1 ? "animals" : "animal"} found
+        {pets.length} {pets.length > 1 ? "animals" : "animal"} found
       </div>
     </div>
 
     <!-- Animals grid -->
-    {#if sortedAnimals.length === 0}
+    {#if pets.length === 0}
       <div class="text-center py-12">
         <div class="text-6xl mb-4">😢</div>
         <h3 class="text-2xl font-bold text-[#8B4513] mb-2">No animals found</h3>
@@ -129,17 +126,17 @@ let sortedAnimals = $derived(
       </div>
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {#each sortedAnimals as animal (animal.id)}
+        {#each pets as pet (pet.id)}
           <a
             href="/profil_animaux"
             class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
             <!-- Animal image -->
             <div class="relative">
-              {#if animal.hasAvatar}
+              {#if pet.hasAvatar}
                 <img 
-                  src={getAvatar(animal)} 
-                  alt={animal.name}
+                  src={getAvatar(pet)} 
+                  alt={pet.name}
                   class="w-full h-56 object-cover"
                 />
               {:else}
@@ -154,24 +151,24 @@ let sortedAnimals = $derived(
 
             <!-- Information -->
             <div class="p-5">
-              <h3 class="text-2xl font-bold text-[#8B4513] mb-2">{animal.name}</h3>
+              <h3 class="text-2xl font-bold text-[#8B4513] mb-2">{pet.name}</h3>
               <div class="flex items-center gap-2 mb-2">
-                <span class="text-lg text-[#A0522D] font-medium">{animal.species}</span>
-                {#if animal.breed}
+                <span class="text-lg text-[#A0522D] font-medium">{pet.species}</span>
+                {#if pet.breed}
                   <span class="text-[#8B4513]">•</span>
-                  <span class="text-[#A0522D]">{animal.breed}</span>
+                  <span class="text-[#A0522D]">{pet.breed}</span>
                 {/if}
               </div>
-              
-              {#if animal.age}
+
+              {#if pet.age}
                 <div class="text-sm text-[#A0522D] mb-2">
-                  🎂 {animal.age}
+                  🎂 {pet.age}
                 </div>
               {/if}
 
-              {#if animal.bio}
+              {#if pet.bio}
                 <p class="text-sm text-[#8B4513] mb-4 line-clamp-2">
-                  {animal.bio}
+                  {pet.bio}
                 </p>
               {/if}
 
