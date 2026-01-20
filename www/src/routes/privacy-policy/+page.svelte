@@ -6,13 +6,13 @@
 	<!-- Header -->
 	<header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
 		<div class="flex items-center justify-between px-6 py-3">
-			<button
-				onclick={() => (window.location.href = '/')}
+			<a
+				href="/"
 				class="flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
 			>
 				<span class="text-xl">🏠</span>
 				<span>Home</span>
-			</button>
+			</a>
 
 			<div class="flex items-center gap-3">
 				<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐄%3C/text%3E%3C/svg%3E" alt="Logo" class="w-10 h-10" />
@@ -144,12 +144,12 @@
 			</div>
 
 			<div class="mt-8 pt-6 border-t-2 border-orange-300">
-				<button
-					onclick={() => (window.location.href = '/')}
+				<a
+					href="/"
 					class="px-6 py-3 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md"
 				>
 					← Back to home
-				</button>
+				</a>
 			</div>
 		</div>
 	</main>
