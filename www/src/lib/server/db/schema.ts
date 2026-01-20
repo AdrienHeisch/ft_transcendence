@@ -2,6 +2,7 @@ import { lt } from "drizzle-orm";
 import {
   boolean,
   check,
+  integer,
   pgTable,
   primaryKey,
   text,
@@ -43,12 +44,12 @@ export const pet = pgTable("pet", {
   name: text("name").notNull(),
   species: text("species").notNull(),
   breed: text("breed").notNull(),
-  age: text("age"),
-  description: text("description"),
-  photo: text("photo"),
+  age: integer("age").notNull(),
+  bio: text("description").notNull(),
+  hasAvatar: boolean("has_avatar").notNull(),
 });
 
-export type Pet = typeof user.$inferSelect;
+export type Pet = typeof pet.$inferSelect;
 
 export const friendsPair = pgTable(
   "friends_pair",

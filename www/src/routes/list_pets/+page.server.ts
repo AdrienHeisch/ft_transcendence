@@ -1,12 +1,10 @@
-import type { PageServerLoad } from './$types';
 import { db } from "$lib/server/db";
 import * as table from "$lib/server/db/schema";
+import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = () => {
   // Fetch all animals from the database
-  const pets = await db.select().from(table.pet);
-  
   return {
-    pets
+    pets: db.select().from(table.pet)
   };
 };

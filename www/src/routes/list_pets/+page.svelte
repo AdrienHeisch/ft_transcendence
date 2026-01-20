@@ -1,7 +1,10 @@
 <script lang="ts">
+  import type { Pet } from "$lib/server/db/schema";
   import type { PageData } from "./$types";
 
-  let { data }: { data: PageData } = $props();
+  const { data }: { data: PageData } = $props();
+
+  const getAvatar = (_: Pet) => "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=800";
 
   // Filters
   let searchQuery = $state("");
@@ -9,7 +12,7 @@
   let sortBy = $state("name");
 
   // Use data from database
-  let animals = $derived(data.pets || []);
+  let animals = $derived(await data.pets || []);
 
   // List of unique species for the filter
   let species = $derived(["all", ...new Set(animals.map(a => a.species))]);
@@ -125,9 +128,9 @@
           >
             <!-- Animal image -->
             <div class="relative">
-              {#if animal.photo}
+              {#if animal.hasAvatar}
                 <img 
-                  src={animal.photo} 
+                  src={getAvatar(animal)} 
                   alt={animal.name}
                   class="w-full h-56 object-cover"
                 />
@@ -158,9 +161,9 @@
                 </div>
               {/if}
 
-              {#if animal.description}
+              {#if animal.bio}
                 <p class="text-sm text-[#8B4513] mb-4 line-clamp-2">
-                  {animal.description}
+                  {animal.bio}
                 </p>
               {/if}
 
