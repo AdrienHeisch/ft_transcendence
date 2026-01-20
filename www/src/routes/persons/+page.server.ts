@@ -8,3 +8,5 @@ export const load: PageServerLoad = () => {
     users: db.select().from(schema.user),
   };
 };
+
+export const trailingSlash = "always";

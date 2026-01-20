@@ -8,3 +8,5 @@ export const load: PageServerLoad = () => {
     pets: db.select().from(table.pet),
   };
 };
+
+export const trailingSlash = "always";
