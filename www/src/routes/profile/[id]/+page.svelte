@@ -1,83 +1,52 @@
 <script lang="ts">
-  import type { PageData } from "./$types";
+import { error } from "@sveltejs/kit";
+import type { User } from "$lib/server/db/schema";
 
-  const { data }: { data: PageData } = $props();
+const { data } = $props();
 
-  // Données de démonstration (à remplacer par les vraies données de l'utilisateur)
-  let user = $derived({
-    username: data.username || "RGDupont",
-    firstName: "Roger",
-    lastName: "Dupont",
-    bio: "Passionate about animals and farming | Amateur photographer | Chicken lover",
-    profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=" + (data.username || "rgdupont"),
-    coverImage: "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
-    location: "Paris, France",
-    joinedDate: "January 2025",
-    friends: 247,
-    posts: 156,
-    isCurrentUser: false, // À gérer selon l'utilisateur connecté
-    isFriend: false,
-  });
+const [_user] = $derived(await data.user);
 
-  const passions = [
+$effect(() => {
+  if (!_user) error(404);
+});
+
+// TODO remove fake data
+const user = $derived({
+  ..._user,
+  coverImage:
+    "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
+  username: _user.firstName.charAt(0) + _user.lastName,
+  location: "Paris, France",
+  joinedDate: "January 2025",
+  passions: [
     { icon: "🐾", name: "Animals" },
     { icon: "🐔", name: "Chickens" },
     { icon: "🚜", name: "Farm" },
     { icon: "🍽️", name: "Gastronomy" },
     { icon: "🧠", name: "Philosophy" },
     { icon: "📚", name: "Reading" },
-  ];
+  ],
+});
 
-  const posts = [
-    {
-      id: 1,
-      image: "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
-      caption: "Marguerite enjoying the sun in the meadow 🐄 #happycow",
-      likes: 42,
-      comments: 7,
-      timestamp: "2 hours ago",
-    },
-    {
-      id: 2,
-      image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600&h=400&fit=crop",
-      caption: "The chickens laid 12 eggs today! 🐔 Record broken!",
-      likes: 38,
-      comments: 5,
-      timestamp: "5 hours ago",
-    },
-    {
-      id: 3,
-      image: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=600&h=400&fit=crop",
-      caption: "Pigs love mud! 🐷 They're so cute",
-      likes: 89,
-      comments: 23,
-      timestamp: "Yesterday",
-    },
-    {
-      id: 4,
-      image: "https://as1.ftcdn.net/v2/jpg/01/33/21/60/1000_F_133216088_Za1Z6sMjrAgGqKnHIj3EaghzA0hUHTYg.jpg",
-      caption: "The sheep just got sheared 🐑 They're so soft!",
-      likes: 56,
-      comments: 12,
-      timestamp: "2 days ago",
-    },
-    {
-      id: 5,
-      image: "https://lh6.googleusercontent.com/proxy/D68TIix5hlepNYgkXZViy8zdyEc5RT60ACsloBevch4Sdy1xwFQvVhuFg8Rive0u9k96WxskbJZw6ghffdujSZqHo9RA7w",
-      caption: "Goats are mischievous as always 🐐",
-      likes: 64,
-      comments: 15,
-      timestamp: "3 days ago",
-    },
-    {
-      id: 6,
-      image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&h=400&fit=crop",
-      caption: "Nice horseback ride this morning 🐴 #horseback",
-      likes: 71,
-      comments: 18,
-      timestamp: "4 days ago",
-    },
-  ];
+const _posts = $derived(await data.posts);
+const friends = $derived(await data.friends);
+
+const isCurrentUser = $derived(data.currentUser?.id === user.id);
+
+// TODO remove fake data
+const posts = $derived(
+  _posts.map((post) => ({
+    ...post,
+    likes: post.content.length % 33,
+    comments: post.content.length % 20,
+    image:
+      "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
+  })),
+);
+
+// TODO avatars
+const getAvatar = (user: User) =>
+  `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.firstName}`;
 </script>
 
 <div class="min-h-screen relative">
@@ -108,7 +77,7 @@
         <!-- Profile Picture -->
         <div class="relative">
           <img 
-            src={user.profileImage} 
+            src={getAvatar(user)} 
             alt={user.username}
             class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
           />
@@ -140,13 +109,13 @@
 
         <!-- Action Buttons -->
         <div class="flex gap-3">
-          {#if user.isCurrentUser}
+          {#if isCurrentUser}
             <button class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
               Edit profile
             </button>
           {:else}
             <button class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
-              {#if user.isFriend}
+              {#if (await data.currentUserFriends).some((friend) => user.id === friend.id)}
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
@@ -168,11 +137,11 @@
       <!-- Stats -->
       <div class="flex justify-center md:justify-start gap-8 mt-6 pt-6 border-t-2 border-orange-700">
         <div class="text-center">
-          <div class="text-2xl font-bold text-orange-700">{user.friends}</div>
+          <div class="text-2xl font-bold text-orange-700">{friends.length}</div>
           <div class="text-sm text-amber-900">Friends</div>
         </div>
         <div class="text-center">
-          <div class="text-2xl font-bold text-orange-700">{user.posts}</div>
+          <div class="text-2xl font-bold text-orange-700">{posts.length}</div>
           <div class="text-sm text-amber-900">Posts</div>
         </div>
       </div>
@@ -189,7 +158,7 @@
             Passions
           </h2>
           <div class="grid grid-cols-2 gap-3">
-            {#each passions as passion}
+            {#each user.passions as passion}
               <div class="flex items-center gap-2 p-3 bg-yellow-100 rounded-lg hover:bg-orange-100 transition-all duration-200 cursor-pointer border-2 border-orange-700">
                 <span class="text-2xl">{passion.icon}</span>
                 <span class="text-sm font-medium text-gray-700">{passion.name}</span>
@@ -205,16 +174,17 @@
               <span class="text-2xl">👥</span>
               Friends
             </span>
-            <a href="/profile/{user.username}/friends" class="text-sm text-orange-700 hover:text-orange-800 font-medium">View all</a>
+            <a href="/profile/{user.id}/friends" class="text-sm text-orange-700 hover:text-orange-800 font-medium">View all</a>
           </h2>
           <div class="grid grid-cols-3 gap-2">
-            {#each Array(6) as _, i}
+            {#each friends as friend (friend.id)}
               <div class="aspect-square rounded-lg overflow-hidden border-2 border-orange-700 hover:border-orange-900 transition-all duration-200 cursor-pointer">
-                <img 
-                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=friend{i}" 
-                  alt="Ami" 
+                <a href="./{friend.id}"><img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed={friend.firstName}" 
+                  alt="{friend.firstName} {friend.lastName}"
+                  title="{friend.firstName} {friend.lastName}"
                   class="w-full h-full object-cover"
-                />
+                /></a>
               </div>
             {/each}
           </div>
@@ -228,13 +198,13 @@
             <!-- Post Header -->
             <div class="p-4 flex items-center gap-3">
               <img 
-                src={user.profileImage} 
+                src={getAvatar(user)} 
                 alt={user.username}
                 class="w-12 h-12 rounded-full border-2 border-orange-700"
               />
               <div class="flex-1">
                 <p class="font-semibold text-gray-900">{user.firstName} {user.lastName}</p>
-                <p class="text-sm text-gray-600">{post.timestamp}</p>
+                <p class="text-sm text-gray-600">{post.postedAt}</p>
               </div>
               <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Actions">
                 <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
@@ -273,7 +243,7 @@
               </div>
 
               <!-- Caption -->
-              <p class="text-gray-800">{post.caption}</p>
+              <p class="text-gray-800">{post.content}</p>
             </div>
           </div>
         {/each}
