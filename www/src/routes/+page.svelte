@@ -1,126 +1,123 @@
 <script lang="ts">
-  let showLogin = $state(false);
-  let isAdminMode = $state(false);
-  let sidebarOpen = $state(true);
+let showLogin = $state(false);
+let isAdminMode = $state(false);
+let sidebarOpen = $state(true);
 
-  // The animals
-  const animals = [
-    {
-      id: 1,
-      name: "Marguerite",
-      type: "Cow",
-      age: "4 years old",
-      image: "🐄",
-      description:
-        "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
-    },
-    {
-      id: 2,
-      name: "Marguerite",
-      type: "Cow",
-      age: "4 years old",
-      image: "🐄",
-      description:
-        "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
-    },
-    {
-      id: 3,
-      name: "Marguerite",
-      type: "Cow",
-      age: "4 years old",
-      image: "🐄",
-      description:
-        "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
-    },
-    {
-      id: 4,
-      name: "Marguerite",
-      type: "Cow",
-      age: "4 years old",
-      image: "🐄",
-      description:
-        "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
-    },
-    {
-      id: 5,
-      name: "Marguerite",
-      type: "Cow",
-      age: "4 years old",
-      image: "🐄",
-      description:
-        "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
-    },
-    {
-      id: 6,
-      name: "Marguerite",
-      type: "Cow",
-      age: "4 years old",
-      image: "🐄",
-      description:
-        "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
-    },
-    {
-      id: 7,
-      name: "Marguerite",
-      type: "Cow",
-      age: "4 years old",
-      image: "🐄",
-      description:
-        "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
-    },
-  ];
+// The animals
+const animals = [
+  {
+    id: 1,
+    name: "Marguerite",
+    type: "Cow",
+    age: "4 years old",
+    image: "🐄",
+    description:
+      "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
+  },
+  {
+    id: 2,
+    name: "Marguerite",
+    type: "Cow",
+    age: "4 years old",
+    image: "🐄",
+    description:
+      "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
+  },
+  {
+    id: 3,
+    name: "Marguerite",
+    type: "Cow",
+    age: "4 years old",
+    image: "🐄",
+    description:
+      "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
+  },
+  {
+    id: 4,
+    name: "Marguerite",
+    type: "Cow",
+    age: "4 years old",
+    image: "🐄",
+    description:
+      "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
+  },
+  {
+    id: 5,
+    name: "Marguerite",
+    type: "Cow",
+    age: "4 years old",
+    image: "🐄",
+    description:
+      "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
+  },
+  {
+    id: 6,
+    name: "Marguerite",
+    type: "Cow",
+    age: "4 years old",
+    image: "🐄",
+    description:
+      "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
+  },
+  {
+    id: 7,
+    name: "Marguerite",
+    type: "Cow",
+    age: "4 years old",
+    image: "🐄",
+    description:
+      "Our lovely Marguerite, with beautiful udders waiting in her meadow! Adorable, she will charm you with her milk",
+  },
+];
 
-  // news
-  const news = [
-    {
-      id: 1,
-      author: "The budding farmer",
-      date: "3h ago",
-      content:
-        "Today's news: 3 cows saved by Didier, 45 years old! This nature lover decided to adopt them, thanks to him for this beautiful gesture.",
-      likes: 1500,
-    },
-    {
-      id: 2,
-      author: "The milkmaid",
-      date: "1h ago",
-      content:
-        "My natural milk: the recipe 3 hectares of meadows for 3 cows!",
-      likes: 10,
-    },
-    {
-      id: 3,
-      author: "The budding farmer",
-      date: "3h ago",
-      content:
-        "Today's news: 3 cows saved by Didier, 45 years old! This nature lover decided to adopt them, thanks to him for this beautiful gesture.",
-      likes: 1500,
-    },
-    {
-      id: 4,
-      author: "The milkmaid",
-      date: "1h ago",
-      content:
-        "My natural milk: the recipe 3 hectares of meadows for 3 cows!",
-      likes: 10,
-    },
-    {
-      id: 5,
-      author: "The budding farmer",
-      date: "3h ago",
-      content:
-        "Today's news: 3 cows saved by Didier, 45 years old! This nature lover decided to adopt them, thanks to him for this beautiful gesture.",
-      likes: 1500,
-    },
-    {
-      id: 6,
-      author: "The milkmaid",
-      date: "1h ago",
-      content:
-        "My natural milk: the recipe 3 hectares of meadows for 3 cows!",
-      likes: 10,
-    },
-  ];
+// news
+const news = [
+  {
+    id: 1,
+    author: "The budding farmer",
+    date: "3h ago",
+    content:
+      "Today's news: 3 cows saved by Didier, 45 years old! This nature lover decided to adopt them, thanks to him for this beautiful gesture.",
+    likes: 1500,
+  },
+  {
+    id: 2,
+    author: "The milkmaid",
+    date: "1h ago",
+    content: "My natural milk: the recipe 3 hectares of meadows for 3 cows!",
+    likes: 10,
+  },
+  {
+    id: 3,
+    author: "The budding farmer",
+    date: "3h ago",
+    content:
+      "Today's news: 3 cows saved by Didier, 45 years old! This nature lover decided to adopt them, thanks to him for this beautiful gesture.",
+    likes: 1500,
+  },
+  {
+    id: 4,
+    author: "The milkmaid",
+    date: "1h ago",
+    content: "My natural milk: the recipe 3 hectares of meadows for 3 cows!",
+    likes: 10,
+  },
+  {
+    id: 5,
+    author: "The budding farmer",
+    date: "3h ago",
+    content:
+      "Today's news: 3 cows saved by Didier, 45 years old! This nature lover decided to adopt them, thanks to him for this beautiful gesture.",
+    likes: 1500,
+  },
+  {
+    id: 6,
+    author: "The milkmaid",
+    date: "1h ago",
+    content: "My natural milk: the recipe 3 hectares of meadows for 3 cows!",
+    likes: 10,
+  },
+];
 </script>
 <div class="min-h-screen bg-[#f5e6d3]" style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a574' fill-opacity='0.05'%3E%3Cpath d='M0 0h20L0 20z'/%3E%3C/g%3E%3C/svg%3E&quot;);">
   <!-- Header -->
