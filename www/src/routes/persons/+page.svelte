@@ -1,24 +1,8 @@
 <script lang="ts">
-import type { User } from "$lib/server/db/schema.js";
-
 const { data } = $props();
 
-// TODO remove fake data
-const getUsername = (user: User) =>
-  `${user.firstName.charAt(0)}${user.lastName}`;
-const getAvatar = (user: User) =>
-  `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.firstName}`;
 const _roles = ["Adoptant", "Association", "Bénévole"];
-const getRole = (user: User) => {
-  return _roles[user.firstName.length % _roles.length];
-};
 const _cities = ["Paris", "Lyon", "Montpellier"];
-const getCity = (user: User) => {
-  return _cities[user.firstName.length % _cities.length];
-};
-const getAdoptedAnimals = (user: User) => user.firstName.length % 3;
-const getAge = (user: User) =>
-  ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20;
 
 // Filters
 let searchQuery = $state("");
@@ -34,12 +18,12 @@ let persons = $derived(
   (await data.persons)
     // TODO remove fake data
     .map((person) => ({
-      username: getUsername(person),
-      photo: getAvatar(person),
-      role: getRole(person),
-      city: getCity(person),
-      adoptedAnimals: getAdoptedAnimals(person),
-      age: getAge(person),
+      username: `${person.firstName.charAt(0)}${person.lastName}`,
+      photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${person.firstName}`,
+      role: _roles[person.firstName.length % _roles.length],
+      city: _cities[person.firstName.length % _cities.length],
+      adoptedAnimals: person.firstName.length % 3,
+      age: ((20 * (person.firstName.length + person.lastName.length)) % 33) + 20,
       ...person,
     }))
     .filter((persons) => {
