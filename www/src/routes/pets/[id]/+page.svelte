@@ -1,18 +1,17 @@
 <script lang="ts">
-  const { data } = $props();
+const { data } = $props();
 
-  // Dérivation automatique de l'animal depuis data
-  let [_pet] = $derived(await data.pet);
+let [_pet] = $derived(await data.pet);
 
-  // TODO remove fake data
-  const pet = $derived({..._pet, adopted: true});
+// TODO remove fake data
+const pet = $derived({ ..._pet, adopted: true });
 
-  // Photos animal (exemple : marguerite ma jolie vache)
-  const animalPhotos = [
-    "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
-    "https://www.lozere-online.com/wp-content/uploads/2013/09/vache-race-aubrac.jpg",
-    "https://cdn.canardware.com/2021/05/05044743/10327-vache-1200x627.jpg",
-  ];
+// Photos animal (exemple : marguerite ma jolie vache)
+const animalPhotos = [
+  "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
+  "https://www.lozere-online.com/wp-content/uploads/2013/09/vache-race-aubrac.jpg",
+  "https://cdn.canardware.com/2021/05/05044743/10327-vache-1200x627.jpg",
+];
 </script>
 
 <svelte:head>
