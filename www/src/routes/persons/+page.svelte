@@ -76,13 +76,13 @@ let persons = $derived(
   <!-- Header -->
   <header class="bg-gradient-to-r from-orange-600 to-orange-700 text-white shadow-lg">
     <div class="flex items-center justify-between px-6 py-3">
-      <button
-        onclick={() => (window.location.href = '/')}
+      <a
+        href="/"
         class="flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
       >
         <span class="text-xl">🏠</span>
         <span>Accueil</span>
-      </button>
+      </a>
 
       <div class="flex items-center gap-3">
         <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐄%3C/text%3E%3C/svg%3E" alt="Logo" class="w-10 h-10" />
