@@ -5,11 +5,11 @@
   let { form }: { form: ActionData } = $props();
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-rose-100 via-amber-100 to-orange-200 flex items-center justify-center p-4 relative overflow-hidden">
+<div class="min-h-screen bg-linear-to-br from-rose-100 via-amber-100 to-orange-200 flex items-center justify-center p-4 relative overflow-hidden">
   <div class="absolute inset-0 overflow-hidden">
-    <div class="absolute top-20 left-10 w-72 h-72 bg-gradient-to-br from-yellow-300/30 to-orange-400/30 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-br from-rose-300/30 to-pink-400/30 rounded-full blur-3xl"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-3xl"></div>
+    <div class="absolute top-20 left-10 w-72 h-72 bg-linear-to-br from-yellow-300/30 to-orange-400/30 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 bg-linear-to-br from-rose-300/30 to-pink-400/30 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-linear-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-3xl"></div>
   </div>
 
   <div class="w-full max-w-md relative z-10">
@@ -17,7 +17,7 @@
     <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 space-y-6 border-2 border-amber-200">
       <!-- Header -->
       <div class="text-center space-y-2">
-        <h1 class="text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Create an account</h1>
+        <h1 class="text-3xl font-bold bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Create an account</h1>
         <p class="text-gray-600">Join us today</p>
       </div>
 
@@ -155,7 +155,7 @@
         <!-- Submit -->
         <button
           type="submit"
-          class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-amber-600 hover:to-orange-600 focus:ring-4 focus:ring-amber-300 transition-all duration-200 shadow-md hover:shadow-lg"
+          class="w-full bg-linear-to-r from-amber-500 to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-amber-600 hover:to-orange-600 focus:ring-4 focus:ring-amber-300 transition-all duration-200 shadow-md hover:shadow-lg"
         >
           Sign up
         </button>
