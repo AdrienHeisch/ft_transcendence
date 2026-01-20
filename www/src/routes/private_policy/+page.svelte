@@ -11,14 +11,14 @@
 				class="flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
 			>
 				<span class="text-xl">🏠</span>
-				<span>Accueil</span>
+				<span>Home</span>
 			</button>
 
 			<div class="flex items-center gap-3">
 				<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐄%3C/text%3E%3C/svg%3E" alt="Logo" class="w-10 h-10" />
 				<div>
-					<h1 class="text-3xl font-bold text-yellow-100" style="font-family: Georgia, serif;">La Ferme à Bibi</h1>
-					<p class="text-sm text-yellow-200 italic" style="font-family: Georgia, serif;">Depuis 1887</p>
+					<h1 class="text-3xl font-bold text-yellow-100" style="font-family: Georgia, serif;">Bibi's Farm</h1>
+					<p class="text-sm text-yellow-200 italic" style="font-family: Georgia, serif;">Since 1887</p>
 				</div>
 			</div>
 
@@ -30,115 +30,115 @@
 	<main class="max-w-4xl mx-auto p-8">
 		<div class="bg-white rounded-xl shadow-lg border-3 border-orange-400 p-8">
 			<h1 class="text-4xl font-bold text-orange-900 mb-6" style="font-family: Georgia, serif;">
-				Politique de Confidentialité
+				Privacy Policy
 			</h1>
 			
 			<div class="text-gray-700 space-y-6">
 				<p class="text-sm text-gray-500 italic">
-					Dernière mise à jour : 17 janvier 2026
+					Last updated: January 17, 2026
 				</p>
 
 				<section>
 					<h2 class="text-2xl font-bold text-orange-800 mb-3">1. Introduction</h2>
 					<p>
-						Bienvenue sur La Ferme à Bibi. Nous nous engageons à protéger votre vie privée et vos données personnelles. 
-						Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations.
+						Welcome to Bibi's Farm. We are committed to protecting your privacy and personal data. 
+						This privacy policy explains how we collect, use, and protect your information.
 					</p>
 				</section>
 
 				<section>
-					<h2 class="text-2xl font-bold text-orange-800 mb-3">2. Données Collectées</h2>
-					<p class="mb-2">Nous collectons les types de données suivants :</p>
+					<h2 class="text-2xl font-bold text-orange-800 mb-3">2. Data Collected</h2>
+					<p class="mb-2">We collect the following types of data:</p>
 					<ul class="list-disc list-inside space-y-1 ml-4">
-						<li>Informations de profil (nom, email, photo de profil)</li>
-						<li>Données adoptants et associations (historique d'adoptions, préférences)</li>
-						<li>Messages et communications entre utilisateurs</li>
-						<li>Photos et contenus partagés</li>
-						<li>Informations de connexion (date, heure, adresse IP)</li>
+						<li>Profile information (name, email, profile picture)</li>
+						<li>Adopter and association data (adoption history, preferences)</li>
+						<li>Messages and communications between users</li>
+						<li>Shared photos and content</li>
+						<li>Connection information (date, time, IP address)</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2 class="text-2xl font-bold text-orange-800 mb-3">3. Utilisation des Données</h2>
-					<p class="mb-2">Vos données sont utilisées pour :</p>
+					<h2 class="text-2xl font-bold text-orange-800 mb-3">3. Data Usage</h2>
+					<p class="mb-2">Your data is used to:</p>
 					<ul class="list-disc list-inside space-y-1 ml-4">
-						<li>Fournir et améliorer nos services</li>
-						<li>Personnaliser votre expérience</li>
-						<li>Faciliter les interactions sociales et les adoptions</li>
-						<li>Assurer la sécurité et prévenir les abus</li>
-						<li>Vous envoyer des notifications importantes</li>
+						<li>Provide and improve our services</li>
+						<li>Personalize your experience</li>
+						<li>Facilitate social interactions and adoptions</li>
+						<li>Ensure security and prevent abuse</li>
+						<li>Send you important notifications</li>
 					</ul>
 				</section>
 
 				<section>
-					<h2 class="text-2xl font-bold text-orange-800 mb-3">4. Partage des Données</h2>
+					<h2 class="text-2xl font-bold text-orange-800 mb-3">4. Data Sharing</h2>
 					<p>
-						Nous ne vendons jamais vos données personnelles. Vos informations peuvent être partagées avec d'autres 
-						utilisateurs uniquement dans le cadre des fonctionnalités sociales du site (profil public, messages, 
-						annonces d'adoption). Nous pouvons partager des données anonymisées à des fins statistiques.
+						We never sell your personal data. Your information may be shared with other 
+						users only as part of the site's social features (public profile, messages, 
+						adoption announcements). We may share anonymized data for statistical purposes.
 					</p>
 				</section>
 
 				<section>
-					<h2 class="text-2xl font-bold text-orange-800 mb-3">5. Sécurité des Données</h2>
+					<h2 class="text-2xl font-bold text-orange-800 mb-3">5. Data Security</h2>
 					<p>
-						Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles pour protéger vos données 
-						contre tout accès non autorisé, modification, divulgation ou destruction. Toutes les communications sont 
-						chiffrées et les données sensibles sont stockées de manière sécurisée.
+						We implement technical and organizational security measures to protect your data 
+						against unauthorized access, modification, disclosure, or destruction. All communications are 
+						encrypted and sensitive data is stored securely.
 					</p>
 				</section>
 
 				<section>
-					<h2 class="text-2xl font-bold text-orange-800 mb-3">6. Vos Droits</h2>
-					<p class="mb-2">Conformément au RGPD, vous disposez des droits suivants :</p>
+					<h2 class="text-2xl font-bold text-orange-800 mb-3">6. Your Rights</h2>
+					<p class="mb-2">In accordance with GDPR, you have the following rights:</p>
 					<ul class="list-disc list-inside space-y-1 ml-4">
-						<li>Droit d'accès à vos données personnelles</li>
-						<li>Droit de rectification de vos données</li>
-						<li>Droit à l'effacement (droit à l'oubli)</li>
-						<li>Droit à la portabilité de vos données</li>
-						<li>Droit d'opposition au traitement</li>
-						<li>Droit de retirer votre consentement</li>
+						<li>Right to access your personal data</li>
+						<li>Right to rectify your data</li>
+						<li>Right to erasure (right to be forgotten)</li>
+						<li>Right to data portability</li>
+						<li>Right to object to processing</li>
+						<li>Right to withdraw consent</li>
 					</ul>
 				</section>
 
 				<section>
 					<h2 class="text-2xl font-bold text-orange-800 mb-3">7. Cookies</h2>
 					<p>
-						Nous utilisons des cookies essentiels pour le fonctionnement du site (authentification, préférences). 
-						Vous pouvez gérer vos préférences de cookies dans les paramètres de votre navigateur.
+						We use essential cookies for site functionality (authentication, preferences). 
+						You can manage your cookie preferences in your browser settings.
 					</p>
 				</section>
 
 				<section>
-					<h2 class="text-2xl font-bold text-orange-800 mb-3">8. Conservation des Données</h2>
+					<h2 class="text-2xl font-bold text-orange-800 mb-3">8. Data Retention</h2>
 					<p>
-						Nous conservons vos données aussi longtemps que votre compte est actif. Si vous supprimez votre compte, 
-						vos données seront effacées dans un délai de 30 jours, sauf obligation légale de conservation.
+						We retain your data as long as your account is active. If you delete your account, 
+						your data will be erased within 30 days, unless legal retention is required.
 					</p>
 				</section>
 
 				<section>
-					<h2 class="text-2xl font-bold text-orange-800 mb-3">9. Mineurs</h2>
+					<h2 class="text-2xl font-bold text-orange-800 mb-3">9. Minors</h2>
 					<p>
-						Notre service n'est pas destiné aux personnes de moins de 13 ans. Si nous découvrons qu'un mineur a 
-						fourni des données personnelles, nous les supprimerons immédiatement.
+						Our service is not intended for persons under 13 years of age. If we discover that a minor has 
+						provided personal data, we will delete it immediately.
 					</p>
 				</section>
 
 				<section>
 					<h2 class="text-2xl font-bold text-orange-800 mb-3">10. Contact</h2>
 					<p>
-						Pour toute question concernant cette politique de confidentialité ou pour exercer vos droits, 
-						contactez-nous à : <a href="mailto:privacy@lafermeabibi.com" class="text-orange-600 hover:text-orange-800 underline">privacy@lafermeabibi.com</a>
+						For any questions regarding this privacy policy or to exercise your rights, 
+						contact us at: <a href="mailto:privacy@lafermeabibi.com" class="text-orange-600 hover:text-orange-800 underline">privacy@lafermeabibi.com</a>
 					</p>
 				</section>
 
 				<section>
-					<h2 class="text-2xl font-bold text-orange-800 mb-3">11. Modifications</h2>
+					<h2 class="text-2xl font-bold text-orange-800 mb-3">11. Changes</h2>
 					<p>
-						Nous nous réservons le droit de modifier cette politique de confidentialité. Toute modification sera 
-						publiée sur cette page avec une date de mise à jour. Nous vous encourageons à consulter régulièrement 
-						cette page.
+						We reserve the right to modify this privacy policy. Any changes will be 
+						published on this page with an update date. We encourage you to regularly review 
+						this page.
 					</p>
 				</section>
 			</div>
@@ -148,7 +148,7 @@
 					onclick={() => (window.location.href = '/')}
 					class="px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md"
 				>
-					← Retour à l'accueil
+					← Back to home
 				</button>
 			</div>
 		</div>
