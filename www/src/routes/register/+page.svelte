@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
-  import type { ActionData } from "./$types";
-
-  let { form }: { form: ActionData } = $props();
+import * as remote from "./register.remote";
 </script>
 
 <div class="min-h-screen bg-linear-to-br from-rose-100 via-amber-100 to-orange-200 flex items-center justify-center p-4 relative overflow-hidden">
@@ -22,7 +19,7 @@
       </div>
 
       <!-- Form -->
-      <form method="post" action="?/register" use:enhance class="space-y-5">
+      <form {...remote.register}>
         <!-- First and Last name on the same line -->
         <div class="grid grid-cols-2 gap-4">
           <!-- Last name -->
@@ -145,12 +142,12 @@
           />
         </div>
 
-        <!-- Error Message -->
-        {#if form?.message}
-          <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-            {form.message}
-          </div>
-        {/if}
+        <!-- TODO Error Message -->
+        <!-- {#if form?.message} -->
+          <!-- <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"> -->
+            <!-- {form.message} -->
+          <!-- </div> -->
+        <!-- {/if} -->
 
         <!-- Submit -->
         <button
