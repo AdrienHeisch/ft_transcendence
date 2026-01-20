@@ -3,20 +3,20 @@
 	let messagesOpen = $state(false);
 
 	const sidebarMainItems = [
-		{ label: 'Profil', icon: '👤' },
-		{ label: 'Groupes', icon: '👥' },
-		{ label: 'Favoris', icon: '⭐' },
+		{ label: 'Profile', icon: '👤' },
+		{ label: 'Groups', icon: '👥' },
+		{ label: 'Favorites', icon: '⭐' },
 		{ label: 'Photos', icon: '📷' },
-		{ label: 'Fil actu', icon: '📰' },
-		{ label: 'Amis', icon: '🤝' },
-		{ label: 'Adopter', icon: '🐾' },
+		{ label: 'News feed', icon: '📰' },
+		{ label: 'Friends', icon: '🤝' },
+		{ label: 'Adopt', icon: '🐾' },
 		{ label: 'Pet sitter', icon: '🐕' }
 	];
 
 	const sidebarBottomItems = [
-		{ label: 'Aide et assistance', icon: '❓' },
-		{ label: 'Paramètres', icon: '⚙️' },
-		{ label: 'Déconnexion', icon: '🚪' }
+		{ label: 'Help & Support', icon: '❓' },
+		{ label: 'Settings', icon: '⚙️' },
+		{ label: 'Logout', icon: '🚪' }
 	];
 </script>
 
@@ -37,8 +37,8 @@
 		<div class="flex items-center gap-3">
 			<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐄%3C/text%3E%3C/svg%3E" alt="Logo" class="w-10 h-10" />
 			<div>
-				<h1 class="text-3xl font-bold text-yellow-100" style="font-family: Georgia, serif;">La Ferme à Bibi</h1>
-				<p class="text-sm text-yellow-200 italic" style="font-family: Georgia, serif;">Depuis 1887</p>
+				<h1 class="text-3xl font-bold text-yellow-100" style="font-family: Georgia, serif;">Bibi's Farm</h1>
+				<p class="text-sm text-yellow-200 italic" style="font-family: Georgia, serif;">Since 1887</p>
 			</div>
 		</div>
 
@@ -57,7 +57,7 @@
 	{#if messagesOpen}
 		<div class="fixed top-16 right-6 w-96 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-50">
 			<div class="bg-gradient-to-r from-orange-600 to-orange-700 text-white px-4 py-3 rounded-t flex items-center justify-between">
-				<h2 class="font-bold text-lg">Messages Directs</h2>
+				<h2 class="font-bold text-lg">Direct Messages</h2>
 				<button onclick={() => (messagesOpen = false)} class="text-2xl hover:text-orange-200 transition">&times;</button>
 			</div>
 			<div class="p-4 max-h-96 overflow-y-auto">
@@ -67,7 +67,7 @@
 							<div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">A</div>
 							<div class="flex-1">
 								<div class="font-semibold text-orange-900">Alice</div>
-								<div class="text-sm text-gray-700">Prêt pour la fete de la vache ?</div>
+								<div class="text-sm text-gray-700">Ready for the cow party?</div>
 							</div>
 							<span class="text-xs text-orange-600 font-medium">2m</span>
 						</div>
@@ -77,7 +77,7 @@
 							<div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">B</div>
 							<div class="flex-1">
 								<div class="font-semibold text-orange-900">Bob</div>
-								<div class="text-sm text-gray-700">Salut Franck comment va ta vache ?</div>
+								<div class="text-sm text-gray-700">Hi Frank, how's your cow doing?</div>
 							</div>
 							<span class="text-xs text-orange-600 font-medium">15m</span>
 						</div>
@@ -87,7 +87,7 @@
 							<div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">C</div>
 							<div class="flex-1">
 								<div class="font-semibold text-orange-900">Charlie</div>
-								<div class="text-sm text-gray-700">Dis moi tu aurais une poule par hasard ?</div>
+								<div class="text-sm text-gray-700">Tell me, would you happen to have a chicken?</div>
 							</div>
 							<span class="text-xs text-orange-600 font-medium">1h</span>
 						</div>
@@ -158,19 +158,19 @@
 				<section class="bg-white rounded-xl shadow-lg border-3 border-orange-400 p-6 mb-6">
 					<h2 class="text-2xl font-bold text-orange-900 mb-4 flex items-center gap-2">
 						<span>📰</span>
-						Fil d'actualité
+						News Feed
 					</h2>
 					
 					<!-- Post input -->
 					<div class="mb-6 p-4 bg-orange-50 rounded-lg border-2 border-orange-300">
 						<textarea 
 							class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
-							placeholder="Quoi de neuf ?"
+							placeholder="What's new?"
 							rows="3"
 						></textarea>
 						<div class="flex justify-end mt-2">
 							<button class="px-6 py-2 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
-								Publier
+								Post
 							</button>
 						</div>
 					</div>
@@ -183,28 +183,28 @@
 									U
 								</div>
 								<div>
-									<div class="font-semibold text-orange-900">Utilisateur</div>
-									<div class="text-xs text-gray-600">Il y a 5 minutes</div>
+									<div class="font-semibold text-orange-900">User</div>
+									<div class="text-xs text-gray-600">5 minutes ago</div>
 								</div>
 							</div>
-							<p class="text-gray-800 mb-3">Bienvenue sur La Ferme A Bibi ! </p>
+							<p class="text-gray-800 mb-3">Welcome to Bibi's Farm! </p>
 							<div class="flex gap-4 text-sm text-gray-600">
-								<button class="hover:text-orange-700 transition">👍 J'aime</button>
-								<button class="hover:text-orange-700 transition">💬 Commenter</button>
-								<button class="hover:text-orange-700 transition">↗️ Partager</button>
+								<button class="hover:text-orange-700 transition">👍 Like</button>
+								<button class="hover:text-orange-700 transition">💬 Comment</button>
+								<button class="hover:text-orange-700 transition">↗️ Share</button>
 							</div>
 						</div>
 					</div>
 				</section>
 
-				<!-- Annonces adoptions -->
+				<!-- Announcements adoptions -->
 				<section class="bg-white rounded-xl shadow-lg border-3 border-orange-400 p-6">
 					<h2 class="text-2xl font-bold text-orange-900 mb-4 flex items-center gap-2">
 						<span>📢</span>
-						Annonces & Adoptions
+						Announcements & Adoptions
 					</h2>
 					<div class="p-4 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 text-center">
-						<p class="text-gray-600 italic">Aucune annonce pour le moment.</p>
+						<p class="text-gray-600 italic">No announcements at the moment.</p>
 					</div>
 				</section>
 			</div>
