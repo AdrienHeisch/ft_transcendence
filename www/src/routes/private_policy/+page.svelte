@@ -1,5 +1,5 @@
 <script lang="ts">
-	// Svelte 5 ready - no state needed for this static page
+// Svelte 5 ready - no state needed for this static page
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100">
