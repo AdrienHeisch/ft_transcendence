@@ -1,9 +1,7 @@
 <script lang="ts">
-	// Svelte 5 ok 
 </script>
 
 <div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
-	<!-- Header -->
 	<header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
 		<div class="flex items-center justify-between px-6 py-3">
 			<button
@@ -26,7 +24,6 @@
 		</div>
 	</header>
 
-	<!-- Contenu -->
 	<main class="max-w-4xl mx-auto p-8">
 		<div class="bg-white rounded-xl shadow-lg border-3 border-orange-400 p-8">
 			<h1 class="text-4xl font-bold text-orange-900 mb-6" style="font-family: Georgia, serif;">
