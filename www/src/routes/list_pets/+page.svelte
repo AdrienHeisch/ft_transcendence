@@ -3,31 +3,31 @@
 
   let { data }: { data: PageData } = $props();
 
-  // Filtres
+  // Filters
   let searchQuery = $state("");
-  let selectedEspece = $state("tous");
-  let sortBy = $state("nom");
+  let selectedSpecies = $state("all");
+  let sortBy = $state("name");
 
-  // Utiliser les données de la base de données
-  let animaux = $derived(data.pets || []);
+  // Use data from database
+  let animals = $derived(data.pets || []);
 
-  // Liste des espèces uniques pour le filtre
-  let especes = $derived(["tous", ...new Set(animaux.map(a => a.species))]);
+  // List of unique species for the filter
+  let species = $derived(["all", ...new Set(animals.map(a => a.species))]);
 
-  // Filtrage des animaux
-  let animauxFiltres = $derived(animaux.filter(animal => {
+  // Filtering animals
+  let filteredAnimals = $derived(animals.filter(animal => {
     const matchSearch = animal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                        (animal.breed && animal.breed.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchEspece = selectedEspece === "tous" || animal.species === selectedEspece;
+    const matchSpecies = selectedSpecies === "all" || animal.species === selectedSpecies;
     
-    return matchSearch && matchEspece;
+    return matchSearch && matchSpecies;
   }));
 
-  // Tri des animaux
-  let animauxTries = $derived([...animauxFiltres].sort((a, b) => {
-    if (sortBy === "nom") {
+  // Sorting animals
+  let sortedAnimals = $derived([...filteredAnimals].sort((a, b) => {
+    if (sortBy === "name") {
       return a.name.localeCompare(b.name);
-    } else if (sortBy === "espece") {
+    } else if (sortBy === "species") {
       return a.species.localeCompare(b.species);
     }
     return 0;
@@ -35,7 +35,7 @@
 </script>
 
 <svelte:head>
-  <title>Nos animaux - La Ferme à Bibi</title>
+  <title>Our Animals - Bibi's Farm</title>
 </svelte:head>
 
 <div class="min-h-screen bg-[#f5e6d3]">
@@ -43,85 +43,85 @@
   <div class="bg-gradient-to-r from-[#CC5500] to-[#A04000] py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 class="text-4xl md:text-5xl font-bold text-white text-center mb-4">
-        🐾 Nos Pensionnaires
+        🐾 Our Residents
       </h1>
       <p class="text-xl text-white/90 text-center max-w-2xl mx-auto">
-        Des compagnons qui n'attendent que vous ! Venez vite les rencontrer, ou
-        parler avec des personnes du monde entier sur notre site!
+        Companions waiting for you! Come meet them, or
+        chat with people from all over the world on our site!
       </p>
     </div>
   </div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Filtres de recherche -->
+    <!-- Search filters -->
     <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-6 border-4 border-[#8B4513] mb-8">
       <h2 class="text-2xl font-bold text-[#8B4513] mb-6 flex items-center gap-2">
         <span>🔍</span>
-        Rechercher un animal
+        Search for an animal
       </h2>
 
-      <!-- Barre de recherche -->
+      <!-- Search bar -->
       <div class="mb-6">
         <input
           type="text"
           bind:value={searchQuery}
-          placeholder="Rechercher par nom ou description..."
+          placeholder="Search by name or description..."
           class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
         />
       </div>
 
-      <!-- Filtres -->
+      <!-- Filters -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Espèce -->
+        <!-- Species -->
         <div>
-          <label class="block text-sm font-bold text-[#8B4513] mb-2">Espèce</label>
+          <label class="block text-sm font-bold text-[#8B4513] mb-2">Species</label>
           <select
-            bind:value={selectedEspece}
+            bind:value={selectedSpecies}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
-            {#each especes as espece}
-              <option value={espece}>{espece === "tous" ? "Toutes" : espece}</option>
+            {#each species as sp}
+              <option value={sp}>{sp === "all" ? "All" : sp}</option>
             {/each}
           </select>
         </div>
 
-        <!-- Tri -->
+        <!-- Sort -->
         <div>
-          <label class="block text-sm font-bold text-[#8B4513] mb-2">Trier par</label>
+          <label class="block text-sm font-bold text-[#8B4513] mb-2">Sort by</label>
           <select
             bind:value={sortBy}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
-            <option value="nom">Nom (A-Z)</option>
-            <option value="espece">Espèce</option>
+            <option value="name">Name (A-Z)</option>
+            <option value="species">Species</option>
           </select>
         </div>
 
-        <!-- Espace vide pour alignement -->
+        <!-- Empty space for alignment -->
         <div></div>
       </div>
 
-      <!-- Résultats -->
+      <!-- Results -->
       <div class="mt-4 text-[#8B4513] font-medium">
-        {animauxTries.length} {animauxTries.length > 1 ? "animaux" : "animal"} trouvé{animauxTries.length > 1 ? "s" : ""}
+        {sortedAnimals.length} {sortedAnimals.length > 1 ? "animals" : "animal"} found
       </div>
     </div>
 
-    <!-- Grille d'animaux -->
-    {#if animauxTries.length === 0}
+    <!-- Animals grid -->
+    {#if sortedAnimals.length === 0}
       <div class="text-center py-12">
         <div class="text-6xl mb-4">😢</div>
-        <h3 class="text-2xl font-bold text-[#8B4513] mb-2">Aucun animal trouvé</h3>
-        <p class="text-[#A0522D]">Essayez de modifier vos critères de recherche</p>
+        <h3 class="text-2xl font-bold text-[#8B4513] mb-2">No animals found</h3>
+        <p class="text-[#A0522D]">Try adjusting your search criteria</p>
       </div>
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {#each animauxTries as animal (animal.id)}
+        {#each sortedAnimals as animal (animal.id)}
           <a
             href="/profil_animaux"
             class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
-            <!-- Image de l'animal -->
+            <!-- Animal image -->
             <div class="relative">
               {#if animal.photo}
                 <img 
@@ -135,11 +135,11 @@
                 </div>
               {/if}
               <span class="absolute top-3 right-3 px-3 py-1 bg-[#CC5500] text-white rounded-lg font-bold text-sm">
-                ⭐ DISPONIBLE
+                ⭐ AVAILABLE
               </span>
             </div>
 
-            <!-- Informations -->
+            <!-- Information -->
             <div class="p-5">
               <h3 class="text-2xl font-bold text-[#8B4513] mb-2">{animal.name}</h3>
               <div class="flex items-center gap-2 mb-2">
@@ -162,13 +162,13 @@
                 </p>
               {/if}
 
-              <!-- Boutons -->
+              <!-- Buttons -->
               <div class="flex gap-2">
                 <button class="flex-1 py-2 bg-[#CC5500] text-white rounded-lg font-bold hover:bg-[#A04000] transition-colors">
-                  🏠 Adopter
+                  🏠 Adopt
                 </button>
                 <button class="flex-1 py-2 bg-white border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-bold hover:bg-[#fef7ed] transition-colors">
-                  👁️ Voir le profil
+                  👁️ View profile
                 </button>
               </div>
             </div>
