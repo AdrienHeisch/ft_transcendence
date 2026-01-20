@@ -128,7 +128,7 @@ let pets = $derived(
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each pets as pet (pet.id)}
           <a
-            href="/profil_animaux"
+            href="/pets/{pet.id}"
             class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
             <!-- Animal image -->
