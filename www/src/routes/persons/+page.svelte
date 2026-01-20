@@ -33,10 +33,8 @@ let users = $derived(
         user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.bio.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchRole =
-        selectedRole === "tous" || user.role === selectedRole;
-      const matchCity =
-        selectedCity === "toutes" || user.city === selectedCity;
+      const matchRole = selectedRole === "tous" || user.role === selectedRole;
+      const matchCity = selectedCity === "toutes" || user.city === selectedCity;
 
       return matchSearch && matchRole && matchCity;
     })
