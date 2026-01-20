@@ -32,6 +32,9 @@ export default async function seedDb() {
         breed: gen.valuesFromArray({
           values: ["Red", "Orange", "Black", "White", "Green"],
         }),
+        bio: gen.loremIpsum(),
+        age: gen.int({ minValue: 1, maxValue: 5 }),
+        hasAvatar: gen.default({ defaultValue: true }),
       },
     },
     post: {
