@@ -2,7 +2,8 @@ import { error } from "@sveltejs/kit";
 import { and, eq, or } from "drizzle-orm";
 import { union } from "drizzle-orm/pg-core";
 import * as z from "zod";
-import { command, getRequestEvent, query } from "$app/server";
+import { command, query } from "$app/server";
+import { requireLogin } from "$lib/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 
@@ -105,13 +106,3 @@ export const removeFriend = command(
     getFriends().refresh();
   },
 );
-
-function requireLogin() {
-  const { locals } = getRequestEvent();
-
-  if (!locals.user) {
-    error(403, "Unauthenticated");
-  }
-
-  return locals.user;
-}

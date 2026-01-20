@@ -4,7 +4,7 @@ import { resolve } from "$app/paths";
 
 <ul>
   <li>
-    <a href={resolve("/demo/lucia")}>lucia</a>
+    <a href={resolve("/demo/auth")}>lucia</a>
   </li>
   <li>
     <a href={resolve("/demo/files")}>files</a>

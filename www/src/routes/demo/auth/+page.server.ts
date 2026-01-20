@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { getRequestEvent } from "$app/server";
+import { requireLogin } from "$lib/auth";
 import * as auth from "$lib/server/auth";
 import type { Actions, PageServerLoad } from "./$types";
 
@@ -16,16 +16,6 @@ export const actions: Actions = {
     await auth.invalidateSession(event.locals.session.id);
     auth.deleteSessionTokenCookie(event);
 
-    return redirect(302, "/demo/lucia/login");
+    return redirect(302, "/demo/auth/login");
   },
 };
-
-function requireLogin() {
-  const { locals } = getRequestEvent();
-
-  if (!locals.user) {
-    return redirect(302, "/demo/lucia/login");
-  }
-
-  return locals.user;
-}

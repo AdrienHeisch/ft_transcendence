@@ -1,4 +1,4 @@
-import { error, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { getRequestEvent } from "$app/server";
 
 export function requireLogin() {

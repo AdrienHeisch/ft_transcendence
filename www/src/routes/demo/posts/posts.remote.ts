@@ -1,6 +1,7 @@
 import { error } from "@sveltejs/kit";
 import * as z from "zod";
-import { form, getRequestEvent } from "$app/server";
+import { form } from "$app/server";
+import { requireLogin } from "$lib/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 
@@ -23,13 +24,3 @@ export const sendPost = form(
     console.log("Done");
   },
 );
-
-function requireLogin() {
-  const { locals } = getRequestEvent();
-
-  if (!locals.user) {
-    error(403, "Unauthenticated");
-  }
-
-  return locals.user;
-}
