@@ -149,3 +149,18 @@ export const city = pgTable(
 );
 
 export type City = typeof city.$inferSelect;
+
+export const association = pgTable("association", {
+  id: uuid("id").primaryKey(),
+  name: text("name").notNull(),
+  logo: text("logo").notNull(),
+  description: text("description").notNull(),
+  city: text("city").notNull(),
+  type: text("type").notNull(),
+  animalsCount: text("animals_count").notNull(),
+  foundedYear: text("founded_year").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+});
+
+export type Association = typeof association.$inferSelect;
