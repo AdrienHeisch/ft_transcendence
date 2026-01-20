@@ -57,7 +57,7 @@ export const friendsPair = pgTable(
     right: uuid("right")
       .notNull()
       .references(() => user.id),
-    pending: uuid(),
+    pending: uuid().references(() => user.id),
   },
   (table) => [
     primaryKey({ columns: [table.left, table.right] }),
