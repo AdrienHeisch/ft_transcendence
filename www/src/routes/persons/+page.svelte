@@ -14,28 +14,29 @@ let sortBy = $state("lastName");
 let roles = $derived(["tous", ...new Set(_roles)]);
 let cities = $derived(["toutes", ...new Set(_cities)]);
 
-let persons = $derived(
-  (await data.persons)
+// TODO use db queries instead of this
+let users = $derived(
+  (await data.users)
     // TODO remove fake data
-    .map((person) => ({
-      username: `${person.firstName.charAt(0)}${person.lastName}`,
-      photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${person.firstName}`,
-      role: _roles[person.firstName.length % _roles.length],
-      city: _cities[person.firstName.length % _cities.length],
-      adoptedAnimals: person.firstName.length % 3,
-      age: ((20 * (person.firstName.length + person.lastName.length)) % 33) + 20,
-      ...person,
+    .map((user) => ({
+      username: `${user.firstName.charAt(0)}${user.lastName}`,
+      photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.firstName}`,
+      role: _roles[user.firstName.length % _roles.length],
+      city: _cities[user.firstName.length % _cities.length],
+      adoptedAnimals: user.firstName.length % 3,
+      age: ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20,
+      ...user,
     }))
-    .filter((persons) => {
+    .filter((user) => {
       const matchSearch =
-        persons.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        persons.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        persons.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        persons.bio.toLowerCase().includes(searchQuery.toLowerCase());
+        user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.bio.toLowerCase().includes(searchQuery.toLowerCase());
       const matchRole =
-        selectedRole === "tous" || persons.role === selectedRole;
+        selectedRole === "tous" || user.role === selectedRole;
       const matchCity =
-        selectedCity === "toutes" || persons.city === selectedCity;
+        selectedCity === "toutes" || user.city === selectedCity;
 
       return matchSearch && matchRole && matchCity;
     })
@@ -157,12 +158,12 @@ let persons = $derived(
 
       <!-- Results -->
       <div class="mt-4 text-orange-900 font-medium">
-        {persons.length} {persons.length > 1 ? "personnes trouvées" : "personne trouvée"}
+        {users.length} {users.length > 1 ? "personnes trouvées" : "personne trouvée"}
       </div>
     </div>
 
-    <!-- Persons -->
-    {#if persons.length === 0}
+    <!-- Users -->
+    {#if users.length === 0}
       <div class="text-center py-12">
         <div class="text-6xl mb-4">😢</div>
         <h3 class="text-2xl font-bold text-orange-900 mb-2">Aucune personne trouvée</h3>
@@ -170,7 +171,7 @@ let persons = $derived(
       </div>
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {#each persons as person (person.id)}
+        {#each users as user (user.id)}
           <div
             class="bg-white rounded-2xl shadow-lg overflow-hidden border-3 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
@@ -178,45 +179,45 @@ let persons = $derived(
             <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
                 <img 
-                  src={person.photo} 
-                  alt={person.firstName + ' ' + person.lastName}
+                  src={user.photo} 
+                  alt={user.firstName + ' ' + user.lastName}
                   class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white"
                 />
               </div>
               
               <!-- Role badge -->
               <span class="absolute top-3 right-3 px-3 py-1 bg-orange-600 text-white rounded-lg font-bold text-sm shadow-md">
-                {person.role}
+                {user.role}
               </span>
             </div>
 
             <!-- Info -->
             <div class="p-5">
               <h3 class="text-2xl font-bold text-orange-900 mb-1" style="font-family: Georgia, serif;">
-                {person.firstName} {person.lastName}
+                {user.firstName} {user.lastName}
               </h3>
-              <p class="text-orange-700 mb-2">@{person.username}</p>
+              <p class="text-orange-700 mb-2">@{user.username}</p>
 
               <div class="flex items-center gap-4 mb-3 text-sm text-orange-800">
                 <div class="flex items-center gap-1">
                   <span>📍</span>
-                  <span>{person.city}</span>
+                  <span>{user.city}</span>
                 </div>
                 <div class="flex items-center gap-1">
                   <span>🎂</span>
-                  <span>{person.age} ans</span>
+                  <span>{user.age} ans</span>
                 </div>
               </div>
 
-              {#if person.adoptedAnimals > 0}
+              {#if user.adoptedAnimals > 0}
                 <div class="mb-3 text-sm text-orange-800 flex items-center gap-1">
                   <span>🐾</span>
-                  <span class="font-semibold">{person.adoptedAnimals} {person.adoptedAnimals > 1 ? "animaux adoptés" : "animal adopté"}</span>
+                  <span class="font-semibold">{user.adoptedAnimals} {user.adoptedAnimals > 1 ? "animaux adoptés" : "animal adopté"}</span>
                 </div>
               {/if}
 
               <p class="text-sm text-gray-700 mb-4 line-clamp-2 italic">
-                "{person.bio}"
+                "{user.bio}"
               </p>
 
               <!-- Buttons -->

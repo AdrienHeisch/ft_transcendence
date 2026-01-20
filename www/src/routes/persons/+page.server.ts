@@ -5,6 +5,6 @@ import type { PageServerLoad } from "./$types";
 export const load: PageServerLoad = () => {
   // TODO pagination
   return {
-    persons: db.select().from(schema.user),
+    users: db.select().from(schema.user),
   };
 };
