@@ -40,7 +40,7 @@
 
 <div class="min-h-screen bg-[#f5e6d3]">
   <!-- Header -->
-  <div class="bg-gradient-to-r from-[#CC5500] to-[#A04000] py-12">
+  <div class="bg-linear-to-r from-[#CC5500] to-[#A04000] py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 class="text-4xl md:text-5xl font-bold text-white text-center mb-4">
         🐾 Our Residents
@@ -74,8 +74,9 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Species -->
         <div>
-          <label class="block text-sm font-bold text-[#8B4513] mb-2">Species</label>
+          <label class="block text-sm font-bold text-[#8B4513] mb-2" for="species">Species</label>
           <select
+            id="species"
             bind:value={selectedSpecies}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
@@ -87,8 +88,9 @@
 
         <!-- Sort -->
         <div>
-          <label class="block text-sm font-bold text-[#8B4513] mb-2">Sort by</label>
+          <label class="block text-sm font-bold text-[#8B4513] mb-2" for="sortBy">Sort by</label>
           <select
+            id="sortBy"
             bind:value={sortBy}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
@@ -130,7 +132,7 @@
                   class="w-full h-56 object-cover"
                 />
               {:else}
-                <div class="w-full h-56 bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center">
+                <div class="w-full h-56 bg-linear-to-br from-orange-100 to-amber-100 flex items-center justify-center">
                   <span class="text-6xl">🐾</span>
                 </div>
               {/if}
