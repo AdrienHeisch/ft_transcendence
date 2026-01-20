@@ -8,11 +8,11 @@
     username: data.username || "RGDupont",
     firstName: "Roger",
     lastName: "Dupont",
-    bio: "Passionné par les animaux et la ferme | Photographe amateur | Amoureux des poules",
+    bio: "Passionate about animals and farming | Amateur photographer | Chicken lover",
     profileImage: "https://api.dicebear.com/7.x/avataaars/svg?seed=" + (data.username || "rgdupont"),
     coverImage: "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
     location: "Paris, France",
-    joinedDate: "Janvier 2025",
+    joinedDate: "January 2025",
     friends: 247,
     posts: 156,
     isCurrentUser: false, // À gérer selon l'utilisateur connecté
@@ -20,62 +20,62 @@
   });
 
   const passions = [
-    { icon: "🐾", name: "Animaux" },
-    { icon: "🐔", name: "Poules" },
-    { icon: "🚜", name: "Ferme" },
-    { icon: "🍽️", name: "Gastronomie" },
-    { icon: "🧠", name: "Philosophie" },
-    { icon: "📚", name: "Lecture" },
+    { icon: "🐾", name: "Animals" },
+    { icon: "🐔", name: "Chickens" },
+    { icon: "🚜", name: "Farm" },
+    { icon: "🍽️", name: "Gastronomy" },
+    { icon: "🧠", name: "Philosophy" },
+    { icon: "📚", name: "Reading" },
   ];
 
   const posts = [
     {
       id: 1,
       image: "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
-      caption: "Marguerite profite du soleil dans le pré 🐄 #vacheheureuse",
+      caption: "Marguerite enjoying the sun in the meadow 🐄 #happycow",
       likes: 42,
       comments: 7,
-      timestamp: "Il y a 2 heures",
+      timestamp: "2 hours ago",
     },
     {
       id: 2,
       image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600&h=400&fit=crop",
-      caption: "Les poules ont pondu 12 œufs aujourd'hui ! 🐔 Record battu !",
+      caption: "The chickens laid 12 eggs today! 🐔 Record broken!",
       likes: 38,
       comments: 5,
-      timestamp: "Il y a 5 heures",
+      timestamp: "5 hours ago",
     },
     {
       id: 3,
       image: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=600&h=400&fit=crop",
-      caption: "Les cochons adorent la boue ! 🐷 Ils sont tellement mignons",
+      caption: "Pigs love mud! 🐷 They're so cute",
       likes: 89,
       comments: 23,
-      timestamp: "Hier",
+      timestamp: "Yesterday",
     },
     {
       id: 4,
       image: "https://as1.ftcdn.net/v2/jpg/01/33/21/60/1000_F_133216088_Za1Z6sMjrAgGqKnHIj3EaghzA0hUHTYg.jpg",
-      caption: "Les moutons viennent d'être tondus 🐑 Ils sont tout doux !",
+      caption: "The sheep just got sheared 🐑 They're so soft!",
       likes: 56,
       comments: 12,
-      timestamp: "Il y a 2 jours",
+      timestamp: "2 days ago",
     },
     {
       id: 5,
       image: "https://lh6.googleusercontent.com/proxy/D68TIix5hlepNYgkXZViy8zdyEc5RT60ACsloBevch4Sdy1xwFQvVhuFg8Rive0u9k96WxskbJZw6ghffdujSZqHo9RA7w",
-      caption: "Les chèvres sont espiègles comme toujours 🐐",
+      caption: "Goats are mischievous as always 🐐",
       likes: 64,
       comments: 15,
-      timestamp: "Il y a 3 jours",
+      timestamp: "3 days ago",
     },
     {
       id: 6,
       image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&h=400&fit=crop",
-      caption: "Jolie balade à cheval ce matin 🐴 #equitation",
+      caption: "Nice horseback ride this morning 🐴 #horseback",
       likes: 71,
       comments: 18,
-      timestamp: "Il y a 4 jours",
+      timestamp: "4 days ago",
     },
   ];
 </script>
@@ -133,7 +133,7 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
               </svg>
-              <span>Membre depuis {user.joinedDate}</span>
+              <span>Member since {user.joinedDate}</span>
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@
         <div class="flex gap-3">
           {#if user.isCurrentUser}
             <button class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
-              Modifier le profil
+              Edit profile
             </button>
           {:else}
             <button class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
@@ -150,12 +150,12 @@
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
-                Amis
+                Friends
               {:else}
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                 </svg>
-                Ajouter en ami
+                Add friend
               {/if}
             </button>
             <button class="px-6 py-3 bg-yellow-50 border-2 border-orange-700 text-amber-900 rounded-lg font-medium hover:bg-yellow-100 transition-all duration-200 shadow-md hover:shadow-lg">
@@ -169,11 +169,11 @@
       <div class="flex justify-center md:justify-start gap-8 mt-6 pt-6 border-t-2 border-orange-700">
         <div class="text-center">
           <div class="text-2xl font-bold text-orange-700">{user.friends}</div>
-          <div class="text-sm text-amber-900">Amis</div>
+          <div class="text-sm text-amber-900">Friends</div>
         </div>
         <div class="text-center">
           <div class="text-2xl font-bold text-orange-700">{user.posts}</div>
-          <div class="text-sm text-amber-900">Publications</div>
+          <div class="text-sm text-amber-900">Posts</div>
         </div>
       </div>
     </div>
@@ -203,9 +203,9 @@
           <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center justify-between">
             <span class="flex items-center gap-2">
               <span class="text-2xl">👥</span>
-              Amis
+              Friends
             </span>
-            <a href="/profile/{user.username}/friends" class="text-sm text-orange-700 hover:text-orange-800 font-medium">Voir tout</a>
+            <a href="/profile/{user.username}/friends" class="text-sm text-orange-700 hover:text-orange-800 font-medium">View all</a>
           </h2>
           <div class="grid grid-cols-3 gap-2">
             {#each Array(6) as _, i}
@@ -280,7 +280,7 @@
 
         <!-- Load More -->
         <button class="w-full py-4 bg-yellow-50 backdrop-blur-sm rounded-2xl shadow-lg border-4 border-orange-700 text-amber-900 font-bold hover:bg-orange-100 hover:border-orange-900 transition-all duration-200">
-          Voir plus de publications
+          View more posts
         </button>
       </div>
     </div>
