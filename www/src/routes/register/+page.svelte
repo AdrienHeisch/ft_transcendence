@@ -17,18 +17,18 @@
     <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 space-y-6 border-2 border-amber-200">
       <!-- Header -->
       <div class="text-center space-y-2">
-        <h1 class="text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Créer un compte</h1>
-        <p class="text-gray-600">Rejoignez-nous dès aujourd'hui</p>
+        <h1 class="text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Create an account</h1>
+        <p class="text-gray-600">Join us today</p>
       </div>
 
       <!-- Form -->
       <form method="post" action="?/register" use:enhance class="space-y-5">
-        <!-- Nom et Prénom sur la même ligne -->
+        <!-- First and Last name on the same line -->
         <div class="grid grid-cols-2 gap-4">
-          <!-- Nom -->
+          <!-- Last name -->
           <div class="space-y-2">
             <label for="lastName" class="block text-sm font-medium text-gray-700">
-              Nom
+              Last name
             </label>
             <input
               id="lastName"
@@ -36,14 +36,14 @@
               type="text"
               required
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-              placeholder="Nom"
+              placeholder="Last name"
             />
           </div>
 
-          <!-- Prénom -->
+          <!-- First name -->
           <div class="space-y-2">
             <label for="firstName" class="block text-sm font-medium text-gray-700">
-              Prénom
+              First name
             </label>
             <input
               id="firstName"
@@ -51,15 +51,15 @@
               type="text"
               required
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-              placeholder="Prénom"
+              placeholder="First name"
             />
           </div>
         </div>
 
-        <!-- Date de naissance -->
+        <!-- Birthdate -->
         <div class="space-y-2">
           <label for="birthdate" class="block text-sm font-medium text-gray-700">
-            Date de naissance
+            Date of birth
           </label>
           <input
             id="birthdate"
@@ -70,10 +70,10 @@
           />
         </div>
 
-        <!-- Téléphone -->
+        <!-- Phone -->
         <div class="space-y-2">
           <label for="phone" class="block text-sm font-medium text-gray-700">
-            Numéro de téléphone
+            Phone number
           </label>
           <input
             id="phone"
@@ -88,7 +88,7 @@
         <!-- Username -->
         <div class="space-y-2">
           <label for="username" class="block text-sm font-medium text-gray-700">
-            Nom d'utilisateur
+            Username
           </label>
           <input
             id="username"
@@ -96,7 +96,7 @@
             type="text"
             required
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-            placeholder="Entrez votre nom d'utilisateur"
+            placeholder="Enter your username"
           />
         </div>
 
@@ -111,14 +111,14 @@
             type="email"
             required
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-            placeholder="votre@email.com"
+            placeholder="your@email.com"
           />
         </div>
 
         <!-- Password  -->
         <div class="space-y-2">
           <label for="password" class="block text-sm font-medium text-gray-700">
-            Mot de passe
+            Password
           </label>
           <input
             id="password"
@@ -133,7 +133,7 @@
         <!-- Confirm Password -->
         <div class="space-y-2">
           <label for="confirmPassword" class="block text-sm font-medium text-gray-700">
-            Confirmer le mot de passe
+            Confirm password
           </label>
           <input
             id="confirmPassword"
@@ -157,7 +157,7 @@
           type="submit"
           class="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-amber-600 hover:to-orange-600 focus:ring-4 focus:ring-amber-300 transition-all duration-200 shadow-md hover:shadow-lg"
         >
-          S'inscrire
+          Sign up
         </button>
       </form>
 
@@ -167,26 +167,26 @@
           <div class="w-full border-t border-gray-300"></div>
         </div>
         <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-white text-gray-500">Ou</span>
+          <span class="px-2 bg-white text-gray-500">Or</span>
         </div>
       </div>
 
       <!-- Login  -->
       <div class="text-center">
         <p class="text-gray-600">
-          Vous avez déjà un compte ?
+          Already have an account?
           <a href="/login" class="text-amber-600 hover:text-amber-700 font-semibold transition-colors">
-            Se connecter
+            Log in
           </a>
         </p>
       </div>
     </div>
     <!-- Terms and Privacy -->
     <p class="text-center text-sm text-gray-500 mt-6">
-      En vous inscrivant, vous acceptez nos
-      <a href="/terms" class="text-amber-600 hover:text-amber-700 underline">conditions d'utilisation</a>
-      et notre
-      <a href="/privacy" class="text-amber-600 hover:text-amber-700 underline">politique de confidentialité</a>
+      By signing up, you agree to our
+      <a href="/terms" class="text-amber-600 hover:text-amber-700 underline">terms of use</a>
+      and our
+      <a href="/privacy" class="text-amber-600 hover:text-amber-700 underline">privacy policy</a>
     </p>
   </div>
 </div>
