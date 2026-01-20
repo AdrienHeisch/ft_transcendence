@@ -72,9 +72,9 @@ let persons = $derived(
   <title>Liste des membres - La Ferme à Bibi</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100">
+<div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
   <!-- Header -->
-  <header class="bg-gradient-to-r from-orange-600 to-orange-700 text-white shadow-lg">
+  <header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
     <div class="flex items-center justify-between px-6 py-3">
       <a
         href="/"
@@ -191,7 +191,7 @@ let persons = $derived(
             class="bg-white rounded-2xl shadow-lg overflow-hidden border-3 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
             <!-- Profile picture -->
-            <div class="relative bg-gradient-to-br from-orange-200 to-yellow-200 p-6">
+            <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
                 <img 
                   src={person.photo} 
@@ -237,7 +237,7 @@ let persons = $derived(
 
               <!-- Buttons -->
               <div class="flex gap-2">
-                <button class="flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
+                <button class="flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
                   👁️ Voir le profil
                 </button>
                 <button class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
