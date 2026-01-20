@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from "./$types";
 
-  let { data }: { data: PageData } = $props();
+  const { data }: { data: PageData } = $props();
 
   // Données de démonstration (à remplacer par les vraies données de l'utilisateur)
   let user = $derived({
