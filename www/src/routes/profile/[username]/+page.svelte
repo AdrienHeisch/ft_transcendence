@@ -88,22 +88,22 @@
       alt="Ferme" 
       class="w-full h-full object-cover opacity-20"
     />
-    <div class="absolute inset-0 bg-gradient-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95"></div>
+    <div class="absolute inset-0 bg-linear-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95"></div>
   </div>
 
   <!-- Cover Image -->
-  <div class="relative h-80 bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600">
+  <div class="relative h-80 bg-linear-to-r from-orange-700 via-orange-600 to-amber-600">
     <img 
       src={user.coverImage} 
       alt="Couverture" 
       class="w-full h-full object-cover"
     />
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/20"></div>
+    <div class="absolute inset-0 bg-linear-to-b from-transparent to-black/20"></div>
   </div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-10">
     <!-- Profile Header -->
-    <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
+    <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
       <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
         <!-- Profile Picture -->
         <div class="relative">
@@ -183,7 +183,7 @@
       <!-- Left Sidebar - Passions -->
       <div class="lg:col-span-1 space-y-6">
         <!-- Passions Card -->
-        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
+        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
           <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2">
             <span class="text-2xl">🌾</span>
             Passions
@@ -199,7 +199,7 @@
         </div>
 
         <!-- Friends Preview Card -->
-        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
+        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
           <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center justify-between">
             <span class="flex items-center gap-2">
               <span class="text-2xl">👥</span>
@@ -224,7 +224,7 @@
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#each posts as post (post.id)}
-          <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
+          <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
             <!-- Post Header -->
             <div class="p-4 flex items-center gap-3">
               <img 
