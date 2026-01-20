@@ -121,7 +121,7 @@ const news = [
 </script>
 <div class="min-h-screen bg-[#f5e6d3]" style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a574' fill-opacity='0.05'%3E%3Cpath d='M0 0h20L0 20z'/%3E%3C/g%3E%3C/svg%3E&quot;);">
   <!-- Header -->
-  <header class="bg-gradient-to-r from-amber-700 via-orange-800 to-amber-800 text-amber-50 shadow-lg sticky top-0 z-50 border-b-4 border-amber-900">
+  <header class="bg-linear-to-r from-amber-700 via-orange-800 to-amber-800 text-amber-50 shadow-lg sticky top-0 z-50 border-b-4 border-amber-900">
     <div class="container mx-auto px-4 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -168,7 +168,7 @@ const news = [
     {#if !sidebarOpen}
       <button
         onclick={() => sidebarOpen = true}
-        class="fixed left-0 top-1/2 -translate-y-1/2 bg-gradient-to-r from-amber-600 to-orange-700 text-white px-2 py-6 rounded-r-lg font-bold hover:from-amber-700 hover:to-orange-800 transition shadow-lg border-2 border-amber-800 z-40"
+        class="fixed left-0 top-1/2 -translate-y-1/2 bg-linear-to-r from-amber-600 to-orange-700 text-white px-2 py-6 rounded-r-lg font-bold hover:from-amber-700 hover:to-orange-800 transition shadow-lg border-2 border-amber-800 z-40"
         style="writing-mode: vertical-rl;"
       >
         ☰ MENU
@@ -177,7 +177,7 @@ const news = [
 
     <!-- Sidebar gauche -->
     <aside 
-      class="bg-gradient-to-b from-amber-100 to-amber-200 border-r-4 border-amber-700 shadow-xl transition-all duration-300 sticky top-[88px] h-[calc(100vh-88px)] overflow-y-auto"
+      class="bg-linear-to-b from-amber-100 to-amber-200 border-r-4 border-amber-700 shadow-xl transition-all duration-300 sticky top-22 h-[calc(100vh-88px)] overflow-y-auto"
       class:hidden={!sidebarOpen}
       class:block={sidebarOpen}
       class:w-64={sidebarOpen}
@@ -240,7 +240,7 @@ const news = [
           </div>
 
           <!-- Farm stats -->
-          <div class="bg-gradient-to-br from-orange-100 to-amber-100 rounded-lg p-4 border-2 border-amber-700 shadow-md">
+          <div class="bg-linear-to-br from-orange-100 to-amber-100 rounded-lg p-4 border-2 border-amber-700 shadow-md">
             <h3 class="text-lg font-bold text-amber-900 mb-3 flex items-center gap-2" style="font-family: 'Georgia', serif;">
               📊 The Farm in Numbers
             </h3>
@@ -262,7 +262,7 @@ const news = [
 
           <!-- Call to action -->
           <div class="mt-6">
-            <button class="w-full bg-gradient-to-r from-rose-500 to-rose-600 text-white py-3 rounded-lg font-bold hover:from-rose-600 hover:to-rose-700 transition shadow-lg border-2 border-rose-800">
+            <button class="w-full bg-linear-to-r from-rose-500 to-rose-600 text-white py-3 rounded-lg font-bold hover:from-rose-600 hover:to-rose-700 transition shadow-lg border-2 border-rose-800">
               ❤️ Support us
             </button>
           </div>
@@ -274,8 +274,15 @@ const news = [
 
   <!-- Panneau de connexion -->
   {#if showLogin}
+    <!-- TODO handle warnings -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onclick={() => showLogin = false}>
-      <div class="bg-amber-50 rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 border-4 border-amber-800" onclick={(e) => e.stopPropagation()} style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a574' fill-opacity='0.08'%3E%3Cpath d='M0 0h40L0 40z'/%3E%3C/g%3E%3C/svg%3E&quot;);">
+      <div
+        class="bg-amber-50 rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 border-4 border-amber-800"
+        onclick={(e) => e.stopPropagation()}
+        style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a574' fill-opacity='0.08'%3E%3Cpath d='M0 0h40L0 40z'/%3E%3C/g%3E%3C/svg%3E&quot;);"
+      >
         <div class="text-center mb-6">
           <h2 class="text-3xl font-bold text-amber-900 mb-2" style="font-family: 'Georgia', serif;">Welcome</h2>
           <p class="text-amber-700 italic">Log in to Bibi's Farm</p>
@@ -283,13 +290,13 @@ const news = [
         
         <form class="space-y-4">
           <div>
-            <label class="block text-amber-900 font-semibold mb-2">Username</label>
-            <input type="text" class="w-full px-4 py-2 border-2 border-amber-300 rounded bg-white focus:border-amber-600 focus:outline-none" placeholder="Enter your name">
+            <label class="block text-amber-900 font-semibold mb-2" for="username">Username</label>
+            <input id="username" type="text" class="w-full px-4 py-2 border-2 border-amber-300 rounded bg-white focus:border-amber-600 focus:outline-none" placeholder="Enter your name">
           </div>
           
           <div>
-            <label class="block text-amber-900 font-semibold mb-2">Password</label>
-            <input type="password" class="w-full px-4 py-2 border-2 border-amber-300 rounded bg-white focus:border-amber-600 focus:outline-none" placeholder="Enter your password">
+            <label class="block text-amber-900 font-semibold mb-2" for="password">Password</label>
+            <input id="password" type="password" class="w-full px-4 py-2 border-2 border-amber-300 rounded bg-white focus:border-amber-600 focus:outline-none" placeholder="Enter your password">
           </div>
 
           <div class="flex items-center gap-2 bg-amber-100 p-3 rounded border-2 border-amber-400">
@@ -297,14 +304,14 @@ const news = [
             <label for="admin" class="text-amber-900 font-semibold cursor-pointer">🔐 Administrator Mode</label>
           </div>
           
-          <button type="submit" class="w-full bg-gradient-to-r from-amber-600 to-orange-700 text-white py-3 rounded-lg font-bold hover:from-amber-700 hover:to-orange-800 transition shadow-lg border-2 border-amber-800">
+          <button type="submit" class="w-full bg-linear-to-r from-amber-600 to-orange-700 text-white py-3 rounded-lg font-bold hover:from-amber-700 hover:to-orange-800 transition shadow-lg border-2 border-amber-800">
             Log in
           </button>
         </form>
         
         <div class="mt-6 text-center">
-          <a href="#" class="text-amber-700 hover:text-amber-900 text-sm underline">Forgot password?</a>
-          <p class="text-sm text-amber-600 mt-2">Don't have an account yet? <a href="#" class="text-amber-800 font-semibold underline">Sign up</a></p>
+          <a href="/" class="text-amber-700 hover:text-amber-900 text-sm underline">Forgot password?</a> <!-- TODO location -->
+          <p class="text-sm text-amber-600 mt-2">Don't have an account yet? <a href="/" class="text-amber-800 font-semibold underline">Sign up</a></p> <!-- TODO location -->
         </div>
       </div>
     </div>
@@ -312,7 +319,7 @@ const news = [
 
   <!-- Hero section-->
   <section
-    class="bg-gradient-to-r from-orange-300 via-amber-200 to-yellow-200 text-amber-900 py-20"
+    class="bg-linear-to-r from-orange-300 via-amber-200 to-yellow-200 text-amber-900 py-20"
   >
     <div class="container mx-auto px-4 text-center">
       <h2 class="text-5xl font-bold mb-4">
@@ -352,14 +359,14 @@ const news = [
           class="bg-amber-50 rounded-lg shadow-xl hover:shadow-2xl transition overflow-hidden border-4 border-amber-700 transform hover:-translate-y-1"
           style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a574' fill-opacity='0.06'%3E%3Cpath d='M0 0h30L0 30z'/%3E%3C/g%3E%3C/svg%3E&quot;);"
         >
-          <div class="bg-gradient-to-r from-amber-800 to-orange-900 text-center py-2 border-b-2 border-amber-900">
+          <div class="bg-linear-to-r from-amber-800 to-orange-900 text-center py-2 border-b-2 border-amber-900">
             <span class="text-amber-100 font-bold text-sm tracking-wider" style="font-family: 'Georgia', serif;">★ AVAILABLE ★</span>
           </div>
 
           <!-- Image de l'animal -->
           <div class="p-4">
             <div
-              class="bg-gradient-to-br from-orange-200 via-yellow-100 to-amber-200 h-48 flex items-center justify-center text-8xl rounded border-8 border-amber-800 shadow-inner"
+              class="bg-linear-to-br from-orange-200 via-yellow-100 to-amber-200 h-48 flex items-center justify-center text-8xl rounded border-8 border-amber-800 shadow-inner"
               style="box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);"
             >
               {animal.image}
@@ -381,12 +388,12 @@ const news = [
         
             <div class="flex gap-2">
               <button
-                class="flex-1 bg-gradient-to-b from-rose-400 to-rose-600 text-white py-2 rounded font-bold hover:from-rose-500 hover:to-rose-700 transition shadow-md border-2 border-rose-800"
+                class="flex-1 bg-linear-to-b from-rose-400 to-rose-600 text-white py-2 rounded font-bold hover:from-rose-500 hover:to-rose-700 transition shadow-md border-2 border-rose-800"
               >
                 ❤️ Like
               </button>
               <button
-                class="flex-1 bg-gradient-to-b from-amber-500 to-amber-700 text-white py-2 rounded font-bold hover:from-amber-600 hover:to-amber-800 transition shadow-md border-2 border-amber-900"
+                class="flex-1 bg-linear-to-b from-amber-500 to-amber-700 text-white py-2 rounded font-bold hover:from-amber-600 hover:to-amber-800 transition shadow-md border-2 border-amber-900"
               >
                 🏡 Adopt
               </button>
@@ -398,7 +405,7 @@ const news = [
   </section>
 
   <!-- News section-->
-  <section class="bg-gradient-to-b from-yellow-50 to-amber-50 py-16">
+  <section class="bg-linear-to-b from-yellow-50 to-amber-50 py-16">
     <div class="container mx-auto px-4">
       <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">
         News & Testimonials
@@ -410,7 +417,7 @@ const news = [
             <!-- En-tête du post -->
             <div class="flex items-center gap-3 mb-3">
               <div
-                class="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-400 rounded-full flex items-center justify-center text-white font-bold"
+                class="w-10 h-10 bg-linear-to-br from-orange-400 to-amber-400 rounded-full flex items-center justify-center text-white font-bold"
               >
                 {post.author[0]}
               </div>
@@ -444,7 +451,7 @@ const news = [
   </section>
 
 
-  <footer class="bg-gradient-to-r from-amber-800 to-orange-900 text-amber-50 py-12">
+  <footer class="bg-linear-to-r from-amber-800 to-orange-900 text-amber-50 py-12">
     <div class="container mx-auto px-4">
       <div class="grid md:grid-cols-3 gap-8 mb-8">
       
