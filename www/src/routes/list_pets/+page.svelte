@@ -1,40 +1,48 @@
 <script lang="ts">
-  import type { Pet } from "$lib/server/db/schema";
-  import type { PageData } from "./$types";
+import type { Pet } from "$lib/server/db/schema";
+import type { PageData } from "./$types";
 
-  const { data }: { data: PageData } = $props();
+const { data }: { data: PageData } = $props();
 
-  const getAvatar = (_: Pet) => "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=800";
+const getAvatar = (_: Pet) =>
+  "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=800";
 
-  // Filters
-  let searchQuery = $state("");
-  let selectedSpecies = $state("all");
-  let sortBy = $state("name");
+// Filters
+let searchQuery = $state("");
+let selectedSpecies = $state("all");
+let sortBy = $state("name");
 
-  // Use data from database
-  let animals = $derived(await data.pets || []);
+// Use data from database
+let animals = $derived((await data.pets) || []);
 
-  // List of unique species for the filter
-  let species = $derived(["all", ...new Set(animals.map(a => a.species))]);
+// List of unique species for the filter
+let species = $derived(["all", ...new Set(animals.map((a) => a.species))]);
 
-  // Filtering animals
-  let filteredAnimals = $derived(animals.filter(animal => {
-    const matchSearch = animal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                       (animal.breed && animal.breed.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchSpecies = selectedSpecies === "all" || animal.species === selectedSpecies;
-    
+// Filtering animals
+let filteredAnimals = $derived(
+  animals.filter((animal) => {
+    const matchSearch =
+      animal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (animal.breed &&
+        animal.breed.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchSpecies =
+      selectedSpecies === "all" || animal.species === selectedSpecies;
+
     return matchSearch && matchSpecies;
-  }));
+  }),
+);
 
-  // Sorting animals
-  let sortedAnimals = $derived([...filteredAnimals].sort((a, b) => {
+// Sorting animals
+let sortedAnimals = $derived(
+  [...filteredAnimals].sort((a, b) => {
     if (sortBy === "name") {
       return a.name.localeCompare(b.name);
     } else if (sortBy === "species") {
       return a.species.localeCompare(b.species);
     }
     return 0;
-  }));
+  }),
+);
 </script>
 
 <svelte:head>
