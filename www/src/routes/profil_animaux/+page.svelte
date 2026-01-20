@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-  <title>Profil de {animal.nom}</title>
+  <title>{animal.nom}'s Profile</title>
 </svelte:head>
 
 <div class="min-h-screen bg-[#f5e6d3]">
@@ -24,7 +24,7 @@
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
       </svg>
-      Retour à la liste
+      Back to list
     </a>
   </div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
@@ -38,11 +38,11 @@
             </div>
             {#if animal.adopte}
               <span class="px-4 py-2 bg-orange-600 text-white rounded-lg font-medium">
-                Adopté
+                Adopted
               </span>
             {:else}
               <span class="px-4 py-2 bg-[#CC5500] text-white rounded-lg font-bold">
-                ★ DISPONIBLE ★
+                ★ AVAILABLE ★
               </span>
             {/if}
           </div>
@@ -52,24 +52,24 @@
             <div class="flex items-center gap-3 p-4 bg-[#fef7ed] rounded-lg border-2 border-[#8B4513]">
               <span class="text-2xl">🎂</span>
               <div>
-                <p class="text-sm text-[#A0522D] font-medium">Âge</p>
-                <p class="text-lg text-[#8B4513] font-bold">{animal.age} ans</p>
+                <p class="text-sm text-[#A0522D] font-medium">Age</p>
+                <p class="text-lg text-[#8B4513] font-bold">{animal.age} years old</p>
               </div>
             </div>
 
             <div class="flex items-center gap-3 p-4 bg-[#fef7ed] rounded-lg border-2 border-[#8B4513]">
               <span class="text-2xl">📍</span>
               <div>
-                <p class="text-sm text-[#A0522D] font-medium">Localisation</p>
-                <p class="text-lg text-[#8B4513] font-bold">La Ferme à Bibi</p>
+                <p class="text-sm text-[#A0522D] font-medium">Location</p>
+                <p class="text-lg text-[#8B4513] font-bold">Bibi's Farm</p>
               </div>
             </div>
 
             <div class="flex items-center gap-3 p-4 bg-[#fef7ed] rounded-lg border-2 border-[#8B4513]">
               <span class="text-2xl">🏥</span>
               <div>
-                <p class="text-sm text-[#A0522D] font-medium">Santé</p>
-                <p class="text-lg text-[#8B4513] font-bold">Excellente</p>
+                <p class="text-sm text-[#A0522D] font-medium">Health</p>
+                <p class="text-lg text-[#8B4513] font-bold">Excellent</p>
               </div>
             </div>
           </div>
@@ -87,11 +87,11 @@
 
           {#if !animal.adopte}
             <button class="w-full py-4 bg-[#CC5500] text-white rounded-lg font-bold text-lg hover:bg-[#A04000] transition-all duration-200 shadow-md hover:shadow-lg">
-              🏠 Adopter {animal.nom}
+              🏠 Adopt {animal.nom}
             </button>
           {:else}
             <button disabled class="w-full py-4 bg-gray-400 text-white rounded-lg font-bold text-lg cursor-not-allowed opacity-60">
-              Déjà adopté
+              Already adopted
             </button>
           {/if}
         </div>
@@ -99,24 +99,24 @@
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-6 border-4 border-[#8B4513]">
           <h2 class="text-xl font-bold text-[#8B4513] mb-4 flex items-center gap-2">
             <span>⭐</span>
-            Caractéristiques
+            Characteristics
           </h2>
           <div class="grid grid-cols-2 gap-3">
             <div class="p-3 bg-[#fef7ed] rounded-lg border-2 border-[#8B4513] text-center">
               <p class="text-sm text-[#A0522D]">Sociable</p>
-              <p class="text-2xl">Oui</p>
+              <p class="text-2xl">Yes</p>
             </div>
             <div class="p-3 bg-[#fef7ed] rounded-lg border-2 border-[#8B4513] text-center">
-              <p class="text-sm text-[#A0522D]">Calme</p>
-              <p class="text-2xl">Oui</p>
+              <p class="text-sm text-[#A0522D]">Calm</p>
+              <p class="text-2xl">Yes</p>
             </div>
             <div class="p-3 bg-[#fef7ed] rounded-lg border-2 border-[#8B4513] text-center">
-              <p class="text-sm text-[#A0522D]">Affectueux</p>
-              <p class="text-2xl">Oui</p>
+              <p class="text-sm text-[#A0522D]">Affectionate</p>
+              <p class="text-2xl">Yes</p>
             </div>
             <div class="p-3 bg-[#fef7ed] rounded-lg border-2 border-[#8B4513] text-center">
-              <p class="text-sm text-[#A0522D]">Joueur</p>
-              <p class="text-2xl">Non</p>
+              <p class="text-sm text-[#A0522D]">Playful</p>
+              <p class="text-2xl">No</p>
             </div>
           </div>
         </div>
@@ -149,20 +149,20 @@
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-6 border-4 border-[#8B4513]">
           <h2 class="text-xl font-bold text-[#8B4513] mb-4 flex items-center gap-2">
             <span>📋</span>
-            Historique
+            History
           </h2>
           <div class="space-y-3">
             <div class="flex items-start gap-3">
               <span class="text-[#CC5500] font-bold">•</span>
-              <p class="text-[#8B4513]">Arrivé à la ferme en {new Date().getFullYear() - 1}</p>
+              <p class="text-[#8B4513]">Arrived at the farm in {new Date().getFullYear() - 1}</p>
             </div>
             <div class="flex items-start gap-3">
               <span class="text-[#CC5500] font-bold">•</span>
-              <p class="text-[#8B4513]">Vacciné et en bonne santé</p>
+              <p class="text-[#8B4513]">Vaccinated and in good health</p>
             </div>
             <div class="flex items-start gap-3">
               <span class="text-[#CC5500] font-bold">•</span>
-              <p class="text-[#8B4513]">S'entend bien avec les autres animaux</p>
+              <p class="text-[#8B4513]">Gets along well with other animals</p>
             </div>
           </div>
         </div>
