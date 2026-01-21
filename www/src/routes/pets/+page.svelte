@@ -1,8 +1,7 @@
 <script lang="ts">
 import type { Pet } from "$lib/server/db/schema";
-import type { PageData } from "./$types";
 
-const { data }: { data: PageData } = $props();
+const { data } = $props();
 
 // TODO avatars
 const getAvatar = (_: Pet) =>
@@ -10,24 +9,20 @@ const getAvatar = (_: Pet) =>
 
 // Filters
 let searchQuery = $state("");
-let selectedSpecies = $state("all");
-let sortBy = $state("name");
+let selectedSpecies = $state<string | null>(null);
+let sortBy = $state<"name" | "species">("name");
 
 // Unique species
-let species = $derived([
-  "all",
-  ...new Set((await data.pets).map((a) => a.species)),
-]);
+const species = $derived(new Set((await data.pets).map((a) => a.species)));
 
-let pets = $derived(
+const pets = $derived(
   (await data.pets)
     .filter((pet) => {
       const matchSearch =
         pet.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (pet.breed &&
           pet.breed.toLowerCase().includes(searchQuery.toLowerCase()));
-      const matchSpecies =
-        selectedSpecies === "all" || pet.species === selectedSpecies;
+      const matchSpecies = !selectedSpecies || pet.species === selectedSpecies;
 
       return matchSearch && matchSpecies;
     })
@@ -88,8 +83,9 @@ let pets = $derived(
             bind:value={selectedSpecies}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
+            <option value={null}>All</option>
             {#each species as sp}
-              <option value={sp}>{sp === "all" ? "All" : sp}</option>
+              <option value={sp}>{sp}</option>
             {/each}
           </select>
         </div>
