@@ -30,7 +30,7 @@ const sidebarBottomItems = [
 </svelte:head>
 
 <!-- Header avec bouton home et messages -->
-<header class="sticky top-0 z-9 bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
+<header class="sticky top-0 z-99 bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
   <div class="flex items-center justify-between px-6 py-3">
     <div class="flex items-center gap-4">
       <a
@@ -118,7 +118,7 @@ const sidebarBottomItems = [
 
 <!-- Sidebar -->
 {#if sidebarOpen}
-  <aside class="z-10 fixed top-0 bottom-0 overflow-scroll w-72 bg-linear-to-b from-orange-50 to-yellow-50 shadow-xl border-r-4 border-orange-600 flex flex-col">
+  <aside class="z-100 fixed top-0 bottom-0 overflow-scroll w-72 bg-linear-to-b from-orange-50 to-yellow-50 shadow-xl border-r-4 border-orange-600 flex flex-col">
     <div class="p-4 flex-1">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl font-bold text-orange-900">Menu</h2>
