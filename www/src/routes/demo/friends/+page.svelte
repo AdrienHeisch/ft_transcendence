@@ -35,7 +35,7 @@ const inbox = $derived(
 {#each list as friend}
     <li>
       <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
-      <button class="border-1" onclick={async () => {
+      <button class="border" onclick={async () => {
         await remote.removeFriend(friend);
         friendToAdd = "";
       }}>Remove</button>
@@ -48,7 +48,7 @@ const inbox = $derived(
 {#each invitations as friend}
   <li>
     <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
-    <button class="border-1" onclick={async () => {
+    <button class="border" onclick={async () => {
       await remote.removeFriend(friend);
       friendToAdd = "";
     }}>Cancel</button>
@@ -61,11 +61,11 @@ const inbox = $derived(
 {#each inbox as friend}
   <li>
     <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
-    <button class="border-1" onclick={async () => {
+    <button class="border" onclick={async () => {
       await remote.acceptFriend(friend);
       friendToAdd = "";
     }}>Accept</button>
-    <button class="border-1" onclick={async () => {
+    <button class="border" onclick={async () => {
       await remote.removeFriend(friend);
       friendToAdd = "";
     }}>Refuse</button>
