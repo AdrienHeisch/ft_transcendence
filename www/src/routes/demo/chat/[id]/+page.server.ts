@@ -1,14 +1,12 @@
-import { error } from "@sveltejs/kit";
 import { and, desc, eq, getTableColumns, or } from "drizzle-orm";
+import { requireLogin } from "$lib/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = ({ params, locals }) => {
-  if (!locals.user) {
-    error(403);
-  }
-  console.log(`chat: ${params.id}, user: ${locals.user.id}`);
+export const load: PageServerLoad = ({ params }) => {
+  const user = requireLogin();
+  console.log(`chat: ${params.id}, user: ${user.id}`);
   return {
     messages: db
       .select({ ...getTableColumns(schema.chatMessage) })
@@ -21,8 +19,8 @@ export const load: PageServerLoad = ({ params, locals }) => {
         and(
           eq(schema.friendsPair.id, params.id),
           or(
-            eq(schema.friendsPair.left, locals.user.id),
-            eq(schema.friendsPair.right, locals.user.id),
+            eq(schema.friendsPair.left, user.id),
+            eq(schema.friendsPair.right, user.id),
           ),
         ),
       )

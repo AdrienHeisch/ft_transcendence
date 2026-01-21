@@ -1,12 +1,11 @@
 <script lang="ts">
-import { resolve } from "$app/paths";
+const demos = ["auth", "chat", "files", "friends", "posts"];
 </script>
 
 <ul>
+  {#each demos as demo}
   <li>
-    <a href={resolve("/demo/auth")}>lucia</a>
+    <a href={`/demo/${demo}`}>{demo}</a>
   </li>
-  <li>
-    <a href={resolve("/demo/files")}>files</a>
-  </li>
+{/each}
 </ul>

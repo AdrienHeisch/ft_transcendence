@@ -10,3 +10,7 @@ export function requireLogin() {
 
   return locals.user;
 }
+
+export function isLoggedIn() {
+  return !!getRequestEvent().locals.user;
+}

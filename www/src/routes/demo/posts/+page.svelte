@@ -4,13 +4,15 @@ import * as remote from "./posts.remote";
 const { data } = $props();
 </script>
 
-<form enctype="multipart/form-data" {...remote.sendPost}>
-  <div>
-    <label for="content">New post: </label>
-    <input type="text" id="content" name="content" required />
-  </div>
-  <button type="submit">Submit !</button>
-</form>
+{#if data.isLoggedIn}
+  <form enctype="multipart/form-data" {...remote.sendPost}>
+    <div>
+      <label for="content">New post: </label>
+      <input type="text" id="content" name="content" required />
+    </div>
+    <button type="submit">Submit !</button>
+  </form>
+{/if}
 
 <div class="grid columns-3">
   {#each await data.posts as post}

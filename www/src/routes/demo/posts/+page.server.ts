@@ -1,14 +1,12 @@
-import { error } from "@sveltejs/kit";
 import { desc, eq } from "drizzle-orm";
+import { isLoggedIn } from "$lib/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals }) => {
-  if (!locals.user) {
-    error(403, "Not logged in");
-  }
+export const load: PageServerLoad = async () => {
   return {
+    isLoggedIn: isLoggedIn(),
     posts: db
       .select()
       .from(schema.post)
