@@ -1,39 +1,21 @@
 <script lang="ts">
 import type { Pet } from "$lib/server/db/schema";
-
-const { data } = $props();
+import { getPets } from "./pets.remote";
 
 // TODO avatars
 const getAvatar = (_: Pet) =>
   "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=800";
+
+// TODO generate this list
+const species = ["Cat", "Dog", "Cow", "Fish", "Horse"];
 
 // Filters
 let searchQuery = $state("");
 let selectedSpecies = $state<string | null>(null);
 let sortBy = $state<"name" | "species">("name");
 
-// Unique species
-const species = $derived(new Set((await data.pets).map((a) => a.species)));
-
 const pets = $derived(
-  (await data.pets)
-    .filter((pet) => {
-      const matchSearch =
-        pet.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (pet.breed &&
-          pet.breed.toLowerCase().includes(searchQuery.toLowerCase()));
-      const matchSpecies = !selectedSpecies || pet.species === selectedSpecies;
-
-      return matchSearch && matchSpecies;
-    })
-    .sort((a, b) => {
-      if (sortBy === "name") {
-        return a.name.localeCompare(b.name);
-      } else if (sortBy === "species") {
-        return a.species.localeCompare(b.species);
-      }
-      return 0;
-    }),
+  await getPets({ search: searchQuery, species: selectedSpecies, sortBy }),
 );
 </script>
 
