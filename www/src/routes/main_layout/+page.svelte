@@ -1,23 +1,23 @@
 <script lang="ts">
-	let sidebarOpen = $state(true);
-	let messagesOpen = $state(false);
+let sidebarOpen = $state(true);
+let messagesOpen = $state(false);
 
-	const sidebarMainItems = [
-		{ label: 'Profile', icon: '👤' },
-		{ label: 'Groups', icon: '👥' },
-		{ label: 'Favorites', icon: '⭐' },
-		{ label: 'Photos', icon: '📷' },
-		{ label: 'News feed', icon: '📰' },
-		{ label: 'Friends', icon: '🤝' },
-		{ label: 'Adopt', icon: '🐾' },
-		{ label: 'Pet sitter', icon: '🐕' }
-	];
+const sidebarMainItems = [
+  { label: "Profile", icon: "👤" },
+  { label: "Groups", icon: "👥" },
+  { label: "Favorites", icon: "⭐" },
+  { label: "Photos", icon: "📷" },
+  { label: "News feed", icon: "📰" },
+  { label: "Friends", icon: "🤝" },
+  { label: "Adopt", icon: "🐾" },
+  { label: "Pet sitter", icon: "🐕" },
+];
 
-	const sidebarBottomItems = [
-		{ label: 'Help & Support', icon: '❓' },
-		{ label: 'Settings', icon: '⚙️' },
-		{ label: 'Logout', icon: '🚪' }
-	];
+const sidebarBottomItems = [
+  { label: "Help & Support", icon: "❓" },
+  { label: "Settings", icon: "⚙️" },
+  { label: "Logout", icon: "🚪" },
+];
 </script>
 
 <div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
