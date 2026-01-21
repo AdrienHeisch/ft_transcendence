@@ -20,9 +20,9 @@
 	];
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100">
+<div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
 	<!-- Header avec bouton home et messages -->
-	<header class="bg-gradient-to-r from-orange-600 to-orange-700 text-white shadow-lg">
+	<header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
 		<div class="flex items-center justify-between px-6 py-3">
 			<div class="flex items-center gap-4">
 				<button
@@ -56,7 +56,7 @@
 	<!-- Panel de messages -->
 	{#if messagesOpen}
 		<div class="fixed top-16 right-6 w-96 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-50">
-			<div class="bg-gradient-to-r from-orange-600 to-orange-700 text-white px-4 py-3 rounded-t flex items-center justify-between">
+			<div class="bg-linear-to-r from-orange-600 to-orange-700 text-white px-4 py-3 rounded-t flex items-center justify-between">
 				<h2 class="font-bold text-lg">Direct Messages</h2>
 				<button onclick={() => (messagesOpen = false)} class="text-2xl hover:text-orange-200 transition">&times;</button>
 			</div>
@@ -64,7 +64,7 @@
 				<div class="space-y-2">
 					<div class="p-3 hover:bg-white rounded-lg cursor-pointer border-2 border-orange-300 bg-orange-100 transition">
 						<div class="flex items-center gap-3">
-							<div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">A</div>
+							<div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">A</div>
 							<div class="flex-1">
 								<div class="font-semibold text-orange-900">Alice</div>
 								<div class="text-sm text-gray-700">Ready for the cow party?</div>
@@ -74,7 +74,7 @@
 					</div>
 					<div class="p-3 hover:bg-white rounded-lg cursor-pointer border-2 border-orange-300 bg-orange-100 transition">
 						<div class="flex items-center gap-3">
-							<div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">B</div>
+							<div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">B</div>
 							<div class="flex-1">
 								<div class="font-semibold text-orange-900">Bob</div>
 								<div class="text-sm text-gray-700">Hi Frank, how's your cow doing?</div>
@@ -84,7 +84,7 @@
 					</div>
 					<div class="p-3 hover:bg-white rounded-lg cursor-pointer border-2 border-orange-300 bg-orange-100 transition">
 						<div class="flex items-center gap-3">
-							<div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">C</div>
+							<div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">C</div>
 							<div class="flex-1">
 								<div class="font-semibold text-orange-900">Charlie</div>
 								<div class="text-sm text-gray-700">Tell me, would you happen to have a chicken?</div>
@@ -102,7 +102,7 @@
 		{#if !sidebarOpen}
 			<button
 				onclick={() => (sidebarOpen = true)}
-				class="fixed left-0 top-1/2 -translate-y-1/2 bg-gradient-to-r from-orange-600 to-orange-700 text-white px-2 py-6 rounded-r-lg font-bold hover:from-orange-700 hover:to-orange-800 transition shadow-lg z-40"
+				class="fixed left-0 top-1/2 -translate-y-1/2 bg-linear-to-r from-orange-600 to-orange-700 text-white px-2 py-6 rounded-r-lg font-bold hover:from-orange-700 hover:to-orange-800 transition shadow-lg z-40"
 				style="writing-mode: vertical-rl"
 			>
 				MENU
@@ -111,7 +111,7 @@
 
 		<!-- Sidebar -->
 		{#if sidebarOpen}
-			<aside class="w-72 bg-gradient-to-b from-orange-50 to-yellow-50 shadow-xl border-r-4 border-orange-600 min-h-[calc(100vh-60px)] flex flex-col">
+			<aside class="w-72 bg-linear-to-b from-orange-50 to-yellow-50 shadow-xl border-r-4 border-orange-600 min-h-[calc(100vh-60px)] flex flex-col">
 				<div class="p-4 flex-1">
 					<div class="flex items-center justify-between mb-6">
 						<h2 class="text-xl font-bold text-orange-900">Menu</h2>
@@ -169,7 +169,7 @@
 							rows="3"
 						></textarea>
 						<div class="flex justify-end mt-2">
-							<button class="px-6 py-2 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
+							<button class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
 								Post
 							</button>
 						</div>
@@ -177,9 +177,9 @@
 
 					<!-- Posts -->
 					<div class="space-y-4">
-						<div class="p-4 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
+						<div class="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
 							<div class="flex items-center gap-3 mb-3">
-								<div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">
+								<div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">
 									U
 								</div>
 								<div>
@@ -203,7 +203,7 @@
 						<span>📢</span>
 						Announcements & Adoptions
 					</h2>
-					<div class="p-4 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 text-center">
+					<div class="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 text-center">
 						<p class="text-gray-600 italic">No announcements at the moment.</p>
 					</div>
 				</section>
