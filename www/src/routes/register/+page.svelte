@@ -1,5 +1,20 @@
 <script lang="ts">
 import * as remote from "./register.remote";
+
+let firstName = $state<string>("");
+let lastName = $state<string>("");
+
+let password = $state<string>("");
+let confirm = $state<string>("");
+let confirmField: HTMLInputElement;
+
+$effect(() =>
+  confirmField.setCustomValidity(
+    password == confirm ? "" : "Passwords do not match",
+  ),
+);
+
+// const defaultUsername = $derived(`${firstName.toLowerCase()}${lastName.toLowerCase()}`);
 </script>
 
 <div class="min-h-screen bg-linear-to-br from-rose-100 via-amber-100 to-orange-200 flex items-center justify-center p-4 relative overflow-hidden">
@@ -22,21 +37,6 @@ import * as remote from "./register.remote";
       <form {...remote.register}>
         <!-- First and Last name on the same line -->
         <div class="grid grid-cols-2 gap-4">
-          <!-- Last name -->
-          <div class="space-y-2">
-            <label for="lastName" class="block text-sm font-medium text-gray-700">
-              Last name
-            </label>
-            <input
-              id="lastName"
-              name="lastName"
-              type="text"
-              required
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-              placeholder="Last name"
-            />
-          </div>
-
           <!-- First name -->
           <div class="space-y-2">
             <label for="firstName" class="block text-sm font-medium text-gray-700">
@@ -49,53 +49,70 @@ import * as remote from "./register.remote";
               required
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
               placeholder="First name"
+              bind:value={firstName}
+            />
+          </div>
+
+          <!-- Last name -->
+          <div class="space-y-2">
+            <label for="lastName" class="block text-sm font-medium text-gray-700">
+              Last name
+            </label>
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
+              placeholder="Last name"
+              bind:value={lastName}
             />
           </div>
         </div>
 
         <!-- Birthdate -->
-        <div class="space-y-2">
-          <label for="birthdate" class="block text-sm font-medium text-gray-700">
-            Date of birth
-          </label>
-          <input
-            id="birthdate"
-            name="birthdate"
-            type="date"
-            required
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-          />
-        </div>
-
+        <!-- <div class="space-y-2"> -->
+        <!--   <label for="birthdate" class="block text-sm font-medium text-gray-700"> -->
+        <!--     Date of birth -->
+        <!--   </label> -->
+        <!--   <input -->
+        <!--     id="birthdate" -->
+        <!--     name="birthdate" -->
+        <!--     type="date" -->
+        <!--     required -->
+        <!--     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400" -->
+        <!--   /> -->
+        <!-- </div> -->
+        <!---->
         <!-- Phone -->
-        <div class="space-y-2">
-          <label for="phone" class="block text-sm font-medium text-gray-700">
-            Phone number
-          </label>
-          <input
-            id="phone"
-            name="phone"
-            type="tel"
-            required
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-            placeholder="06 12 34 56 78"
-          />
-        </div>
-
+        <!-- <div class="space-y-2"> -->
+        <!--   <label for="phone" class="block text-sm font-medium text-gray-700"> -->
+        <!--     Phone number -->
+        <!--   </label> -->
+        <!--   <input -->
+        <!--     id="phone" -->
+        <!--     name="phone" -->
+        <!--     type="tel" -->
+        <!--     required -->
+        <!--     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400" -->
+        <!--     placeholder="06 12 34 56 78" -->
+        <!--   /> -->
+        <!-- </div> -->
+        <!---->
         <!-- Username -->
-        <div class="space-y-2">
-          <label for="username" class="block text-sm font-medium text-gray-700">
-            Username
-          </label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            required
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-            placeholder="Enter your username"
-          />
-        </div>
+        <!-- <div class="space-y-2"> -->
+        <!--   <label for="username" class="block text-sm font-medium text-gray-700"> -->
+        <!--     Username -->
+        <!--   </label> -->
+        <!--   <input -->
+        <!--     id="username" -->
+        <!--     name="username" -->
+        <!--     type="text" -->
+        <!--     required -->
+        <!--     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400" -->
+        <!--     placeholder={defaultUsername || "Enter your username"} -->
+        <!--   /> -->
+        <!-- </div> -->
 
         <!-- Email -->
         <div class="space-y-2">
@@ -124,6 +141,7 @@ import * as remote from "./register.remote";
             required
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
             placeholder="••••••••"
+            bind:value={password}
           />
         </div>
 
@@ -139,6 +157,8 @@ import * as remote from "./register.remote";
             required
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
             placeholder="••••••••"
+            bind:value={confirm}
+            bind:this={confirmField}
           />
         </div>
 
@@ -152,7 +172,7 @@ import * as remote from "./register.remote";
         <!-- Submit -->
         <button
           type="submit"
-          class="w-full bg-linear-to-r from-amber-500 to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-amber-600 hover:to-orange-600 focus:ring-4 focus:ring-amber-300 transition-all duration-200 shadow-md hover:shadow-lg"
+          class="mt-2 w-full bg-linear-to-r from-amber-500 to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-amber-600 hover:to-orange-600 focus:ring-4 focus:ring-amber-300 transition-all duration-200 shadow-md hover:shadow-lg"
         >
           Sign up
         </button>

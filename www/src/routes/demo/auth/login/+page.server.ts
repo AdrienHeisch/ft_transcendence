@@ -3,6 +3,7 @@ import { hash, verify } from "@node-rs/argon2";
 import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import z from "zod";
+import { resolve } from "$app/paths";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as table from "$lib/server/db/schema";
@@ -10,7 +11,7 @@ import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = (event) => {
   if (event.locals.user) {
-    return redirect(302, "/demo/lucia");
+    return redirect(302, resolve("/demo/auth"));
   }
   return {};
 };
