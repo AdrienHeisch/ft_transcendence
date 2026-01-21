@@ -25,13 +25,13 @@ const sidebarBottomItems = [
 	<header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
 		<div class="flex items-center justify-between px-6 py-3">
 			<div class="flex items-center gap-4">
-				<button
-					onclick={() => (window.location.href = '/')}
+				<a
+					href="/"
 					class="flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
 				>
 					<span class="text-xl">🏠</span>
 					<span>Accueil</span>
-				</button>
+				</a>
 		</div>
 
 		<div class="flex items-center gap-3">
