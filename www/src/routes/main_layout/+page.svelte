@@ -20,7 +20,7 @@ const sidebarBottomItems = [
 ];
 </script>
 
-<div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100 flex flex-col">
+<div class="h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100 flex flex-col">
 	<!-- Header avec bouton home et messages -->
 	<header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg flex-none">
 		<div class="flex items-center justify-between px-6 py-3">
@@ -97,7 +97,7 @@ const sidebarBottomItems = [
 		</div>
 	{/if}
 
-	<div class="flex relative flex-auto">
+	<div class="relative flex-auto overflow-hidden *:overflow-scroll">
 		<!-- Bouton pour ouvrir la sidebar quand elle est fermée -->
 		{#if !sidebarOpen}
 			<button
@@ -111,7 +111,7 @@ const sidebarBottomItems = [
 
 		<!-- Sidebar -->
 		{#if sidebarOpen}
-			<aside class="w-72 bg-linear-to-b from-orange-50 to-yellow-50 shadow-xl border-r-4 border-orange-600 flex flex-col">
+			<aside class="absolute top-0 bottom-0 w-72 bg-linear-to-b from-orange-50 to-yellow-50 shadow-xl border-r-4 border-orange-600 flex flex-col">
 				<div class="p-4 flex-1">
 					<div class="flex items-center justify-between mb-6">
 						<h2 class="text-xl font-bold text-orange-900">Menu</h2>
