@@ -1,4 +1,4 @@
-import { eq, ilike } from "drizzle-orm";
+import { and, eq, ilike } from "drizzle-orm";
 import z from "zod";
 import { query } from "$app/server";
 import { db } from "$lib/server/db";
@@ -11,17 +11,15 @@ export const getPets = query(
     sortBy: z.custom<"name" | "species">(),
   }),
   ({ search, species, sortBy }) => {
-    const query = db
+    return db
       .select()
       .from(schema.pet)
-      .orderBy(sortBy === "name" ? schema.pet.name : schema.pet.species)
-      .$dynamic();
-    if (search) {
-      query.where(ilike(schema.pet.name, `%${search}%`));
-    }
-    if (species) {
-      query.where(eq(schema.pet.species, species));
-    }
-    return query;
+      .where(
+        and(
+          search ? ilike(schema.pet.name, `%${search}%`) : undefined,
+          species ? eq(schema.pet.species, species) : undefined,
+        ),
+      )
+      .orderBy(sortBy === "name" ? schema.pet.name : schema.pet.species);
   },
 );
