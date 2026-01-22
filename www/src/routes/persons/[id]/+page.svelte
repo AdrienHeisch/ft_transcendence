@@ -1,5 +1,6 @@
 <script lang="ts">
 import { error } from "@sveltejs/kit";
+import { resolve } from "$app/paths";
 import type { User } from "$lib/server/db/schema";
 
 const { data } = $props();
@@ -174,12 +175,12 @@ const getAvatar = (user: User) =>
               <span class="text-2xl">👥</span>
               Friends
             </span>
-            <a href="/profile/{user.id}/friends" class="text-sm text-orange-700 hover:text-orange-800 font-medium">View all</a>
+            <a href={resolve(`/persons/${user.id}/friends`)} class="text-sm text-orange-700 hover:text-orange-800 font-medium">View all</a>
           </h2>
           <div class="grid grid-cols-3 gap-2">
             {#each friends as friend (friend.id)}
               <div class="aspect-square rounded-lg overflow-hidden border-2 border-orange-700 hover:border-orange-900 transition-all duration-200 cursor-pointer">
-                <a href="./{friend.id}"><img 
+                <a href={resolve(`/persons/${friend.id}`)}><img 
                   src="https://api.dicebear.com/7.x/avataaars/svg?seed={friend.firstName}" 
                   alt="{friend.firstName} {friend.lastName}"
                   title="{friend.firstName} {friend.lastName}"

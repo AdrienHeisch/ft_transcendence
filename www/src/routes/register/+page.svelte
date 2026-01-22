@@ -1,5 +1,5 @@
 <script lang="ts">
-import * as remote from "./register.remote";
+import * as remote from "$lib/auth.remote";
 
 let firstName = $state<string>("");
 let lastName = $state<string>("");

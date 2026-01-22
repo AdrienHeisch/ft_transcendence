@@ -3,28 +3,56 @@ import { fly } from "svelte/transition";
 import favicon from "$lib/assets/favicon.svg";
 import "../app.css";
 import { resolve } from "$app/paths";
+import * as auth from "$lib/auth.remote";
+    import { afterNavigate } from "$app/navigation";
 
-const { children } = $props();
+const { children, data } = $props();
 
 let sidebarOpen = $state(false);
 let messagesOpen = $state(false);
 
-const sidebarMainItems = [
-  { label: "Home", icon: "🏠" },
-  { label: "Profile", icon: "👤" },
-  { label: "Groups", icon: "👥" },
-  { label: "Favorites", icon: "⭐" },
-  { label: "Photos", icon: "📷" },
-  { label: "News feed", icon: "📰" },
-  { label: "Friends", icon: "🤝" },
-  { label: "Adopt", icon: "🐾" },
-  { label: "Pet sitter", icon: "🐕" },
-];
+afterNavigate(() => sidebarOpen = false)
+
+const sidebarMainItems = $derived(
+  [
+    { label: "Home", icon: "🏠", href: "/" },
+    data.currentUser
+      ? {
+          label: "Profile",
+          icon: "👤",
+          href: `/persons/${data.currentUser.id}`,
+        }
+      : undefined,
+    // { label: "Groups", icon: "👥" },
+    // { label: "Favorites", icon: "⭐" },
+    // { label: "Photos", icon: "📷" },
+    // { label: "News feed", icon: "📰" },
+    data.currentUser
+      ? {
+          label: "Friends",
+          icon: "🤝",
+          href: `/persons/${data.currentUser.id}/friends`,
+        }
+      : undefined,
+    // { label: "Adopt", icon: "🐾" },
+    { label: "Pets", icon: "🐕", href: "/pets" },
+    // { label: "Pet sitter", icon: "🐕" },
+  ].filter((item) => !!item),
+);
 
 const sidebarBottomItems = [
   { label: "Help & Support", icon: "❓" },
   { label: "Settings", icon: "⚙️" },
-  { label: "Logout", icon: "🚪" },
+  {
+    label: "Logout",
+    icon: "🚪",
+    action: () => {
+      auth
+        .logout()
+        .then(() => location.reload())
+        .catch((e) => console.log(e));
+    },
+  },
 ];
 </script>
 
@@ -127,12 +155,13 @@ const sidebarBottomItems = [
 
         <nav class="space-y-2">
           {#each sidebarMainItems as item}
-            <button
+            <a
+              href={item.href}
               class="w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
             >
               <span class="text-xl">{item.icon}</span>
               <span>{item.label}</span>
-            </button>
+            </a>
           {/each}
         </nav>
       </div>
@@ -142,6 +171,7 @@ const sidebarBottomItems = [
         <nav class="space-y-2">
           {#each sidebarBottomItems as item}
             <button
+              onclick={() => {if (item.action) item.action()}}
               class="w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
             >
               <span class="text-xl">{item.icon}</span>

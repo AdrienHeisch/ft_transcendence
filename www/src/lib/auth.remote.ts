@@ -2,7 +2,7 @@ import { hash } from "@node-rs/argon2";
 import { error, redirect } from "@sveltejs/kit";
 import z from "zod";
 import { resolve } from "$app/paths";
-import { form, getRequestEvent } from "$app/server";
+import { command, form, getRequestEvent } from "$app/server";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
@@ -53,3 +53,12 @@ export const register = form(
     return redirect(302, resolve("/demo/auth"));
   },
 );
+
+export const logout = command(async (): Promise<void> => {
+  const event = getRequestEvent();
+  if (!event.locals.session) {
+    return error(401);
+  }
+  await auth.invalidateSession(event.locals.session.id);
+  auth.deleteSessionTokenCookie(event);
+});
