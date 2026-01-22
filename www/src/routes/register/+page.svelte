@@ -17,7 +17,7 @@ $effect(() =>
 // const defaultUsername = $derived(`${firstName.toLowerCase()}${lastName.toLowerCase()}`);
 </script>
 
-<div class="min-h-screen bg-linear-to-br from-rose-100 via-amber-100 to-orange-200 flex items-center justify-center p-4 relative overflow-hidden">
+<div class="bg-linear-to-br from-rose-100 via-amber-100 to-orange-200 flex items-center justify-center p-4">
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute top-20 left-10 w-72 h-72 bg-linear-to-br from-yellow-300/30 to-orange-400/30 rounded-full blur-3xl"></div>
     <div class="absolute bottom-20 right-10 w-96 h-96 bg-linear-to-br from-rose-300/30 to-pink-400/30 rounded-full blur-3xl"></div>

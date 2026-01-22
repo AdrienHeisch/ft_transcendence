@@ -1,29 +1,7 @@
 <script lang="ts">
 </script>
 
-<div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
-	<header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
-		<div class="flex items-center justify-between px-6 py-3">
-			<a
-				href="/"
-				class="flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
-			>
-				<span class="text-xl">🏠</span>
-				<span>Home</span>
-			</a>
-
-			<div class="flex items-center gap-3">
-				<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐄%3C/text%3E%3C/svg%3E" alt="Logo" class="w-10 h-10" />
-				<div>
-					<h1 class="text-3xl font-bold text-yellow-100" style="font-family: Georgia, serif;">Bibi's Farm</h1>
-					<p class="text-sm text-yellow-200 italic" style="font-family: Georgia, serif;">Since 1887</p>
-				</div>
-			</div>
-
-			<div class="w-32"></div>
-		</div>
-	</header>
-
+<div class="bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
 	<main class="max-w-4xl mx-auto p-8">
 		<div class="bg-white rounded-xl shadow-lg border-3 border-orange-400 p-8">
 			<h1 class="text-4xl font-bold text-orange-900 mb-6" style="font-family: Georgia, serif;">

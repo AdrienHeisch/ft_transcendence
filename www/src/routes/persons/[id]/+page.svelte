@@ -51,7 +51,7 @@ const getAvatar = (user: User) =>
 
 <div class="min-h-screen relative">
   <!-- Background Image de ferme -->
-  <div class="fixed inset-0 -z-10">
+  <div class="fixed inset-0">
     <img 
       src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&h=1080&fit=crop" 
       alt="Ferme" 
@@ -62,15 +62,15 @@ const getAvatar = (user: User) =>
 
   <!-- Cover Image -->
   <div class="relative h-80 bg-linear-to-r from-orange-700 via-orange-600 to-amber-600">
-    <img 
-      src={user.coverImage} 
-      alt="Couverture" 
-      class="w-full h-full object-cover"
+    <img
+      src={user.coverImage}
+      alt="Couverture"
+       class="w-full h-full object-cover"
     />
     <div class="absolute inset-0 bg-linear-to-b from-transparent to-black/20"></div>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative">
     <!-- Profile Header -->
     <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
       <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
