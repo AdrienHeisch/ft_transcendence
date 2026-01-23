@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
+import { s3 } from "bun";
 import * as z from "zod";
 import { form } from "$app/server";
-import { public_storage } from "$lib/server/storage";
 
 export const postFile = form(
   z.object({
@@ -15,7 +15,7 @@ export const postFile = form(
     const key = `demo/${file.name}`;
     console.log(`Putting file at ${key} of size ${file.size}`);
     try {
-      const n = await public_storage.write(key, await file.arrayBuffer());
+      const n = await s3.write(key, await file.arrayBuffer());
       console.log(`${n} bytes written`);
     } catch (e) {
       console.error(`Error while uploading file to storage: ${e}`);

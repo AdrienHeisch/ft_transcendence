@@ -26,13 +26,7 @@ services:
       - www
       - db
       - storage
-    volumes:
-      - api-keys:/tmp/api-keys
-    # env_file: ./www/.env
-    environment:
-      DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
-      ORIGIN: https://localhost:8000
-      BODY_SIZE_LIMIT: 5M
+    env_file: .env
   ws:
     image: ft-transcendence_ws
     build:
@@ -45,19 +39,13 @@ services:
     networks:
       - ws
       - db
-    # env_file: ./www/.env
-    environment:
-      DATABASE_URL: postgres://root:mysecretpassword@db:5432/local
+    env_file: .env
   db:
     image: postgres:18
     restart: always
     networks:
       - db
-    # env_file: ./db/.env
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: mysecretpassword
-      POSTGRES_DB: local
+    env_file: .env
     volumes:
       - db-data:/var/lib/postgresql
     healthcheck:
@@ -74,7 +62,7 @@ services:
       - ./garage/config.toml:/etc/garage.toml:ro
       - storage-meta:/var/lib/garage/meta
       - storage-data:/var/lib/garage/data
-      - api-keys:/tmp/api-keys
+    env_file: .env
     healthcheck:
       test: ["CMD", "garage", "status"]
 
@@ -82,7 +70,6 @@ volumes:
   db-data:
   storage-meta:
   storage-data:
-  api-keys:
 
 networks:
   www:

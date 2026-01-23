@@ -15,10 +15,7 @@ fi
 
 if [[ $(garage bucket list | wc -l) -lt 2 ]]; then
   KEY_NAME=www-key
-  garage key create $KEY_NAME
-  API_KEY_ID=$(garage key list | sed '2q;d' | awk '{printf $1}')
-  garage key info $API_KEY_ID | sed '2q;d' | awk '{printf $3}' >/tmp/api-keys/storage-id
-  garage key info $API_KEY_ID --show-secret | sed '4q;d' | awk '{printf $3}' >/tmp/api-keys/storage-secret
+  garage key import $S3_ACCESS_KEY_ID $S3_SECRET_ACCESS_KEY -n $KEY_NAME --yes
 
   garage bucket create public
   garage bucket allow --read --write --owner public --key $KEY_NAME

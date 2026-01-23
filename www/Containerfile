@@ -18,7 +18,7 @@ COPY bunfig.toml .
 COPY svelte.config.js .
 RUN bun ci
 COPY . .
-COPY .env.example .env
+COPY ../.env.example .env
 RUN bun sv:prepare && bun run build
 
 FROM oven/bun:1.3.5-debian AS www
