@@ -9,8 +9,6 @@ const [user] = $derived(await data.user);
 
 $effect(() => {
   if (!user) error(404);
-  if (data.currentUser?.id === user.id)
-    replaceState(resolve("/persons/me/friends"), {});
 });
 
 const friends = $derived(await data.friends);

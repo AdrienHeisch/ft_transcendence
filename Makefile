@@ -38,6 +38,11 @@ format:
 		-v ./www:/app \
 		docker.io/oven/bun:1.3.5-debian \
 		bun biome
+	docker run \
+		--rm \
+    -v ./Caddyfile:/etc/caddy/Caddyfile \
+		caddy:2.11 \
+		caddy fmt --overwrite /etc/caddy/Caddyfile
 
 check:
 	docker run \
