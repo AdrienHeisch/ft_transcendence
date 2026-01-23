@@ -12,6 +12,10 @@
     }
   }
 
+  handle /private/* {
+    reverse_proxy storage:3900 
+  }
+
   handle_path /ws/* {
     reverse_proxy ws:3000
   }

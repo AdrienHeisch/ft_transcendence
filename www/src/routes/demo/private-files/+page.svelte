@@ -29,5 +29,5 @@ $effect(() => {
 
 {#each list.contents as file}
   {@const key = file.key.replace(list.prefix || "", "")}
-  <a href={resolve(`/demo/files/${key}`)}>{key}</a>
+  <a href={resolve(`/demo/private-files/${key}`)}>{key}</a>
 {/each}

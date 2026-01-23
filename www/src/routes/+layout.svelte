@@ -2,16 +2,16 @@
 import { fly } from "svelte/transition";
 import favicon from "$lib/assets/favicon.svg";
 import "../app.css";
+import { afterNavigate } from "$app/navigation";
 import { resolve } from "$app/paths";
 import * as auth from "$lib/auth.remote";
-    import { afterNavigate } from "$app/navigation";
 
 const { children, data } = $props();
 
 let sidebarOpen = $state(false);
 let messagesOpen = $state(false);
 
-afterNavigate(() => sidebarOpen = false)
+afterNavigate(() => (sidebarOpen = false));
 
 const sidebarMainItems = $derived(
   [
