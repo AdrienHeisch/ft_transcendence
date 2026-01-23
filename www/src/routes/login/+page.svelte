@@ -1,44 +1,99 @@
 <script lang="ts">
+import { resolve } from "$app/paths";
+import * as remote from "$lib/auth.remote";
 </script>
 
-<!-- TODO handle warnings -->
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <!-- <div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onclick={() => showLogin = false}> -->
-    <!--   <div -->
-    <!--     class="bg-amber-50 rounded-lg shadow-2xl p-8 max-w-md w-full mx-4 border-4 border-amber-800" -->
-    <!--     onclick={(e) => e.stopPropagation()} -->
-    <!--     style="background-image: url(&quot;data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a574' fill-opacity='0.08'%3E%3Cpath d='M0 0h40L0 40z'/%3E%3C/g%3E%3C/svg%3E&quot;);" -->
-    <!--   > -->
-    <!--     <div class="text-center mb-6"> -->
-    <!--       <h2 class="text-3xl font-bold text-amber-900 mb-2" style="font-family: 'Georgia', serif;">Welcome</h2> -->
-    <!--       <p class="text-amber-700 italic">Log in to Bibi's Farm</p> -->
-    <!--     </div> -->
-    <!---->
-    <!--     <form class="space-y-4"> -->
-    <!--       <div> -->
-    <!--         <label class="block text-amber-900 font-semibold mb-2" for="username">Username</label> -->
-    <!--         <input id="username" type="text" class="w-full px-4 py-2 border-2 border-amber-300 rounded bg-white focus:border-amber-600 focus:outline-none" placeholder="Enter your name"> -->
-    <!--       </div> -->
-    <!---->
-    <!--       <div> -->
-    <!--         <label class="block text-amber-900 font-semibold mb-2" for="password">Password</label> -->
-    <!--         <input id="password" type="password" class="w-full px-4 py-2 border-2 border-amber-300 rounded bg-white focus:border-amber-600 focus:outline-none" placeholder="Enter your password"> -->
-    <!--       </div> -->
-    <!---->
-    <!--       <div class="flex items-center gap-2 bg-amber-100 p-3 rounded border-2 border-amber-400"> -->
-    <!--         <input type="checkbox" id="admin" bind:checked={isAdminMode} class="w-4 h-4"> -->
-    <!--         <label for="admin" class="text-amber-900 font-semibold cursor-pointer">🔐 Administrator Mode</label> -->
-    <!--       </div> -->
-    <!---->
-    <!--       <button type="submit" class="w-full bg-linear-to-r from-amber-600 to-orange-700 text-white py-3 rounded-lg font-bold hover:from-amber-700 hover:to-orange-800 transition shadow-lg border-2 border-amber-800"> -->
-    <!--         Log in -->
-    <!--       </button> -->
-    <!--     </form> -->
-    <!---->
-    <!--     <div class="mt-6 text-center"> -->
-    <!--       <a href="/" class="text-amber-700 hover:text-amber-900 text-sm underline">Forgot password?</a> <!-- TODO location --> -->
-    <!--       <p class="text-sm text-amber-600 mt-2">Don't have an account yet? <a href="/" class="text-amber-800 font-semibold underline">Sign up</a></p> <!-- TODO location --> -->
-    <!--     </div> -->
-    <!--   </div> -->
-    <!-- </div> -->
+<div class="bg-linear-to-br from-rose-100 via-amber-100 to-orange-200 flex items-center justify-center p-4">
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-linear-to-br from-yellow-300/30 to-orange-400/30 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 bg-linear-to-br from-rose-300/30 to-pink-400/30 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-linear-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="w-full max-w-md relative z-10">
+    <!-- Card -->
+    <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 space-y-6 border-2 border-amber-200">
+      <!-- Header -->
+      <div class="text-center space-y-2">
+        <h1 class="text-3xl font-bold bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Welcome</h1>
+        <p class="text-gray-600">Log into Bibi's Farm</p>
+      </div>
+
+      <!-- Form -->
+      <form {...remote.login}>
+        <!-- First and Last name on the same line -->
+        <!-- Email -->
+        <div class="space-y-2">
+          <label for="email" class="block text-sm font-medium text-gray-700">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
+            placeholder="your@email.com"
+          />
+        </div>
+
+        <!-- Password  -->
+        <div class="space-y-2">
+          <label for="password" class="block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <!-- TODO Error Message -->
+        <!-- {#if form?.message} -->
+          <!-- <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"> -->
+            <!-- {form.message} -->
+          <!-- </div> -->
+        <!-- {/if} -->
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="mt-2 w-full bg-linear-to-r from-amber-500 to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-amber-600 hover:to-orange-600 focus:ring-4 focus:ring-amber-300 transition-all duration-200 shadow-md hover:shadow-lg"
+        >
+          Log in
+        </button>
+      </form>
+
+
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-white text-gray-500">Or</span>
+        </div>
+      </div>
+
+      <!-- Login  -->
+      <div class="text-center">
+        <p class="text-gray-600">
+          Don't have an account yet ?
+          <a href={resolve("/register")} class="text-amber-600 hover:text-amber-700 font-semibold transition-colors">
+            Register
+          </a>
+        </p>
+      </div>
+    </div>
+    <!-- Terms and Privacy -->
+    <p class="text-center text-sm text-gray-500 mt-6">
+      By logging in, you agree to our
+      <a href="/terms" class="text-amber-600 hover:text-amber-700 underline">terms of use</a>
+      and our
+      <a href="/privacy" class="text-amber-600 hover:text-amber-700 underline">privacy policy</a>
+    </p>
+  </div>
+</div>

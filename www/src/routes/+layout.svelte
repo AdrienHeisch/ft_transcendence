@@ -71,7 +71,7 @@ const sidebarBottomItems = [
         style="writing-mode: vertical-rl"
         aria-label="sidebar-open"
       >
-        <svg class="w-[16px] h-[16px]">
+        <svg class="w-4 h-4">
           <path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z"></path>
         </svg>
       </button>
@@ -84,14 +84,24 @@ const sidebarBottomItems = [
         </div>
       </a>
 
-      <button
-        onclick={() => (messagesOpen = !messagesOpen)}
-        class="relative flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
-      >
-        <span class="text-xl">💬</span>
-        <span>Messages</span>
-        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span>
-      </button>
+      {#if data.currentUser}
+        <button
+          onclick={() => (messagesOpen = !messagesOpen)}
+          class="relative flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
+        >
+          <span class="text-xl">💬</span>
+          <span>Messages</span>
+          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span>
+        </button>
+      {:else}
+        <a
+          href={resolve("/login")}
+          class="relative flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
+        >
+          <span class="text-xl">👤</span>
+          <span>Login</span>
+        </a>
+      {/if}
     </div>
   </header>
 

@@ -1,5 +1,6 @@
-import { hash } from "@node-rs/argon2";
+import { hash, verify } from "@node-rs/argon2";
 import { error, redirect } from "@sveltejs/kit";
+import { eq } from "drizzle-orm";
 import z from "zod";
 import { resolve } from "$app/paths";
 import { command, form, getRequestEvent } from "$app/server";
@@ -50,7 +51,42 @@ export const register = form(
     } catch {
       return error(500, { message: "An error has occurred" });
     }
-    return redirect(302, resolve("/demo/auth"));
+    return redirect(302, resolve("/"));
+  },
+);
+
+export const login = form(
+  z.object({ email: z.email(), password: z.string() }),
+  async ({ email, password }) => {
+    const results = await db
+      .select()
+      .from(schema.user)
+      .where(eq(schema.user.email, email));
+
+    const existingUser = results.at(0);
+    if (!existingUser) {
+      return error(400, { message: "Incorrect username or password" });
+    }
+
+    const validPassword = await verify(existingUser.passwordHash, password, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    });
+    if (!validPassword) {
+      return error(400, { message: "Incorrect username or password" });
+    }
+
+    const sessionToken = auth.generateSessionToken();
+    const session = await auth.createSession(sessionToken, existingUser.id);
+    auth.setSessionTokenCookie(
+      getRequestEvent(),
+      sessionToken,
+      session.expiresAt,
+    );
+
+    return redirect(302, "/");
   },
 );
 
