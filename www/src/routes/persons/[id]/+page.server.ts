@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
@@ -16,6 +16,7 @@ export const load: PageServerLoad = ({ params }) => {
     posts: db
       .select()
       .from(schema.post)
-      .where(eq(schema.post.author, params.id)),
+      .where(eq(schema.post.author, params.id))
+      .orderBy(desc(schema.post.postedAt)),
   };
 };

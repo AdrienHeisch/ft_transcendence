@@ -137,10 +137,10 @@ const getAvatar = (user: User) =>
 
       <!-- Stats -->
       <div class="flex justify-center md:justify-start gap-8 mt-6 pt-6 border-t-2 border-orange-700">
-        <div class="text-center">
+        <a href={resolve(`/persons/${user.id}/friends`)} class="text-center">
           <div class="text-2xl font-bold text-orange-700">{friends.length}</div>
           <div class="text-sm text-amber-900">Friends</div>
-        </div>
+        </a>
         <div class="text-center">
           <div class="text-2xl font-bold text-orange-700">{posts.length}</div>
           <div class="text-sm text-amber-900">Posts</div>

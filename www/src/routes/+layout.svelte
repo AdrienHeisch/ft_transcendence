@@ -182,7 +182,7 @@ const sidebarBottomItems = [
           {#each sidebarBottomItems as item}
             <button
               onclick={() => {if (item.action) item.action()}}
-              class="w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
+              class="cursor-pointer w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
             >
               <span class="text-xl">{item.icon}</span>
               <span>{item.label}</span>
