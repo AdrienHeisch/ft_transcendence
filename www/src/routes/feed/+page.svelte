@@ -1,4 +1,8 @@
 <script lang="ts">
+import Post from "$lib/components/Post.svelte";
+import { getPosts } from "$lib/posts.remote";
+
+const posts = $derived(await getPosts());
 </script>
 
 <!-- Zone de contenu principal -->
@@ -27,23 +31,9 @@
 
       <!-- Posts -->
 			<div class="space-y-4">
-				<div class="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
-					<div class="flex items-center gap-3 mb-3">
-						<div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">
-							U
-						</div>
-						<div>
-							<div class="font-semibold text-orange-900">User</div>
-							<div class="text-xs text-gray-600">5 minutes ago</div>
-						</div>
-					</div>
-					<p class="text-gray-800 mb-3">Welcome to Bibi's Farm! </p>
-					<div class="flex gap-4 text-sm text-gray-600">
-						<button class="hover:text-orange-700 transition">👍 Like</button>
-						<button class="hover:text-orange-700 transition">💬 Comment</button>
-						<button class="hover:text-orange-700 transition">↗️ Share</button>
-					</div>
-				</div>
+        {#each posts as post}
+          <Post {post} />
+        {/each}
 			</div>
 		</section>
 

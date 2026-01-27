@@ -1,4 +1,6 @@
 <script lang="ts">
+import { getUserAvatar } from "$lib/storage";
+
 const { data } = $props();
 
 const _roles = ["Adoptant", "Association", "Bénévole"];
@@ -20,7 +22,7 @@ let users = $derived(
     // TODO remove fake data
     .map((user) => ({
       username: `${user.firstName.charAt(0)}${user.lastName}`,
-      photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.firstName}`,
+      photo: getUserAvatar(user),
       role: _roles[user.firstName.length % _roles.length],
       city: _cities[user.firstName.length % _cities.length],
       adoptedAnimals: user.firstName.length % 3,

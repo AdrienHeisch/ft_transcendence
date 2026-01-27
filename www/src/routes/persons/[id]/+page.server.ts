@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, getTableColumns } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
@@ -13,9 +13,13 @@ export const load: PageServerLoad = ({ params }) => {
     friends: getUserFriends(params.id),
     currentUser,
     posts: db
-      .select()
+      .select({
+        ...getTableColumns(schema.post),
+        author: { ...getTableColumns(schema.user) },
+      })
       .from(schema.post)
       .where(eq(schema.post.author, params.id))
+      .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
       .orderBy(desc(schema.post.postedAt)),
   };
 };

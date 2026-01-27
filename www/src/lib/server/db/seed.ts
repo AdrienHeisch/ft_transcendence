@@ -40,6 +40,7 @@ export default async function seedDb() {
     post: {
       columns: {
         content: gen.loremIpsum(),
+        postedAt: gen.date({ maxDate: new Date(Date.now()) }),
       },
     },
     friendsPair: {

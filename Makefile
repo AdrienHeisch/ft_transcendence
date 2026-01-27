@@ -26,8 +26,8 @@ seed:
 		--rm \
 		-w /app \
 		-v ./www:/app \
+		-v ./.env:/app/.env \
 		--network ft-transcendence_db \
-		--env-file .env \
 		docker.io/oven/bun:1.3.5-debian \
 		bun db:seed
 

@@ -1,33 +1,16 @@
 import { error } from "@sveltejs/kit";
 import { and, eq, or } from "drizzle-orm";
-import { union } from "drizzle-orm/pg-core";
 import * as z from "zod";
 import { command, query } from "$app/server";
 import { isLoggedIn, requireLogin } from "$lib/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
+import { friendsOf } from "./friends";
 
 export const getFriends = query(() => {
   if (!isLoggedIn()) return [];
   const user = requireLogin();
-  return union(
-    db
-      .select({
-        user: schema.user,
-        pending: schema.friendsPair.pending,
-      })
-      .from(schema.friendsPair)
-      .where(eq(schema.friendsPair.right, user.id))
-      .innerJoin(schema.user, eq(schema.friendsPair.left, schema.user.id)),
-    db
-      .select({
-        user: schema.user,
-        pending: schema.friendsPair.pending,
-      })
-      .from(schema.friendsPair)
-      .where(eq(schema.friendsPair.left, user.id))
-      .innerJoin(schema.user, eq(schema.friendsPair.right, schema.user.id)),
-  );
+  return friendsOf(user);
 });
 
 export const addFriend = command(
