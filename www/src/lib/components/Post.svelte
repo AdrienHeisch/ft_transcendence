@@ -3,6 +3,7 @@ import { slide } from "svelte/transition";
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
 import {
+  deletePost,
   getPostCommentCount,
   getPostComments,
   getPostLikes,
@@ -27,6 +28,7 @@ const post = $derived({
     "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
 });
 
+let optionsOpen = $state(false);
 let commentsOpen = $state(false);
 
 const isLiked = $derived(isPostLiked(_post.id));
@@ -48,26 +50,42 @@ const onLikePost = async () => {
     }
   }
 };
+
+const onDelete = async () => {
+  optionsOpen = false;
+  await deletePost(post.id);
+};
 </script>
 
 <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
   <!-- Post Header -->
   <div class="p-4 flex items-center gap-3">
-    <img 
-      src={getUserAvatar(post.author)} 
-      alt="{post.author.firstName} {post.author.lastName}"
-      class="w-12 h-12 rounded-full border-2 border-orange-700"
-    />
+    <a href={resolve(`/persons/${post.author.id}`)}>
+      <img 
+        src={getUserAvatar(post.author)} 
+        alt="{post.author.firstName} {post.author.lastName}"
+        class="w-12 h-12 rounded-full border-2 border-orange-700"
+      />
+    </a>
     <div class="flex-1">
-      <p class="font-semibold text-gray-900">{post.author.firstName} {post.author.lastName}</p>
+      <a href={resolve(`/persons/${post.author.id}`)}>
+        <p class="font-semibold text-gray-900">{post.author.firstName} {post.author.lastName}</p>
+      </a>
       <p class="text-sm text-gray-600">{post.postedAt}</p>
     </div>
-    <button class="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Actions">
+    <button onclick={() => optionsOpen = !optionsOpen} class="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Actions">
       <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
         <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
       </svg>
     </button>
   </div>
+
+  {#if optionsOpen}
+    <div class="fixed top-14 right-6 flex flex-col p-2 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-20">
+      <button>Edit</button>
+      <button onclick={onDelete}>Delete</button>
+    </div>
+  {/if}
 
   <!-- Post Image -->
   <img 
@@ -107,8 +125,6 @@ const onLikePost = async () => {
         {#each await getPostComments(post.id) as comment}
           <div transition:slide class="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
             <div class="flex items-center gap-3 mb-3">
-              <!-- <div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow"> -->
-              <!-- </div> -->
               <img 
                 src={getUserAvatar(comment.author)} 
                 alt="{comment.author.firstName} {comment.author.lastName}"
@@ -120,11 +136,6 @@ const onLikePost = async () => {
               </div>
             </div>
             <p class="text-gray-800 mb-3">{comment.content}</p>
-            <!-- <div class="flex gap-4 text-sm text-gray-600"> -->
-            <!--   <button class="hover:text-orange-700 transition">👍 Like</button> -->
-            <!--   <button class="hover:text-orange-700 transition">💬 Comment</button> -->
-            <!--   <button class="hover:text-orange-700 transition">↗️ Share</button> -->
-            <!-- </div> -->
           </div>
         {/each}
       </div>

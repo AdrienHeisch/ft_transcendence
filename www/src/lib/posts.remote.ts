@@ -77,7 +77,14 @@ export const createPost = form(
       content,
       postedAt: new Date(),
     });
-    console.log("post created!")
     await getPosts().refresh();
   },
 );
+
+export const deletePost = command(z.string(), async (id) => {
+  const user = requireLogin();
+  await db
+    .delete(schema.post)
+    .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
+  await getPosts().refresh();
+});
