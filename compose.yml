@@ -17,8 +17,8 @@ services:
   www:
     image: ft-transcendence_www
     build:
-      context: ./www
-      dockerfile: Containerfile
+      context: .
+      dockerfile: ./www/Containerfile
     restart: always
     depends_on:
       - db
@@ -31,8 +31,8 @@ services:
   ws:
     image: ft-transcendence_ws
     build:
-      context: ./www
-      dockerfile: Containerfile
+      context: .
+      dockerfile: ./www/Containerfile
       target: ws
     restart: always
     depends_on:
@@ -54,8 +54,8 @@ services:
   storage:
     image: ft-transcendence_garage
     build:
-      context: ./garage
-      dockerfile: Containerfile
+      context: .
+      dockerfile: ./garage/Containerfile
     restart: always
     networks:
       - storage

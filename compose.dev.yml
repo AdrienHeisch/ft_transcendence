@@ -70,8 +70,8 @@ services:
   storage:
     image: ft-transcendence_garage
     build:
-      context: ./garage
-      dockerfile: Containerfile
+      context: .
+      dockerfile: ./garage/Containerfile
     restart: always
     networks:
       - storage
