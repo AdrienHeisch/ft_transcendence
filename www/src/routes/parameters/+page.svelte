@@ -1,5 +1,5 @@
 <script>
-  let selectedSection = "Profile"; // Default active section
+  let selectedSection = "Profile"; 
 
   const sections = [
     { name: "Profile", icon: "👤", description: "Manage your personal information." },
@@ -15,17 +15,16 @@
 
 <style>
   :global(html) {
-    font-family: 'Georgia', serif; /* Matches your project's primary font */
+    font-family: 'Georgia', serif;
   }
 
   .settings-container {
     display: flex;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #fff7e6, #ffebc9); /* Light amber gradient */
-    color: #7a5835; /* Harmonizes with amber theme */
+    background: linear-gradient(to bottom, #fff7e6, #ffebc9); 
+    color: #7a5835; 
   }
 
-  /* Sidebar styling */
   .sidebar {
     width: 280px;
     background: linear-gradient(to bottom, #fbe6c2, #d9b284);
@@ -62,7 +61,7 @@
     border-color: #a86f3a;
   }
 
-  /* Main content styling */
+
   .main-content {
     flex-grow: 1;
     padding: 2rem;
