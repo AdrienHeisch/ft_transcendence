@@ -7,7 +7,7 @@ import {
   addFriend,
   getFriends,
   removeFriend,
-} from "$lib/friends.remote.js";
+} from "$lib/friends.remote";
 import { getUserAvatar } from "$lib/storage/index.js";
 
 const { data } = $props();
