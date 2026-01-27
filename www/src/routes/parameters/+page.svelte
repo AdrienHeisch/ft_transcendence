@@ -4,7 +4,7 @@
   const sections = [
     { name: "Profile", icon: "👤", description: "Manage your personal information." },
     { name: "Account", icon: "🔒", description: "Adjust security and account details." },
-    { name: "Privacy", icon: "🔐", description: "Set your data sharing and privacy preferences." },
+    //{ name: "Privacy", icon: "🔐", description: "Set your data sharing and privacy preferences." },
   ];
 
   function saveChanges(section) {
@@ -174,11 +174,11 @@
         <form>
           <div class="form-group">
             <label for="username">Username</label>
-            <input id="username" type="text" placeholder="Enter your username..." />
+            <input id="username" type="text" placeholder="Modify your username..." />
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" type="email" placeholder="Enter your email..." />
+            <label for="username">Username</label>
+            <input id="username" type="text" placeholder="Verification of your new username..." />
           </div>
           <button type="button" class="save-button" on:click={() => saveChanges("Profile")}>
             Save Changes
@@ -187,18 +187,33 @@
       {/if}
 
       {#if selectedSection === "Account"}
+		<form>
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input id="email" type="text" placeholder="Modify your email..." />
+			</div>
+			<div class="form-group">
+				<label for="old password">Old Password</label>
+				<input id="old password" type="text" placeholder="Enter your password..." />
+			</div>
+			<div class="form-group">
+				<label for="new password">New Password</label>
+				<input id="new password" type="text" placeholder="Enter your new password..." />
+			</div>
+
+		</form>
         <p>Manage your security settings, including your password and authentication factors.</p>
         <button type="button" class="save-button" on:click={() => saveChanges("Account")}>
           Save Account Changes
         </button>
       {/if}
 
-      {#if selectedSection === "Privacy"}
+      <!--{#if selectedSection === "Privacy"}
         <p>Adjust your sharing preferences and data settings here.</p>
         <button type="button" class="save-button" on:click={() => saveChanges("Privacy")}>
           Save Privacy Settings
         </button>
-      {/if}
+      {/if}-->
     </div>
   </main>
 </div>
