@@ -5,7 +5,7 @@ export function requireLogin() {
   const { locals } = getRequestEvent();
 
   if (!locals.user) {
-    redirect(302, "/demo/auth/login");
+    redirect(302, "/login");
   }
 
   return locals.user;
