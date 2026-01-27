@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
 import { and, desc, eq, getTableColumns } from "drizzle-orm";
 import z from "zod";
-import { command, query } from "$app/server";
+import { command, form, query } from "$app/server";
 import * as schema from "$lib/server/db/schema";
 import { isLoggedIn, requireLogin } from "./auth";
 import { db } from "./server/db";
@@ -14,7 +14,8 @@ export const getPosts = query(async () => {
     })
     .from(schema.post)
     .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
-    .orderBy(desc(schema.post.postedAt));
+    .orderBy(desc(schema.post.postedAt))
+    .limit(10);
 });
 
 export const likePost = command(z.string(), async (id) => {
@@ -65,3 +66,18 @@ export const getPostComments = query(z.string(), (id) => {
     .where(eq(schema.postComment.post, id))
     .innerJoin(schema.user, eq(schema.user.id, schema.postComment.author));
 });
+
+export const createPost = form(
+  z.object({ content: z.string() }),
+  async ({ content }) => {
+    const user = requireLogin();
+    await db.insert(schema.post).values({
+      id: crypto.randomUUID(),
+      author: user.id,
+      content,
+      postedAt: new Date(),
+    });
+    console.log("post created!")
+    await getPosts().refresh();
+  },
+);

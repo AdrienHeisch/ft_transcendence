@@ -1,6 +1,6 @@
 <script lang="ts">
 import Post from "$lib/components/Post.svelte";
-import { getPosts } from "$lib/posts.remote";
+import { createPost, getPosts } from "$lib/posts.remote";
 
 const posts = $derived(await getPosts());
 </script>
@@ -16,18 +16,22 @@ const posts = $derived(await getPosts());
 			</h2>
 
       <!-- Post input -->
-			<div class="mb-6 p-4 bg-orange-50 rounded-lg border-2 border-orange-300">
-				<textarea 
-					class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
-					placeholder="What's new?"
-					rows="3"
-				></textarea>
-				<div class="flex justify-end mt-2">
-					<button class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
-						Post
-					</button>
-				</div>
-			</div>
+      <form {...createPost}>
+        <div class="mb-6 p-4 bg-orange-50 rounded-lg border-2 border-orange-300">
+          <textarea 
+            class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
+            placeholder="What's new?"
+            rows="3"
+            name="content"
+            required
+          ></textarea>
+          <div class="flex justify-end mt-2">
+            <button type="submit" class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
+              Post
+            </button>
+          </div>
+        </div>
+      </form>
 
       <!-- Posts -->
 			<div class="space-y-4">

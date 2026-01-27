@@ -40,7 +40,7 @@ export default async function seedDb() {
     post: {
       columns: {
         content: gen.loremIpsum(),
-        postedAt: gen.date({ maxDate: new Date(Date.now()) }),
+        postedAt: gen.date({ maxDate: new Date() }),
       },
       with: {
         postLike: [{ weight: 1, count: 1 }],
@@ -53,7 +53,7 @@ export default async function seedDb() {
     postComment: {
       columns: {
         content: gen.loremIpsum(),
-        postedAt: gen.date({ maxDate: new Date(Date.now()) }),
+        postedAt: gen.date({ maxDate: new Date() }),
       },
     },
     friendsPair: {
