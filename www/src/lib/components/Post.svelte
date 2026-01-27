@@ -16,9 +16,10 @@ import { getUserAvatar } from "$lib/storage";
 
 interface Props {
   post: Omit<Post, "author"> & { author: User };
+  isOwned: boolean | undefined;
 }
 
-const { post: _post }: Props = $props();
+const { post: _post, isOwned = false }: Props = $props();
 
 // TODO remove fake data
 const post = $derived({
@@ -30,6 +31,8 @@ const post = $derived({
 
 let optionsOpen = $state(false);
 let commentsOpen = $state(false);
+
+let isEditing = $state(false);
 
 const isLiked = $derived(isPostLiked(_post.id));
 
@@ -55,6 +58,16 @@ const onDelete = async () => {
   optionsOpen = false;
   await deletePost(post.id);
 };
+
+const onEditStart = () => {
+  optionsOpen = false;
+  isEditing = !isEditing;
+};
+
+const cancelEdit = () => {
+  optionsOpen = false;
+  isEditing = false;
+};
 </script>
 
 <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
@@ -73,16 +86,18 @@ const onDelete = async () => {
       </a>
       <p class="text-sm text-gray-600">{post.postedAt}</p>
     </div>
-    <button onclick={() => optionsOpen = !optionsOpen} class="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Actions">
-      <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
-      </svg>
-    </button>
+    {#if isOwned}
+      <button onclick={() => optionsOpen = !optionsOpen} class="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Actions">
+        <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
+        </svg>
+      </button>
+    {/if}
   </div>
 
   {#if optionsOpen}
     <div class="fixed top-14 right-6 flex flex-col p-2 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-20">
-      <button>Edit</button>
+      <button onclick={onEditStart}>Edit</button>
       <button onclick={onDelete}>Delete</button>
     </div>
   {/if}
@@ -117,7 +132,22 @@ const onDelete = async () => {
     </div>
 
     <!-- Caption -->
-    <p class="text-gray-800">{post.content}</p>
+    {#if isEditing}
+      <form>
+        <textarea class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
+        >{post.content}</textarea>
+        <div>
+          <button onclick={cancelEdit} class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
+            Cancel
+          </button>
+          <button type="submit" class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
+            Post
+          </button>
+        </div>
+      </form>
+    {:else}
+      <p class="text-gray-800">{post.content}</p>
+    {/if}
 
     <!-- Comments -->
     {#if commentsOpen}

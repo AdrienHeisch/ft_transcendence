@@ -2,6 +2,8 @@
 import Post from "$lib/components/Post.svelte";
 import { createPost, getPosts } from "$lib/posts.remote";
 
+const { data } = $props();
+
 const posts = $derived(await getPosts());
 </script>
 
@@ -36,7 +38,7 @@ const posts = $derived(await getPosts());
       <!-- Posts -->
 			<div class="space-y-4">
         {#each posts as post}
-          <Post {post} />
+          <Post {post} isOwned={post.author.id === data.currentUser?.id} />
         {/each}
 			</div>
 		</section>

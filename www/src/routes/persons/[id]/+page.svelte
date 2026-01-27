@@ -203,7 +203,7 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#each posts as post (post.id)}
-          <Post {post} />
+          <Post {post} isOwned={post.author === data.currentUser} />
         {/each}
 
         <!-- Load More -->
