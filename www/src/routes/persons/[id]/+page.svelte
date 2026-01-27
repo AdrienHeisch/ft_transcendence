@@ -1,6 +1,7 @@
 <script lang="ts">
 import { error } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
+import { acceptFriend, addFriend, getFriends, removeFriend } from "$lib/friends.remote.js";
 import type { User } from "$lib/server/db/schema";
 
 const { data } = $props();
@@ -33,6 +34,7 @@ const _posts = $derived(await data.posts);
 const friends = $derived(await data.friends);
 
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
+const currentUserFriends = $derived(await getFriends());
 
 // TODO remove fake data
 const posts = $derived(
@@ -115,19 +117,35 @@ const getAvatar = (user: User) =>
               Edit profile
             </button>
           {:else}
-            <button class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
-              {#if (await data.currentUserFriends).some((friend) => user.id === friend.id)}
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-                Friends
+            {@const friend = currentUserFriends.find((friend) => user.id === friend.user.id)}
+            {#if friend}
+              {#if friend.pending == data.currentUser?.id}
+                <button onclick={() => acceptFriend(user)} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  Accept invitation
+                </button>
               {:else}
+                <button onclick={() => removeFriend(user)} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  {#if friend.pending == user.id}
+                    Invitation sent
+                  {:else}
+                    Friends
+                  {/if}
+                </button>
+              {/if}
+            {:else}
+              <button onclick={() => addFriend(user)} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                 </svg>
                 Add friend
-              {/if}
-            </button>
+              </button>
+            {/if}
             <button class="px-6 py-3 bg-yellow-50 border-2 border-orange-700 text-amber-900 rounded-lg font-medium hover:bg-yellow-100 transition-all duration-200 shadow-md hover:shadow-lg">
               Message
             </button>

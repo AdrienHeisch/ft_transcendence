@@ -1,5 +1,5 @@
 <script lang="ts">
-import * as remote from "./friends.remote";
+import * as remote from "$lib/friends.remote";
 
 let friendToAdd = $state("");
 

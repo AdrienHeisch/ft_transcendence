@@ -3,11 +3,12 @@ import { and, eq, or } from "drizzle-orm";
 import { union } from "drizzle-orm/pg-core";
 import * as z from "zod";
 import { command, query } from "$app/server";
-import { requireLogin } from "$lib/auth";
+import { isLoggedIn, requireLogin } from "$lib/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 
 export const getFriends = query(() => {
+  if (!isLoggedIn()) return [];
   const user = requireLogin();
   return union(
     db
