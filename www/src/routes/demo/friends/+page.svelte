@@ -36,7 +36,7 @@ const inbox = $derived(
     <li>
       <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
       <button class="border" onclick={async () => {
-        await remote.removeFriend(friend);
+        await remote.removeFriend(friend.id);
         friendToAdd = "";
       }}>Remove</button>
     </li>
@@ -49,7 +49,7 @@ const inbox = $derived(
   <li>
     <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
     <button class="border" onclick={async () => {
-      await remote.removeFriend(friend);
+      await remote.removeFriend(friend.id);
       friendToAdd = "";
     }}>Cancel</button>
   </li>
@@ -62,11 +62,11 @@ const inbox = $derived(
   <li>
     <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
     <button class="border" onclick={async () => {
-      await remote.acceptFriend(friend);
+      await remote.acceptFriend(friend.id);
       friendToAdd = "";
     }}>Accept</button>
     <button class="border" onclick={async () => {
-      await remote.removeFriend(friend);
+      await remote.removeFriend(friend.id);
       friendToAdd = "";
     }}>Refuse</button>
   </li>
@@ -79,7 +79,7 @@ const inbox = $derived(
     <input class="border-2" type="text" id="id" bind:value={friendToAdd} required />
   </div>
   <button onclick={async () => {
-    await remote.addFriend({ id: friendToAdd });
+    await remote.addFriend(friendToAdd);
     friendToAdd = "";
   }}>Submit</button>
 </form>

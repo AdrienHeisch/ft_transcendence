@@ -101,3 +101,35 @@ export const post = pgTable("post", {
 });
 
 export type Post = typeof post.$inferSelect;
+
+export const postLike = pgTable(
+  "post_like",
+  {
+    post: uuid("post")
+      .notNull()
+      .references(() => post.id),
+    user: uuid("user")
+      .notNull()
+      .references(() => user.id),
+  },
+  (table) => [primaryKey({ columns: [table.post, table.user] })],
+);
+
+export type PostLike = typeof postLike.$inferSelect;
+
+export const postComment = pgTable("post_comment", {
+  id: uuid("id").primaryKey(),
+  post: uuid("post")
+    .notNull()
+    .references(() => post.id),
+  author: uuid("author")
+    .notNull()
+    .references(() => user.id),
+  content: text("content").notNull(),
+  postedAt: timestamp("posted_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
+export type PostComment = typeof postComment.$inferSelect;

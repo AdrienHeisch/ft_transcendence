@@ -13,80 +13,65 @@ export const getFriends = query(() => {
   return friendsOf(user);
 });
 
-export const addFriend = command(
-  z.object({
-    id: z.string(),
-  }),
-  async (friend) => {
-    const user = requireLogin();
-    try {
-      await db.insert(schema.friendsPair).values({
-        id: crypto.randomUUID(),
-        left: user.id,
-        right: friend.id,
-        pending: friend.id,
-      });
-    } catch {
-      error(500);
-    }
-    getFriends().refresh();
-  },
-);
+export const addFriend = command(z.string(), async (friendId) => {
+  const user = requireLogin();
+  try {
+    await db.insert(schema.friendsPair).values({
+      id: crypto.randomUUID(),
+      left: user.id,
+      right: friendId,
+      pending: friendId,
+    });
+  } catch {
+    error(500);
+  }
+  getFriends().refresh();
+});
 
-export const acceptFriend = command(
-  z.object({
-    id: z.string(),
-  }),
-  async (friend) => {
-    const user = requireLogin();
-    try {
-      await db
-        .update(schema.friendsPair)
-        .set({
-          pending: null,
-        })
-        .where(
-          and(
-            eq(schema.friendsPair.pending, user.id),
-            and(
-              or(
-                eq(schema.friendsPair.left, user.id),
-                eq(schema.friendsPair.right, user.id),
-              ),
-              or(
-                eq(schema.friendsPair.left, friend.id),
-                eq(schema.friendsPair.right, friend.id),
-              ),
-            ),
-          ),
-        );
-    } catch {
-      error(500);
-    }
-    getFriends().refresh();
-  },
-);
-
-export const removeFriend = command(
-  z.object({
-    id: z.string(),
-  }),
-  async (friend) => {
-    const user = requireLogin();
+export const acceptFriend = command(z.string(), async (friendId) => {
+  const user = requireLogin();
+  try {
     await db
-      .delete(schema.friendsPair)
+      .update(schema.friendsPair)
+      .set({
+        pending: null,
+      })
       .where(
-        or(
+        and(
+          eq(schema.friendsPair.pending, user.id),
           and(
-            eq(schema.friendsPair.left, user.id),
-            eq(schema.friendsPair.right, friend.id),
-          ),
-          and(
-            eq(schema.friendsPair.right, user.id),
-            eq(schema.friendsPair.left, friend.id),
+            or(
+              eq(schema.friendsPair.left, user.id),
+              eq(schema.friendsPair.right, user.id),
+            ),
+            or(
+              eq(schema.friendsPair.left, friendId),
+              eq(schema.friendsPair.right, friendId),
+            ),
           ),
         ),
       );
-    getFriends().refresh();
-  },
-);
+  } catch {
+    error(500);
+  }
+  getFriends().refresh();
+});
+
+export const removeFriend = command(z.string(), async (friendId) => {
+  const user = requireLogin();
+  await db
+    .delete(schema.friendsPair)
+    .where(
+      or(
+        and(
+          eq(schema.friendsPair.left, user.id),
+          eq(schema.friendsPair.right, friendId),
+        ),
+        and(
+          eq(schema.friendsPair.right, user.id),
+          eq(schema.friendsPair.left, friendId),
+        ),
+      ),
+    );
+  getFriends().refresh();
+});

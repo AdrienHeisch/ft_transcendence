@@ -42,6 +42,19 @@ export default async function seedDb() {
         content: gen.loremIpsum(),
         postedAt: gen.date({ maxDate: new Date(Date.now()) }),
       },
+      with: {
+        postLike: [{ weight: 1, count: 1 }],
+        postComment: [
+          { weight: 0.5, count: 1 },
+          { weight: 0.5, count: [1, 2, 3, 4, 5, 6, 7, 8, 9] },
+        ],
+      },
+    },
+    postComment: {
+      columns: {
+        content: gen.loremIpsum(),
+        postedAt: gen.date({ maxDate: new Date(Date.now()) }),
+      },
     },
     friendsPair: {
       count: 20,
