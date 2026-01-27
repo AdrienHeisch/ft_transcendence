@@ -1,8 +1,8 @@
 <script>
 	let selectedSection = "Profile";
 	const sections = [ { name: "Profile", icon: "👤" }, 
-	{ name: "Account Settings" icon: "🔒"},
-	{ name: "Notifications", icon: "🔔"},
+	{ name: "Account Settings", icon: "🔒"},
+	//{ name: "Notifications", icon: "🔔"},
 	{ name: "Privacy", icon: "🛡"},];
 
 </script>
@@ -41,7 +41,7 @@
 <div class="setting-container">
 	<!-- sidebar -->
 	<aside class="sidebar">
-		{ #each sections as section }
+		{#each sections as section }
 		<div 
 			class="sidebar-item { selectedSection === section.name ? 'active' : ''}"
 			on:click={() => (selectedSection = section.name)}
@@ -54,4 +54,30 @@
 	</aside>
 
 	<!-- Main content -->
-	
+	<div class="main-content">
+		<h1 class="content-header">{selectedSection}</h1>
+		{#if selectedSection === "Profile"}
+			<form>
+				<div class="form-group">
+					<label	for="username">Full Name</label>
+					<input type="text" id="username"
+					placeholder="e.g, Adrien Heisch" />
+				</div>
+				<div class="form-group">
+					<label for="email">Email Address</label>
+					<input type="email" id="email" placeholder="e.g, aheisch@student.42.fr" />
+				</div>
+				<button type="submit">Save Changes</button>
+			</form>
+			{/if}
+			{#if selectedSection === "Account Settings"}
+				<p>Change your account details hehre, such as your password or linked accounts.</p>
+			{/if}
+			{#if selectedSection === "Privacy"}
+				<p>Adjust privacy settings, including visibility and sharing options.</p>
+			{/if}
+			<!--{#if selectedSection === "Notification"}
+				<p>Manage your notifications preferences for emails and updates.</p>
+			{/if}-->
+	</div>
+</div>
