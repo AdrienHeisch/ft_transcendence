@@ -1,29 +1,34 @@
 <script lang="ts">
-import type { PageData } from "./$types";
+import { onMount } from "svelte";
+import { getAssociations } from "$lib/associations.remote";
 
-let { data }: { data: PageData } = $props();
+let { data } = $props();
 
 // Get filters from server
-let searchQuery = $derived(data.filters.search);
-let selectedType = $derived(data.filters.type);
-let selectedCity = $derived(data.filters.city);
-let sortBy = $derived(data.filters.sort);
+let searchQuery = $state("");
+let selectedType = $state<string | null>(null);
+let selectedCity = $state<string | null>(null);
+let sortBy = $state<"name" | "type" | "city" | "animalsCount">("name");
 
 // Unique types and cities (would ideally come from the server)
-const types = ["all", "Sanctuary", "Rescue", "Adoption", "Care"];
-const cities = ["all", "Paris", "Lyon", "Montpellier"];
+const types = ["Sanctuary", "Rescue", "Adoption", "Care"];
+const cities = ["Paris", "Lyon", "Montpellier"];
 
-// Function to update URL with filters
-function updateFilters() {
-  const params = new URLSearchParams();
-  if (searchQuery) params.set("search", searchQuery);
-  if (selectedType !== "all") params.set("type", selectedType);
-  if (selectedCity !== "all") params.set("city", selectedCity);
-  if (sortBy !== "name") params.set("sort", sortBy);
+const associations = $derived(
+  await getAssociations({
+    search: searchQuery,
+    type: selectedType,
+    city: selectedCity,
+    sortBy,
+  }),
+);
 
-  const queryString = params.toString();
-  window.location.href = queryString ? `?${queryString}` : "/associations";
-}
+onMount(() => {
+  searchQuery = data.filters.search;
+  selectedType = data.filters.type;
+  selectedCity = data.filters.city;
+  sortBy = data.filters.sort;
+});
 </script>
 
 <svelte:head>
@@ -54,7 +59,6 @@ function updateFilters() {
         <input
           type="text"
           bind:value={searchQuery}
-          onchange={updateFilters}
           placeholder="Search by name or description..."
           class="w-full px-4 py-3 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
         />
@@ -68,11 +72,11 @@ function updateFilters() {
           <select
             id="type"
             bind:value={selectedType}
-            onchange={updateFilters}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
+            <option value={null}>All</option>
             {#each types as type}
-              <option value={type}>{type === "all" ? "All types" : type}</option>
+              <option value={type}>{type}</option>
             {/each}
           </select>
         </div>
@@ -83,11 +87,11 @@ function updateFilters() {
           <select
             id="city"
             bind:value={selectedCity}
-            onchange={updateFilters}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
+            <option value={null}>All</option>
             {#each cities as city}
-              <option value={city}>{city === "all" ? "All cities" : city}</option>
+              <option value={city}>{city}</option>
             {/each}
           </select>
         </div>
@@ -98,7 +102,6 @@ function updateFilters() {
           <select
             id="sortBy"
             bind:value={sortBy}
-            onchange={updateFilters}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
             <option value="name">Name (A-Z)</option>
@@ -113,12 +116,12 @@ function updateFilters() {
 
       <!-- Results -->
       <div class="mt-4 text-orange-900 font-medium">
-        {data.associations.length} {data.associations.length > 1 ? "associations found" : "association found"}
+        {associations.length} {associations.length > 1 ? "associations found" : "association found"}
       </div>
     </div>
 
     <!-- Associations -->
-    {#if data.associations.length === 0}
+    {#if associations.length === 0}
       <div class="text-center py-12">
         <div class="text-6xl mb-4">😢</div>
         <h3 class="text-2xl font-bold text-orange-900 mb-2">No association found</h3>
@@ -126,7 +129,7 @@ function updateFilters() {
       </div>
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {#each data.associations as association (association.id)}
+        {#each associations as association (association.id)}
           <div
             class="bg-white rounded-2xl shadow-lg overflow-hidden border-4 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
