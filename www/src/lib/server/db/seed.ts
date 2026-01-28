@@ -44,6 +44,20 @@ export default async function seedDb() {
         hasAvatar: gen.default({ defaultValue: false }),
       },
     },
+    association: {
+      columns: {
+        name: gen.companyName(),
+        logo: gen.valuesFromArray({ values: ["🐄"] }),
+        city: gen.city(),
+        animalsCount: gen.int({ minValue: 1, maxValue: 100 }),
+        description: gen.loremIpsum(),
+        foundedYear: gen.int({ minValue: 1960, maxValue: 2025 }),
+        phone: gen.phoneNumber(),
+        type: gen.valuesFromArray({
+          values: ["Sanctuary", "Rescue", "Adoption", "Care"],
+        }),
+      },
+    },
     post: {
       columns: {
         content: gen.loremIpsum(),
