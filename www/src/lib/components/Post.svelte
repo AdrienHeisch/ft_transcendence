@@ -3,6 +3,7 @@ import { slide } from "svelte/transition";
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
 import {
+  createComment,
   deletePost,
   getPostCommentCount,
   getPostComments,
@@ -16,7 +17,7 @@ import { getUserAvatar } from "$lib/storage";
 
 interface Props {
   post: Omit<Post, "author"> & { author: User };
-  isOwned: boolean | undefined;
+  isOwned?: boolean;
 }
 
 const { post: _post, isOwned = false }: Props = $props();
@@ -151,9 +152,9 @@ const cancelEdit = () => {
 
     <!-- Comments -->
     {#if commentsOpen}
-      <div>
+      <div class="flex flex-col content-center">
         {#each await getPostComments(post.id) as comment}
-          <div transition:slide class="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
+          <div transition:slide class="m-1 p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
             <div class="flex items-center gap-3 mb-3">
               <img 
                 src={getUserAvatar(comment.author)} 
@@ -168,6 +169,24 @@ const cancelEdit = () => {
             <p class="text-gray-800 mb-3">{comment.content}</p>
           </div>
         {/each}
+        <form class="m-1 p-4 bg-orange-50 rounded-lg border-2 border-orange-300 shadow" {...createComment}>
+          <input {...createComment.fields.post.as("hidden", post.id)}/>
+          <textarea 
+            class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
+            placeholder="What's new?"
+            rows="3"
+            required
+            {...createComment.fields.content.as("text")}
+          ></textarea>
+          <div class="flex justify-end mt-2">
+            <button
+              type="submit"
+              class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md"
+            >
+              Comment
+            </button>
+          </div>
+        </form>
       </div>
     {/if}
   </div>

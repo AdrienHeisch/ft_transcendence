@@ -67,6 +67,22 @@ export const getPostComments = query(z.string(), (id) => {
     .innerJoin(schema.user, eq(schema.user.id, schema.postComment.author));
 });
 
+export const createComment = form(
+  z.object({ post: z.string(), content: z.string() }),
+  async ({ post, content }) => {
+    const user = requireLogin();
+    await db.insert(schema.postComment).values({
+      id: crypto.randomUUID(),
+      post,
+      author: user.id,
+      content,
+      postedAt: new Date(),
+    });
+    await getPostCommentCount(post).refresh();
+    await getPostComments(post).refresh();
+  },
+);
+
 export const createPost = form(
   z.object({ content: z.string() }),
   async ({ content }) => {
