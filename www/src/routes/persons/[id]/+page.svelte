@@ -221,17 +221,16 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
             {/if}
           </h2>
           <div class="grid grid-cols-2 gap-3">
-            {#if pets.length > 0}
-              {#each pets as pet (pet.id)}
-                <div class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
-                    <span class="font-bold text-gray-900">{pet.name}</span>
-                  </div>
-                  <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>
+            {#each pets as pet (pet.id)}
+              <a href={resolve(`/pets/${pet.id}`)} class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
+                  <span class="font-bold text-gray-900">{pet.name}</span>
                 </div>
-              {/each}
-            {:else}
+                <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>
+              </a>
+            {/each}
+            {#if pets.length == 0}
               <div class="col-span-2 text-center py-4 text-gray-600">
                 {#if isCurrentUser}
                   No animals yet. Add your first one!
