@@ -57,11 +57,11 @@ export const friendsPair = pgTable(
     id: uuid("id").notNull().unique(),
     left: uuid("left")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
     right: uuid("right")
       .notNull()
-      .references(() => user.id),
-    pending: uuid().references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
+    pending: uuid().references(() => user.id, { onDelete: "cascade" }),
   },
   (table) => [
     primaryKey({ columns: [table.left, table.right] }),
@@ -92,7 +92,7 @@ export const post = pgTable("post", {
   id: uuid("id").primaryKey(),
   author: uuid("author")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   postedAt: timestamp("posted_at", {
     withTimezone: true,
@@ -107,10 +107,10 @@ export const postLike = pgTable(
   {
     post: uuid("post")
       .notNull()
-      .references(() => post.id),
+      .references(() => post.id, { onDelete: "cascade" }),
     user: uuid("user")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
   },
   (table) => [primaryKey({ columns: [table.post, table.user] })],
 );
@@ -121,10 +121,10 @@ export const postComment = pgTable("post_comment", {
   id: uuid("id").primaryKey(),
   post: uuid("post")
     .notNull()
-    .references(() => post.id),
+    .references(() => post.id, { onDelete: "cascade" }),
   author: uuid("author")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   postedAt: timestamp("posted_at", {
     withTimezone: true,
