@@ -141,7 +141,7 @@ export const association = pgTable("association", {
   description: text("description").notNull(),
   city: text("city").notNull(),
   type: text("type").notNull(),
-  animalsCount: text("animals_count").notNull(),
+  animalsCount: integer("animals_count").notNull(),
   foundedYear: text("founded_year").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
