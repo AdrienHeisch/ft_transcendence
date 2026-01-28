@@ -210,7 +210,7 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
             {#if isCurrentUser}
               <div class="flex gap-2">
                 <button aria-label="Add new animal" class="bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
-                  +
+                  + <!-- TODO pet profile creation -->
                 </button>
               </div>
             {:else}

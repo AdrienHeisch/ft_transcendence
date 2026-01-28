@@ -1,8 +1,9 @@
 import { and, eq, ilike } from "drizzle-orm";
 import z from "zod";
-import { query } from "$app/server";
+import { form, query } from "$app/server";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
+import { requireLogin } from "./auth";
 
 export const getPets = query(
   z.object({
@@ -23,5 +24,28 @@ export const getPets = query(
         ),
       )
       .orderBy(sortBy === "name" ? schema.pet.name : schema.pet.species);
+  },
+);
+
+export const createPet = form(
+  z.object({
+    name: z.string(),
+    age: z.int(),
+    bio: z.string(),
+    species: z.string(),
+    breed: z.string(),
+  }),
+  ({ name, age, bio, species, breed }) => {
+    const user = requireLogin();
+    return db.insert(schema.pet).values({
+      id: crypto.randomUUID(),
+      ownerId: user.id,
+      name,
+      age,
+      bio,
+      species,
+      breed,
+      hasAvatar: false,
+    });
   },
 );
