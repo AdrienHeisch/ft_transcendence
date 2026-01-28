@@ -8,7 +8,7 @@ import {
   getFriends,
   removeFriend,
 } from "$lib/friends.remote";
-import { getUserAvatar } from "$lib/storage/index.js";
+import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
@@ -38,6 +38,7 @@ const user = $derived({
 
 const posts = $derived(await data.posts);
 const friends = $derived(await data.friends);
+const pets = $derived(await data.pets);
 
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
 </script>
@@ -196,6 +197,49 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
                 /></a>
               </div>
             {/each}
+          </div>
+        </div>
+
+        <!-- Animals Card -->
+        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
+          <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <span class="text-2xl">🐾</span>
+              Animals
+            </span>
+            {#if isCurrentUser}
+              <div class="flex gap-2">
+                <button class="text-sm bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
+                  Add
+                </button>
+                <button class="text-sm bg-yellow-50 border-2 border-orange-700 text-amber-900 px-3 py-1 rounded-lg hover:bg-yellow-100 font-medium transition-colors">
+                  Modify
+                </button>
+              </div>
+            {:else}
+              <span class="text-sm text-orange-700 font-medium">{pets.length} animals</span>
+            {/if}
+          </h2>
+          <div class="grid grid-cols-2 gap-3">
+            {#if pets.length > 0}
+              {#each pets as pet (pet.id)}
+                <div class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
+                    <span class="font-bold text-gray-900">{pet.name}</span>
+                  </div>
+                  <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>
+                </div>
+              {/each}
+            {:else}
+              <div class="col-span-2 text-center py-4 text-gray-600">
+                {#if isCurrentUser}
+                  No animals yet. Add your first one!
+                {:else}
+                  No animals registered
+                {/if}
+              </div>
+            {/if}
           </div>
         </div>
       </div>

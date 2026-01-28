@@ -11,6 +11,7 @@ export const load: PageServerLoad = ({ params }) => {
   return {
     user: db.select().from(schema.user).where(eq(schema.user.id, params.id)),
     friends: getUserFriends(params.id),
+    pets: db.select().from(schema.pet).where(eq(schema.pet.ownerId, params.id)),
     currentUser,
     posts: db
       .select({
