@@ -6,17 +6,19 @@ import * as schema from "$lib/server/db/schema";
 
 export const getPets = query(
   z.object({
+    owner: z.string().optional(),
     search: z.string(),
     species: z.string().nullable(),
     sortBy: z.custom<"name" | "species">(),
   }),
-  ({ search, species, sortBy }) => {
+  ({ owner, search, species, sortBy }) => {
     return db
       .select()
       .from(schema.pet)
       .where(
         and(
-          search ? ilike(schema.pet.name, `%${search}%`) : undefined,
+          ilike(schema.pet.name, `%${search}%`),
+          owner ? eq(schema.pet.ownerId, owner) : undefined,
           species ? eq(schema.pet.species, species) : undefined,
         ),
       )

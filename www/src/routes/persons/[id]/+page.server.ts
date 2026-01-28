@@ -1,5 +1,6 @@
 import { desc, eq, getTableColumns } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
+import { getPets } from "$lib/pets.remote";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import { getUserFriends } from "$lib/server/db/utils";
@@ -11,7 +12,7 @@ export const load: PageServerLoad = ({ params }) => {
   return {
     user: db.select().from(schema.user).where(eq(schema.user.id, params.id)),
     friends: getUserFriends(params.id),
-    pets: db.select().from(schema.pet).where(eq(schema.pet.ownerId, params.id)),
+    pets: getPets({ owner: currentUser?.id, search: "", species: null, sortBy: "name" }),
     currentUser,
     posts: db
       .select({

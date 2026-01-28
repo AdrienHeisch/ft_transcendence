@@ -209,11 +209,8 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
             </span>
             {#if isCurrentUser}
               <div class="flex gap-2">
-                <button class="text-sm bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
-                  Add
-                </button>
-                <button class="text-sm bg-yellow-50 border-2 border-orange-700 text-amber-900 px-3 py-1 rounded-lg hover:bg-yellow-100 font-medium transition-colors">
-                  Modify
+                <button aria-label="Add new animal" class="bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
+                  +
                 </button>
               </div>
             {:else}

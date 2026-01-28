@@ -1,6 +1,6 @@
 <script lang="ts">
+import { getPets } from "$lib/pets.remote";
 import type { Pet } from "$lib/server/db/schema";
-import { getPets } from "./pets.remote";
 
 // TODO avatars
 const getAvatar = (_: Pet) =>
