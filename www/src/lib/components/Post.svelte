@@ -5,6 +5,7 @@ import { resolve } from "$app/paths";
 import {
   createComment,
   deletePost,
+  editPost,
   getPostCommentCount,
   getPostComments,
   getPostLikes,
@@ -65,7 +66,7 @@ const onEditStart = () => {
   isEditing = !isEditing;
 };
 
-const cancelEdit = () => {
+const closeEdit = () => {
   optionsOpen = false;
   isEditing = false;
 };
@@ -134,11 +135,13 @@ const cancelEdit = () => {
 
     <!-- Caption -->
     {#if isEditing}
-      <form>
-        <textarea class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
+      <form {...editPost} onsubmit={closeEdit}>
+        <input {...editPost.fields.id.as("hidden", post.id)}/>
+        <textarea class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white" {...editPost.fields.content.as("text")}
         >{post.content}</textarea>
-        <div>
-          <button onclick={cancelEdit} class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
+        <div class="flex mt-1">
+          <div class="flex-1"></div>
+          <button onclick={closeEdit} class="px-6 py-2 mr-1 bg-linear-to-r from-gray-600 to-gray-700 text-white rounded-lg font-semibold hover:from-gray-700 hover:to-gray-800 transition shadow-md">
             Cancel
           </button>
           <button type="submit" class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">

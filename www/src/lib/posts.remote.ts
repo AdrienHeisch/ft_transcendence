@@ -97,6 +97,17 @@ export const createPost = form(
   },
 );
 
+export const editPost = form(
+  z.object({ id: z.string(), content: z.string() }),
+  async ({ id, content }) => {
+    const user = requireLogin();
+    await db
+      .update(schema.post)
+      .set({ content })
+      .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
+    await getPosts().refresh();
+  },
+);
 export const deletePost = command(z.string(), async (id) => {
   const user = requireLogin();
   await db
