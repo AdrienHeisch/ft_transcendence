@@ -1,14 +1,14 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import { getAssociations } from "$lib/associations.remote";
+import { getAssociations, getPetsCount } from "$lib/associations.remote";
+import type { AssociationType } from "$lib/server/db/schema";
 
 let { data } = $props();
 
-// Get filters from server
 let searchQuery = $state("");
-let selectedType = $state<string | null>(null);
+let selectedType = $state<AssociationType | null>(null);
 let selectedCity = $state<string | null>(null);
-let sortBy = $state<"name" | "type" | "city" | "animalsCount">("name");
+let sortBy = $state<"name" | "type">("name");
 
 onMount(() => {
   searchQuery = data.filters.search;
@@ -17,8 +17,7 @@ onMount(() => {
   sortBy = data.filters.sort;
 });
 
-// Unique types and cities (would ideally come from the server)
-const types = ["Sanctuary", "Rescue", "Adoption", "Care"];
+//TODO cities ?
 const cities = ["Paris", "Lyon", "Montpellier"];
 
 const associations = $derived(
@@ -27,7 +26,13 @@ const associations = $derived(
     type: selectedType,
     city: selectedCity,
     sortBy,
-  }),
+  }).then((associations) =>
+    associations.map((association) => ({
+      ...association,
+      logo: "🐄",
+      city: cities.at(Math.floor(Math.random() * cities.length)),
+    })),
+  ),
 );
 </script>
 
@@ -75,7 +80,7 @@ const associations = $derived(
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
             <option value={null}>All</option>
-            {#each types as type}
+            {#each data.associationTypes as type}
               <option value={type}>{type}</option>
             {/each}
           </select>
@@ -160,13 +165,13 @@ const associations = $derived(
                 </div>
                 <div class="flex items-center gap-1">
                   <span>📅</span>
-                  <span>Since {association.foundedYear}</span>
+                  <span>Since {association.foundedAt}</span>
                 </div>
               </div>
 
               <div class="mb-3 text-sm text-orange-800 flex items-center gap-1">
                 <span>🐾</span>
-                <span class="font-semibold">{association.animalsCount} animals</span>
+                <span class="font-semibold">{await getPetsCount(association.id)} animals</span>
               </div>
 
               <p class="text-sm text-gray-700 mb-4 line-clamp-3 italic">

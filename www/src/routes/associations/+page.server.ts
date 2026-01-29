@@ -4,7 +4,9 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ url }) => {
   const searchQuery = url.searchParams.get("search")?.toLowerCase() || "";
-  const selectedType = url.searchParams.get("type");
+  const selectedType =
+    schema.associationTypeSchema.safeParse(url.searchParams.get("type")).data ??
+    null;
   const selectedCity = url.searchParams.get("city");
   const sortBy = (() => {
     const sortBy = url.searchParams.get("sort");
@@ -15,10 +17,11 @@ export const load: PageServerLoad = async ({ url }) => {
       )
     )
       return "name";
-    return sortBy as "name" | "type" | "city" | "animalsCount";
+    return sortBy as "name" | "type";
   })();
 
   return {
+    associationTypes: schema.associationType.enumValues,
     filters: {
       search: searchQuery,
       type: selectedType,
