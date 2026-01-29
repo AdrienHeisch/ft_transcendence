@@ -22,8 +22,7 @@ export const likePost = command(z.string(), async (id) => {
   if (!isLoggedIn()) error(401);
   const user = requireLogin();
   await db.insert(schema.postLike).values({ post: id, user: user.id });
-  await getPostLikes(id).refresh();
-  await isPostLiked(id).refresh();
+  await Promise.all([getPostLikes(id).refresh(), isPostLiked(id).refresh()]);
 });
 
 export const unlikePost = command(z.string(), async (id) => {
@@ -34,8 +33,7 @@ export const unlikePost = command(z.string(), async (id) => {
     .where(
       and(eq(schema.postLike.post, id), eq(schema.postLike.user, user.id)),
     );
-  await getPostLikes(id).refresh();
-  await isPostLiked(id).refresh();
+  await Promise.all([getPostLikes(id).refresh(), isPostLiked(id).refresh()]);
 });
 
 export const getPostLikes = query(z.string(), (id) => {
@@ -78,8 +76,10 @@ export const createComment = form(
       content,
       postedAt: new Date(),
     });
-    await getPostCommentCount(post).refresh();
-    await getPostComments(post).refresh();
+    await Promise.all([
+      getPostCommentCount(post).refresh(),
+      getPostComments(post).refresh(),
+    ]);
   },
 );
 

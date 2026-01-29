@@ -25,7 +25,7 @@ export const addFriend = command(z.string(), async (friendId) => {
   } catch {
     error(500);
   }
-  getFriends().refresh();
+  await getFriends().refresh();
 });
 
 export const acceptFriend = command(z.string(), async (friendId) => {
@@ -54,7 +54,7 @@ export const acceptFriend = command(z.string(), async (friendId) => {
   } catch {
     error(500);
   }
-  getFriends().refresh();
+  await getFriends().refresh();
 });
 
 export const removeFriend = command(z.string(), async (friendId) => {
@@ -73,5 +73,5 @@ export const removeFriend = command(z.string(), async (friendId) => {
         ),
       ),
     );
-  getFriends().refresh();
+  await getFriends().refresh();
 });
