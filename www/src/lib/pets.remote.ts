@@ -1,9 +1,18 @@
-import { and, eq, ilike } from "drizzle-orm";
+import { and, eq, ilike, inArray } from "drizzle-orm";
 import z from "zod";
 import { form, query } from "$app/server";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import { requireLogin } from "./auth";
+
+export const getPet = query.batch(z.string(), async (pets) => {
+  const result = await db
+    .select()
+    .from(schema.pet)
+    .where(inArray(schema.pet.id, pets));
+  const lookup = new Map(result.map((pet) => [pet.id, pet]));
+  return (pet) => lookup.get(pet);
+});
 
 export const getPets = query(
   z.object({
