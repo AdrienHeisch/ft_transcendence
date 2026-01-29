@@ -4,6 +4,7 @@ import {
   check,
   index,
   integer,
+  pgEnum,
   pgTable,
   point,
   primaryKey,
@@ -11,6 +12,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import { createSelectSchema } from "drizzle-zod";
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
@@ -150,17 +152,27 @@ export const city = pgTable(
 
 export type City = typeof city.$inferSelect;
 
+export const associationType = pgEnum("association_type", [
+  "Sanctuary",
+  "Rescue",
+  "Adoption",
+  "Care",
+]);
+
+export const associationTypeSchema = createSelectSchema(associationType);
+export type AssociationType = (typeof associationType.enumValues)[number];
+
 export const association = pgTable("association", {
   id: uuid("id").primaryKey(),
   name: text("name").notNull(),
-  logo: text("logo").notNull(),
-  description: text("description").notNull(),
-  city: text("city").notNull(),
-  type: text("type").notNull(),
-  animalsCount: integer("animals_count").notNull(),
-  foundedYear: text("founded_year").notNull(),
   email: text("email").notNull(),
   phone: text("phone").notNull(),
+  description: text("description").notNull(),
+  type: associationType("type").notNull(),
+  foundedAt: timestamp("founded_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
 });
 
 export type Association = typeof association.$inferSelect;
