@@ -2,7 +2,7 @@ import { error } from "@sveltejs/kit";
 import { and, eq, or } from "drizzle-orm";
 import * as z from "zod";
 import { command, query } from "$app/server";
-import { isLoggedIn, requireLogin } from "$lib/auth";
+import { isLoggedIn, requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import { friendsOf } from "./friends";

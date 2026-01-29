@@ -1,9 +1,9 @@
 import { and, eq, ilike, inArray } from "drizzle-orm";
 import z from "zod";
 import { form, query } from "$app/server";
+import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
-import { requireLogin } from "./auth";
 
 export const getPet = query.batch(z.string(), async (pets) => {
   const result = await db

@@ -2,8 +2,8 @@ import { error } from "@sveltejs/kit";
 import { and, desc, eq, getTableColumns } from "drizzle-orm";
 import z from "zod";
 import { command, form, query } from "$app/server";
+import { isLoggedIn, requireLogin } from "$lib/server/auth";
 import * as schema from "$lib/server/db/schema";
-import { isLoggedIn, requireLogin } from "./auth";
 import { db } from "./server/db";
 
 export const getPosts = query(async () => {
