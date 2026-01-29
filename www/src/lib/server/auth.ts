@@ -31,11 +31,7 @@ export async function createSession(token: string, userId: string) {
 export async function validateSessionToken(token: string) {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const [result] = await db
-    .select({
-      // Adjust user table here to tweak returned data
-      user: { id: table.user.id, email: table.user.email },
-      session: table.session,
-    })
+    .select()
     .from(table.session)
     .innerJoin(table.user, eq(table.session.userId, table.user.id))
     .where(eq(table.session.id, sessionId));
