@@ -6,8 +6,9 @@ import postgres from "postgres";
 import * as schema from "./schema";
 
 export default async function seedDb() {
-  if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
-  const client = postgres(process.env.DATABASE_URL);
+  const client = postgres(
+    `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
+  );
   const db = drizzle(client, { schema });
   console.log("Resetting database...");
   await reset(db, schema);
@@ -35,6 +36,20 @@ export default async function seedDb() {
         bio: gen.loremIpsum(),
         age: gen.int({ minValue: 1, maxValue: 5 }),
         hasAvatar: gen.default({ defaultValue: true }),
+      },
+    },
+    association: {
+      columns: {
+        name: gen.companyName(),
+        logo: gen.valuesFromArray({ values: ["🐄"] }),
+        city: gen.city(),
+        animalsCount: gen.int({ minValue: 1, maxValue: 100 }),
+        description: gen.loremIpsum(),
+        foundedYear: gen.int({ minValue: 1960, maxValue: 2025 }),
+        phone: gen.phoneNumber(),
+        type: gen.valuesFromArray({
+          values: ["Sanctuary", "Rescue", "Adoption", "Care"],
+        }),
       },
     },
     post: {

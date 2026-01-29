@@ -3,12 +3,14 @@ import {
   boolean,
   check,
   integer,
+  pgEnum,
   pgTable,
   primaryKey,
   text,
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import { createSelectSchema } from "drizzle-zod";
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
@@ -133,3 +135,28 @@ export const postComment = pgTable("post_comment", {
 });
 
 export type PostComment = typeof postComment.$inferSelect;
+
+export const associationType = pgEnum("association_type", [
+  "Sanctuary",
+  "Rescue",
+  "Adoption",
+  "Care",
+]);
+
+export const associationTypeSchema = createSelectSchema(associationType);
+export type AssociationType = (typeof associationType.enumValues)[number];
+
+export const association = pgTable("association", {
+  id: uuid("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  description: text("description").notNull(),
+  type: associationType("type").notNull(),
+  foundedAt: timestamp("founded_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
+export type Association = typeof association.$inferSelect;
