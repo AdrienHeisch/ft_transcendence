@@ -8,6 +8,7 @@ export default async function setup() {
   );
   const db = drizzle(client, { schema });
   console.log("[ ] Adding triggers...");
+  //TODO check what happens if left == right
   const query = `
 CREATE OR REPLACE FUNCTION canonicalize_friends_pair() RETURNS trigger AS $$
 DECLARE

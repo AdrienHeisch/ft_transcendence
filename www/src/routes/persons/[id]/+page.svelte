@@ -108,9 +108,9 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
               Edit profile
             </button>
           {:else}
-            {@const friend = (await getFriends()).find((friend) => user.id === friend.user.id)}
+            {@const friend = (await getFriends()).find((friend) => user.id === friend.id)}
             {#if friend}
-              {#if friend.pending == data.currentUser?.id}
+              {#if friend.status == "received"}
                 <button onclick={() => acceptFriend(user.id)} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -122,7 +122,7 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
-                  {#if friend.pending == user.id}
+                  {#if friend.status == "sent"}
                     Invitation sent
                   {:else}
                     Friends
