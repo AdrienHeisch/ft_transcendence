@@ -8,18 +8,21 @@ import {
   getUserFriends,
   removeFriend,
 } from "$lib/friends.remote";
+import { updatePerson } from "$lib/persons.remote";
 import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
+const _user = $derived(await data.user);
+
 // TODO remove fake data
 const user = $derived({
-  ...data.user,
+  ..._user,
   coverImage:
     "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
-  username: data.user.firstName.charAt(0) + data.user.lastName,
+  username: _user.firstName.charAt(0) + _user.lastName,
   location: "Paris, France",
   joinedDate: "January 2025",
   passions: [
@@ -32,11 +35,11 @@ const user = $derived({
   ],
 });
 
-const posts = $derived(await getPosts({ author: data.user.id }));
-const friends = $derived(await getUserFriends(data.user.id));
+const posts = $derived(await getPosts({ author: _user.id }));
+const friends = $derived(await getUserFriends(_user.id));
 const pets = $derived(
   await getPets({
-    owner: data.user.id,
+    owner: _user.id,
     search: "",
     species: null,
     sortBy: "name",
@@ -44,6 +47,8 @@ const pets = $derived(
 );
 
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
+
+let isEditMode = $state(false);
 </script>
 
 <div class="min-h-screen relative">
@@ -70,7 +75,11 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative">
     <!-- Profile Header -->
     <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
-      <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
+      <form {...updatePerson.enhance(async ({ submit }) => {
+        await submit();
+        await data.user.refresh();
+        isEditMode = false;
+      })} class="flex flex-col md:flex-row items-center md:items-end gap-6">
         <!-- Profile Picture -->
         <div class="relative">
           <img 
@@ -83,10 +92,33 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
 
         <!-- User Info -->
         <div class="flex-1 text-center md:text-left">
-          <h1 class="text-3xl font-bold text-gray-900">{user.firstName} {user.lastName}</h1>
+          {#if isEditMode}
+            <div class="flex">
+              <textarea
+                class="text-3xl font-bold text-gray-900 border-1 rounded bg-yellow-100 resize-none"
+                rows=1
+                {...updatePerson.fields.firstName.as("text")}
+              >{user.firstName}</textarea>
+              <textarea
+                class="text-3xl font-bold text-gray-900 border-1 rounded bg-yellow-100 resize-none"
+                rows=1
+                {...updatePerson.fields.lastName.as("text")}
+              >{user.lastName}</textarea>
+            </div>
+          {:else}
+            <h1 class="text-3xl font-bold text-gray-900">{user.firstName} {user.lastName}</h1>
+          {/if}
           <p class="text-lg text-gray-600">@{user.username}</p>
-          <p class="mt-2 text-gray-700 max-w-2xl">{user.bio}</p>
-          
+          {#if isEditMode}
+            <textarea
+              class="mt-2 text-gray-700 max-w-2xl border-1 rounded bg-yellow-100 resize-none"
+              rows=1
+              {...updatePerson.fields.bio.as("text")}
+            >{user.bio}</textarea>
+          {:else}
+            <p class="mt-2 text-gray-700 max-w-2xl">{user.bio}</p>
+          {/if}
+
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
             <div class="flex items-center gap-1">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,9 +139,15 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
         <!-- Action Buttons -->
         <div class="flex gap-3">
           {#if isCurrentUser}
-            <button class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
-              Edit profile
-            </button>
+            {#if isEditMode}
+              <button type="submit" class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                Save profile
+              </button>
+            {:else}
+              <button type="button" onclick={() => isEditMode = true} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                Edit profile
+              </button>
+            {/if}
           {:else}
             {@const friend = (await getFriends()).find((friend) => user.id === friend.id)}
             {#if friend}
@@ -145,7 +183,7 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
             </button>
           {/if}
         </div>
-      </div>
+      </form>
 
       <!-- Stats -->
       <div class="flex justify-center md:justify-start gap-8 mt-6 pt-6 border-t-2 border-orange-700">
@@ -193,7 +231,7 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
             {#each friends as friend (friend.id)}
               <div class="aspect-square rounded-lg overflow-hidden border-2 border-orange-700 hover:border-orange-900 transition-all duration-200 cursor-pointer">
                 <a href={resolve(`/persons/${friend.id}`)}><img 
-                  src="{getUserAvatar(friend)}" 
+                  src={getUserAvatar(friend)}
                   alt="{friend.firstName} {friend.lastName}"
                   title="{friend.firstName} {friend.lastName}"
                   class="w-full h-full object-cover"

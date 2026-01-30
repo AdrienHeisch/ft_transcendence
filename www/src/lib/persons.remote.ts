@@ -1,6 +1,7 @@
-import { and, ilike, inArray, or } from "drizzle-orm";
+import { and, eq, ilike, inArray, or } from "drizzle-orm";
 import z from "zod";
-import { query } from "$app/server";
+import { form, query } from "$app/server";
+import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 
@@ -33,5 +34,14 @@ export const getPersons = query(
       .orderBy(
         sortBy === "firstName" ? schema.user.firstName : schema.user.lastName,
       );
+  },
+);
+
+export const updatePerson = form(
+  z.object({ firstName: z.string(), lastName: z.string(), bio: z.string() }),
+  async (values) => {
+    const user = requireLogin();
+    await db.update(schema.user).set(values).where(eq(schema.user.id, user.id));
+    await getPerson(user.id).refresh();
   },
 );
