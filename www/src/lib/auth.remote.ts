@@ -98,3 +98,40 @@ export const logout = command(async (): Promise<void> => {
   await auth.invalidateSession(event.locals.session.id);
   auth.deleteSessionTokenCookie(event);
 });
+
+export const updateCredentials = form(
+  z.object({
+    currentPassword: z.string(),
+    email: z.email().optional(),
+    password: z.string().optional(),
+  }),
+  async ({ currentPassword, email, password }) => {
+    const user = auth.requireLogin();
+
+    //TODO extract to function (present in login)
+    const validPassword = await verify(user.passwordHash, currentPassword, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    });
+
+    if (!validPassword) {
+      return error(400, { message: "Incorrect username or password" });
+    }
+
+    const passwordHash = password
+      ? await hash(password, {
+          memoryCost: 19456,
+          timeCost: 2,
+          outputLen: 32,
+          parallelism: 1,
+        })
+      : undefined;
+
+    await db
+      .update(schema.user)
+      .set({ email, passwordHash })
+      .where(eq(schema.user.id, user.id));
+  },
+);
