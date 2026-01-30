@@ -1,5 +1,10 @@
 <script lang="ts">
+import { resolve } from "$app/paths";
 import * as remote from "./files.remote";
+
+const { data } = $props();
+
+const list = $derived(await data.files);
 
 let files = $state<FileList>();
 
@@ -21,3 +26,8 @@ $effect(() => {
   </div>
   <button type="submit">Submit !</button>
 </form>
+
+{#each list.contents as file}
+  {@const key = file.key.replace(list.prefix || "", "")}
+  <a href={resolve(`/demo/files/${key}`)}>{key}</a>
+{/each}

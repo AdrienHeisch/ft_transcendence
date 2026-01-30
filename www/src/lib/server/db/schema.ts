@@ -2,6 +2,7 @@ import { lt } from "drizzle-orm";
 import {
   boolean,
   check,
+  integer,
   pgTable,
   primaryKey,
   text,
@@ -43,9 +44,12 @@ export const pet = pgTable("pet", {
   name: text("name").notNull(),
   species: text("species").notNull(),
   breed: text("breed").notNull(),
+  age: integer("age").notNull(),
+  bio: text("description").notNull(),
+  hasAvatar: boolean("has_avatar").notNull(),
 });
 
-export type Pet = typeof user.$inferSelect;
+export type Pet = typeof pet.$inferSelect;
 
 export const friendsPair = pgTable(
   "friends_pair",
@@ -53,11 +57,11 @@ export const friendsPair = pgTable(
     id: uuid("id").notNull().unique(),
     left: uuid("left")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
     right: uuid("right")
       .notNull()
-      .references(() => user.id),
-    pending: uuid().references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
+    pending: uuid().references(() => user.id, { onDelete: "cascade" }),
   },
   (table) => [
     primaryKey({ columns: [table.left, table.right] }),
@@ -88,7 +92,7 @@ export const post = pgTable("post", {
   id: uuid("id").primaryKey(),
   author: uuid("author")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   postedAt: timestamp("posted_at", {
     withTimezone: true,
@@ -97,3 +101,35 @@ export const post = pgTable("post", {
 });
 
 export type Post = typeof post.$inferSelect;
+
+export const postLike = pgTable(
+  "post_like",
+  {
+    post: uuid("post")
+      .notNull()
+      .references(() => post.id, { onDelete: "cascade" }),
+    user: uuid("user")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+  },
+  (table) => [primaryKey({ columns: [table.post, table.user] })],
+);
+
+export type PostLike = typeof postLike.$inferSelect;
+
+export const postComment = pgTable("post_comment", {
+  id: uuid("id").primaryKey(),
+  post: uuid("post")
+    .notNull()
+    .references(() => post.id, { onDelete: "cascade" }),
+  author: uuid("author")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  postedAt: timestamp("posted_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
+export type PostComment = typeof postComment.$inferSelect;

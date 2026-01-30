@@ -17,8 +17,7 @@ tools, versions, configuration like .env setup, etc.), and step-by-step
 instructions to run the project._
 
 - Docker 29.0.0 or Podman 5.7.1 (with podman aliased as docker)
-- `find -name '.env.example' -execdir cp .env.example .env \;`
-- Edit `.env` files as necessary
+- `cp .env.example .env` and edit `.env` as necessary
 
 ### Release
 
@@ -27,6 +26,7 @@ instructions to run the project._
 ### Development
 
 - `make dev` to start the development server
+- `make seed` to seed the database
 - `make check` to run CI checks
 - `make format` to format the code
 

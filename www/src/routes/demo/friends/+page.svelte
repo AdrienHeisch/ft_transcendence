@@ -1,32 +1,17 @@
 <script lang="ts">
-import * as remote from "./friends.remote";
+import * as remote from "$lib/friends.remote";
 
 let friendToAdd = $state("");
 
 const friends = $derived(await remote.getFriends());
 const list = $derived(
-  friends.flatMap(({ user, pending }) => {
-    if (pending === null) {
-      return user;
-    }
-    return [];
-  }),
+  friends.flatMap((friend) => (friend.status === null ? friend : [])),
 );
 const invitations = $derived(
-  friends.flatMap(({ user, pending }) => {
-    if (pending !== null && pending === user.id) {
-      return user;
-    }
-    return [];
-  }),
+  friends.flatMap((friend) => (friend.status === "sent" ? friend : [])),
 );
 const inbox = $derived(
-  friends.flatMap(({ user, pending }) => {
-    if (pending !== null && pending !== user.id) {
-      return user;
-    }
-    return [];
-  }),
+  friends.flatMap((friend) => (friend.status === "received" ? friend : [])),
 );
 </script>
 
@@ -35,8 +20,8 @@ const inbox = $derived(
 {#each list as friend}
     <li>
       <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
-      <button class="border-1" onclick={async () => {
-        await remote.removeFriend(friend);
+      <button class="border" onclick={async () => {
+        await remote.removeFriend(friend.id);
         friendToAdd = "";
       }}>Remove</button>
     </li>
@@ -48,8 +33,8 @@ const inbox = $derived(
 {#each invitations as friend}
   <li>
     <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
-    <button class="border-1" onclick={async () => {
-      await remote.removeFriend(friend);
+    <button class="border" onclick={async () => {
+      await remote.removeFriend(friend.id);
       friendToAdd = "";
     }}>Cancel</button>
   </li>
@@ -61,12 +46,12 @@ const inbox = $derived(
 {#each inbox as friend}
   <li>
     <span>{friend.firstName} {friend.lastName} ({friend.id})</span>
-    <button class="border-1" onclick={async () => {
-      await remote.acceptFriend(friend);
+    <button class="border" onclick={async () => {
+      await remote.acceptFriend(friend.id);
       friendToAdd = "";
     }}>Accept</button>
-    <button class="border-1" onclick={async () => {
-      await remote.removeFriend(friend);
+    <button class="border" onclick={async () => {
+      await remote.removeFriend(friend.id);
       friendToAdd = "";
     }}>Refuse</button>
   </li>
@@ -79,7 +64,7 @@ const inbox = $derived(
     <input class="border-2" type="text" id="id" bind:value={friendToAdd} required />
   </div>
   <button onclick={async () => {
-    await remote.addFriend({ id: friendToAdd });
+    await remote.addFriend(friendToAdd);
     friendToAdd = "";
   }}>Submit</button>
 </form>

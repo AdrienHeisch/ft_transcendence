@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
 import * as z from "zod";
 import { form } from "$app/server";
-import * as storage from "$lib/server/storage";
+import { PublicStorage } from "$lib/server/storage";
 
 export const postFile = form(
   z.object({
@@ -15,8 +15,8 @@ export const postFile = form(
     const key = `demo/${file.name}`;
     console.log(`Putting file at ${key} of size ${file.size}`);
     try {
-      const upload = storage.upload(storage.Bucket.Public, key, file);
-      await upload.done();
+      const n = await PublicStorage.upload(key, file);
+      console.log(`${n} bytes written`);
     } catch (e) {
       console.error(`Error while uploading file to storage: ${e}`);
       error(500, "Failed to import file");

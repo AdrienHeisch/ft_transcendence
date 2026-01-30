@@ -20,15 +20,14 @@ reset:
 	docker volume rm ft-transcendence_db-data
 	docker volume rm ft-transcendence_storage-meta
 	docker volume rm ft-transcendence_storage-data
-	docker volume rm ft-transcendence_api-keys
 
 seed:
 	docker run \
 		--rm \
 		-w /app \
 		-v ./www:/app \
+		-v ./.env:/app/.env \
 		--network ft-transcendence_db \
-		-e DATABASE_URL=postgres://root:mysecretpassword@db:5432/local \
 		docker.io/oven/bun:1.3.5-debian \
 		bun db:seed
 
@@ -39,6 +38,11 @@ format:
 		-v ./www:/app \
 		docker.io/oven/bun:1.3.5-debian \
 		bun biome
+	docker run \
+		--rm \
+    -v ./Caddyfile:/etc/caddy/Caddyfile \
+		caddy:2.11 \
+		caddy fmt --overwrite /etc/caddy/Caddyfile
 
 check:
 	docker run \

@@ -1,8 +1,8 @@
 import { hash, verify } from "@node-rs/argon2";
-// import { encodeBase32LowerCase } from "@oslojs/encoding";
 import { fail, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import z from "zod";
+import { resolve } from "$app/paths";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as table from "$lib/server/db/schema";
@@ -10,7 +10,7 @@ import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = (event) => {
   if (event.locals.user) {
-    return redirect(302, "/demo/lucia");
+    return redirect(302, resolve("/demo/auth"));
   }
   return {};
 };
@@ -56,7 +56,7 @@ export const actions: Actions = {
     const session = await auth.createSession(sessionToken, existingUser.id);
     auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
 
-    return redirect(302, "/demo/lucia");
+    return redirect(302, "/demo/auth");
   },
   register: async (event) => {
     const formData = await event.request.formData();
@@ -97,7 +97,7 @@ export const actions: Actions = {
     } catch {
       return fail(500, { message: "An error has occurred" });
     }
-    return redirect(302, "/demo/lucia");
+    return redirect(302, "/demo/auth");
   },
 };
 

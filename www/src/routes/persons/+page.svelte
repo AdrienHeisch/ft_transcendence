@@ -1,53 +1,40 @@
 <script lang="ts">
-const { data } = $props();
+import { getPersons } from "$lib/persons.remote";
+import { getUserAvatar } from "$lib/storage";
 
 const _roles = ["Adoptant", "Association", "Bénévole"];
 const _cities = ["Paris", "Lyon", "Montpellier"];
 
 // Filters
 let searchQuery = $state("");
-let selectedRole = $state("tous");
-let selectedCity = $state("toutes");
-let sortBy = $state("lastName");
+let selectedRole = $state<string>();
+let selectedCity = $state<string>();
+let sortBy = $state<"firstName" | "lastName">("lastName");
 
-// Unique roles and cities
-let roles = $derived(["tous", ...new Set(_roles)]);
-let cities = $derived(["toutes", ...new Set(_cities)]);
-
-// TODO use db queries instead of this
-let users = $derived(
-  (await data.users)
+const _users = $derived(
+  (await getPersons({ search: searchQuery, sortBy }))
     // TODO remove fake data
     .map((user) => ({
+      ...user,
       username: `${user.firstName.charAt(0)}${user.lastName}`,
-      photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.firstName}`,
+      photo: getUserAvatar(user),
       role: _roles[user.firstName.length % _roles.length],
-      city: _cities[user.firstName.length % _cities.length],
+      city: _cities[user.lastName.length % _cities.length],
       adoptedAnimals: user.firstName.length % 3,
       age: ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20,
-      ...user,
-    }))
-    .filter((user) => {
-      const matchSearch =
-        user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        user.bio.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchRole = selectedRole === "tous" || user.role === selectedRole;
-      const matchCity = selectedCity === "toutes" || user.city === selectedCity;
+    })),
+);
 
-      return matchSearch && matchRole && matchCity;
-    })
-    .sort((a, b) => {
-      if (sortBy === "lastName") {
-        return a.lastName.localeCompare(b.lastName);
-      } else if (sortBy === "city") {
-        return a.city.localeCompare(b.city);
-      } else if (sortBy === "role") {
-        return a.role.localeCompare(b.role);
-      }
-      return 0;
-    }),
+const roles = $derived(new Set(_users.map((user) => user.role)));
+const cities = $derived(new Set(_users.map((user) => user.city)));
+
+// TODO use SQL filtering instead of this
+const users = $derived(
+  _users.filter((user) => {
+    const matchRole = !selectedRole || user.role == selectedRole;
+    const matchCity = !selectedCity || user.city == selectedCity;
+    return matchRole && matchCity;
+  }),
 );
 </script>
 
@@ -56,29 +43,6 @@ let users = $derived(
 </svelte:head>
 
 <div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
-  <!-- Header -->
-  <header class="bg-linear-to-r from-orange-600 to-orange-700 text-white shadow-lg">
-    <div class="flex items-center justify-between px-6 py-3">
-      <a
-        href="/"
-        class="flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
-      >
-        <span class="text-xl">🏠</span>
-        <span>Accueil</span>
-      </a>
-
-      <div class="flex items-center gap-3">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐄%3C/text%3E%3C/svg%3E" alt="Logo" class="w-10 h-10" />
-        <div>
-          <h1 class="text-3xl font-bold text-yellow-100" style="font-family: Georgia, serif;">La Ferme à Bibi</h1>
-          <p class="text-sm text-yellow-200 italic" style="font-family: Georgia, serif;">Depuis 1887</p>
-        </div>
-      </div>
-
-      <div class="w-32"></div>
-    </div>
-  </header>
-
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Page title -->
     <div class="text-center mb-8">
@@ -117,8 +81,9 @@ let users = $derived(
             bind:value={selectedRole}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
+            <option value={undefined}>{"Tous les rôles"}</option>
             {#each roles as role}
-              <option value={role}>{role === "tous" ? "Tous les rôles" : role}</option>
+              <option value={role}>{role}</option>
             {/each}
           </select>
         </div>
@@ -131,8 +96,9 @@ let users = $derived(
             bind:value={selectedCity}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
+            <option value={undefined}>{"Toutes les villes"}</option>
             {#each cities as city}
-              <option value={city}>{city === "toutes" ? "Toutes les villes" : city}</option>
+              <option value={city}>{city}</option>
             {/each}
           </select>
         </div>
@@ -145,9 +111,10 @@ let users = $derived(
             bind:value={sortBy}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
+            <option value="firstName">Prenom (A-Z)</option>
             <option value="lastName">Nom (A-Z)</option>
-            <option value="city">Ville</option>
-            <option value="role">Rôle</option>
+            <!-- <option value="city">Ville</option> -->
+            <!-- <option value="role">Rôle</option> -->
           </select>
         </div>
 
@@ -220,9 +187,9 @@ let users = $derived(
 
               <!-- Buttons -->
               <div class="flex gap-2">
-                <button class="flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
+                <a href="./{user.id}" class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
                   👁️ Voir le profil
-                </button>
+                </a>
                 <button class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
                   💬 Contacter
                 </button>
