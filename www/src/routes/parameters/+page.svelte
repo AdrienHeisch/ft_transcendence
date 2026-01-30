@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 let selectedSection = "Profile";
 
 const sections = [
@@ -15,7 +15,7 @@ const sections = [
   //{ name: "Privacy", icon: "🔐", description: "Set your data sharing and privacy preferences." },
 ];
 
-function saveChanges(section) {
+function saveChanges(section: string) {
   console.log(`${section} changes saved!`);
   alert(`${section} settings saved!`);
 }
@@ -59,7 +59,7 @@ function saveChanges(section) {
             <label for="username">Username</label>
             <input id="username" type="text" placeholder="Verification of your new username..." />
           </div>
-          <button type="button" class="save-button" on:click={() => saveChanges("Profile")}>
+          <button type="button" class="save-button" onclick={() => saveChanges("Profile")}>
             Save Changes
           </button>
         </form>
@@ -82,7 +82,7 @@ function saveChanges(section) {
 
         </form>
         <p>Manage your security settings, including your password and authentication factors.</p>
-        <button type="button" class="save-button" on:click={() => saveChanges("Account")}>
+        <button type="button" class="save-button" onclick={() => saveChanges("Account")}>
           Save Account Changes
         </button>
       {/if}
