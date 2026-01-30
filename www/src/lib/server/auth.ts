@@ -1,9 +1,29 @@
 import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeBase64url, encodeHexLowerCase } from "@oslojs/encoding";
 import type { RequestEvent } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
+import { getRequestEvent } from "$app/server";
 import { db } from "$lib/server/db";
 import * as table from "$lib/server/db/schema";
+
+export function getCurrentUser() {
+  return getRequestEvent().locals.user;
+}
+
+export function requireLogin() {
+  const user = getCurrentUser();
+
+  if (!user) {
+    redirect(302, "/login");
+  }
+
+  return user;
+}
+
+export function isLoggedIn() {
+  return !!getCurrentUser();
+}
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 const EXPIRATION_TIME = DAY_IN_MS * 30;
@@ -31,11 +51,7 @@ export async function createSession(token: string, userId: string) {
 export async function validateSessionToken(token: string) {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const [result] = await db
-    .select({
-      // Adjust user table here to tweak returned data
-      user: { id: table.user.id, email: table.user.email },
-      session: table.session,
-    })
+    .select()
     .from(table.session)
     .innerJoin(table.user, eq(table.session.userId, table.user.id))
     .where(eq(table.session.id, sessionId));

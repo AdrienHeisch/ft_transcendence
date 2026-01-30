@@ -1,6 +1,6 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { requireLogin } from "$lib/auth";
 import * as auth from "$lib/server/auth";
+import { requireLogin } from "$lib/server/auth";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = () => {

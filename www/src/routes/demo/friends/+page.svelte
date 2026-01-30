@@ -5,28 +5,13 @@ let friendToAdd = $state("");
 
 const friends = $derived(await remote.getFriends());
 const list = $derived(
-  friends.flatMap(({ user, pending }) => {
-    if (pending === null) {
-      return user;
-    }
-    return [];
-  }),
+  friends.flatMap((friend) => (friend.status === null ? friend : [])),
 );
 const invitations = $derived(
-  friends.flatMap(({ user, pending }) => {
-    if (pending !== null && pending === user.id) {
-      return user;
-    }
-    return [];
-  }),
+  friends.flatMap((friend) => (friend.status === "sent" ? friend : [])),
 );
 const inbox = $derived(
-  friends.flatMap(({ user, pending }) => {
-    if (pending !== null && pending !== user.id) {
-      return user;
-    }
-    return [];
-  }),
+  friends.flatMap((friend) => (friend.status === "received" ? friend : [])),
 );
 </script>
 

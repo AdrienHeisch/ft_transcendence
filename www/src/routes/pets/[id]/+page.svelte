@@ -1,11 +1,9 @@
 <script lang="ts">
 const { data } = $props();
 
-let [_pet] = $derived(await data.pet);
-
 // TODO remove fake data
 const pet = $derived({
-  ..._pet,
+  ...data.pet,
   adopted: true,
   photos: [
     "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",

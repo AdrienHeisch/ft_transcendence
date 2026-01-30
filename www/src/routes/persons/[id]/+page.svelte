@@ -1,29 +1,25 @@
 <script lang="ts">
-import { error } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
 import Post from "$lib/components/Post.svelte";
 import {
   acceptFriend,
   addFriend,
   getFriends,
+  getUserFriends,
   removeFriend,
-} from "$lib/friends.remote.js";
-import { getUserAvatar } from "$lib/storage/index.js";
+} from "$lib/friends.remote";
+import { getPets } from "$lib/pets.remote";
+import { getPosts } from "$lib/posts.remote";
+import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
-const [_user] = $derived(await data.user);
-
-$effect(() => {
-  if (!_user) error(404);
-});
-
 // TODO remove fake data
 const user = $derived({
-  ..._user,
+  ...data.user,
   coverImage:
     "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
-  username: _user.firstName.charAt(0) + _user.lastName,
+  username: data.user.firstName.charAt(0) + data.user.lastName,
   location: "Paris, France",
   joinedDate: "January 2025",
   passions: [
@@ -36,8 +32,16 @@ const user = $derived({
   ],
 });
 
-const posts = $derived(await data.posts);
-const friends = $derived(await data.friends);
+const posts = $derived(await getPosts({ author: data.user.id }));
+const friends = $derived(await getUserFriends(data.user.id));
+const pets = $derived(
+  await getPets({
+    owner: data.user.id,
+    search: "",
+    species: null,
+    sortBy: "name",
+  }),
+);
 
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
 </script>
@@ -107,9 +111,9 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
               Edit profile
             </button>
           {:else}
-            {@const friend = (await getFriends()).find((friend) => user.id === friend.user.id)}
+            {@const friend = (await getFriends()).find((friend) => user.id === friend.id)}
             {#if friend}
-              {#if friend.pending == data.currentUser?.id}
+              {#if friend.status == "received"}
                 <button onclick={() => acceptFriend(user.id)} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -121,7 +125,7 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
-                  {#if friend.pending == user.id}
+                  {#if friend.status == "sent"}
                     Invitation sent
                   {:else}
                     Friends
@@ -196,6 +200,45 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
                 /></a>
               </div>
             {/each}
+          </div>
+        </div>
+
+        <!-- Animals Card -->
+        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
+          <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <span class="text-2xl">🐾</span>
+              Animals
+            </span>
+            {#if isCurrentUser}
+              <div class="flex gap-2">
+                <button aria-label="Add new animal" class="bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
+                  + <!-- TODO pet profile creation -->
+                </button>
+              </div>
+            {:else}
+              <span class="text-sm text-orange-700 font-medium">{pets.length} animals</span>
+            {/if}
+          </h2>
+          <div class="grid grid-cols-2 gap-3">
+            {#each pets as pet (pet.id)}
+              <a href={resolve(`/pets/${pet.id}`)} class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
+                  <span class="font-bold text-gray-900">{pet.name}</span>
+                </div>
+                <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>
+              </a>
+            {/each}
+            {#if pets.length == 0}
+              <div class="col-span-2 text-center py-4 text-gray-600">
+                {#if isCurrentUser}
+                  No animals yet. Add your first one!
+                {:else}
+                  No animals registered
+                {/if}
+              </div>
+            {/if}
           </div>
         </div>
       </div>

@@ -6,8 +6,9 @@ import postgres from "postgres";
 import * as schema from "./schema";
 
 export default async function seedDb() {
-  if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
-  const client = postgres(process.env.DATABASE_URL);
+  const client = postgres(
+    `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
+  );
   const db = drizzle(client, { schema });
   console.log("Resetting database...");
   await reset(db, schema);

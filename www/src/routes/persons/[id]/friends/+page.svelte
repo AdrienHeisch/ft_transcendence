@@ -1,19 +1,10 @@
 <script lang="ts">
-import { error } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
+import { getUserFriends } from "$lib/friends.remote";
 import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
-const [user] = $derived(await data.user);
-
-$effect(() => {
-  if (!user) error(404);
-});
-
-const friends = $derived(await data.friends);
-
-const isCurrentUser = $derived(data.currentUser?.id === user?.id);
 </script>
 
 <div class="min-h-screen relative">

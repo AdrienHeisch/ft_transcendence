@@ -2,28 +2,31 @@ import { error } from "@sveltejs/kit";
 import { and, desc, eq, getTableColumns } from "drizzle-orm";
 import z from "zod";
 import { command, form, query } from "$app/server";
+import { isLoggedIn, requireLogin } from "$lib/server/auth";
 import * as schema from "$lib/server/db/schema";
-import { isLoggedIn, requireLogin } from "./auth";
 import { db } from "./server/db";
 
-export const getPosts = query(async () => {
-  return db
-    .select({
-      ...getTableColumns(schema.post),
-      author: { ...getTableColumns(schema.user) },
-    })
-    .from(schema.post)
-    .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
-    .orderBy(desc(schema.post.postedAt))
-    .limit(10);
-});
+export const getPosts = query(
+  z.object({ author: z.string().optional() }),
+  async ({ author }) => {
+    return db
+      .select({
+        ...getTableColumns(schema.post),
+        author: { ...getTableColumns(schema.user) },
+      })
+      .from(schema.post)
+      .where(author ? eq(schema.user.id, author) : undefined)
+      .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
+      .orderBy(desc(schema.post.postedAt))
+      .limit(10);
+  },
+);
 
 export const likePost = command(z.string(), async (id) => {
   if (!isLoggedIn()) error(401);
   const user = requireLogin();
   await db.insert(schema.postLike).values({ post: id, user: user.id });
-  await getPostLikes(id).refresh();
-  await isPostLiked(id).refresh();
+  await Promise.all([getPostLikes(id).refresh(), isPostLiked(id).refresh()]);
 });
 
 export const unlikePost = command(z.string(), async (id) => {
@@ -34,8 +37,7 @@ export const unlikePost = command(z.string(), async (id) => {
     .where(
       and(eq(schema.postLike.post, id), eq(schema.postLike.user, user.id)),
     );
-  await getPostLikes(id).refresh();
-  await isPostLiked(id).refresh();
+  await Promise.all([getPostLikes(id).refresh(), isPostLiked(id).refresh()]);
 });
 
 export const getPostLikes = query(z.string(), (id) => {
@@ -78,8 +80,10 @@ export const createComment = form(
       content,
       postedAt: new Date(),
     });
-    await getPostCommentCount(post).refresh();
-    await getPostComments(post).refresh();
+    await Promise.all([
+      getPostCommentCount(post).refresh(),
+      getPostComments(post).refresh(),
+    ]);
   },
 );
 
@@ -93,7 +97,7 @@ export const createPost = form(
       content,
       postedAt: new Date(),
     });
-    await getPosts().refresh();
+    await getPosts({}).refresh();
   },
 );
 
@@ -105,7 +109,7 @@ export const editPost = form(
       .update(schema.post)
       .set({ content })
       .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
-    await getPosts().refresh();
+    await getPosts({}).refresh();
   },
 );
 export const deletePost = command(z.string(), async (id) => {
@@ -113,5 +117,5 @@ export const deletePost = command(z.string(), async (id) => {
   await db
     .delete(schema.post)
     .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
-  await getPosts().refresh();
+  await getPosts({}).refresh();
 });

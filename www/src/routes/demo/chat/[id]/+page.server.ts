@@ -1,5 +1,5 @@
 import { and, desc, eq, getTableColumns, or } from "drizzle-orm";
-import { requireLogin } from "$lib/auth";
+import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import type { PageServerLoad } from "./$types";

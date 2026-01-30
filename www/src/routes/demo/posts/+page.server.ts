@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm";
-import { isLoggedIn } from "$lib/auth";
+import { isLoggedIn } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import type { PageServerLoad } from "./$types";

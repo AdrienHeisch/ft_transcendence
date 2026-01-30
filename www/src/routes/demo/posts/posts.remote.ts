@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
 import * as z from "zod";
 import { form } from "$app/server";
-import { requireLogin } from "$lib/auth";
+import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 

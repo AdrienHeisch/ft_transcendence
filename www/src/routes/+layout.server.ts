@@ -1,8 +1,6 @@
+import { getCurrentUser } from "$lib/server/auth";
 import type { LayoutServerLoad } from "./$types";
 
-export const load: LayoutServerLoad = ({ locals }) => {
-  const currentUser = locals.user;
-  return {
-    currentUser,
-  };
-};
+export const load: LayoutServerLoad = () => ({
+  currentUser: getCurrentUser(),
+});
