@@ -1,7 +1,6 @@
 <script lang="ts">
+import { getPersons } from "$lib/persons.remote";
 import { getUserAvatar } from "$lib/storage";
-
-const { data } = $props();
 
 const _roles = ["Adoptant", "Association", "Bénévole"];
 const _cities = ["Paris", "Lyon", "Montpellier"];
@@ -10,7 +9,11 @@ const _cities = ["Paris", "Lyon", "Montpellier"];
 let searchQuery = $state("");
 let selectedRole = $state("tous");
 let selectedCity = $state("toutes");
-let sortBy = $state("lastName");
+let sortBy = $state<"firstName" | "lastName">("lastName");
+
+const data = $derived({ users: 
+  await getPersons({ search: searchQuery, sortBy }),
+ });
 
 // Unique roles and cities
 let roles = $derived(["tous", ...new Set(_roles)]);
@@ -18,7 +21,7 @@ let cities = $derived(["toutes", ...new Set(_cities)]);
 
 // TODO use db queries instead of this
 let users = $derived(
-  (await data.users)
+  data.users
     // TODO remove fake data
     .map((user) => ({
       username: `${user.firstName.charAt(0)}${user.lastName}`,
@@ -43,10 +46,10 @@ let users = $derived(
     .sort((a, b) => {
       if (sortBy === "lastName") {
         return a.lastName.localeCompare(b.lastName);
-      } else if (sortBy === "city") {
-        return a.city.localeCompare(b.city);
-      } else if (sortBy === "role") {
-        return a.role.localeCompare(b.role);
+      // } else if (sortBy === "city") {
+      //   return a.city.localeCompare(b.city);
+      // } else if (sortBy === "role") {
+      //   return a.role.localeCompare(b.role);
       }
       return 0;
     }),
@@ -124,9 +127,10 @@ let users = $derived(
             bind:value={sortBy}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
+            <option value="firstName">Prenom (A-Z)</option>
             <option value="lastName">Nom (A-Z)</option>
-            <option value="city">Ville</option>
-            <option value="role">Rôle</option>
+            <!-- <option value="city">Ville</option> -->
+            <!-- <option value="role">Rôle</option> -->
           </select>
         </div>
 

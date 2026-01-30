@@ -6,13 +6,14 @@ import { isLoggedIn, requireLogin } from "$lib/server/auth";
 import * as schema from "$lib/server/db/schema";
 import { db } from "./server/db";
 
-export const getPosts = query(async () => {
+export const getPosts = query(z.object({ author: z.string().optional() }), async ({ author }) => {
   return db
     .select({
       ...getTableColumns(schema.post),
       author: { ...getTableColumns(schema.user) },
     })
     .from(schema.post)
+    .where(author ? eq(schema.user.id, author) : undefined)
     .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
     .orderBy(desc(schema.post.postedAt))
     .limit(10);
@@ -93,7 +94,7 @@ export const createPost = form(
       content,
       postedAt: new Date(),
     });
-    await getPosts().refresh();
+    await getPosts({}).refresh();
   },
 );
 
@@ -105,7 +106,7 @@ export const editPost = form(
       .update(schema.post)
       .set({ content })
       .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
-    await getPosts().refresh();
+    await getPosts({}).refresh();
   },
 );
 export const deletePost = command(z.string(), async (id) => {
@@ -113,5 +114,5 @@ export const deletePost = command(z.string(), async (id) => {
   await db
     .delete(schema.post)
     .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
-  await getPosts().refresh();
+  await getPosts({}).refresh();
 });

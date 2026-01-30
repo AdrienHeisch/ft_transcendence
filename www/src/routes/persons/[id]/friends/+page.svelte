@@ -1,15 +1,8 @@
 <script lang="ts">
-import { error } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
 import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
-
-const [user] = $derived(await data.user);
-
-$effect(() => {
-  if (!user) error(404);
-});
 
 const friends = $derived(await data.friends);
 </script>

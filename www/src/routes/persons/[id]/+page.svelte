@@ -1,5 +1,4 @@
 <script lang="ts">
-import { error } from "@sveltejs/kit";
 import { resolve } from "$app/paths";
 import Post from "$lib/components/Post.svelte";
 import {
@@ -12,18 +11,12 @@ import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
-const [_user] = $derived(await data.user);
-
-$effect(() => {
-  if (!_user) error(404);
-});
-
 // TODO remove fake data
 const user = $derived({
-  ..._user,
+  ...data.user,
   coverImage:
     "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
-  username: _user.firstName.charAt(0) + _user.lastName,
+  username: data.user.firstName.charAt(0) + data.user.lastName,
   location: "Paris, France",
   joinedDate: "January 2025",
   passions: [

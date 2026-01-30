@@ -4,7 +4,7 @@ import { createPost, getPosts } from "$lib/posts.remote";
 
 const { data } = $props();
 
-const posts = $derived(await getPosts());
+const posts = $derived(await getPosts({}));
 </script>
 
 <!-- Zone de contenu principal -->

@@ -1,0 +1,10 @@
+// import { db } from "$lib/server/db";
+// import * as schema from "$lib/server/db/schema";
+import type { PageLoad } from "./$types";
+
+export const load: PageLoad = () => {
+  // TODO pagination
+  return {
+    // users: db.select().from(schema.user),
+  };
+};
