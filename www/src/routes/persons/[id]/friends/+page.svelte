@@ -1,10 +1,11 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
+import { getUserFriends } from "$lib/friends.remote";
 import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
-const friends = $derived(await data.friends);
+const friends = $derived(await getUserFriends(data.user.id));
 </script>
 
 <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center justify-between">

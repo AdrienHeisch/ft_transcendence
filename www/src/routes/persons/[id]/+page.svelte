@@ -5,8 +5,11 @@ import {
   acceptFriend,
   addFriend,
   getFriends,
+  getUserFriends,
   removeFriend,
 } from "$lib/friends.remote";
+import { getPets } from "$lib/pets.remote";
+import { getPosts } from "$lib/posts.remote";
 import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
@@ -29,9 +32,16 @@ const user = $derived({
   ],
 });
 
-const posts = $derived(await data.posts);
-const friends = $derived(await data.friends);
-const pets = $derived(await data.pets);
+const posts = $derived(await getPosts({ author: data.user.id }));
+const friends = $derived(await getUserFriends(data.user.id));
+const pets = $derived(
+  await getPets({
+    owner: data.user.id,
+    search: "",
+    species: null,
+    sortBy: "name",
+  }),
+);
 
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
 </script>
