@@ -11,9 +11,9 @@ let selectedRole = $state("tous");
 let selectedCity = $state("toutes");
 let sortBy = $state<"firstName" | "lastName">("lastName");
 
-const data = $derived({ users: 
-  await getPersons({ search: searchQuery, sortBy }),
- });
+const data = $derived({
+  users: await getPersons({ search: searchQuery, sortBy }),
+});
 
 // Unique roles and cities
 let roles = $derived(["tous", ...new Set(_roles)]);
@@ -46,10 +46,10 @@ let users = $derived(
     .sort((a, b) => {
       if (sortBy === "lastName") {
         return a.lastName.localeCompare(b.lastName);
-      // } else if (sortBy === "city") {
-      //   return a.city.localeCompare(b.city);
-      // } else if (sortBy === "role") {
-      //   return a.role.localeCompare(b.role);
+        // } else if (sortBy === "city") {
+        //   return a.city.localeCompare(b.city);
+        // } else if (sortBy === "role") {
+        //   return a.role.localeCompare(b.role);
       }
       return 0;
     }),

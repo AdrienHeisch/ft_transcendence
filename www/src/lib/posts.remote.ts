@@ -6,18 +6,21 @@ import { isLoggedIn, requireLogin } from "$lib/server/auth";
 import * as schema from "$lib/server/db/schema";
 import { db } from "./server/db";
 
-export const getPosts = query(z.object({ author: z.string().optional() }), async ({ author }) => {
-  return db
-    .select({
-      ...getTableColumns(schema.post),
-      author: { ...getTableColumns(schema.user) },
-    })
-    .from(schema.post)
-    .where(author ? eq(schema.user.id, author) : undefined)
-    .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
-    .orderBy(desc(schema.post.postedAt))
-    .limit(10);
-});
+export const getPosts = query(
+  z.object({ author: z.string().optional() }),
+  async ({ author }) => {
+    return db
+      .select({
+        ...getTableColumns(schema.post),
+        author: { ...getTableColumns(schema.user) },
+      })
+      .from(schema.post)
+      .where(author ? eq(schema.user.id, author) : undefined)
+      .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
+      .orderBy(desc(schema.post.postedAt))
+      .limit(10);
+  },
+);
 
 export const likePost = command(z.string(), async (id) => {
   if (!isLoggedIn()) error(401);
