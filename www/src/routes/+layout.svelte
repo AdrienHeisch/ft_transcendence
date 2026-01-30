@@ -36,6 +36,7 @@ const sidebarMainItems = $derived(
       : undefined,
     // { label: "Adopt", icon: "🐾" },
     { label: "Pets", icon: "🐕", href: "/pets" },
+    { label: "Search People", icon: "🔍", href: "/persons" },
     // { label: "Pet sitter", icon: "🐕" },
   ].filter((item) => !!item),
 );
