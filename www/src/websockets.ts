@@ -59,7 +59,7 @@ const server = Bun.serve({
       ws.subscribe(ws.data.chatId);
     },
     async message(ws, content) {
-      const message = {
+      const message: schema.ChatMessage = {
         id: crypto.randomUUID(),
         friendsId: ws.data.chatId,
         author: ws.data.user.id,
