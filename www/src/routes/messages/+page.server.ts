@@ -5,15 +5,16 @@ import * as schema from "$lib/server/db/schema";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = () => {
-  const user = requireLogin();
+  const currentUser = requireLogin();
   return {
+    user: currentUser,
     chats: db
-      .select({ id: schema.friendsPair.id })
+      .select()
       .from(schema.friendsPair)
       .where(
         or(
-          eq(schema.friendsPair.left, user.id),
-          eq(schema.friendsPair.right, user.id),
+          eq(schema.friendsPair.left, currentUser.id),
+          eq(schema.friendsPair.right, currentUser.id),
         ),
       ),
   };

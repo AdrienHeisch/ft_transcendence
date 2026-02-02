@@ -6,7 +6,6 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = ({ params }) => {
   const user = requireLogin();
-  console.log(`chat: ${params.id}, user: ${user.id}`);
   return {
     messages: db
       .select({ ...getTableColumns(schema.chatMessage) })

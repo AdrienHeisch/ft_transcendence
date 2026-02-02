@@ -1,4 +1,5 @@
 <script lang="ts">
+import z from "zod";
 import { browser } from "$app/environment";
 import type { ChatMessage } from "$lib/server/db/schema.js";
 
@@ -9,9 +10,19 @@ let wsMessages = $state<ChatMessage[]>([]);
 
 let ws: WebSocket | undefined = (() => {
   if (!browser) return undefined;
-  const ws = new WebSocket(`/ws/${params.id}`); // TODO error handling
+  const ws = new WebSocket(`/ws/${params.id}`);
+  const messageSchema = z.object({
+    id: z.string(),
+    friendsId: z.string(),
+    author: z.string(),
+    content: z.string(),
+    sentAt: z.coerce.date(),
+  }); // TODO drizzle-zod
   ws.onmessage = (message) => {
-    wsMessages.unshift(JSON.parse(message.data)); // TODO validation
+    const result = messageSchema.safeParse(JSON.parse(message.data));
+    if (result.success) {
+      wsMessages.unshift(result.data);
+    }
   };
   return ws;
 })();
