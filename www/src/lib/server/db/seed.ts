@@ -69,6 +69,7 @@ export default async function seedDb() {
     chatMessage: {
       columns: {
         content: gen.loremIpsum(),
+        sentAt: gen.date({ maxDate: new Date() }),
       },
     },
   }));
