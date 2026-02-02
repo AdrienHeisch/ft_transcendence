@@ -41,18 +41,8 @@ const sidebarMainItems = $derived(
 );
 
 const sidebarBottomItems = [
-  { label: "Help & Support", icon: "❓" },
-  { label: "Settings", icon: "⚙️" },
-  {
-    label: "Logout",
-    icon: "🚪",
-    action: () => {
-      auth
-        .logout()
-        .then(() => location.reload())
-        .catch((e) => console.log(e));
-    },
-  },
+  { label: "Help & Support", icon: "❓", href: "/" }, // TODO href
+  { label: "Settings", icon: "⚙️", href: resolve("/settings") },
 ];
 </script>
 
@@ -180,14 +170,21 @@ const sidebarBottomItems = [
       <div class="p-4 border-t-2 border-orange-300">
         <nav class="space-y-2">
           {#each sidebarBottomItems as item}
-            <button
-              onclick={() => {if (item.action) item.action()}}
-              class="cursor-pointer w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
+            <a
+              href={item.href}
+              class="w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
             >
               <span class="text-xl">{item.icon}</span>
               <span>{item.label}</span>
-            </button>
+            </a>
           {/each}
+            <button
+              onclick={() => auth.logout().then(() => location.reload()).catch((e) => console.log(e))}
+              class="cursor-pointer w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
+            >
+              <span class="text-xl">🚪</span>
+              <span>Logout</span>
+            </button>
         </nav>
       </div>
     </aside>
