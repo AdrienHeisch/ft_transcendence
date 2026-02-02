@@ -1,6 +1,6 @@
 <script lang="ts">
 import z from "zod";
-import { browser } from "$app/environment";
+import { browser, dev } from "$app/environment";
 import type { ChatMessage } from "$lib/server/db/schema.js";
 
 const { data, params } = $props();
@@ -22,6 +22,9 @@ let ws: WebSocket | undefined = (() => {
     const result = messageSchema.safeParse(JSON.parse(message.data));
     if (result.success) {
       wsMessages.unshift(result.data);
+      wsMessages.sort((a, b) => a.sentAt.getDate() - b.sentAt.getDate());
+    } else if (dev) {
+      console.error(result.error);
     }
   };
   return ws;
