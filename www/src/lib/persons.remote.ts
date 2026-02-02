@@ -1,3 +1,4 @@
+import { error } from "@sveltejs/kit";
 import { and, eq, ilike, inArray, or } from "drizzle-orm";
 import z from "zod";
 import { form, query } from "$app/server";
@@ -38,10 +39,18 @@ export const getPersons = query(
 );
 
 export const updatePerson = form(
-  z.object({ firstName: z.string(), lastName: z.string(), bio: z.string() }),
-  async (values) => {
-    const user = requireLogin();
-    await db.update(schema.user).set(values).where(eq(schema.user.id, user.id));
-    await getPerson(user.id).refresh();
+  z.object({
+    id: z.string(),
+    firstName: z.string(),
+    lastName: z.string(),
+    bio: z.string(),
+  }),
+  async (data) => {
+    const { id, ...values } = data;
+    if (id !== requireLogin().id) {
+      error(403);
+    }
+    await db.update(schema.user).set(values).where(eq(schema.user.id, id));
+    await getPerson(id).refresh();
   },
 );

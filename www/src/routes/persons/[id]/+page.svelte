@@ -80,6 +80,8 @@ let isEditMode = $state(false);
         await data.user.refresh();
         isEditMode = false;
       })} class="flex flex-col md:flex-row items-center md:items-end gap-6">
+        <input {...updatePerson.fields.id.as("hidden", user.id)} />
+
         <!-- Profile Picture -->
         <div class="relative">
           <img 
