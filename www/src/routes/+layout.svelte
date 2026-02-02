@@ -9,7 +9,6 @@ import * as auth from "$lib/auth.remote";
 const { children, data } = $props();
 
 let sidebarOpen = $state(false);
-let messagesOpen = $state(false);
 
 afterNavigate(() => (sidebarOpen = false));
 
@@ -76,14 +75,14 @@ const sidebarBottomItems = [
       </a>
 
       {#if data.currentUser}
-        <button
-          onclick={() => (messagesOpen = !messagesOpen)}
+        <a
+          href={resolve("/messages")}
           class="relative flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
         >
           <span class="text-xl">💬</span>
           <span>Messages</span>
           <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span>
-        </button>
+        </a>
       {:else}
         <a
           href={resolve("/login")}
@@ -95,50 +94,6 @@ const sidebarBottomItems = [
       {/if}
     </div>
   </header>
-
-  <!-- Panel de messages -->
-  {#if messagesOpen}
-    <div class="fixed top-16 right-6 w-96 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-20">
-      <div class="bg-linear-to-r from-orange-600 to-orange-700 text-white px-4 py-3 rounded-t flex items-center justify-between">
-        <h2 class="font-bold text-lg">Direct Messages</h2>
-        <button onclick={() => (messagesOpen = false)} class="text-2xl hover:text-orange-200 transition">&times;</button>
-      </div>
-      <div class="p-4 max-h-96 overflow-y-auto">
-        <div class="space-y-2">
-          <div class="p-3 hover:bg-white rounded-lg cursor-pointer border-2 border-orange-300 bg-orange-100 transition">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">A</div>
-              <div class="flex-1">
-                <div class="font-semibold text-orange-900">Alice</div>
-                <div class="text-sm text-gray-700">Ready for the cow party?</div>
-              </div>
-              <span class="text-xs text-orange-600 font-medium">2m</span>
-            </div>
-          </div>
-          <div class="p-3 hover:bg-white rounded-lg cursor-pointer border-2 border-orange-300 bg-orange-100 transition">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">B</div>
-              <div class="flex-1">
-                <div class="font-semibold text-orange-900">Bob</div>
-                <div class="text-sm text-gray-700">Hi Frank, how's your cow doing?</div>
-              </div>
-              <span class="text-xs text-orange-600 font-medium">15m</span>
-            </div>
-          </div>
-          <div class="p-3 hover:bg-white rounded-lg cursor-pointer border-2 border-orange-300 bg-orange-100 transition">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-linear-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow">C</div>
-              <div class="flex-1">
-                <div class="font-semibold text-orange-900">Charlie</div>
-                <div class="text-sm text-gray-700">Tell me, would you happen to have a chicken?</div>
-              </div>
-              <span class="text-xs text-orange-600 font-medium">1h</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  {/if}
 
   <!-- Sidebar -->
   {#if sidebarOpen}
