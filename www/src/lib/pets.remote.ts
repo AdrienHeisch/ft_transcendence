@@ -1,5 +1,7 @@
+import { redirect } from "@sveltejs/kit";
 import { and, eq, ilike, inArray } from "drizzle-orm";
 import z from "zod";
+import { resolve } from "$app/paths";
 import { form, query } from "$app/server";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
@@ -40,21 +42,23 @@ export const createPet = form(
   z.object({
     name: z.string(),
     age: z.int(),
-    bio: z.string(),
+    bio: z.string().optional(),
     species: z.string(),
     breed: z.string(),
   }),
-  ({ name, age, bio, species, breed }) => {
+  async ({ name, age, bio, species, breed }) => {
     const user = requireLogin();
-    return db.insert(schema.pet).values({
-      id: crypto.randomUUID(),
+    const id = crypto.randomUUID();
+    await db.insert(schema.pet).values({
+      id,
       ownerId: user.id,
       name,
       age,
-      bio,
+      bio: bio ?? "",
       species,
       breed,
       hasAvatar: false,
     });
+    redirect(303, resolve(`/pets/${id}`));
   },
 );

@@ -252,9 +252,9 @@ let isEditMode = $state(false);
             </span>
             {#if isCurrentUser}
               <div class="flex gap-2">
-                <button aria-label="Add new animal" class="bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
+                <a href={resolve("/new-pet")} aria-label="Add new animal" class="bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
                   + <!-- TODO pet profile creation -->
-                </button>
+                </a>
               </div>
             {:else}
               <span class="text-sm text-orange-700 font-medium">{pets.length} animals</span>
