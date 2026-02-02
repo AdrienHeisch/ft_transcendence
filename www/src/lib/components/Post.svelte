@@ -1,7 +1,7 @@
 <script lang="ts">
-import { slide } from "svelte/transition";
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
+import Comment from "$lib/components/Comment.svelte";
 import {
   createComment,
   deletePost,
@@ -18,15 +18,16 @@ import { getUserAvatar } from "$lib/storage";
 
 interface Props {
   post: Omit<Post, "author"> & { author: User };
-  isOwned?: boolean;
+  currentUser?: User;
 }
 
-const { post: _post, isOwned = false }: Props = $props();
+const { post: _post, currentUser }: Props = $props();
+
+const comments = $derived(getPostComments(_post.id));
 
 // TODO remove fake data
 const post = $derived({
   ..._post,
-  comments: _post.content.length % 20,
   image:
     "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
 });
@@ -36,6 +37,7 @@ let commentsOpen = $state(false);
 
 let isEditing = $state(false);
 
+const isOwned = $derived(currentUser?.id === post.author.id);
 const isLiked = $derived(isPostLiked(_post.id));
 
 const onLikePost = async () => {
@@ -156,21 +158,8 @@ const closeEdit = () => {
     <!-- Comments -->
     {#if commentsOpen}
       <div class="flex flex-col content-center">
-        {#each await getPostComments(post.id) as comment}
-          <div transition:slide class="m-1 p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
-            <div class="flex items-center gap-3 mb-3">
-              <img 
-                src={getUserAvatar(comment.author)} 
-                alt="{comment.author.firstName} {comment.author.lastName}"
-                class="w-12 h-12 rounded-full border-2 border-orange-700"
-              />
-              <div>
-                <div class="font-semibold text-orange-900">{comment.author.firstName} {comment.author.lastName}</div>
-                <div class="text-xs text-gray-600">{comment.postedAt}</div>
-              </div>
-            </div>
-            <p class="text-gray-800 mb-3">{comment.content}</p>
-          </div>
+        {#each await comments as comment}
+          <Comment comment={comment} currentUser={currentUser} />
         {/each}
         <form class="m-1 p-4 bg-orange-50 rounded-lg border-2 border-orange-300 shadow" {...createComment}>
           <input {...createComment.fields.post.as("hidden", post.id)}/>

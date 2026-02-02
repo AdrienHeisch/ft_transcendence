@@ -38,7 +38,7 @@ const posts = $derived(await getPosts({}));
       <!-- Posts -->
 			<div class="space-y-4">
         {#each posts as post}
-          <Post {post} isOwned={post.author.id === data.currentUser?.id} />
+          <Post {post} currentUser={data.currentUser} />
         {/each}
 			</div>
 		</section>

@@ -87,6 +87,48 @@ export const createComment = form(
   },
 );
 
+export const editComment = form(
+  z.object({ id: z.string(), content: z.string() }),
+  async ({ id, content }) => {
+    const user = requireLogin();
+    const [comment] = await db
+      .update(schema.postComment)
+      .set({ content })
+      .where(
+        and(
+          eq(schema.postComment.id, id),
+          eq(schema.postComment.author, user.id),
+        ),
+      )
+      .returning();
+    if (comment) {
+      await Promise.all([
+        getPostCommentCount(comment.post).refresh(),
+        getPostComments(comment.post).refresh(),
+      ]);
+    }
+  },
+);
+
+export const deleteComment = command(z.string(), async (id) => {
+  const user = requireLogin();
+  const [comment] = await db
+    .delete(schema.postComment)
+    .where(
+      and(
+        eq(schema.postComment.id, id),
+        eq(schema.postComment.author, user.id),
+      ),
+    )
+    .returning();
+  if (comment) {
+    await Promise.all([
+      getPostCommentCount(comment.post).refresh(),
+      getPostComments(comment.post).refresh(),
+    ]);
+  }
+});
+
 export const createPost = form(
   z.object({ content: z.string() }),
   async ({ content }) => {
@@ -112,6 +154,7 @@ export const editPost = form(
     await getPosts({}).refresh();
   },
 );
+
 export const deletePost = command(z.string(), async (id) => {
   const user = requireLogin();
   await db

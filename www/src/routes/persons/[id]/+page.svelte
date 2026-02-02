@@ -286,7 +286,7 @@ let isEditMode = $state(false);
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#each posts as post (post.id)}
-          <Post {post} isOwned={post.author === data.currentUser} />
+          <Post {post} currentUser={data.currentUser} />
         {/each}
 
         <!-- Load More -->
