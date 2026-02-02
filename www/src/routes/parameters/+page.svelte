@@ -1,24 +1,33 @@
 <script lang="ts">
-let selectedSection = "Profile";
+import { updateCredentials } from "$lib/auth.remote";
 
 const sections = [
-  {
-    name: "Profile",
-    icon: "👤",
-    description: "Manage your personal information.",
-  },
+  // {
+  //   name: "Profile",
+  //   icon: "👤",
+  //   description: "Manage your personal information.",
+  // },
   {
     name: "Account",
     icon: "🔒",
-    description: "Adjust security and account details.",
+    description:
+      "Manage your security settings, including your password and authentication factors.",
   },
-  //{ name: "Privacy", icon: "🔐", description: "Set your data sharing and privacy preferences." },
+  // { name: "Privacy", icon: "🔐", description: "Set your data sharing and privacy preferences." },
 ];
 
-function saveChanges(section: string) {
-  console.log(`${section} changes saved!`);
-  alert(`${section} settings saved!`);
-}
+let selectedSection = $state(sections[0].name);
+
+let email = $state<string>();
+let password = $state<string>("");
+let confirmPassword = $state<string>("");
+let confirmPasswordField = $state<HTMLInputElement>();
+
+$effect(() =>
+  confirmPasswordField?.setCustomValidity(
+    password == confirmPassword ? "" : "Passwords do not match",
+  ),
+);
 </script>
 
 <div class="settings-container">
@@ -51,40 +60,54 @@ function saveChanges(section: string) {
 
       {#if selectedSection === "Profile"}
         <form>
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input id="username" type="text" placeholder="Modify your username..." />
+          <div>
+            <label>
+              Username
+              <input type="text" placeholder="Modify your username..." />
+            </label>
           </div>
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input id="username" type="text" placeholder="Verification of your new username..." />
+          <div>
+            <label>
+              Username
+              <input type="text" placeholder="Verification of your new username..." />
+            </label>
           </div>
-          <button type="button" class="save-button" onclick={() => saveChanges("Profile")}>
-            Save Changes
+          <button type="submit" class="save-button">
+            Save
           </button>
         </form>
       {/if}
 
       {#if selectedSection === "Account"}
-        <form>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" type="text" placeholder="Modify your email..." />
+        <form {...updateCredentials}>
+          <div>
+            <label>
+              Current password
+              <input placeholder="Enter your password..." required {...updateCredentials.fields.currentPassword.as("password")} />
+            </label>
           </div>
-          <div class="form-group">
-            <label for="old password">Old Password</label>
-            <input id="old password" type="text" placeholder="Enter your password..." />
+          <div>
+            <label>
+              Email
+              <input placeholder="Modify your email..." bind:value={email} {...updateCredentials.fields.email.as("email")} />
+            </label>
           </div>
-          <div class="form-group">
-            <label for="new password">New Password</label>
-            <input id="new password" type="text" placeholder="Enter your new password..." />
+          <div>
+            <label>
+              New password
+              <input placeholder="Enter your password..." bind:value={password} {...updateCredentials.fields.password.as("password")} />
+            </label>
           </div>
-
+          <div>
+            <label>
+              Confirm password
+              <input placeholder="Enter your new password..." bind:value={confirmPassword} bind:this={confirmPasswordField} type="password" />
+            </label>
+          </div>
+          <button type="submit" class="save-button">
+            Save
+          </button>
         </form>
-        <p>Manage your security settings, including your password and authentication factors.</p>
-        <button type="button" class="save-button" onclick={() => saveChanges("Account")}>
-          Save Account Changes
-        </button>
       {/if}
     </div>
   </main>
@@ -167,7 +190,6 @@ function saveChanges(section: string) {
 }
 
 .settings-panel:hover {
-  background: #ffedd2;
   box-shadow: 0px 5px 14px rgba(0, 0, 0, 0.15);
 }
 
@@ -177,15 +199,15 @@ function saveChanges(section: string) {
   margin-bottom: 1rem;
 }
 
-.form-group label {
+form div label {
   display: block;
   font-size: 1rem;
   color: #a86f3a;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 }
 
-.form-group input {
+form div label input {
   width: 100%;
   padding: 0.75rem;
   font-size: 1rem;
@@ -195,7 +217,7 @@ function saveChanges(section: string) {
   transition: border-color 0.2s;
 }
 
-.form-group input:focus {
+form div label input:focus {
   border-color: #a86f3a;
 }
 
