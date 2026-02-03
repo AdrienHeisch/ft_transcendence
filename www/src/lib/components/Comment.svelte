@@ -1,5 +1,6 @@
 <script lang="ts">
 import { slide } from "svelte/transition";
+import { resolve } from "$app/paths";
 import { deleteComment, editComment } from "$lib/posts.remote";
 import type { PostComment, User } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
@@ -35,13 +36,17 @@ const closeEdit = () => {
 
 <div transition:slide class="relative m-1 p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
   <div class="flex items-center gap-3 mb-3">
-    <img 
-      src={getUserAvatar(comment.author)} 
-      alt="{comment.author.firstName} {comment.author.lastName}"
-      class="w-12 h-12 rounded-full border-2 border-orange-700"
-    />
+    <a href={resolve(`/persons/${comment.author.id}`)}>
+      <img 
+        src={getUserAvatar(comment.author)} 
+        alt="{comment.author.firstName} {comment.author.lastName}"
+        class="w-12 h-12 rounded-full border-2 border-orange-700"
+      />
+    </a>
     <div class="flex-1">
-      <div class="font-semibold text-orange-900">{comment.author.firstName} {comment.author.lastName}</div>
+      <a href={resolve(`/persons/${comment.author.id}`)}>
+        <div class="font-semibold text-orange-900">{comment.author.firstName} {comment.author.lastName}</div>
+      </a>
       <div class="text-xs text-gray-600">{comment.postedAt}</div>
     </div>
     {#if isOwned}
