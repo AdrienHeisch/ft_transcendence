@@ -1,12 +1,12 @@
 <script lang="ts">
 import { slide } from "svelte/transition";
-import { deleteComment } from "$lib/posts.remote";
+import { deleteComment, editComment } from "$lib/posts.remote";
 import type { PostComment, User } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
 
 interface Props {
   comment: Omit<PostComment, "author"> & { author: User };
-  currentUser?: User,
+  currentUser?: User;
 }
 
 const { comment, currentUser }: Props = $props();
@@ -16,8 +16,6 @@ let optionsOpen = $state(false);
 let isEditing = $state(false);
 
 const isOwned = $derived(currentUser?.id === comment.author.id);
-$inspect(currentUser?.id);
-$inspect(comment.author.id);
 
 const onDelete = async () => {
   optionsOpen = false;
@@ -54,11 +52,30 @@ const closeEdit = () => {
       </button>
     {/if}
   </div>
-  <p class="text-gray-800 mb-3">{comment.content}</p>
+
   {#if optionsOpen}
-    <div class="fixed top-14 right-6 flex flex-col p-2 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-20">
+    <div class="absolute top-14 right-6 flex flex-col p-2 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-20">
       <button onclick={onEditStart}>Edit</button>
       <button onclick={onDelete}>Delete</button>
     </div>
+  {/if}
+
+  {#if isEditing}
+    <form {...editComment} onsubmit={closeEdit}>
+      <input {...editComment.fields.id.as("hidden", comment.id)}/>
+      <textarea class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white" {...editComment.fields.content.as("text")}
+      >{comment.content}</textarea>
+      <div class="flex mt-1">
+        <div class="flex-1"></div>
+        <button onclick={closeEdit} class="px-6 py-2 mr-1 bg-linear-to-r from-gray-600 to-gray-700 text-white rounded-lg font-semibold hover:from-gray-700 hover:to-gray-800 transition shadow-md">
+          Cancel
+        </button>
+        <button type="submit" class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
+          Post
+        </button>
+      </div>
+    </form>
+  {:else}
+    <p class="text-gray-800 mb-3">{comment.content}</p>
   {/if}
 </div>

@@ -74,7 +74,7 @@ const closeEdit = () => {
 };
 </script>
 
-<div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
+<div class="relative bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
   <!-- Post Header -->
   <div class="p-4 flex items-center gap-3">
     <a href={resolve(`/persons/${post.author.id}`)}>
@@ -100,7 +100,7 @@ const closeEdit = () => {
   </div>
 
   {#if optionsOpen}
-    <div class="fixed top-14 right-6 flex flex-col p-2 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-20">
+    <div class="absolute top-14 right-6 flex flex-col p-2 bg-orange-50 rounded-lg shadow-2xl border-4 border-orange-600 z-20">
       <button onclick={onEditStart}>Edit</button>
       <button onclick={onDelete}>Delete</button>
     </div>
