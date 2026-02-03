@@ -19,9 +19,10 @@ import { getUserAvatar } from "$lib/storage";
 interface Props {
   post: Omit<Post, "author"> & { author: User };
   currentUser?: User;
+  isFullPage?: boolean;
 }
 
-const { post: _post, currentUser }: Props = $props();
+const { post: _post, currentUser, isFullPage = false }: Props = $props();
 
 const comments = $derived(getPostComments(_post.id));
 
@@ -33,7 +34,7 @@ const post = $derived({
 });
 
 let optionsOpen = $state(false);
-let commentsOpen = $state(false);
+let commentsOpen = $state((() => isFullPage)());
 
 let isEditing = $state(false);
 
@@ -74,7 +75,7 @@ const closeEdit = () => {
 };
 </script>
 
-<div class="relative bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
+<div class="relative h-fit bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
   <!-- Post Header -->
   <div class="p-4 flex items-center gap-3">
     <a href={resolve(`/persons/${post.author.id}`)}>
@@ -107,11 +108,13 @@ const closeEdit = () => {
   {/if}
 
   <!-- Post Image -->
-  <img 
-    src={post.image} 
-    alt="Post"
-    class="w-full aspect-video object-cover"
-  />
+  <a href={resolve(`/post/${post.id}`)}>
+    <img 
+      src={post.image} 
+      alt="Post"
+      class="w-full aspect-video object-cover"
+    />
+  </a>
 
   <!-- Post Actions -->
   <div class="p-4 space-y-3">
@@ -120,13 +123,13 @@ const closeEdit = () => {
         <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill={await isLiked ? "red" : "none"} stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
         </svg>
-        <span class="font-medium">{await getPostLikes(_post.id)}</span>
+        <span class="font-medium">{await getPostLikes(post.id)}</span>
       </button>
-      <button onclick={() => commentsOpen = !commentsOpen} class="flex items-center gap-2 text-amber-900 hover:text-orange-700 transition-colors group">
-        <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <button onclick={() => !isFullPage && (commentsOpen = !commentsOpen)} class={[isFullPage ? "" : "hover:text-orange-700", "flex", "items-center", "gap-2", "text-amber-900", "transition-colors", "group"]}>
+        <svg class={[isFullPage ? "" : "group-hover:scale-110", "w-6", "h-6", "transition-transform"]} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
         </svg>
-        <span class="font-medium">{await getPostCommentCount(_post.id)}</span>
+        <span class="font-medium">{await getPostCommentCount(post.id)}</span>
       </button>
       <button class="flex items-center gap-2 text-amber-900 hover:text-orange-700 transition-colors group ml-auto" aria-label="Share">
         <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

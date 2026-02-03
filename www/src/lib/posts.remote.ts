@@ -1,10 +1,26 @@
 import { error } from "@sveltejs/kit";
-import { and, desc, eq, getTableColumns } from "drizzle-orm";
+import { and, desc, eq, getTableColumns, inArray } from "drizzle-orm";
 import z from "zod";
 import { command, form, query } from "$app/server";
 import { isLoggedIn, requireLogin } from "$lib/server/auth";
+import type { Post, User } from "$lib/server/db/schema";
 import * as schema from "$lib/server/db/schema";
 import { db } from "./server/db";
+
+export type PostData = Omit<Post, "author"> & { author: User };
+
+export const getPost = query.batch(z.string(), async (posts) => {
+  const result = await db
+    .select({
+      ...getTableColumns(schema.post),
+      author: { ...getTableColumns(schema.user) },
+    })
+    .from(schema.post)
+    .where(inArray(schema.post.id, posts))
+    .innerJoin(schema.user, eq(schema.user.id, schema.post.author));
+  const lookup = new Map(result.map((post) => [post.id, post]));
+  return (post) => lookup.get(post);
+});
 
 export const getPosts = query(
   z.object({ author: z.string().optional() }),
