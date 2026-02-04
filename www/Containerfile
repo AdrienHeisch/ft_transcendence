@@ -32,6 +32,7 @@ COPY ./www/bunfig.toml .
 COPY ./www/svelte.config.js .
 COPY ./www/drizzle.config.ts .
 COPY ./www/src/lib/server/db/schema.ts ./src/lib/server/db/schema.ts
+COPY ./www/src/lib/server/db/setup.ts ./src/lib/server/db/setup.ts
 COPY --from=builder /home/bun/app/node_modules ./node_modules
 COPY --from=builder /home/bun/app/build ./build
 USER bun
