@@ -3,7 +3,7 @@ const { data } = $props();
 
 // TODO remove fake data
 const pet = $derived({
-  ...await data.pet,
+  ...(await data.pet),
   adopted: true,
   photos: [
     "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
