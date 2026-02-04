@@ -33,12 +33,18 @@ const presence = new Map<string, Date>();
 
 async function updatePresence(id: string) {
   presence.set(id, new Date());
-  await db.update(schema.user).set({ online: true }).where(eq(schema.user.id, id));
+  await db
+    .update(schema.user)
+    .set({ online: true })
+    .where(eq(schema.user.id, id));
 }
 
 async function clearPresence(id: string) {
   presence.delete(id);
-  await db.update(schema.user).set({ online: false }).where(eq(schema.user.id, id));
+  await db
+    .update(schema.user)
+    .set({ online: false })
+    .where(eq(schema.user.id, id));
 }
 
 const server = Bun.serve({
@@ -94,7 +100,11 @@ const server = Bun.serve({
         return new Response("Not authenticated", { status: 401 });
       }
 
-      if (server.upgrade(req, { data: { type: "presence", user, interval: undefined } })) {
+      if (
+        server.upgrade(req, {
+          data: { type: "presence", user, interval: undefined },
+        })
+      ) {
         return; // Success !
       }
       return new Response("Upgrade failed", { status: 500 });
@@ -111,14 +121,17 @@ const server = Bun.serve({
           ws.data.interval = setInterval(async () => {
             const last = presence.get(ws.data.user.id);
             if (last)
-            if (last && Date.now() - last.getTime() < PRESENCE_DISCONNECTION_DELAY) {
-              ws.send("ping");
-            } else {
-              if (ws.data.type === "presence")
-                clearInterval(ws.data.interval);
-              await clearPresence(ws.data.user.id);
-              ws.close();
-            }
+              if (
+                last &&
+                Date.now() - last.getTime() < PRESENCE_DISCONNECTION_DELAY
+              ) {
+                ws.send("ping");
+              } else {
+                if (ws.data.type === "presence")
+                  clearInterval(ws.data.interval);
+                await clearPresence(ws.data.user.id);
+                ws.close();
+              }
           }, PRESENCE_PING_INTERVAL);
           await updatePresence(ws.data.user.id);
           break;
@@ -134,7 +147,10 @@ const server = Bun.serve({
             content: content.toString(),
             sentAt: new Date(),
           };
-          server.publish(`/messages/${ws.data.chatId}`, JSON.stringify(message));
+          server.publish(
+            `/messages/${ws.data.chatId}`,
+            JSON.stringify(message),
+          );
           await db.insert(schema.chatMessage).values(message);
           break;
         }

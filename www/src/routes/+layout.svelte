@@ -7,7 +7,6 @@ import { afterNavigate } from "$app/navigation";
 import { resolve } from "$app/paths";
 import * as auth from "$lib/auth.remote";
 import { startPresence } from "$lib/presence";
-    import { onMount } from "svelte";
 
 const { children, data } = $props();
 

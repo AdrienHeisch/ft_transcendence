@@ -49,8 +49,6 @@ const pets = $derived(
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
 
 let isEditMode = $state(false);
-
-$inspect(user.online);
 </script>
 
 <div class="min-h-screen relative">
