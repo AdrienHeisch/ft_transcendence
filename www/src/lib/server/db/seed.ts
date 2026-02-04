@@ -14,13 +14,15 @@ export default async function seedDb() {
   await reset(db, schema);
   console.log("Seeding database...");
   await seed(db, schema, { seed: 1 }).refine((gen) => ({
+    session: {
+      count: 0,
+    },
     user: {
       count: 20,
       columns: {
         bio: gen.loremIpsum(),
       },
       with: {
-        session: [{ weight: 1, count: [1, 2] }],
         pet: [{ weight: 1, count: [1, 2, 3] }],
         post: [{ weight: 1, count: [5, 10, 15] }],
       },
