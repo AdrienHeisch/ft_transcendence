@@ -7,7 +7,7 @@ import type { PageServerLoad } from "./$types";
 export const load: PageServerLoad = () => {
   const currentUser = requireLogin();
   return {
-    user: currentUser,
+    currentUser,
     chats: db
       .select()
       .from(schema.usersPair)

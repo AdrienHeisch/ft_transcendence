@@ -38,7 +38,7 @@ const user = $derived({
 const posts = $derived(await getPosts({ author: _user.id }));
 const friends = $derived(await getUserFriends(_user.id));
 const pets = $derived(
-  await getPets({
+  getPets({
     owner: _user.id,
     search: "",
     species: null,
@@ -150,7 +150,7 @@ let isEditMode = $state(false);
                 Edit profile
               </button>
             {/if}
-          {:else}
+          {:else if data.currentUser}
             {@const friend = (await getFriends()).find((friend) => user.id === friend.id)}
             {#if friend}
               {#if friend.status == "received"}
@@ -180,9 +180,9 @@ let isEditMode = $state(false);
                 Add friend
               </button>
             {/if}
-            <button class="px-6 py-3 bg-yellow-50 border-2 border-orange-700 text-amber-900 rounded-lg font-medium hover:bg-yellow-100 transition-all duration-200 shadow-md hover:shadow-lg">
+            <a href={resolve(`/messages/${user.id}`)} class="px-6 py-3 bg-yellow-50 border-2 border-orange-700 text-amber-900 rounded-lg font-medium hover:bg-yellow-100 transition-all duration-200 shadow-md hover:shadow-lg">
               Message
-            </button>
+            </a>
           {/if}
         </div>
       </form>
@@ -257,11 +257,11 @@ let isEditMode = $state(false);
                 </a>
               </div>
             {:else}
-              <span class="text-sm text-orange-700 font-medium">{pets.length} animals</span>
+              <span class="text-sm text-orange-700 font-medium">{(await pets).length} animals</span>
             {/if}
           </h2>
           <div class="grid grid-cols-2 gap-3">
-            {#each pets as pet (pet.id)}
+            {#each await pets as pet (pet.id)}
               <a href={resolve(`/pets/${pet.id}`)} class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
                 <div class="flex items-center gap-2 mb-1">
                   <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
@@ -270,7 +270,7 @@ let isEditMode = $state(false);
                 <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>
               </a>
             {/each}
-            {#if pets.length == 0}
+            {#if (await pets).length == 0}
               <div class="col-span-2 text-center py-4 text-gray-600">
                 {#if isCurrentUser}
                   No animals yet. Add your first one!

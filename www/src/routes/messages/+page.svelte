@@ -7,9 +7,9 @@ const { data } = $props();
 
 <ul>
 {#each await data.chats as chat}
-  {@const friend = await getPerson(data.currentUser?.id === chat.left ? chat.right : chat.left)}
+  {@const friend = await getPerson(data.currentUser.id === chat.left ? chat.right : chat.left)}
   {#if friend && !chat.pending}
-    <li><a href={resolve(`/messages/${chat.id}`)}>{friend.firstName} {friend.lastName}</a></li>
+    <li><a href={resolve(`/messages/${friend.id}`)}>{friend.firstName} {friend.lastName}</a></li>
   {/if}
 {/each}
 </ul>

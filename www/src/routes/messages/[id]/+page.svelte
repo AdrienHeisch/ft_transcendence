@@ -31,7 +31,7 @@ let ws: WebSocket | undefined = (() => {
 })();
 </script>
 
-<form onsubmit={() => { ws?.send(msg); msg = ""; }}>
+<form onsubmit={() => { console.log(msg); ws?.send(msg); msg = ""; }}>
   <div>
     <label for="msg">-> </label>
     <input type="text" id="msg" disabled={!ws} bind:value={msg} required />

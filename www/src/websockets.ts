@@ -23,22 +23,25 @@ const server = Bun.serve({
     "/:id": async (req, server) => {
       const sessionToken = req.cookies.get(sessionCookieName);
       if (!sessionToken) {
-        return new Response("Not authenticated", { status: 403 });
+        return new Response("Not authenticated", { status: 401 });
       }
 
       const { session, user } = await validateSessionToken(sessionToken);
       if (!session || !user) {
-        return new Response("Not authenticated", { status: 403 });
+        return new Response("Not authenticated", { status: 401 });
       }
 
       const [chat] = await db
         .select()
         .from(schema.usersPair)
         .where(
-          and(
-            eq(schema.usersPair.id, req.params.id),
-            or(
+          or(
+            and(
               eq(schema.usersPair.left, user.id),
+              eq(schema.usersPair.right, req.params.id),
+            ),
+            and(
+              eq(schema.usersPair.left, req.params.id),
               eq(schema.usersPair.right, user.id),
             ),
           ),
@@ -47,7 +50,7 @@ const server = Bun.serve({
         return new Response("Not part of this chat", { status: 403 });
       }
 
-      if (server.upgrade(req, { data: { user, chatId: req.params.id } })) {
+      if (server.upgrade(req, { data: { user, chatId: chat.id } })) {
         return; // Success !
       }
       return new Response("Upgrade failed", { status: 500 });
@@ -66,6 +69,7 @@ const server = Bun.serve({
         content: content.toString(),
         sentAt: new Date(),
       };
+      console.log(message);
       server.publish(ws.data.chatId, JSON.stringify(message));
       await db.insert(schema.chatMessage).values(message);
     },
