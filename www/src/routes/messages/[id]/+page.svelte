@@ -10,7 +10,7 @@ let wsMessages = $state<ChatMessage[]>([]);
 
 let ws: WebSocket | undefined = (() => {
   if (!browser) return undefined;
-  const ws = new WebSocket(`/ws/${params.id}`);
+  const ws = new WebSocket(`/ws/messages/${params.id}`);
   const messageSchema = z.object({
     id: z.string(),
     friendsId: z.string(),
@@ -31,7 +31,7 @@ let ws: WebSocket | undefined = (() => {
 })();
 </script>
 
-<form onsubmit={() => { console.log(msg); ws?.send(msg); msg = ""; }}>
+<form onsubmit={() => { ws?.send(msg); msg = ""; }}>
   <div>
     <label for="msg">-> </label>
     <input type="text" id="msg" disabled={!ws} bind:value={msg} required />

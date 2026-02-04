@@ -7,20 +7,44 @@ import * as schema from "./lib/server/db/schema";
 
 const PORT = 3000;
 
-type WebSocketData = {
+const PRESENCE_PING_INTERVAL = 5000;
+const PRESENCE_DISCONNECTION_DELAY = PRESENCE_PING_INTERVAL * 3;
+
+type MessagesData = {
+  type: "messages";
   user: schema.User;
   chatId: string;
 };
+
+type PresenceData = {
+  type: "presence";
+  user: schema.User;
+  interval?: NodeJS.Timeout;
+};
+
+type WebSocketData = MessagesData | PresenceData;
 
 const client = postgres(
   `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
 );
 const db = drizzle(client, { schema });
 
+const presence = new Map<string, Date>();
+
+async function updatePresence(id: string) {
+  presence.set(id, new Date());
+  await db.update(schema.user).set({ online: true }).where(eq(schema.user.id, id));
+}
+
+async function clearPresence(id: string) {
+  presence.delete(id);
+  await db.update(schema.user).set({ online: false }).where(eq(schema.user.id, id));
+}
+
 const server = Bun.serve({
   port: PORT,
   routes: {
-    "/:id": async (req, server) => {
+    "/messages/:id": async (req, server) => {
       const sessionToken = req.cookies.get(sessionCookieName);
       if (!sessionToken) {
         return new Response("Not authenticated", { status: 401 });
@@ -50,7 +74,27 @@ const server = Bun.serve({
         return new Response("Not part of this chat", { status: 403 });
       }
 
-      if (server.upgrade(req, { data: { user, chatId: chat.id } })) {
+      if (
+        server.upgrade(req, {
+          data: { type: "messages", user, chatId: chat.id },
+        })
+      ) {
+        return; // Success !
+      }
+      return new Response("Upgrade failed", { status: 500 });
+    },
+    "/presence": async (req, server) => {
+      const sessionToken = req.cookies.get(sessionCookieName);
+      if (!sessionToken) {
+        return new Response("Not authenticated", { status: 401 });
+      }
+
+      const { session, user } = await validateSessionToken(sessionToken);
+      if (!session || !user) {
+        return new Response("Not authenticated", { status: 401 });
+      }
+
+      if (server.upgrade(req, { data: { type: "presence", user, interval: undefined } })) {
         return; // Success !
       }
       return new Response("Upgrade failed", { status: 500 });
@@ -58,23 +102,57 @@ const server = Bun.serve({
   },
   websocket: {
     data: {} as WebSocketData,
-    open(ws) {
-      ws.subscribe(ws.data.chatId);
+    async open(ws) {
+      switch (ws.data.type) {
+        case "messages":
+          ws.subscribe(`/messages/${ws.data.chatId}`);
+          break;
+        case "presence":
+          ws.data.interval = setInterval(async () => {
+            const last = presence.get(ws.data.user.id);
+            if (last)
+            if (last && Date.now() - last.getTime() < PRESENCE_DISCONNECTION_DELAY) {
+              ws.send("ping");
+            } else {
+              if (ws.data.type === "presence")
+                clearInterval(ws.data.interval);
+              await clearPresence(ws.data.user.id);
+              ws.close();
+            }
+          }, PRESENCE_PING_INTERVAL);
+          await updatePresence(ws.data.user.id);
+          break;
+      }
     },
     async message(ws, content) {
-      const message: schema.ChatMessage = {
-        id: crypto.randomUUID(),
-        friendsId: ws.data.chatId,
-        author: ws.data.user.id,
-        content: content.toString(),
-        sentAt: new Date(),
-      };
-      console.log(message);
-      server.publish(ws.data.chatId, JSON.stringify(message));
-      await db.insert(schema.chatMessage).values(message);
+      switch (ws.data.type) {
+        case "messages": {
+          const message: schema.ChatMessage = {
+            id: crypto.randomUUID(),
+            friendsId: ws.data.chatId,
+            author: ws.data.user.id,
+            content: content.toString(),
+            sentAt: new Date(),
+          };
+          server.publish(`/messages/${ws.data.chatId}`, JSON.stringify(message));
+          await db.insert(schema.chatMessage).values(message);
+          break;
+        }
+        case "presence":
+          await updatePresence(ws.data.user.id);
+          break;
+      }
     },
-    close(ws) {
-      ws.unsubscribe(ws.data.chatId);
+    async close(ws) {
+      switch (ws.data.type) {
+        case "messages":
+          ws.unsubscribe(`/messages/${ws.data.chatId}`);
+          break;
+        case "presence":
+          clearInterval(ws.data.interval);
+          await clearPresence(ws.data.user.id);
+          break;
+      }
     },
   },
 });

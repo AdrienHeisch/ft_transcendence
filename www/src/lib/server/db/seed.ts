@@ -21,6 +21,7 @@ export default async function seedDb() {
       count: 20,
       columns: {
         bio: gen.loremIpsum(),
+        online: gen.default({ defaultValue: false }),
       },
       with: {
         pet: [{ weight: 1, count: [1, 2, 3] }],
@@ -93,7 +94,6 @@ export default async function seedDb() {
       lastName: "Szymczak",
       bio: "Cat person",
       hasAvatar: true,
-      online: true,
     })
     .where(eq(schema.user.id, userA.id));
   await db
@@ -111,7 +111,6 @@ export default async function seedDb() {
       lastName: "Heisch",
       bio: "Dog person",
       hasAvatar: true,
-      online: true,
     })
     .where(eq(schema.user.id, userB.id));
   console.log("Done");

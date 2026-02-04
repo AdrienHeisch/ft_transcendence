@@ -49,6 +49,8 @@ const pets = $derived(
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
 
 let isEditMode = $state(false);
+
+$inspect(user.online);
 </script>
 
 <div class="min-h-screen relative">
@@ -89,7 +91,7 @@ let isEditMode = $state(false);
             alt={user.username}
             class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
           />
-          <div class="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-white"></div>
+          <div class={[user.online ? "bg-green-500" : "bg-red-500", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
         </div>
 
         <!-- User Info -->

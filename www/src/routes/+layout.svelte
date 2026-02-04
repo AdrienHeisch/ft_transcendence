@@ -2,9 +2,12 @@
 import { fly } from "svelte/transition";
 import favicon from "$lib/assets/favicon.svg";
 import "../app.css";
+import { browser } from "$app/environment";
 import { afterNavigate } from "$app/navigation";
 import { resolve } from "$app/paths";
 import * as auth from "$lib/auth.remote";
+import { startPresence } from "$lib/presence";
+    import { onMount } from "svelte";
 
 const { children, data } = $props();
 
@@ -44,6 +47,12 @@ const sidebarBottomItems = [
   { label: "Help & Support", icon: "❓", href: "/" }, // TODO href
   { label: "Settings", icon: "⚙️", href: resolve("/settings") },
 ];
+
+$effect(() => {
+  if (browser && data.currentUser) {
+    startPresence();
+  }
+});
 </script>
 
 <svelte:head>
