@@ -51,8 +51,8 @@ export const pet = pgTable("pet", {
 
 export type Pet = typeof pet.$inferSelect;
 
-export const friendsPair = pgTable(
-  "friends_pair",
+export const usersPair = pgTable(
+  "users_pair",
   {
     id: uuid("id").notNull().unique(),
     left: uuid("left")
@@ -61,6 +61,7 @@ export const friendsPair = pgTable(
     right: uuid("right")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
+    friends: boolean().notNull(),
     pending: uuid().references(() => user.id, { onDelete: "cascade" }),
   },
   (table) => [
@@ -69,13 +70,13 @@ export const friendsPair = pgTable(
   ],
 );
 
-export type FriendsPair = typeof friendsPair.$inferSelect;
+export type UsersPair = typeof usersPair.$inferSelect;
 
 export const chatMessage = pgTable("chat_message", {
   id: uuid("id").primaryKey(),
   friendsId: uuid("friends_id")
     .notNull()
-    .references(() => friendsPair.id, { onDelete: "cascade" }),
+    .references(() => usersPair.id, { onDelete: "cascade" }),
   author: uuid("author")
     .notNull()
     .references(() => user.id),

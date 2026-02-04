@@ -13,7 +13,7 @@ export default async function seedDb() {
   console.log("Resetting database...");
   await reset(db, schema);
   console.log("Seeding database...");
-  await seed(db, schema, { seed: 9 }).refine((gen) => ({
+  await seed(db, schema, { seed: 1 }).refine((gen) => ({
     user: {
       count: 20,
       columns: {
@@ -57,9 +57,10 @@ export default async function seedDb() {
         postedAt: gen.date({ maxDate: new Date() }),
       },
     },
-    friendsPair: {
+    usersPair: {
       count: 20,
       columns: {
+        friends: gen.default({ defaultValue: true }),
         pending: gen.default({ defaultValue: null }),
       },
       with: {

@@ -11,15 +11,15 @@ export const load: PageServerLoad = ({ params }) => {
       .select({ ...getTableColumns(schema.chatMessage) })
       .from(schema.chatMessage)
       .innerJoin(
-        schema.friendsPair,
-        eq(schema.friendsPair.id, schema.chatMessage.friendsId),
+        schema.usersPair,
+        eq(schema.usersPair.id, schema.chatMessage.friendsId),
       )
       .where(
         and(
-          eq(schema.friendsPair.id, params.id),
+          eq(schema.usersPair.id, params.id),
           or(
-            eq(schema.friendsPair.left, user.id),
-            eq(schema.friendsPair.right, user.id),
+            eq(schema.usersPair.left, user.id),
+            eq(schema.usersPair.right, user.id),
           ),
         ),
       )

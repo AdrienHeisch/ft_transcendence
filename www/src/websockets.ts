@@ -33,13 +33,13 @@ const server = Bun.serve({
 
       const [chat] = await db
         .select()
-        .from(schema.friendsPair)
+        .from(schema.usersPair)
         .where(
           and(
-            eq(schema.friendsPair.id, req.params.id),
+            eq(schema.usersPair.id, req.params.id),
             or(
-              eq(schema.friendsPair.left, user.id),
-              eq(schema.friendsPair.right, user.id),
+              eq(schema.usersPair.left, user.id),
+              eq(schema.usersPair.right, user.id),
             ),
           ),
         );

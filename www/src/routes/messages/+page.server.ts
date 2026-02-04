@@ -10,11 +10,11 @@ export const load: PageServerLoad = () => {
     user: currentUser,
     chats: db
       .select()
-      .from(schema.friendsPair)
+      .from(schema.usersPair)
       .where(
         or(
-          eq(schema.friendsPair.left, currentUser.id),
-          eq(schema.friendsPair.right, currentUser.id),
+          eq(schema.usersPair.left, currentUser.id),
+          eq(schema.usersPair.right, currentUser.id),
         ),
       ),
   };

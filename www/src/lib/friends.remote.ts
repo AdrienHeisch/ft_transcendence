@@ -14,17 +14,20 @@ export const getUserFriends = query(z.string(), (userId: string) => {
     return db
       .select({
         ...getTableColumns(schema.user),
-        status: sql<
-          "sent" | "received" | null
-        >`CASE ${schema.friendsPair.pending}
-          WHEN ${schema.friendsPair[other]} THEN 'sent'
-          WHEN ${schema.friendsPair[self]} THEN 'received'
+        status: sql<"sent" | "received" | null>`CASE ${schema.usersPair.pending}
+          WHEN ${schema.usersPair[self]} THEN 'received'
+          WHEN ${schema.usersPair[other]} THEN 'sent'
           ELSE NULL
           END`,
       })
-      .from(schema.friendsPair)
-      .where(eq(schema.friendsPair[self], userId))
-      .innerJoin(schema.user, eq(schema.friendsPair[other], schema.user.id));
+      .from(schema.usersPair)
+      .where(
+        and(
+          eq(schema.usersPair.friends, true),
+          eq(schema.usersPair[self], userId),
+        ),
+      )
+      .innerJoin(schema.user, eq(schema.usersPair[other], schema.user.id));
   };
   return union(select("left", "right"), select("right", "left"));
 });
@@ -38,10 +41,11 @@ export const getFriends = query(() => {
 export const addFriend = command(z.string(), async (friendId) => {
   const user = requireLogin();
   try {
-    await db.insert(schema.friendsPair).values({
+    await db.insert(schema.usersPair).values({
       id: crypto.randomUUID(),
       left: user.id,
       right: friendId,
+      friends: true,
       pending: friendId,
     });
   } catch {
@@ -54,21 +58,22 @@ export const acceptFriend = command(z.string(), async (friendId) => {
   const user = requireLogin();
   try {
     await db
-      .update(schema.friendsPair)
+      .update(schema.usersPair)
       .set({
         pending: null,
       })
       .where(
         and(
-          eq(schema.friendsPair.pending, user.id),
+          eq(schema.usersPair.friends, true),
+          eq(schema.usersPair.pending, user.id),
           and(
             or(
-              eq(schema.friendsPair.left, user.id),
-              eq(schema.friendsPair.right, user.id),
+              eq(schema.usersPair.left, user.id),
+              eq(schema.usersPair.right, user.id),
             ),
             or(
-              eq(schema.friendsPair.left, friendId),
-              eq(schema.friendsPair.right, friendId),
+              eq(schema.usersPair.left, friendId),
+              eq(schema.usersPair.right, friendId),
             ),
           ),
         ),
@@ -82,16 +87,24 @@ export const acceptFriend = command(z.string(), async (friendId) => {
 export const removeFriend = command(z.string(), async (friendId) => {
   const user = requireLogin();
   await db
-    .delete(schema.friendsPair)
+    .update(schema.usersPair)
+    .set({
+      friends: false,
+      pending: null,
+    })
     .where(
-      or(
+      and(
+        eq(schema.usersPair.friends, true),
+        eq(schema.usersPair.pending, user.id),
         and(
-          eq(schema.friendsPair.left, user.id),
-          eq(schema.friendsPair.right, friendId),
-        ),
-        and(
-          eq(schema.friendsPair.right, user.id),
-          eq(schema.friendsPair.left, friendId),
+          or(
+            eq(schema.usersPair.left, user.id),
+            eq(schema.usersPair.right, user.id),
+          ),
+          or(
+            eq(schema.usersPair.left, friendId),
+            eq(schema.usersPair.right, friendId),
+          ),
         ),
       ),
     );

@@ -10,7 +10,7 @@ export default async function setup() {
   console.log("[ ] Adding triggers...");
   //TODO check what happens if left == right
   const query = `
-CREATE OR REPLACE FUNCTION canonicalize_friends_pair() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION canonicalize_users_pair() RETURNS trigger AS $$
 DECLARE
   tmp UUID;
 BEGIN
@@ -23,9 +23,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE TRIGGER trg_canonicalize_friends_pair
-BEFORE INSERT OR UPDATE ON friends_pair
-FOR EACH ROW EXECUTE FUNCTION canonicalize_friends_pair();
+CREATE OR REPLACE TRIGGER trg_canonicalize_users_pair
+BEFORE INSERT OR UPDATE ON users_pair
+FOR EACH ROW EXECUTE FUNCTION canonicalize_users_pair();
   `;
   console.log(query);
   await db.execute(query);
