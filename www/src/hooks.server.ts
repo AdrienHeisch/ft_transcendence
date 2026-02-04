@@ -1,14 +1,13 @@
-import type { Handle } from "@sveltejs/kit";
+import type { Handle, RequestEvent } from "@sveltejs/kit";
 import * as auth from "$lib/server/auth";
 
-const handleAuth: Handle = async ({ event, resolve }) => {
+const handleAuth = async (event: RequestEvent) => {
   const sessionToken = event.cookies.get(auth.sessionCookieName);
 
   if (!sessionToken) {
     event.locals.user = null;
     event.locals.session = null;
-
-    return resolve(event);
+    return;
   }
 
   const { session, user } = await auth.validateSessionToken(sessionToken);
@@ -21,8 +20,9 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 
   event.locals.user = user;
   event.locals.session = session;
-
-  return resolve(event);
 };
 
-export const handle: Handle = handleAuth;
+export const handle: Handle = async ({ event, resolve }) => {
+  handleAuth(event);
+  return resolve(event);
+};
