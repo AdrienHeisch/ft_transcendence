@@ -23,6 +23,6 @@ const handleAuth = async (event: RequestEvent) => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-  handleAuth(event);
+  await handleAuth(event);
   return resolve(event);
 };
