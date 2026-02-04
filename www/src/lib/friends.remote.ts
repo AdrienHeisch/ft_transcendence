@@ -3,7 +3,7 @@ import { and, eq, getTableColumns, or, sql } from "drizzle-orm";
 import { union } from "drizzle-orm/pg-core";
 import * as z from "zod";
 import { command, query } from "$app/server";
-import { isLoggedIn, requireLogin } from "$lib/server/auth";
+import { getCurrentUser, isLoggedIn, requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 
@@ -39,7 +39,8 @@ export const getFriends = query(() => {
 });
 
 export const addFriend = command(z.string(), async (friendId) => {
-  const user = requireLogin();
+  const user = getCurrentUser();
+  if (!user) error(401);
   try {
     await db.insert(schema.usersPair).values({
       id: crypto.randomUUID(),
@@ -55,7 +56,8 @@ export const addFriend = command(z.string(), async (friendId) => {
 });
 
 export const acceptFriend = command(z.string(), async (friendId) => {
-  const user = requireLogin();
+  const user = getCurrentUser();
+  if (!user) error(401);
   try {
     await db
       .update(schema.usersPair)
@@ -85,7 +87,8 @@ export const acceptFriend = command(z.string(), async (friendId) => {
 });
 
 export const removeFriend = command(z.string(), async (friendId) => {
-  const user = requireLogin();
+  const user = getCurrentUser();
+  if (!user) error(401);
   await db
     .update(schema.usersPair)
     .set({
