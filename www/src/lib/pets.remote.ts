@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
-import { and, eq, ilike, inArray } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray, or } from "drizzle-orm";
 import z from "zod";
 import { resolve } from "$app/paths";
 import { form, query } from "$app/server";
@@ -25,11 +25,16 @@ export const getPets = query(
   }),
   ({ owner, search, species, sortBy }) => {
     return db
-      .select()
+      .select(getTableColumns(schema.pet))
       .from(schema.pet)
+      .innerJoin(schema.user, eq(schema.user.id, schema.pet.ownerId))
       .where(
         and(
-          ilike(schema.pet.name, `%${search}%`),
+          or(
+            ilike(schema.pet.name, `%${search}%`),
+            ilike(schema.user.firstName, `%${search}%`),
+            ilike(schema.user.lastName, `%${search}%`),
+          ),
           owner ? eq(schema.pet.ownerId, owner) : undefined,
           species ? eq(schema.pet.species, species) : undefined,
         ),
