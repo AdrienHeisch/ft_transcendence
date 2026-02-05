@@ -30,8 +30,9 @@ seed:
 		-v ./www:/app \
 		-v ./.env:/app/.env \
 		--network ft-transcendence_db \
+		--network ft-transcendence_storage \
 		docker.io/oven/bun:1.3.5-debian \
-		bun db:seed
+		sh -c "bun db:seed && bun storage:seed"
 
 format:
 	$(DOCKER) run \
