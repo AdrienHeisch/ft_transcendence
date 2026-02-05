@@ -30,212 +30,131 @@ $effect(() =>
 );
 </script>
 
-<div class="settings-container">
+<svelte:head>
+  <title>Settings - Bibi's Farm</title>
+</svelte:head>
+
+<div class="min-h-screen bg-[#f5e6d3] flex">
   <!-- Sidebar -->
-  <aside class="sidebar">
-    <h2>Settings</h2>
-    {#each sections as section}
-      <button
-        class="w-full sidebar-item {selectedSection === section.name ? 'active' : ''}"
-        onclick={() => (selectedSection = section.name)}
-      >
-        <span>{section.icon}</span> {section.name}
-      </button>
-    {/each}
+  <aside class="w-80 bg-linear-to-b from-[#fef7ed] to-[#f5e6d3] border-r-4 border-[#8B4513] p-6">
+    <h2 class="text-3xl font-bold text-[#8B4513] mb-6">⚙️ Settings</h2>
+    <div class="space-y-2">
+      {#each sections as section}
+        <button
+          class="w-full text-left px-4 py-3 rounded-lg border-2 transition-all font-semibold flex items-center gap-3 {selectedSection === section.name 
+            ? 'bg-[#CC5500] text-white border-[#CC5500] shadow-lg' 
+            : 'bg-white text-[#8B4513] border-[#8B4513] hover:bg-[#f5e6d3]'}"
+          onclick={() => (selectedSection = section.name)}
+        >
+          <span class="text-xl">{section.icon}</span>
+          <span>{section.name}</span>
+        </button>
+      {/each}
+    </div>
   </aside>
 
   <!-- Main Content -->
-  <main class="main-content">
-    <div class="main-header">
-      <h1>{selectedSection} Settings</h1>
+  <main class="flex-1 p-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-[#8B4513] mb-2">{selectedSection} Settings</h1>
       {#each sections as section (section.name)}
         {#if selectedSection === section.name}
-          <p>{section.description}</p>
+          <p class="text-lg text-[#A0522D]">{section.description}</p>
         {/if}
       {/each}
     </div>
 
-    <div class="settings-panel">
-      <h2>{selectedSection}</h2>
+    <!-- Settings Panel -->
+    <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-8 border-4 border-[#8B4513] max-w-2xl">
+      <h2 class="text-2xl font-bold text-[#8B4513] mb-6">{selectedSection}</h2>
 
       {#if selectedSection === "Profile"}
-        <form>
+        <form class="space-y-6">
           <div>
-            <label>
+            <label class="block text-sm font-bold text-[#8B4513] mb-2">
               Username
-              <input type="text" placeholder="Modify your username..." />
             </label>
+            <input 
+              type="text" 
+              placeholder="Modify your username..." 
+              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+            />
           </div>
           <div>
-            <label>
-              Username
-              <input type="text" placeholder="Verification of your new username..." />
+            <label class="block text-sm font-bold text-[#8B4513] mb-2">
+              Confirm Username
             </label>
+            <input 
+              type="text" 
+              placeholder="Verification of your new username..." 
+              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+            />
           </div>
-          <button type="submit" class="save-button">
-            Save
+          <button 
+            type="submit" 
+            class="w-full py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold text-lg hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg hover:shadow-xl"
+          >
+            💾 Save Changes
           </button>
         </form>
       {/if}
 
       {#if selectedSection === "Account"}
-        <form {...updateCredentials}>
+        <form {...updateCredentials} class="space-y-6">
           <div>
-            <label>
-              Current password
-              <input placeholder="Enter your password..." required {...updateCredentials.fields.currentPassword.as("password")} />
+            <label class="block text-sm font-bold text-[#8B4513] mb-2">
+              Current Password
             </label>
+            <input 
+              placeholder="Enter your current password..." 
+              required 
+              {...updateCredentials.fields.currentPassword.as("password")} 
+              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+            />
           </div>
           <div>
-            <label>
+            <label class="block text-sm font-bold text-[#8B4513] mb-2">
               Email
-              <input placeholder="Modify your email..." bind:value={email} {...updateCredentials.fields.email.as("email")} />
             </label>
+            <input 
+              placeholder="Modify your email..." 
+              bind:value={email} 
+              {...updateCredentials.fields.email.as("email")} 
+              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+            />
           </div>
           <div>
-            <label>
-              New password
-              <input placeholder="Enter your password..." bind:value={password} {...updateCredentials.fields.password.as("password")} />
+            <label class="block text-sm font-bold text-[#8B4513] mb-2">
+              New Password
             </label>
+            <input 
+              placeholder="Enter your new password..." 
+              bind:value={password} 
+              {...updateCredentials.fields.password.as("password")} 
+              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+            />
           </div>
           <div>
-            <label>
-              Confirm password
-              <input placeholder="Enter your new password..." bind:value={confirmPassword} bind:this={confirmPasswordField} type="password" />
+            <label class="block text-sm font-bold text-[#8B4513] mb-2">
+              Confirm Password
             </label>
+            <input 
+              placeholder="Confirm your new password..." 
+              bind:value={confirmPassword} 
+              bind:this={confirmPasswordField} 
+              type="password"
+              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+            />
           </div>
-          <button type="submit" class="save-button">
-            Save
+          <button 
+            type="submit" 
+            class="w-full py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold text-lg hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg hover:shadow-xl"
+          >
+            💾 Save Changes
           </button>
         </form>
       {/if}
     </div>
   </main>
 </div>
-
-<style>
-:global(html) {
-  font-family: 'Georgia', serif;
-}
-
-.settings-container {
-  display: flex;
-  min-height: 100vh;
-  background: linear-gradient(to bottom, #fff7e6, #ffebc9); 
-  color: #7a5835; 
-}
-
-.sidebar {
-  width: 280px;
-  background: linear-gradient(to bottom, #fbe6c2, #d9b284);
-  border-right: 4px solid #a86f3a;
-  padding: 1.5rem;
-}
-
-.sidebar h2 {
-  font-size: 1.5rem;
-  color: #7a5835;
-  margin-bottom: 1.5rem;
-}
-
-.sidebar-item {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: background 0.3s, border-color 0.3s;
-}
-
-.sidebar-item span {
-  font-size: 1.3rem;
-  margin-right: 0.75rem;
-}
-
-.sidebar-item:hover,
-.sidebar-item.active {
-  background: #fcd8a9;
-  border-color: #a86f3a;
-}
-
-.main-content {
-  flex-grow: 1;
-  padding: 2rem;
-}
-
-.main-header {
-  margin-bottom: 2rem;
-}
-
-.main-header h1 {
-  font-size: 2rem;
-  color: #7a5835;
-}
-
-.main-header p {
-  font-size: 1rem;
-  color: #a86f3a;
-}
-
-.settings-panel {
-  background: #fffaf0;
-  padding: 2rem;
-  border-radius: 10px;
-  border: 2px solid #dfb991;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.settings-panel:hover {
-  box-shadow: 0px 5px 14px rgba(0, 0, 0, 0.15);
-}
-
-.settings-panel h2 {
-  font-size: 1.5rem;
-  color: #7a5835;
-  margin-bottom: 1rem;
-}
-
-form div label {
-  display: block;
-  font-size: 1rem;
-  color: #a86f3a;
-  font-weight: bold;
-  margin-top: 0.5rem;
-}
-
-form div label input {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 2px solid #dcb98d;
-  border-radius: 6px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-form div label input:focus {
-  border-color: #a86f3a;
-}
-
-.save-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(to right, #c68642, #a86f3a);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 1rem;
-  display: inline-block;
-  transition: background-color 0.3s;
-}
-
-.save-button:hover {
-  background: linear-gradient(to right, #a86f3a, #7d4c2a);
-}
-</style>
