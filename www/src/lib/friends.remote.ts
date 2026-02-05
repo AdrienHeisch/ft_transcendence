@@ -14,10 +14,15 @@ export const getUserFriends = query(z.string(), (userId: string) => {
     return db
       .select({
         ...getTableColumns(schema.user),
-        status: sql<"sent" | "received" | null>`CASE ${schema.usersPair.pending}
-          WHEN ${schema.usersPair[self]} THEN 'received'
-          WHEN ${schema.usersPair[other]} THEN 'sent'
-          ELSE NULL
+        status: sql<"friends" | "sent" | "received" | null>`
+          CASE
+            WHEN ${schema.usersPair.friends} THEN
+              CASE ${schema.usersPair.pending}
+                WHEN ${schema.usersPair[self]} THEN 'received'
+                WHEN ${schema.usersPair[other]} THEN 'sent'
+                ELSE 'friends'
+              END
+            ELSE NULL
           END`,
       })
       .from(schema.usersPair)

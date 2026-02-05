@@ -5,7 +5,7 @@ let friendToAdd = $state("");
 
 const friends = $derived(await remote.getFriends());
 const list = $derived(
-  friends.flatMap((friend) => (friend.status === null ? friend : [])),
+  friends.flatMap((friend) => (friend.status === "friends" ? friend : [])),
 );
 const invitations = $derived(
   friends.flatMap((friend) => (friend.status === "sent" ? friend : [])),
