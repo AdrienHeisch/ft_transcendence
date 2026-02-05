@@ -134,6 +134,7 @@ const server = Bun.serve({
               }
           }, PRESENCE_PING_INTERVAL);
           await updatePresence(ws.data.user.id);
+          ws.send("ping");
           break;
       }
     },
@@ -165,8 +166,8 @@ const server = Bun.serve({
           ws.unsubscribe(`/messages/${ws.data.chatId}`);
           break;
         case "presence":
-          clearInterval(ws.data.interval);
-          await clearPresence(ws.data.user.id);
+          // clearInterval(ws.data.interval);
+          // await clearPresence(ws.data.user.id);
           break;
       }
     },
