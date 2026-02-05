@@ -6,6 +6,8 @@ import { isLoggedIn, requireLogin } from "$lib/server/auth";
 import type { Post, User } from "$lib/server/db/schema";
 import * as schema from "$lib/server/db/schema";
 import { db } from "./server/db";
+import { PublicStorage } from "./server/storage";
+import { POST_IMAGE_PREFIX } from "./storage";
 
 export type PostData = Omit<Post, "author"> & { author: User };
 
@@ -146,15 +148,21 @@ export const deleteComment = command(z.string(), async (id) => {
 });
 
 export const createPost = form(
-  z.object({ content: z.string() }),
-  async ({ content }) => {
+  z.object({ content: z.string(), file: z.custom<File>() }),
+  async ({ content, file }) => {
     const user = requireLogin();
+    const id = crypto.randomUUID();
     await db.insert(schema.post).values({
-      id: crypto.randomUUID(),
+      id,
       author: user.id,
       content,
       postedAt: new Date(),
     });
+    try {
+      await PublicStorage.upload(`${POST_IMAGE_PREFIX + id}.png`, file);
+    } catch {
+      error(500, "Failed to import file");
+    }
     await getPosts({}).refresh();
   },
 );

@@ -14,7 +14,7 @@ import {
   unlikePost,
 } from "$lib/posts.remote";
 import type { Post, User } from "$lib/server/db/schema";
-import { getUserAvatar } from "$lib/storage";
+import { getPostImage, getUserAvatar } from "$lib/storage";
 
 interface Props {
   post: Omit<Post, "author"> & { author: User };
@@ -22,24 +22,19 @@ interface Props {
   isFullPage?: boolean;
 }
 
-const { post: _post, currentUser, isFullPage = false }: Props = $props();
+const { post, currentUser, isFullPage = false }: Props = $props();
 
-const comments = $derived(getPostComments(_post.id));
-
-// TODO remove fake data
-const post = $derived({
-  ..._post,
-  image:
-    "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
-});
+const comments = $derived(getPostComments(post.id));
 
 let optionsOpen = $state(false);
 let commentsOpen = $state((() => isFullPage)());
 
 let isEditing = $state(false);
 
+let isImageError = $state(false);
+
 const isOwned = $derived(currentUser?.id === post.author.id);
-const isLiked = $derived(isPostLiked(_post.id));
+const isLiked = $derived(isPostLiked(post.id));
 
 const onLikePost = async () => {
   try {
@@ -115,9 +110,10 @@ const closeEdit = () => {
   <!-- Post Image -->
   <a href={resolve(`/post/${post.id}`)}>
     <img 
-      src={post.image} 
+      src={getPostImage(post)} 
       alt="Post"
-      class="w-full aspect-video object-cover"
+      class="{isImageError ? "hidden" : ""} w-full aspect-video object-cover"
+      onerror={() => isImageError = true}
     />
   </a>
 
