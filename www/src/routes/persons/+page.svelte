@@ -143,13 +143,18 @@ const users = $derived(
             <!-- Profile picture -->
             <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
-                <img 
-                  src={user.photo} 
-                  alt={user.firstName + ' ' + user.lastName}
-                  class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white"
-                />
+                <div class="relative">
+                  <img 
+                    src={user.photo} 
+                    alt={user.firstName + ' ' + user.lastName}
+                    class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white"
+                  />
+                  {#if user.online}
+                    <div class={["bg-green-500", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
+                  {/if}
+                </div>
               </div>
-              
+
               <!-- Role badge -->
               <span class="absolute top-3 right-3 px-3 py-1 bg-orange-600 text-white rounded-lg font-bold text-sm shadow-md">
                 {user.role}
