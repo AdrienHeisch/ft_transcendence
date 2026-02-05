@@ -79,11 +79,16 @@ const closeEdit = () => {
   <!-- Post Header -->
   <div class="p-4 flex items-center gap-3">
     <a href={resolve(`/persons/${post.author.id}`)}>
-      <img 
-        src={getUserAvatar(post.author)} 
-        alt="{post.author.firstName} {post.author.lastName}"
-        class="w-12 h-12 rounded-full border-2 border-orange-700"
-      />
+      <div class="relative">
+        <img 
+          src={getUserAvatar(post.author)} 
+          alt="{post.author.firstName} {post.author.lastName}"
+          class="w-12 h-12 rounded-full border-2 border-orange-700"
+        />
+        {#if post.author.online}
+          <div class={["bg-green-500", "absolute", "bottom-0", "right-0", "w-3", "h-3", "rounded-full", "border-2", "border-white"]}></div>
+        {/if}
+      </div>
     </a>
     <div class="flex-1">
       <a href={resolve(`/persons/${post.author.id}`)}>

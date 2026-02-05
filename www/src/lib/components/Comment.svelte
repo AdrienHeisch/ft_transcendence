@@ -37,11 +37,16 @@ const closeEdit = () => {
 <div transition:slide class="relative m-1 p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
   <div class="flex items-center gap-3 mb-3">
     <a href={resolve(`/persons/${comment.author.id}`)}>
-      <img 
-        src={getUserAvatar(comment.author)} 
-        alt="{comment.author.firstName} {comment.author.lastName}"
-        class="w-12 h-12 rounded-full border-2 border-orange-700"
-      />
+      <div class="relative">
+        <img 
+          src={getUserAvatar(comment.author)} 
+          alt="{comment.author.firstName} {comment.author.lastName}"
+          class="w-12 h-12 rounded-full border-2 border-orange-700"
+        />
+        {#if comment.author.online}
+          <div class={["bg-green-500", "absolute", "bottom-0", "right-0", "w-3", "h-3", "rounded-full", "border-2", "border-white"]}></div>
+        {/if}
+      </div>
     </a>
     <div class="flex-1">
       <a href={resolve(`/persons/${comment.author.id}`)}>
