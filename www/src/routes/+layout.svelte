@@ -47,6 +47,8 @@ const sidebarBottomItems = [
   { label: "Settings", icon: "⚙️", href: resolve("/settings") },
 ];
 
+const newMessages = 0; // TODO new messages
+
 $effect(() => {
   if (browser && data.currentUser) {
     startPresence();
@@ -89,7 +91,9 @@ $effect(() => {
         >
           <span class="text-xl">💬</span>
           <span>Messages</span>
-          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span>
+          {#if newMessages > 0}
+          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">{newMessages}</span>
+          {/if}
         </a>
       {:else}
         <a
