@@ -10,8 +10,7 @@ let selectedType = $state<AssociationType | null>(null);
 let selectedCity = $state<string | null>(null);
 let sortBy = $state<"name" | "type">("name");
 
-//TODO cities ?
-const cities = ["Paris", "Lyon", "Montpellier"];
+const cities = $derived((await data.cities).map((city) => city.name).sort());
 
 const associations = $derived(
   await getAssociations({
@@ -23,7 +22,6 @@ const associations = $derived(
     associations.map((association) => ({
       ...association,
       logo: "🐄",
-      city: cities.at(Math.floor(Math.random() * cities.length)),
     })),
   ),
 );
