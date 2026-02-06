@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from "$app/paths";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
@@ -88,6 +89,13 @@
       timestamp: "4 days ago",
       newsSource: "France 3",
     },
+  ];
+
+  const quickLinks = [
+    { title: "📋 Our Mission", href: "/" },
+    { title: "🏠 Adopt an Animal", href: "/" },
+    { title: "🤝 Volunteer", href: "/" },
+    { title: "💚 Make a Donation", href: "/" },
   ];
 
   function getPostBadge(type: string) {
@@ -242,18 +250,11 @@
             Quick Links
           </h2>
           <div class="space-y-2">
-            <a href="#" class="block p-3 bg-yellow-100 rounded-lg hover:bg-orange-100 transition-all duration-200 border-2 border-orange-700 font-medium text-gray-700">
-              📋 Our Mission
-            </a>
-            <a href="#" class="block p-3 bg-yellow-100 rounded-lg hover:bg-orange-100 transition-all duration-200 border-2 border-orange-700 font-medium text-gray-700">
-              🏠 Adopt an Animal
-            </a>
-            <a href="#" class="block p-3 bg-yellow-100 rounded-lg hover:bg-orange-100 transition-all duration-200 border-2 border-orange-700 font-medium text-gray-700">
-              🤝 Volunteer
-            </a>
-            <a href="#" class="block p-3 bg-yellow-100 rounded-lg hover:bg-orange-100 transition-all duration-200 border-2 border-orange-700 font-medium text-gray-700">
-              💚 Make a Donation
-            </a>
+            {#each quickLinks as link}
+              <a href={link.href} class="block p-3 bg-yellow-100 rounded-lg hover:bg-orange-100 transition-all duration-200 border-2 border-orange-700 font-medium text-gray-700">
+                {link.title}
+              </a>
+            {/each}
           </div>
         </div>
       </div>
