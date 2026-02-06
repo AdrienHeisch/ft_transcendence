@@ -48,20 +48,20 @@ export const getPets = query(
 export const createPet = form(
   z.object({
     name: z.string(),
-    age: z.int(),
+    birth: z.string(),
     bio: z.string().optional(),
     species: z.string(),
     breed: z.string(),
     avatar: z.custom<File>(),
   }),
-  async ({ name, age, bio, species, breed, avatar }) => {
+  async ({ name, birth, bio, species, breed, avatar }) => {
     const user = requireLogin();
     const id = crypto.randomUUID();
     await db.insert(schema.pet).values({
       id,
       ownerId: user.id,
       name,
-      age,
+      birth: new Date(birth),
       bio: bio ?? "",
       species,
       breed,

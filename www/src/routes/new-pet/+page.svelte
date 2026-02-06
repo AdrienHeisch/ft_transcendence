@@ -81,12 +81,12 @@ $effect(() => {
                 </label>
               </div>
 
-              <!-- Age -->
+              <!-- Birth -->
               <div>
                 <label class="block text-sm font-bold text-[#8B4513] mb-2" for="age">
-                  Age
+                  Birth
                   <input
-                    {...createPet.fields.age.as("number")}
+                    {...createPet.fields.birth.as("date")}
                     placeholder="8"
                     required
                     min="0"

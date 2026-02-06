@@ -52,7 +52,7 @@ const pet = $derived({
               <span class="text-2xl">🎂</span>
               <div>
                 <p class="text-sm text-[#A0522D] font-medium">Age</p>
-                <p class="text-lg text-[#8B4513] font-bold">{pet.age} years old</p>
+                <p class="text-lg text-[#8B4513] font-bold">{Math.floor((new Date().getTime() - pet.birth.getTime()) / 1000 / 3600 / 24 / 365)} years old</p>
               </div>
             </div>
 

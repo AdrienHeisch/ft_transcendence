@@ -21,7 +21,10 @@ export const load: PageServerLoad = async () => {
       ...chat,
       lastMessage: (
         await db
-          .select({ ...getTableColumns(schema.chatMessage), author: getTableColumns(schema.user) })
+          .select({
+            ...getTableColumns(schema.chatMessage),
+            author: getTableColumns(schema.user),
+          })
           .from(schema.chatMessage)
           .where(eq(schema.chatMessage.friendsId, chat.id))
           .innerJoin(schema.user, eq(schema.user.id, schema.chatMessage.author))

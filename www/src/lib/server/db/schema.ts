@@ -3,7 +3,6 @@ import {
   boolean,
   check,
   index,
-  integer,
   pgEnum,
   pgTable,
   point,
@@ -49,7 +48,10 @@ export const pet = pgTable("pet", {
   name: text("name").notNull(),
   species: text("species").notNull(),
   breed: text("breed").notNull(),
-  age: integer("age").notNull(),
+  birth: timestamp("birth", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
   bio: text("description").notNull(),
   hasAvatar: boolean("has_avatar").notNull(),
 });

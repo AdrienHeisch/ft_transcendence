@@ -134,17 +134,13 @@ const pets = $derived(
                 {/if}
               </div>
 
-              {#if pet.age}
-                <div class="text-sm text-[#A0522D] mb-2">
-                  🎂 {pet.age}
-                </div>
-              {/if}
+              <div class="text-sm text-[#A0522D] mb-2">
+                🎂 {Math.floor((new Date().getTime() - pet.birth.getTime()) / 1000 / 3600 / 24 / 365)}
+              </div>
 
-              {#if pet.bio}
-                <p class="text-sm text-[#8B4513] mb-4 line-clamp-2">
-                  {pet.bio}
-                </p>
-              {/if}
+              <p class="text-sm text-[#8B4513] mb-4 line-clamp-2">
+                {pet.bio}
+              </p>
 
               <!-- Buttons -->
               <div class="flex gap-2">
