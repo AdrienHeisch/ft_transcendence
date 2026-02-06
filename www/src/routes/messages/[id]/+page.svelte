@@ -24,8 +24,8 @@ let ws: WebSocket | undefined = (() => {
   ws.onmessage = (message) => {
     const result = messageSchema.safeParse(JSON.parse(message.data));
     if (result.success) {
-      wsMessages.unshift(result.data);
-      wsMessages.sort((a, b) => a.sentAt.getDate() - b.sentAt.getDate());
+      wsMessages.push(result.data);
+      wsMessages.sort((a, b) => a.sentAt.getTime() - b.sentAt.getTime());
     } else if (dev) {
       console.error(result.error);
     }
@@ -41,9 +41,9 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
   <title>Chat with {friend?.firstName} - Bibi's Farm</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[#f5e6d3] flex flex-col">
+<div class="h-screen bg-[#f5e6d3] flex flex-col">
   <!-- Header -->
-  <div class="bg-linear-to-r from-[#CC5500] to-[#A04000] shadow-lg">
+  <div class="bg-linear-to-r from-[#CC5500] to-[#A04000] shadow-lg flex-shrink-0">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex items-center gap-4">
         <!-- Back button -->
@@ -97,7 +97,7 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
     <div class="max-w-5xl mx-auto h-full px-4 sm:px-6 lg:px-8 py-6">
       <div class="bg-[#fef7ed] rounded-2xl shadow-xl border-4 border-[#8B4513] h-full flex flex-col">
         <!-- Messages area -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-4">
+        <div class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col-reverse">
           {#if allMessages.length === 0}
             <div class="text-center py-12">
               <div class="text-6xl mb-4">💬</div>
@@ -120,7 +120,7 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
         </div>
 
         <!-- Input area -->
-        <div class="border-t-2 border-[#8B4513] p-4">
+        <div class="border-t-2 border-[#8B4513] p-4 flex-shrink-0">
           <form 
             onsubmit={(e) => { 
               e.preventDefault();
