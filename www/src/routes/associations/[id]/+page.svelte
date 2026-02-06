@@ -1,113 +1,126 @@
 <script lang="ts">
-  import { resolve } from "$app/paths";
-  import type { PageData } from "./$types";
+import { resolve } from "$app/paths";
+import type { PageData } from "./$types";
 
-  let { data }: { data: PageData } = $props();
+let { data }: { data: PageData } = $props();
 
-  const _association = $derived(await data.association);
+const _association = $derived(await data.association);
 
-  // TODO remove fake data
-  const association = $derived({
-    ..._association,
-    logo: "🐄",
-    coverImage: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920&h=400&fit=crop",
-    website: "www.fermeheureuse.fr",
-    followers: 1247,
-    animalsCount: 45,
-    isFollowing: false,
-  });
+// TODO remove fake data
+const association = $derived({
+  ..._association,
+  logo: "🐄",
+  coverImage:
+    "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920&h=400&fit=crop",
+  website: "www.fermeheureuse.fr",
+  followers: 1247,
+  animalsCount: 45,
+  isFollowing: false,
+});
 
-  const stats = [
-    { icon: "🐾", value: "45", label: "Animals" },
-    { icon: "👥", value: "1,247", label: "Followers" },
-    { icon: "📅", value: "2010", label: "Founded" },
-    { icon: "🏆", value: "156", label: "Adoptions" },
-  ];
+const stats = [
+  { icon: "🐾", value: "45", label: "Animals" },
+  { icon: "👥", value: "1,247", label: "Followers" },
+  { icon: "📅", value: "2010", label: "Founded" },
+  { icon: "🏆", value: "156", label: "Adoptions" },
+];
 
-  const posts = [
-    {
-      id: 1,
-      type: "publication",
-      image: "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
-      title: "Marguerite's Recovery",
-      content: "Great news! Marguerite, our rescued cow, is doing much better after months of care. She's now enjoying the sun in our meadow 🐄💚",
-      likes: 342,
-      comments: 47,
-      timestamp: "2 hours ago",
-    },
-    {
-      id: 2,
-      type: "adoption",
-      image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600&h=400&fit=crop",
-      title: "🏠 Adoption Alert: Meet Coco!",
-      content: "Coco is a lovely 2-year-old hen looking for a forever home. She's friendly, loves treats, and lays beautiful eggs. Contact us if you're interested in adopting her!",
-      likes: 189,
-      comments: 23,
-      timestamp: "5 hours ago",
-      adoptionStatus: "Available",
-    },
-    {
-      id: 3,
-      type: "news",
-      image: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=600&h=400&fit=crop",
-      title: "📰 Featured in Le Monde",
-      content: "We're honored to be featured in today's Le Monde article about farm animal sanctuaries in France. Thank you for your continued support!",
-      likes: 567,
-      comments: 92,
-      timestamp: "Yesterday",
-      newsSource: "Le Monde",
-    },
-    {
-      id: 4,
-      type: "publication",
-      image: "https://as1.ftcdn.net/v2/jpg/01/33/21/60/1000_F_133216088_Za1Z6sMjrAgGqKnHIj3EaghzA0hUHTYg.jpg",
-      title: "Shearing Day Complete!",
-      content: "Our annual sheep shearing is done! All our woolly friends are now ready for summer. The wool will be donated to local artisans 🐑✂️",
-      likes: 234,
-      comments: 31,
-      timestamp: "2 days ago",
-    },
-    {
-      id: 5,
-      type: "adoption",
-      image: "https://images.unsplash.com/photo-1518796745738-41048802f99a?w=600&h=400&fit=crop",
-      title: "🏠 Adoption Alert: Billy the rabbit",
-      content: "Billy is an energetic 3-year-old rabbit who needs a spacious home. He's great with other animals and loves to eat carrots! Perfect for a family with farm.",
-      likes: 156,
-      comments: 18,
-      timestamp: "3 days ago",
-      adoptionStatus: "Available",
-    },
-    {
-      id: 6,
-      type: "news",
-      image: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&h=400&fit=crop",
-      title: "📰 New Partnership Announced",
-      content: "Exciting news! We've partnered with 5 local schools to offer educational farm visits. Helping the next generation understand animal welfare. Read more in today's France 3 coverage.",
-      likes: 423,
-      comments: 56,
-      timestamp: "4 days ago",
-      newsSource: "France 3",
-    },
-  ];
+const posts = [
+  {
+    id: 1,
+    type: "publication",
+    image:
+      "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
+    title: "Marguerite's Recovery",
+    content:
+      "Great news! Marguerite, our rescued cow, is doing much better after months of care. She's now enjoying the sun in our meadow 🐄💚",
+    likes: 342,
+    comments: 47,
+    timestamp: "2 hours ago",
+  },
+  {
+    id: 2,
+    type: "adoption",
+    image:
+      "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600&h=400&fit=crop",
+    title: "🏠 Adoption Alert: Meet Coco!",
+    content:
+      "Coco is a lovely 2-year-old hen looking for a forever home. She's friendly, loves treats, and lays beautiful eggs. Contact us if you're interested in adopting her!",
+    likes: 189,
+    comments: 23,
+    timestamp: "5 hours ago",
+    adoptionStatus: "Available",
+  },
+  {
+    id: 3,
+    type: "news",
+    image:
+      "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=600&h=400&fit=crop",
+    title: "📰 Featured in Le Monde",
+    content:
+      "We're honored to be featured in today's Le Monde article about farm animal sanctuaries in France. Thank you for your continued support!",
+    likes: 567,
+    comments: 92,
+    timestamp: "Yesterday",
+    newsSource: "Le Monde",
+  },
+  {
+    id: 4,
+    type: "publication",
+    image:
+      "https://as1.ftcdn.net/v2/jpg/01/33/21/60/1000_F_133216088_Za1Z6sMjrAgGqKnHIj3EaghzA0hUHTYg.jpg",
+    title: "Shearing Day Complete!",
+    content:
+      "Our annual sheep shearing is done! All our woolly friends are now ready for summer. The wool will be donated to local artisans 🐑✂️",
+    likes: 234,
+    comments: 31,
+    timestamp: "2 days ago",
+  },
+  {
+    id: 5,
+    type: "adoption",
+    image:
+      "https://images.unsplash.com/photo-1518796745738-41048802f99a?w=600&h=400&fit=crop",
+    title: "🏠 Adoption Alert: Billy the rabbit",
+    content:
+      "Billy is an energetic 3-year-old rabbit who needs a spacious home. He's great with other animals and loves to eat carrots! Perfect for a family with farm.",
+    likes: 156,
+    comments: 18,
+    timestamp: "3 days ago",
+    adoptionStatus: "Available",
+  },
+  {
+    id: 6,
+    type: "news",
+    image:
+      "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600&h=400&fit=crop",
+    title: "📰 New Partnership Announced",
+    content:
+      "Exciting news! We've partnered with 5 local schools to offer educational farm visits. Helping the next generation understand animal welfare. Read more in today's France 3 coverage.",
+    likes: 423,
+    comments: 56,
+    timestamp: "4 days ago",
+    newsSource: "France 3",
+  },
+];
 
-  const quickLinks = [
-    { title: "📋 Our Mission", href: "/" },
-    { title: "🏠 Adopt an Animal", href: "/" },
-    { title: "🤝 Volunteer", href: "/" },
-    { title: "💚 Make a Donation", href: "/" },
-  ];
+const quickLinks = [
+  { title: "📋 Our Mission", href: "/" },
+  { title: "🏠 Adopt an Animal", href: "/" },
+  { title: "🤝 Volunteer", href: "/" },
+  { title: "💚 Make a Donation", href: "/" },
+];
 
-  function getPostBadge(type: string) {
-    switch (type) {
-      case "adoption":
-        return { color: "bg-green-600", icon: "🏠", label: "Adoption" };
-      case "news":
-        return { color: "bg-blue-600", icon: "📰", label: "News" };
-      default:
-        return { color: "bg-orange-600", icon: "📝", label: "Update" };
-    }
+function getPostBadge(type: string) {
+  switch (type) {
+    case "adoption":
+      return { color: "bg-green-600", icon: "🏠", label: "Adoption" };
+    case "news":
+      return { color: "bg-blue-600", icon: "📰", label: "News" };
+    default:
+      return { color: "bg-orange-600", icon: "📝", label: "Update" };
   }
+}
 </script>
 
 <svelte:head>
