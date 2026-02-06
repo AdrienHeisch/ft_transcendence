@@ -3,8 +3,8 @@ import z from "zod";
 import { browser, dev } from "$app/environment";
 import { resolve } from "$app/paths";
 import { getPerson } from "$lib/persons.remote";
-import { getUserAvatar } from "$lib/storage";
 import type { ChatMessage } from "$lib/server/db/schema.js";
+import { getUserAvatar } from "$lib/storage";
 
 const { data, params } = $props();
 
@@ -34,7 +34,7 @@ let ws: WebSocket | undefined = (() => {
 })();
 
 const friend = $derived(await getPerson(params.id));
-const allMessages = $derived([...wsMessages, ...await data.messages]);
+const allMessages = $derived([...wsMessages, ...(await data.messages)]);
 </script>
 
 <svelte:head>
@@ -48,6 +48,7 @@ const allMessages = $derived([...wsMessages, ...await data.messages]);
       <div class="flex items-center gap-4">
         <!-- Back button -->
         <a 
+          aria-label="Back"
           href={resolve("/messages")}
           class="p-2 hover:bg-white/10 rounded-lg transition-colors"
         >
@@ -105,7 +106,7 @@ const allMessages = $derived([...wsMessages, ...await data.messages]);
             </div>
           {:else}
             {#each allMessages as message}
-              {@const isOwn = message.author === data.currentUser.id}
+              {@const isOwn = message.author === data.currentUser?.id}
               <div class="flex {isOwn ? 'justify-end' : 'justify-start'}">
                 <div class="max-w-[70%] {isOwn ? 'bg-[#CC5500] text-white' : 'bg-white border-2 border-[#8B4513] text-[#8B4513]'} rounded-2xl px-4 py-3 shadow-md">
                   <p class="break-words">{message.content}</p>
