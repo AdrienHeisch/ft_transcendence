@@ -74,22 +74,22 @@ $effect(() =>
           <div>
             <label class="block text-sm font-bold text-[#8B4513] mb-2">
               Username
+              <input 
+                type="text" 
+                placeholder="Modify your username..." 
+                class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+              />
             </label>
-            <input 
-              type="text" 
-              placeholder="Modify your username..." 
-              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-            />
           </div>
           <div>
             <label class="block text-sm font-bold text-[#8B4513] mb-2">
               Confirm Username
+              <input 
+                type="text" 
+                placeholder="Verification of your new username..." 
+                class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+              />
             </label>
-            <input 
-              type="text" 
-              placeholder="Verification of your new username..." 
-              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-            />
           </div>
           <button 
             type="submit" 
@@ -105,47 +105,47 @@ $effect(() =>
           <div>
             <label class="block text-sm font-bold text-[#8B4513] mb-2">
               Current Password
+              <input 
+                placeholder="Enter your current password..." 
+                required 
+                {...updateCredentials.fields.currentPassword.as("password")} 
+                class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+              />
             </label>
-            <input 
-              placeholder="Enter your current password..." 
-              required 
-              {...updateCredentials.fields.currentPassword.as("password")} 
-              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-            />
           </div>
           <div>
             <label class="block text-sm font-bold text-[#8B4513] mb-2">
               Email
+              <input 
+                placeholder="Modify your email..." 
+                bind:value={email} 
+                {...updateCredentials.fields.email.as("email")} 
+                class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+              />
             </label>
-            <input 
-              placeholder="Modify your email..." 
-              bind:value={email} 
-              {...updateCredentials.fields.email.as("email")} 
-              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-            />
           </div>
           <div>
             <label class="block text-sm font-bold text-[#8B4513] mb-2">
               New Password
+              <input 
+                placeholder="Enter your new password..." 
+                bind:value={password} 
+                {...updateCredentials.fields.password.as("password")} 
+                class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+              />
             </label>
-            <input 
-              placeholder="Enter your new password..." 
-              bind:value={password} 
-              {...updateCredentials.fields.password.as("password")} 
-              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-            />
           </div>
           <div>
             <label class="block text-sm font-bold text-[#8B4513] mb-2">
               Confirm Password
+              <input 
+                placeholder="Confirm your new password..." 
+                bind:value={confirmPassword} 
+                bind:this={confirmPasswordField} 
+                type="password"
+                class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+              />
             </label>
-            <input 
-              placeholder="Confirm your new password..." 
-              bind:value={confirmPassword} 
-              bind:this={confirmPasswordField} 
-              type="password"
-              class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-            />
           </div>
           <button 
             type="submit" 
