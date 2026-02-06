@@ -10,10 +10,11 @@ export default async function seedDb() {
     `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
   );
   const db = drizzle(client, { schema });
+  const { city, ...tables } = schema;
   console.log("Resetting database...");
-  await reset(db, schema);
+  await reset(db, tables);
   console.log("Seeding database...");
-  await seed(db, schema, { seed: 1 }).refine((gen) => ({
+  await seed(db, tables, { seed: 1 }).refine((gen) => ({
     session: {
       count: 0,
     },

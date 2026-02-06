@@ -2,8 +2,10 @@
 import { getPersons } from "$lib/persons.remote";
 import { getUserAvatar } from "$lib/storage";
 
+const { data } = $props();
+
 const _roles = ["Adopter", "Association", "Volunteer"];
-const _cities = ["Paris", "Lyon", "Montpellier"];
+const cities = $derived((await data.cities).map((city) => city.name).sort());
 
 // Filters
 let searchQuery = $state("");
@@ -19,14 +21,13 @@ const _users = $derived(
       username: `${user.firstName.charAt(0)}${user.lastName}`,
       photo: getUserAvatar(user),
       role: _roles[user.firstName.length % _roles.length],
-      city: _cities[user.lastName.length % _cities.length],
+      city: cities[user.lastName.length % cities.length],
       adoptedAnimals: user.firstName.length % 3,
       age: ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20,
     })),
 );
 
 const roles = $derived(new Set(_users.map((user) => user.role)));
-const cities = $derived(new Set(_users.map((user) => user.city)));
 
 // TODO use SQL filtering instead of this
 const users = $derived(

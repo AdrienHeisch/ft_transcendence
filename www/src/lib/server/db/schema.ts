@@ -2,8 +2,10 @@ import { lt } from "drizzle-orm";
 import {
   boolean,
   check,
+  index,
   integer,
   pgTable,
+  point,
   primaryKey,
   text,
   timestamp,
@@ -134,3 +136,15 @@ export const postComment = pgTable("post_comment", {
 });
 
 export type PostComment = typeof postComment.$inferSelect;
+
+export const city = pgTable(
+  "city",
+  {
+    code: text("code").primaryKey(),
+    name: text("name").notNull(),
+    location: point("location", { mode: "tuple" }).notNull(),
+  },
+  (table) => [index("spatial_index").using("gist", table.location)],
+);
+
+export type City = typeof city.$inferSelect;
