@@ -48,7 +48,7 @@ export default async function seedDb() {
       columns: {
         name: gen.companyName(),
         logo: gen.valuesFromArray({ values: ["🐄"] }),
-        city: gen.city(),
+        city: gen.valuesFromArray({ values: cities.map((city) => city.name) }),
         animalsCount: gen.int({ minValue: 1, maxValue: 100 }),
         description: gen.loremIpsum(),
         foundedYear: gen.int({ minValue: 1960, maxValue: 2025 }),

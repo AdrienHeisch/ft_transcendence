@@ -168,6 +168,7 @@ export const association = pgTable("association", {
   email: text("email").notNull(),
   phone: text("phone").notNull(),
   description: text("description").notNull(),
+  city: text("city").references(() => city.name),
   type: associationType("type").notNull(),
   foundedAt: timestamp("founded_at", {
     withTimezone: true,

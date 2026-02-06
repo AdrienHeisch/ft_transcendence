@@ -11,14 +11,14 @@ export const getAssociations = query(
     city: z.string().nullable(),
     sortBy: z.custom<"name" | "type">(),
   }),
-  ({ search, type, sortBy }) => {
+  ({ search, type, city, sortBy }) => {
     return db
       .select()
       .from(schema.association)
       .where(
         and(
           search ? ilike(schema.association.name, `%${search}%`) : undefined,
-          // city ? eq(schema.association.city, city) : undefined,
+          city ? eq(schema.association.city, city) : undefined,
           type ? eq(schema.association.type, type) : undefined,
         ),
       )
