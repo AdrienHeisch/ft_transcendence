@@ -32,6 +32,7 @@ export const user = pgTable("user", {
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   bio: text("bio").notNull(),
+  city: text("city").references(() => city.name),
   hasAvatar: boolean("has_avatar").notNull(),
   online: boolean("online").notNull(),
 });

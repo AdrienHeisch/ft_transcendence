@@ -11,6 +11,7 @@ export default async function seedDb() {
   );
   const db = drizzle(client, { schema });
   const { city, ...tables } = schema;
+  const cities = await db.select().from(city);
   console.log("Resetting database...");
   await reset(db, tables);
   console.log("Seeding database...");
@@ -23,6 +24,7 @@ export default async function seedDb() {
       columns: {
         bio: gen.loremIpsum(),
         online: gen.default({ defaultValue: false }),
+        city: gen.valuesFromArray({ values: cities.map((city) => city.name) }),
       },
       with: {
         pet: [{ weight: 1, count: [1, 2, 3] }],

@@ -11,7 +11,7 @@ const cities = $derived((await data.cities).map((city) => city.name).sort());
 let searchQuery = $state("");
 let selectedRole = $state<string>();
 let selectedCity = $state<string>();
-let sortBy = $state<"firstName" | "lastName">("lastName");
+let sortBy = $state<"firstName" | "lastName">("firstName");
 
 const _users = $derived(
   (await getPersons({ search: searchQuery, sortBy }))
@@ -21,7 +21,6 @@ const _users = $derived(
       username: `${user.firstName.charAt(0)}${user.lastName}`,
       photo: getUserAvatar(user),
       role: _roles[user.firstName.length % _roles.length],
-      city: cities[user.lastName.length % cities.length],
       adoptedAnimals: user.firstName.length % 3,
       age: ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20,
     })),
