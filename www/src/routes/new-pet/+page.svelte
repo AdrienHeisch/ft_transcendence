@@ -1,4 +1,5 @@
 <script lang="ts">
+import { resolve } from "$app/paths";
 import { createPet } from "$lib/pets.remote";
 
 let previewUrl = $state<string>("");
@@ -190,7 +191,7 @@ function removeAdditionalInfo(index: number) {
                       aria-label="Remove"
                       type="button"
                       onclick={() => removeCharacteristic(i)}
-                      class="text-red-500 hover:text-red-700 transition-colors"
+                      class="text-red-400 hover:text-red-700 transition-colors"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -309,7 +310,7 @@ function removeAdditionalInfo(index: number) {
                     aria-label="Remove"
                     type="button"
                     onclick={() => removeAdditionalInfo(i)}
-                    class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 transition-all"
+                    class="text-red-400 hover:text-red-700 transition-colors"
                   >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -331,7 +332,7 @@ function removeAdditionalInfo(index: number) {
 
             <div class="text-center mt-4">
               <a
-                href="/pets"
+                href={resolve("/pets")}
                 class="text-[#8B4513] hover:text-[#CC5500] font-semibold transition-colors"
               >
                 ← Cancel and go back
