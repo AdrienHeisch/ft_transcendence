@@ -5,7 +5,7 @@ import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
-const chats = $derived(await data.chats);
+const chats = $derived(data.chats);
 </script>
 
 <svelte:head>
@@ -61,11 +61,15 @@ const chats = $derived(await data.chats);
                   <h3 class="text-lg font-bold text-[#8B4513] group-hover:text-[#CC5500] transition-colors">
                     {friend.firstName} {friend.lastName}
                   </h3>
-                  <span class="text-sm text-[#A0522D] font-medium">2h ago</span>
+                  {#if chat.lastMessage}
+                    <span class="text-sm text-[#A0522D] font-medium">{chat.lastMessage.sentAt}</span>
+                  {/if}
                 </div>
-                <p class="text-[#8B4513] truncate">
-                  Last message preview...
-                </p>
+                {#if chat.lastMessage}
+                  <p class="text-[#8B4513] truncate">
+                    {chat.lastMessage.author.firstName}: {chat.lastMessage.content}
+                  </p>
+                {/if}
               </div>
 
               <!-- Arrow -->
