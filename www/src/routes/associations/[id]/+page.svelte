@@ -3,18 +3,13 @@
 
   let { data }: { data: PageData } = $props();
 
-  // Mock association data (will come from server later)
-  let association = $derived({
-    slug: data.slug || "ferme-animaux-heureux",
-    name: "La Ferme des Animaux Heureux",
+  const _association = $derived(await data.association);
+
+  // TODO remove fake data
+  const association = $derived({
+    ..._association,
     logo: "🐄",
-    type: "Sanctuary",
-    description: "Association dedicated to farm animal welfare and rehabilitation since 2010",
     coverImage: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920&h=400&fit=crop",
-    location: "Paris, France",
-    foundedYear: "2010",
-    email: "contact@fermeheureuse.fr",
-    phone: "01 23 45 67 89",
     website: "www.fermeheureuse.fr",
     followers: 1247,
     animalsCount: 45,
@@ -132,7 +127,7 @@
     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/20"></div>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative">
     <!-- Profile Header -->
     <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
       <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
@@ -154,7 +149,7 @@
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
             <div class="flex items-center gap-1">
               <span>📍</span>
-              <span>{association.location}</span>
+              <span>{association.city}</span>
             </div>
             <div class="flex items-center gap-1">
               <span>📧</span>
@@ -227,7 +222,7 @@
               <span class="text-xl">📅</span>
               <div>
                 <div class="font-semibold text-gray-700">Founded</div>
-                <div class="text-gray-600">{association.foundedYear}</div>
+                <div class="text-gray-600">{association.foundedAt}</div>
               </div>
             </div>
             <div class="flex items-start gap-3">
