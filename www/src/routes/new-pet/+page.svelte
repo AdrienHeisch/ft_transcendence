@@ -7,7 +7,7 @@ let characteristics = $state<string[]>([]);
 let newCharacteristic = $state("");
 let additionalInfos = $state<{ label: string; value: string }[]>([
   { label: "Location", value: "Bibi's Farm" },
-  { label: "Health", value: "To be determined" }
+  { label: "Health", value: "To be determined" },
 ]);
 let newInfoLabel = $state("");
 let newInfoValue = $state("");
@@ -22,7 +22,10 @@ function handleFileChange(event: Event) {
 }
 
 function addCharacteristic() {
-  if (newCharacteristic.trim() && !characteristics.includes(newCharacteristic.trim())) {
+  if (
+    newCharacteristic.trim() &&
+    !characteristics.includes(newCharacteristic.trim())
+  ) {
     characteristics.push(newCharacteristic.trim());
     characteristics = characteristics;
     newCharacteristic = "";
@@ -36,7 +39,10 @@ function removeCharacteristic(index: number) {
 
 function addAdditionalInfo() {
   if (newInfoLabel.trim() && newInfoValue.trim()) {
-    additionalInfos.push({ label: newInfoLabel.trim(), value: newInfoValue.trim() });
+    additionalInfos.push({
+      label: newInfoLabel.trim(),
+      value: newInfoValue.trim(),
+    });
     additionalInfos = additionalInfos;
     newInfoLabel = "";
     newInfoValue = "";
@@ -82,75 +88,67 @@ function removeAdditionalInfo(index: number) {
               <div>
                 <label class="block text-sm font-bold text-[#8B4513] mb-2" for="name">
                   Name
+                  <input
+                    {...createPet.fields.name.as("text")}
+                    placeholder="Garfield"
+                    required
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+                  />
                 </label>
-                <input
-                  id="name"
-                  type="text"
-                  {...createPet.fields.name.as("text")}
-                  placeholder="Garfield"
-                  required
-                  class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-                />
               </div>
 
               <!-- Species -->
               <div>
                 <label class="block text-sm font-bold text-[#8B4513] mb-2" for="species">
                   Species
+                  <input
+                    {...createPet.fields.species.as("text")}
+                    placeholder="Cat"
+                    required
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+                  />
                 </label>
-                <input
-                  id="species"
-                  type="text"
-                  {...createPet.fields.species.as("text")}
-                  placeholder="Cat"
-                  required
-                  class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-                />
               </div>
 
               <!-- Breed -->
               <div>
                 <label class="block text-sm font-bold text-[#8B4513] mb-2" for="breed">
                   Breed
+                  <input
+                    {...createPet.fields.breed.as("text")}
+                    placeholder="Orange Lasagna"
+                    required
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+                  />
                 </label>
-                <input
-                  id="breed"
-                  type="text"
-                  {...createPet.fields.breed.as("text")}
-                  placeholder="Orange Lasagna"
-                  required
-                  class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-                />
               </div>
 
               <!-- Age -->
               <div>
                 <label class="block text-sm font-bold text-[#8B4513] mb-2" for="age">
                   Age
+                  <input
+                    {...createPet.fields.age.as("number")}
+                    placeholder="8"
+                    required
+                    min="0"
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+                  />
                 </label>
-                <input
-                  id="age"
-                  type="number"
-                  {...createPet.fields.age.as("number")}
-                  placeholder="8"
-                  required
-                  min="0"
-                  class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-                />
               </div>
 
               <!-- Description -->
               <div>
                 <label class="block text-sm font-bold text-[#8B4513] mb-2" for="bio">
                   Description
+                  <textarea
+                    id="bio"
+                    {...createPet.fields.bio.as("text")}
+                    placeholder="A friendly and playful companion..."
+                    rows="4"
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium resize-none"
+                  ></textarea>
                 </label>
-                <textarea
-                  id="bio"
-                  {...createPet.fields.bio.as("text")}
-                  placeholder="A friendly and playful companion..."
-                  rows="4"
-                  class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium resize-none"
-                ></textarea>
               </div>
             </div>
           </div>
@@ -189,6 +187,7 @@ function removeAdditionalInfo(index: number) {
                   <div class="p-3 bg-white rounded-lg border-2 border-[#8B4513] flex items-center justify-between">
                     <span class="text-[#8B4513] font-medium">{char}</span>
                     <button
+                      aria-label="Remove"
                       type="button"
                       onclick={() => removeCharacteristic(i)}
                       class="text-red-500 hover:text-red-700 transition-colors"
@@ -227,6 +226,7 @@ function removeAdditionalInfo(index: number) {
                     class="w-full h-full object-cover"
                   />
                   <button
+                    aria-label="Remove image"
                     type="button"
                     onclick={() => {
                       previewUrl = "";
@@ -306,6 +306,7 @@ function removeAdditionalInfo(index: number) {
                     <p class="text-lg text-[#8B4513] font-bold">{info.value}</p>
                   </div>
                   <button
+                    aria-label="Remove"
                     type="button"
                     onclick={() => removeAdditionalInfo(i)}
                     class="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 transition-all"
