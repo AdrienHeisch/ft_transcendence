@@ -122,29 +122,6 @@
     <div class="absolute inset-0 bg-gradient-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95"></div>
   </div>
 
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-orange-600 to-orange-700 text-white shadow-lg sticky top-0 z-50">
-    <div class="flex items-center justify-between px-6 py-3">
-      <a
-        href="/"
-        class="flex items-center gap-2 px-4 py-2 bg-orange-700 hover:bg-orange-800 rounded-lg font-semibold transition shadow-md"
-      >
-        <span class="text-xl">🏠</span>
-        <span>Home</span>
-      </a>
-
-      <div class="flex items-center gap-3">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐄%3C/text%3E%3C/svg%3E" alt="Logo" class="w-10 h-10" />
-        <div>
-          <h1 class="text-3xl font-bold text-yellow-100" style="font-family: Georgia, serif;">Bibi's Farm</h1>
-          <p class="text-sm text-yellow-200 italic" style="font-family: Georgia, serif;">Since 1887</p>
-        </div>
-      </div>
-
-      <div class="w-32"></div>
-    </div>
-  </header>
-
   <!-- Cover Image -->
   <div class="relative h-80 bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600">
     <img 
