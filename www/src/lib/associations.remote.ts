@@ -1,8 +1,19 @@
-import { and, eq, getTableColumns, ilike } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray } from "drizzle-orm";
 import z from "zod";
 import { query } from "$app/server";
 import * as schema from "$lib/server/db/schema";
 import { db } from "./server/db";
+
+export const getAssociation = query.batch(z.string(), async (associations) => {
+  const result = await db
+    .select()
+    .from(schema.association)
+    .where(inArray(schema.association.id, associations));
+  const lookup = new Map(
+    result.map((association) => [association.id, association]),
+  );
+  return (association) => lookup.get(association);
+});
 
 export const getAssociations = query(
   z.object({
