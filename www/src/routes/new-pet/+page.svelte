@@ -3,16 +3,14 @@ import { resolve } from "$app/paths";
 import { createPet } from "$lib/pets.remote";
 
 let previewUrl = $state<string>("");
-let selectedFile = $state<File | null>(null);
+let files = $state<FileList>();
 
-function handleFileChange(event: Event) {
-  const input = event.target as HTMLInputElement;
-  const file = input.files?.[0];
+$effect(() => {
+  const file = files?.[0];
   if (file) {
-    selectedFile = file;
     previewUrl = URL.createObjectURL(file);
   }
-}
+});
 </script>
 
 <svelte:head>
@@ -33,7 +31,7 @@ function handleFileChange(event: Event) {
   </div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <form {...createPet}>
+    <form enctype="multipart/form-data" {...createPet}>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Left column - Form fields -->
         <div class="space-y-6">
@@ -137,7 +135,7 @@ function handleFileChange(event: Event) {
                     type="button"
                     onclick={() => {
                       previewUrl = "";
-                      selectedFile = null;
+                      files = undefined;
                     }}
                     class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
                   >
@@ -159,10 +157,11 @@ function handleFileChange(event: Event) {
             <!-- Upload button -->
             <label class="block">
               <input
+                name="avatar"
                 type="file"
                 accept="image/*"
-                onchange={handleFileChange}
                 class="hidden"
+                bind:files
               />
               <div class="w-full py-3 bg-[#CC5500] text-white rounded-lg font-bold text-center hover:bg-[#A04000] transition-all cursor-pointer">
                 📷 {previewUrl ? "Change photo" : "Add photo"}

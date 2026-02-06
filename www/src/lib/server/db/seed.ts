@@ -38,7 +38,7 @@ export default async function seedDb() {
         }),
         bio: gen.loremIpsum(),
         age: gen.int({ minValue: 1, maxValue: 5 }),
-        hasAvatar: gen.default({ defaultValue: true }),
+        hasAvatar: gen.default({ defaultValue: false }),
       },
     },
     post: {

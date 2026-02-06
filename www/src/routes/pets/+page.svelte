@@ -1,10 +1,6 @@
 <script lang="ts">
 import { getPets } from "$lib/pets.remote";
-import type { Pet } from "$lib/server/db/schema";
-
-// TODO avatars
-const getAvatar = (_: Pet) =>
-  "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=800";
+import { getPetAvatar } from "$lib/storage";
 
 // TODO generate this list
 const species = ["Cat", "Dog", "Cow", "Fish", "Horse"];
@@ -113,7 +109,7 @@ const pets = $derived(
             <div class="relative">
               {#if pet.hasAvatar}
                 <img 
-                  src={getAvatar(pet)} 
+                  src={getPetAvatar(pet)} 
                   alt={pet.name}
                   class="w-full h-56 object-cover"
                 />
