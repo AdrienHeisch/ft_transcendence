@@ -1,26 +1,26 @@
 :80, :443 {
-  log {
-    output file /var/log/caddy/access.log {
-      roll_size 1Mib
-      roll_keep 1
-    }
-  }
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 1Mib
+			roll_keep 1
+		}
+	}
 
-  handle_path /public/* {
-    reverse_proxy storage:3902 {
-      header_up Host public.web.garage
-    }
-  }
+	handle_path /public/* {
+		reverse_proxy storage:3902 {
+			header_up Host public.web.garage
+		}
+	}
 
-  handle /private/* {
-    reverse_proxy storage:3900 
-  }
+	handle /private/* {
+		reverse_proxy storage:3900
+	}
 
-  handle_path /ws/* {
-    reverse_proxy ws:3000
-  }
+	handle_path /ws/* {
+		reverse_proxy ws:3000
+	}
 
-  handle {
-    reverse_proxy www:3000
-  }
+	handle {
+		reverse_proxy www:3000
+	}
 }
