@@ -1,7 +1,8 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import { getPerson } from "$lib/persons.remote";
-import { getUserAvatar, USER_AVATAR_PREFIX } from "$lib/storage";
+import { getUserAvatar } from "$lib/storage";
+
 const { data } = $props();
 
 const chats = $derived(data.chats);

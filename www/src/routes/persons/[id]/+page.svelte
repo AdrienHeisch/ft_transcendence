@@ -11,7 +11,8 @@ import {
 import { updatePerson } from "$lib/persons.remote";
 import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
-import { getUserAvatar, USER_AVATAR_PREFIX } from "$lib/storage";
+import { getUserAvatar } from "$lib/storage";
+
 const { data } = $props();
 
 const _user = $derived(await data.user);
@@ -84,7 +85,7 @@ let isEditMode = $state(false);
         <!-- Profile Picture -->
         <div class="relative">
                     <img
-            src={user.hasAvatar ? `${PUBLIC_STORAGE_ENDPOINT}/${USER_AVATAR_PREFIX}${user.id}.png` : `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
+            src={getUserAvatar(user)}
             alt={user.firstName}
             class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-orange-200 object-cover"
             onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}

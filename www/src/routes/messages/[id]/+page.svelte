@@ -4,7 +4,8 @@ import { browser, dev } from "$app/environment";
 import { resolve } from "$app/paths";
 import { getPerson } from "$lib/persons.remote";
 import type { ChatMessage } from "$lib/server/db/schema.js";
-import { getUserAvatar, USER_AVATAR_PREFIX } from "$lib/storage";
+import { getUserAvatar } from "$lib/storage";
+
 const { data, params } = $props();
 
 let msg = $state<string>("");

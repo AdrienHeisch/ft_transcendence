@@ -1,6 +1,7 @@
 <script lang="ts">
 import { getPersons } from "$lib/persons.remote";
-import { getUserAvatar, USER_AVATAR_PREFIX } from "$lib/storage";
+import { getUserAvatar } from "$lib/storage";
+
 const { data } = $props();
 
 const _roles = ["Adopter", "Association", "Volunteer"];
@@ -146,7 +147,7 @@ const users = $derived(
               <div class="flex justify-center">
                 <div class="relative">
                                     <img
-                    src={user.hasAvatar ? `${PUBLIC_STORAGE_ENDPOINT}/${USER_AVATAR_PREFIX}${user.id}.png` : `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
+                    src={getUserAvatar(user)}
                     alt={user.firstName}
                     class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-orange-200 object-cover"
                     onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
