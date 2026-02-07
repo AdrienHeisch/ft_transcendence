@@ -146,11 +146,11 @@ const users = $derived(
             <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
                 <div class="relative">
-                  <img 
-                    src={user.photo} 
-                    alt={user.firstName + ' ' + user.lastName}
+                                    <img
+                    src={user.hasAvatar ? `${PUBLIC_STORAGE_ENDPOINT}/${USER_AVATAR_PREFIX}${user.id}.png` : `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
+                    alt={user.firstName}
                     class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-orange-200 object-cover"
-                    onerror={(e) => e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
+                    onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
                   />
                   {#if user.online}
                     <div class={["bg-green-500", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>

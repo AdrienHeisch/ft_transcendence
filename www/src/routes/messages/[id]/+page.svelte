@@ -73,11 +73,11 @@ const allMessages = $derived(
           <!-- Friend info -->
           <div class="flex items-center gap-3 flex-1">
             <div class="relative">
-              <img 
-                src={getUserAvatar(friend)} 
+                            <img
+                src={friend.hasAvatar ? `${PUBLIC_STORAGE_ENDPOINT}/${USER_AVATAR_PREFIX}${friend.id}.png` : `https://api.dicebear.com/7.x/avataaars/png?seed=${friend.id}`}
                 alt={friend.firstName}
                 class="w-12 h-12 rounded-full border-2 border-white bg-orange-200 object-cover"
-                onerror={(e) => e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/png?seed=${friend.id}`}
+                onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${friend.id}`}
               />
               {#if friend.online}
                 <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
