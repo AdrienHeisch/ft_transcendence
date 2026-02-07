@@ -1,7 +1,7 @@
 # ft_transcendence
 
 This project has been created as part of the 42 curriculum by
-ekanaeva, mszymcza, altoulle, aheisch.
+mszymcza, aheisch, wscherre, ezohin.
 
 ## Description
 
@@ -47,21 +47,25 @@ _TODO_
 
 ## Team Information
 
-### ekanaeva
-
-_TODO_
-
 ### mszymcza
 
-_TODO_
-
-### altoulle
-
-_TODO_
+_TODO: role_
+_TODO: brief description of their responsibilities_
 
 ### aheisch
 
-_TODO_
+__Technical Lead__
+_TODO: brief description of their responsibilities_
+
+### wscherre
+
+_TODO: role_
+_TODO: brief description of their responsibilities_
+
+### ezohin
+
+_TODO: role_
+_TODO: brief description of their responsibilities_
 
 ## Project Management
 
