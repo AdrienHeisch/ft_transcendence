@@ -18,7 +18,8 @@ instructions to run the project._
 
 ### Before anything
 
-- Docker 29.0.0 or Podman 5.7.1 (with podman aliased as docker)
+- Tested with Docker 29.0.0 or Podman 5.7.1 (with the `DOCKER` variable set to
+`podman` in `Makefile`)
 - `cp .env.example .env` and edit `.env` as necessary
 - The server will listen on port `8000`
 
