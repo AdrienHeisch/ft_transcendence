@@ -80,7 +80,7 @@ _TODO_
 
 ## Database Schema
 
-_TODO_
+Import `drawdb.json` into this web application to view the schema : [https://www.drawdb.app/editor](https://www.drawdb.app/editor)
 
 ## Features List
 
