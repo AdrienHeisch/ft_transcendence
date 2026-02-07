@@ -1,4 +1,3 @@
-import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
@@ -6,13 +5,13 @@ import * as schema from "./schema";
 export default async function runMigrations() {
   const client = postgres(
     `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}/${process.env.POSTGRES_DB}`,
-    { max: 1 }
+    { max: 1 },
   );
-  
+
   const db = drizzle(client, { schema });
-  
+
   console.log("Running migrations...");
-  
+
   // Create schema directly using SQL
   await db.execute(`
     CREATE TABLE IF NOT EXISTS "session" (

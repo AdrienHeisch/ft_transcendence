@@ -11,10 +11,10 @@ export default async function seedDb() {
   );
   const db = drizzle(client, { schema });
   const { city, ...tables } = schema;
-  
+
   console.log("Resetting database...");
   await reset(db, tables);
-  
+
   // Insert default cities if table is empty
   let cities = await db.select().from(city);
   if (cities.length === 0) {
@@ -28,7 +28,7 @@ export default async function seedDb() {
     cities = await db.select().from(city);
   }
   const cityNames = cities.map((city) => city.name);
-  
+
   console.log("Seeding database...");
   await seed(db, tables, { seed: 1 }).refine((gen) => ({
     session: {

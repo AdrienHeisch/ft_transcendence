@@ -43,7 +43,9 @@ let ws: WebSocket | undefined = (() => {
 
 const friend = $derived(await getPerson(params.id));
 const allMessages = $derived(
-  [...wsMessages, ...(await data.messages)].sort((a, b) => a.sentAt.getTime() - b.sentAt.getTime())
+  [...wsMessages, ...(await data.messages)].sort(
+    (a, b) => a.sentAt.getTime() - b.sentAt.getTime(),
+  ),
 );
 </script>
 
