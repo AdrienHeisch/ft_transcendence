@@ -10,6 +10,14 @@ const { data, params } = $props();
 
 let msg = $state<string>("");
 let wsMessages = $state<ChatMessage[]>([]);
+let messagesContainer = $state<HTMLDivElement>();
+
+// Auto-scroll to bottom when messages change
+$effect(() => {
+  if (messagesContainer && allMessages.length > 0) {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+});
 
 let ws: WebSocket | undefined = (() => {
   if (!browser) return undefined;
@@ -34,7 +42,11 @@ let ws: WebSocket | undefined = (() => {
 })();
 
 const friend = $derived(await getPerson(params.id));
-const allMessages = $derived([...wsMessages, ...(await data.messages)]);
+const allMessages = $derived(
+  [...wsMessages, ...(await data.messages)].sort(
+    (a, b) => a.sentAt.getTime() - b.sentAt.getTime(),
+  ),
+);
 </script>
 
 <svelte:head>
@@ -61,11 +73,12 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
           <!-- Friend info -->
           <div class="flex items-center gap-3 flex-1">
             <div class="relative">
-              <img 
-                src={getUserAvatar(friend)} 
-                alt={friend.firstName}
-                class="w-12 h-12 rounded-full border-2 border-white bg-white object-cover"
-              />
+                            <img
+					src={getUserAvatar(friend)}
+					alt={friend.firstName}
+					class="w-12 h-12 rounded-full border-2 border-white bg-orange-200 object-cover"
+					onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${friend.id}`}
+				/>
               {#if friend.online}
                 <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
               {/if}
@@ -97,7 +110,7 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
     <div class="max-w-5xl mx-auto h-full px-4 sm:px-6 lg:px-8 py-6">
       <div class="bg-[#fef7ed] rounded-2xl shadow-xl border-4 border-[#8B4513] h-full flex flex-col">
         <!-- Messages area -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col-reverse">
+        <div bind:this={messagesContainer} class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col">
           {#if allMessages.length === 0}
             <div class="text-center py-12">
               <div class="text-6xl mb-4">💬</div>

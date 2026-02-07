@@ -84,10 +84,11 @@ let isEditMode = $state(false);
 
         <!-- Profile Picture -->
         <div class="relative">
-          <img 
-            src={getUserAvatar(user)} 
-            alt={user.username}
-            class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
+                    <img
+            src={getUserAvatar(user)}
+            alt={user.firstName}
+            class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-orange-200 object-cover"
+            onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
           />
           <div class={[user.online ? "bg-green-500" : "bg-gray-300", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
         </div>
@@ -236,7 +237,8 @@ let isEditMode = $state(false);
                   src={getUserAvatar(friend)}
                   alt="{friend.firstName} {friend.lastName}"
                   title="{friend.firstName} {friend.lastName}"
-                  class="w-full h-full object-cover"
+                  class="w-full h-full object-cover bg-orange-200"
+                  onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${friend.id}`}
                 /></a>
               </div>
             {/each}

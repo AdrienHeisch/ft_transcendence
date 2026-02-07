@@ -151,6 +151,9 @@ export const createPost = form(
   z.object({ content: z.string(), file: z.custom<File>() }),
   async ({ content, file }) => {
     const user = requireLogin();
+    if (!file || !file.size) {
+      return; // Silently return if no file - client should have validated
+    }
     const id = crypto.randomUUID();
     await db.insert(schema.post).values({
       id,

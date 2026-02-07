@@ -45,11 +45,12 @@ const chats = $derived(data.chats);
             >
               <!-- Avatar -->
               <div class="relative flex-shrink-0">
-                <img 
-                  src={getUserAvatar(friend)} 
-                  alt={friend.firstName}
-                  class="w-16 h-16 rounded-full border-3 border-[#8B4513] bg-white object-cover"
-                />
+                                <img
+					src={getUserAvatar(friend)}
+					alt={friend.firstName}
+					class="w-16 h-16 rounded-full border-3 border-[#8B4513] bg-orange-200 object-cover"
+					onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${friend.id}`}
+				/>
                 {#if friend.online}
                   <div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                 {/if}

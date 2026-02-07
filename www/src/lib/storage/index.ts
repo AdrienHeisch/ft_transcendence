@@ -12,9 +12,10 @@ export const PublicStorage = {
 
 export const USER_AVATAR_PREFIX = "user/avatar/";
 
-// TODO avatars
-export const getUserAvatar = (user: { id: string }) =>
-  PublicStorage.url(`${USER_AVATAR_PREFIX + user.id}.png`);
+export const getUserAvatar = (user: { id: string; hasAvatar?: boolean }) =>
+  user.hasAvatar
+    ? PublicStorage.url(`${USER_AVATAR_PREFIX + user.id}.png`)
+    : `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`;
 
 export const PET_AVATAR_PREFIX = "pet/avatar/";
 

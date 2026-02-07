@@ -31,6 +31,8 @@ const roles = $derived(new Set(_users.map((user) => user.role)));
 // TODO use SQL filtering instead of this
 const users = $derived(
   _users.filter((user) => {
+    // Exclude current user from results
+    if (data.currentUser && user.id === data.currentUser.id) return false;
     const matchRole = !selectedRole || user.role == selectedRole;
     const matchCity = !selectedCity || user.city == selectedCity;
     return matchRole && matchCity;
@@ -144,10 +146,11 @@ const users = $derived(
             <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
                 <div class="relative">
-                  <img 
-                    src={user.photo} 
-                    alt={user.firstName + ' ' + user.lastName}
-                    class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white"
+                                    <img
+                    src={getUserAvatar(user)}
+                    alt={user.firstName}
+                    class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-orange-200 object-cover"
+                    onerror={(e) => (e.currentTarget as HTMLImageElement).src = `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
                   />
                   {#if user.online}
                     <div class={["bg-green-500", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
@@ -192,12 +195,12 @@ const users = $derived(
 
               <!-- Buttons -->
               <div class="flex gap-2">
-                <a href="./{user.id}" class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
+                <a href="/persons/{user.id}" class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
                   👁️ View profile
                 </a>
-                <button class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
+                <a href="/messages/{user.id}" class="text-center flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
                   💬 Contact
-                </button>
+                </a>
               </div>
             </div>
           </div>

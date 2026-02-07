@@ -46,14 +46,28 @@ export const getFriends = query(() => {
 export const addFriend = command(z.string(), async (friendId) => {
   const user = getCurrentUser();
   if (!user) error(401);
+
+  // Ensure left < right to satisfy the check constraint
+  const [left, right] =
+    user.id < friendId ? [user.id, friendId] : [friendId, user.id];
+
   try {
-    await db.insert(schema.usersPair).values({
-      id: crypto.randomUUID(),
-      left: user.id,
-      right: friendId,
-      friends: true,
-      pending: friendId,
-    });
+    await db
+      .insert(schema.usersPair)
+      .values({
+        id: crypto.randomUUID(),
+        left,
+        right,
+        friends: true,
+        pending: friendId,
+      })
+      .onConflictDoUpdate({
+        target: [schema.usersPair.left, schema.usersPair.right],
+        set: {
+          friends: true,
+          pending: friendId,
+        },
+      });
   } catch {
     error(500);
   }

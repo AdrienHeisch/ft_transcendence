@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { POST_IMAGE_PREFIX, USER_AVATAR_PREFIX } from "../../storage";
@@ -18,6 +19,10 @@ export default async function seedStorage() {
         `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`,
       );
       await PublicStorage.upload(key, await file.blob());
+      await db
+        .update(schema.user)
+        .set({ hasAvatar: true })
+        .where(eq(schema.user.id, user.id));
     }
   }
   for (const post of await db.select().from(schema.post)) {
