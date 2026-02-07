@@ -9,7 +9,9 @@ export const load: PageServerLoad = async ({ url }) => {
     schema.associationTypeSchema.safeParse(url.searchParams.get("type")).data ??
     undefined;
   const cityCode = url.searchParams.get("city");
-  const selectedCity = cityCode ? db.select().from(schema.city).where(eq(schema.city.code, cityCode)) : undefined;
+  const selectedCity = cityCode
+    ? db.select().from(schema.city).where(eq(schema.city.code, cityCode))
+    : undefined;
   const sortBy = (() => {
     const sortBy = url.searchParams.get("sort");
     if (

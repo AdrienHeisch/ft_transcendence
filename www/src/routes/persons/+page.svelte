@@ -6,8 +6,9 @@ import { getUserAvatar } from "$lib/storage";
 const { data } = $props();
 
 const _roles = ["Adopter", "Association", "Volunteer"];
-const cities = $derived((await data.cities).sort((a, b) =>
-  a.name.localeCompare(b.name)));
+const cities = $derived(
+  (await data.cities).sort((a, b) => a.name.localeCompare(b.name)),
+);
 
 // Filters
 let searchQuery = $state("");

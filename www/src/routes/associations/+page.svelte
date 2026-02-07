@@ -32,7 +32,7 @@ const associations = $derived(
 onMount(async () => {
   searchQuery = data.filters.search;
   selectedType = data.filters.type;
-  [selectedCity] = await data.filters.city ?? [undefined];
+  [selectedCity] = (await data.filters.city) ?? [undefined];
   sortBy = data.filters.sort;
 });
 </script>
