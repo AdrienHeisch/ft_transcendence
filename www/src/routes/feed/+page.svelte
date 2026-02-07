@@ -7,6 +7,36 @@ const { data } = $props();
 const posts = $derived(await getPosts({}));
 
 let files = $state<FileList>();
+let fileInput = $state<HTMLInputElement>();
+let showFileError = $state(false);
+let formElement = $state<HTMLFormElement>();
+
+function clearFile() {
+  if (fileInput) {
+    fileInput.value = "";
+  }
+  files = undefined;
+}
+
+function resetForm() {
+  clearFile();
+  showFileError = false;
+  if (formElement) {
+    formElement.reset();
+  }
+}
+
+function handlePostClick(event: MouseEvent) {
+  if (!files || !files.item(0)) {
+    event.preventDefault();
+    event.stopPropagation();
+    showFileError = true;
+  } else {
+    showFileError = false;
+    // Reset after a short delay to allow form submission
+    setTimeout(resetForm, 100);
+  }
+}
 </script>
 
 <!-- Zone de contenu principal -->
@@ -21,11 +51,21 @@ let files = $state<FileList>();
 
       <!-- Post input -->
       {#if data.currentUser}
-        <form enctype="multipart/form-data" {...createPost}>
+        <form bind:this={formElement} enctype="multipart/form-data" {...createPost}>
           <div class="flex flex-col mb-6 p-4 bg-orange-50 rounded-lg border-2 border-orange-300">
             {#if files && files.item(0)}
               {@const file = files.item(0) as File}
-              <img class="p-1" alt="Uploaded" src={`data:image/png;base64,${(await file.bytes()).toBase64()}`} />
+              <div class="relative inline-block mb-2">
+                <img class="p-1 rounded-lg" alt="Uploaded" src={`data:image/png;base64,${(await file.bytes()).toBase64()}`} />
+                <button
+                  type="button"
+                  onclick={clearFile}
+                  class="absolute top-2 right-2 w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-md transition"
+                  aria-label="Remove image"
+                >
+                  ✕
+                </button>
+              </div>
             {/if}
             <textarea 
               class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
@@ -34,17 +74,23 @@ let files = $state<FileList>();
               {...createPost.fields.content.as("text")}
               required
             ></textarea>
-            <div class="flex justify-end mt-2">
-              <label>Upload your file
+            {#if showFileError}
+              <p class="text-red-500 text-sm mt-2 font-medium">⚠️ Please upload an image before posting.</p>
+            {/if}
+            <div class="flex justify-end mt-2 gap-2">
+              <label class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md cursor-pointer">
+                Upload file
                 <input
                   name="file"
                   type="file"
                   accept="image/png"
+                  bind:this={fileInput}
                   bind:files
-                  required
+                  onchange={() => showFileError = false}
+                  class="hidden"
                 />
               </label>
-              <button type="submit" class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
+              <button type="submit" onclick={handlePostClick} class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
                 Post
               </button>
             </div>
