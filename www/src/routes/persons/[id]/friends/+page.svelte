@@ -66,12 +66,13 @@ const isCurrentUser = $derived(data.currentUser?.id === data.user?.id);
           <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg border-4 border-orange-700 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300">
             <a href={resolve(`/persons/${friend.id}`)} class="block">
               <!-- Friend Avatar -->
-              <div class="relative h-48 bg-linear-to-br from-orange-400 to-orange-600">
-                <img 
-                  src={getUserAvatar(friend)}
-                  alt="{friend.firstName} {friend.lastName}"
-                  class="w-full h-full object-cover"
-                />
+              <div class="relative w-full h-64 bg-linear-to-br from-orange-200 to-yellow-200">
+                  <img 
+                    src={getUserAvatar(friend)}
+                    alt={friend.firstName + ' ' + friend.lastName}
+                    class="w-full h-full object-cover"
+                    onerror={(e) => e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/png?seed=${friend.id}`}
+                  />
                 {#if friend.online}
                   <div class="absolute top-4 right-4 flex items-center gap-2 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
                     <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
