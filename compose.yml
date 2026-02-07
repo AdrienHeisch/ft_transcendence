@@ -21,8 +21,10 @@ services:
       dockerfile: ./www/Containerfile
     restart: always
     depends_on:
-      - db
-      - storage
+      db:
+        condition: service_healthy
+      storage:
+        condition: service_healthy
     networks:
       - www
       - db
@@ -36,7 +38,8 @@ services:
       target: ws
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - ws
       - db
@@ -51,6 +54,8 @@ services:
       - db-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "local"]
+      start_period: 30s
+      start_interval: 5s
   storage:
     image: ft-transcendence_garage
     build:
@@ -66,6 +71,8 @@ services:
     env_file: .env
     healthcheck:
       test: ["CMD", "garage", "status"]
+      start_period: 30s
+      start_interval: 5s
 
 volumes:
   db-data:
