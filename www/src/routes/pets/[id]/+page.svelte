@@ -1,16 +1,10 @@
 <script lang="ts">
+import { getPetAvatar } from "$lib/storage";
+
 const { data } = $props();
 
-// TODO remove fake data
-const pet = $derived({
-  ...(await data.pet),
-  adopted: true,
-  photos: [
-    "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
-    "https://www.lozere-online.com/wp-content/uploads/2013/09/vache-race-aubrac.jpg",
-    "https://cdn.canardware.com/2021/05/05044743/10327-vache-1200x627.jpg",
-  ],
-});
+const pet = $derived(await data.pet);
+const petAvatar = $derived(getPetAvatar(pet));
 </script>
 
 <svelte:head>
@@ -35,15 +29,9 @@ const pet = $derived({
               <h1 class="text-4xl font-bold text-[#8B4513] mb-2">{pet.name}</h1>
               <p class="text-xl text-[#A0522D] font-medium">{pet.species}</p>
             </div>
-            {#if pet.adopted}
-              <span class="px-4 py-2 bg-orange-600 text-white rounded-lg font-medium">
-                Adopted
-              </span>
-            {:else}
-              <span class="px-4 py-2 bg-[#CC5500] text-white rounded-lg font-bold">
-                ★ AVAILABLE ★
-              </span>
-            {/if}
+            <span class="px-4 py-2 bg-[#CC5500] text-white rounded-lg font-bold">
+              ★ AVAILABLE ★
+            </span>
           </div>
 
           <!-- Info -->
@@ -84,15 +72,9 @@ const pet = $derived({
             </p>
           </div>
 
-          {#if !pet.adopted}
-            <button class="w-full py-4 bg-[#CC5500] text-white rounded-lg font-bold text-lg hover:bg-[#A04000] transition-all duration-200 shadow-md hover:shadow-lg">
-              🏠 Adopt {pet.name}
-            </button>
-          {:else}
-            <button disabled class="w-full py-4 bg-gray-400 text-white rounded-lg font-bold text-lg cursor-not-allowed opacity-60">
-              Already adopted
-            </button>
-          {/if}
+          <button class="w-full py-4 bg-[#CC5500] text-white rounded-lg font-bold text-lg hover:bg-[#A04000] transition-all duration-200 shadow-md hover:shadow-lg">
+            🏠 Adopt {pet.name}
+          </button>
         </div>
 
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-6 border-4 border-[#8B4513]">
@@ -121,28 +103,15 @@ const pet = $derived({
         </div>
       </div>
 
-      <!-- Photos à droite -->
+      <!-- Photo à droite -->
       <div class="space-y-6">
         <!-- Photo principale -->
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl overflow-hidden border-4 border-[#8B4513]">
           <img 
-            src={pet.photos[0]} 
+            src={petAvatar} 
             alt={pet.name}
             class="w-full aspect-video object-cover"
           />
-        </div>
-
-        <!-- Galerie de photos -->
-        <div class="grid grid-cols-2 gap-4">
-          {#each pet.photos.slice(1) as photo, i}
-            <div class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 cursor-pointer">
-              <img 
-                src={photo} 
-                alt="{pet.name} - Photo {i + 2}"
-                class="w-full aspect-square object-cover"
-              />
-            </div>
-          {/each}
         </div>
 
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-6 border-4 border-[#8B4513]">
