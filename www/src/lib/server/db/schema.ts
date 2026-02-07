@@ -33,7 +33,7 @@ export const user = pgTable("user", {
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   bio: text("bio").notNull(),
-  city: text("city").references(() => city.name),
+  city: text("city").references(() => city.code),
   hasAvatar: boolean("has_avatar").notNull(),
   online: boolean("online").notNull(),
 });
@@ -170,7 +170,7 @@ export const association = pgTable("association", {
   email: text("email").notNull(),
   phone: text("phone").notNull(),
   description: text("description").notNull(),
-  city: text("city").references(() => city.name),
+  city: text("city").references(() => city.code),
   type: associationType("type").notNull(),
   foundedAt: timestamp("founded_at", {
     withTimezone: true,

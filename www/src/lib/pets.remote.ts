@@ -22,7 +22,7 @@ export const getPets = query(
   z.object({
     owner: z.string().optional(),
     search: z.string(),
-    species: z.string().nullable(),
+    species: z.string().optional(),
     sortBy: z.custom<"name" | "species">(),
   }),
   ({ owner, search, species, sortBy }) => {

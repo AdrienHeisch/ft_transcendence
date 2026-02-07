@@ -2,22 +2,24 @@
 import { onMount } from "svelte";
 import { resolve } from "$app/paths";
 import { getAssociations, getPetsCount } from "$lib/associations.remote";
-import type { AssociationType } from "$lib/server/db/schema";
+import type { AssociationType, City } from "$lib/server/db/schema";
 
 let { data } = $props();
 
 let searchQuery = $state("");
-let selectedType = $state<AssociationType | null>(null);
-let selectedCity = $state<string | null>(null);
+let selectedType = $state<AssociationType>();
+let selectedCity = $state<City>();
 let sortBy = $state<"name" | "type">("name");
 
-const cities = $derived((await data.cities).map((city) => city.name).sort());
+const cities = $derived(
+  (await data.cities).sort((a, b) => a.name.localeCompare(b.name)),
+);
 
 const associations = $derived(
   await getAssociations({
     search: searchQuery,
     type: selectedType,
-    city: selectedCity,
+    city: selectedCity?.code,
     sortBy,
   }).then((associations) =>
     associations.map((association) => ({
@@ -27,10 +29,10 @@ const associations = $derived(
   ),
 );
 
-onMount(() => {
+onMount(async () => {
   searchQuery = data.filters.search;
   selectedType = data.filters.type;
-  selectedCity = data.filters.city;
+  [selectedCity] = await data.filters.city ?? [undefined];
   sortBy = data.filters.sort;
 });
 </script>
@@ -78,7 +80,7 @@ onMount(() => {
             bind:value={selectedType}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
-            <option value={null}>All</option>
+            <option value={undefined}>All</option>
             {#each data.associationTypes as type}
               <option value={type}>{type}</option>
             {/each}
@@ -93,9 +95,9 @@ onMount(() => {
             bind:value={selectedCity}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
-            <option value={null}>All</option>
+            <option value={undefined}>All</option>
             {#each cities as city}
-              <option value={city}>{city}</option>
+              <option value={city}>{city.name}</option>
             {/each}
           </select>
         </div>
@@ -160,7 +162,7 @@ onMount(() => {
               <div class="flex items-center gap-4 mb-3 text-sm text-orange-800">
                 <div class="flex items-center gap-1">
                   <span>📍</span>
-                  <span>{association.city}</span>
+                  <span>{association.city.name}</span>
                 </div>
                 <div class="flex items-center gap-1">
                   <span>📅</span>

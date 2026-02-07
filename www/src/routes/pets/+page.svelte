@@ -7,7 +7,7 @@ const species = ["Cat", "Dog", "Cow", "Fish", "Horse"];
 
 // Filters
 let searchQuery = $state("");
-let selectedSpecies = $state<string | null>(null);
+let selectedSpecies = $state<string>();
 let sortBy = $state<"name" | "species">("name");
 
 const pets = $derived(
@@ -61,7 +61,7 @@ const pets = $derived(
             bind:value={selectedSpecies}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
-            <option value={null}>All</option>
+            <option value={undefined}>All</option>
             {#each species as sp}
               <option value={sp}>{sp}</option>
             {/each}

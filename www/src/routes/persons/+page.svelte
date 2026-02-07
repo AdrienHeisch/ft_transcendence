@@ -1,16 +1,18 @@
 <script lang="ts">
 import { getPersons } from "$lib/persons.remote";
+import type { City } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
 const _roles = ["Adopter", "Association", "Volunteer"];
-const cities = $derived((await data.cities).map((city) => city.name).sort());
+const cities = $derived((await data.cities).sort((a, b) =>
+  a.name.localeCompare(b.name)));
 
 // Filters
 let searchQuery = $state("");
 let selectedRole = $state<string>();
-let selectedCity = $state<string>();
+let selectedCity = $state<City>();
 let sortBy = $state<"firstName" | "lastName">("firstName");
 
 const _users = $derived(
@@ -32,7 +34,7 @@ const roles = $derived(new Set(_users.map((user) => user.role)));
 const users = $derived(
   _users.filter((user) => {
     const matchRole = !selectedRole || user.role == selectedRole;
-    const matchCity = !selectedCity || user.city == selectedCity;
+    const matchCity = !selectedCity || user.city.code == selectedCity.code;
     return matchRole && matchCity;
   }),
 );
@@ -98,7 +100,7 @@ const users = $derived(
           >
             <option value={undefined}>{"All cities"}</option>
             {#each cities as city}
-              <option value={city}>{city}</option>
+              <option value={city}>{city.name}</option>
             {/each}
           </select>
         </div>
@@ -171,7 +173,7 @@ const users = $derived(
               <div class="flex items-center gap-4 mb-3 text-sm text-orange-800">
                 <div class="flex items-center gap-1">
                   <span>📍</span>
-                  <span>{user.city}</span>
+                  <span>{user.city.name}</span>
                 </div>
                 <div class="flex items-center gap-1">
                   <span>🎂</span>

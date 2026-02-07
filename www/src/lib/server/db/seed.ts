@@ -24,7 +24,7 @@ export default async function seedDb() {
       columns: {
         bio: gen.loremIpsum(),
         online: gen.default({ defaultValue: false }),
-        city: gen.valuesFromArray({ values: cities.map((city) => city.name) }),
+        city: gen.valuesFromArray({ values: cities.map((city) => city.code) }),
       },
       with: {
         pet: [{ weight: 1, count: [1, 2, 3] }],
@@ -48,7 +48,7 @@ export default async function seedDb() {
       columns: {
         name: gen.companyName(),
         logo: gen.valuesFromArray({ values: ["🐄"] }),
-        city: gen.valuesFromArray({ values: cities.map((city) => city.name) }),
+        city: gen.valuesFromArray({ values: cities.map((city) => city.code) }),
         animalsCount: gen.int({ minValue: 1, maxValue: 100 }),
         description: gen.loremIpsum(),
         foundedYear: gen.int({ minValue: 1960, maxValue: 2025 }),

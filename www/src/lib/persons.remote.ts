@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { and, eq, ilike, inArray, or } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray, or } from "drizzle-orm";
 import z from "zod";
 import { form, query } from "$app/server";
 import { requireLogin } from "$lib/server/auth";
@@ -8,9 +8,13 @@ import * as schema from "$lib/server/db/schema";
 
 export const getPerson = query.batch(z.string(), async (persons) => {
   const result = await db
-    .select()
+    .select({
+      ...getTableColumns(schema.user),
+      city: getTableColumns(schema.city),
+    })
     .from(schema.user)
-    .where(inArray(schema.user.id, persons));
+    .where(inArray(schema.user.id, persons))
+    .innerJoin(schema.city, eq(schema.city.code, schema.user.city));
   const lookup = new Map(result.map((user) => [user.id, user]));
   return (user) => lookup.get(user);
 });
@@ -22,7 +26,10 @@ export const getPersons = query(
   }),
   ({ search, sortBy }) => {
     return db
-      .select()
+      .select({
+        ...getTableColumns(schema.user),
+        city: getTableColumns(schema.city),
+      })
       .from(schema.user)
       .where(
         and(
@@ -32,6 +39,7 @@ export const getPersons = query(
           ),
         ),
       )
+      .innerJoin(schema.city, eq(schema.city.code, schema.user.city))
       .orderBy(
         sortBy === "firstName" ? schema.user.firstName : schema.user.lastName,
       );

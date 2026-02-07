@@ -6,9 +6,13 @@ import { db } from "./server/db";
 
 export const getAssociation = query.batch(z.string(), async (associations) => {
   const result = await db
-    .select()
+    .select({
+      ...getTableColumns(schema.association),
+      city: getTableColumns(schema.city),
+    })
     .from(schema.association)
-    .where(inArray(schema.association.id, associations));
+    .where(inArray(schema.association.id, associations))
+    .innerJoin(schema.city, eq(schema.city.code, schema.association.city));
   const lookup = new Map(
     result.map((association) => [association.id, association]),
   );
@@ -18,13 +22,16 @@ export const getAssociation = query.batch(z.string(), async (associations) => {
 export const getAssociations = query(
   z.object({
     search: z.string(),
-    type: schema.associationTypeSchema.nullable(),
-    city: z.string().nullable(),
+    type: schema.associationTypeSchema.optional(),
+    city: z.string().optional(),
     sortBy: z.custom<"name" | "type">(),
   }),
   ({ search, type, city, sortBy }) => {
     return db
-      .select()
+      .select({
+        ...getTableColumns(schema.association),
+        city: getTableColumns(schema.city),
+      })
       .from(schema.association)
       .where(
         and(
@@ -33,6 +40,7 @@ export const getAssociations = query(
           type ? eq(schema.association.type, type) : undefined,
         ),
       )
+      .innerJoin(schema.city, eq(schema.city.code, schema.association.city))
       .orderBy(getTableColumns(schema.association)[sortBy]);
   },
 );

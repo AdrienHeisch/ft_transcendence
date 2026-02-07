@@ -41,7 +41,6 @@ const pets = $derived(
   getPets({
     owner: _user.id,
     search: "",
-    species: null,
     sortBy: "name",
   }),
 );
