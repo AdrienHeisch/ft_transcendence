@@ -11,9 +11,24 @@ export default async function seedDb() {
   );
   const db = drizzle(client, { schema });
   const { city, ...tables } = schema;
-  const cities = await db.select().from(city);
+  
   console.log("Resetting database...");
   await reset(db, tables);
+  
+  // Insert default cities if table is empty
+  let cities = await db.select().from(city);
+  if (cities.length === 0) {
+    await db.insert(city).values([
+      { code: "75056", name: "Paris", location: [2.3522, 48.8566] },
+      { code: "69123", name: "Lyon", location: [4.8357, 45.764] },
+      { code: "13055", name: "Marseille", location: [5.3698, 43.2965] },
+      { code: "31555", name: "Toulouse", location: [1.4442, 43.6047] },
+      { code: "06088", name: "Nice", location: [7.2619, 43.7102] },
+    ]);
+    cities = await db.select().from(city);
+  }
+  const cityNames = cities.map((city) => city.name);
+  
   console.log("Seeding database...");
   await seed(db, tables, { seed: 1 }).refine((gen) => ({
     session: {
@@ -24,7 +39,7 @@ export default async function seedDb() {
       columns: {
         bio: gen.loremIpsum(),
         online: gen.default({ defaultValue: false }),
-        city: gen.valuesFromArray({ values: cities.map((city) => city.name) }),
+        city: gen.valuesFromArray({ values: cityNames }),
       },
       with: {
         pet: [{ weight: 1, count: [1, 2, 3] }],
@@ -48,7 +63,7 @@ export default async function seedDb() {
       columns: {
         name: gen.companyName(),
         logo: gen.valuesFromArray({ values: ["🐄"] }),
-        city: gen.valuesFromArray({ values: cities.map((city) => city.name) }),
+        city: gen.valuesFromArray({ values: cityNames }),
         animalsCount: gen.int({ minValue: 1, maxValue: 100 }),
         description: gen.loremIpsum(),
         foundedYear: gen.int({ minValue: 1960, maxValue: 2025 }),

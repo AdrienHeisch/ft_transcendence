@@ -41,7 +41,8 @@ const closeEdit = () => {
         <img 
           src={getUserAvatar(comment.author)} 
           alt="{comment.author.firstName} {comment.author.lastName}"
-          class="w-12 h-12 rounded-full border-2 border-orange-700"
+          class="w-12 h-12 rounded-full border-2 border-orange-700 bg-orange-200 object-cover"
+          onerror={(e) => e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/png?seed=${comment.author.id}`}
         />
         {#if comment.author.online}
           <div class={["bg-green-500", "absolute", "bottom-0", "right-0", "w-3", "h-3", "rounded-full", "border-2", "border-white"]}></div>

@@ -147,7 +147,8 @@ const users = $derived(
                   <img 
                     src={user.photo} 
                     alt={user.firstName + ' ' + user.lastName}
-                    class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white"
+                    class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-orange-200 object-cover"
+                    onerror={(e) => e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`}
                   />
                   {#if user.online}
                     <div class={["bg-green-500", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>

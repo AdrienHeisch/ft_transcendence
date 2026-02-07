@@ -71,6 +71,7 @@ const isCurrentUser = $derived(data.currentUser?.id === data.user?.id);
                   src={getUserAvatar(friend)}
                   alt="{friend.firstName} {friend.lastName}"
                   class="w-full h-full object-cover"
+                  onerror={(e) => e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/png?seed=${friend.id}`}
                 />
                 {#if friend.online}
                   <div class="absolute top-4 right-4 flex items-center gap-2 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
