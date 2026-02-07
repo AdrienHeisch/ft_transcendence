@@ -3,7 +3,7 @@ WORKDIR /home/bun/app
 COPY ./www/package.json .
 COPY ./www/bun.lock .
 COPY ./www/bunfig.toml .
-COPY ./www/svelte.config.js .
+RUN bun ci
 COPY ./www/drizzle.config.ts .
 COPY ./www/src/lib/server/db/schema.ts ./src/lib/server/db/schema.ts
 COPY ./www/src/websockets.ts ./src/websockets.ts
