@@ -47,6 +47,7 @@ async function addGeoData(db: PostgresJsDatabase<typeof schema>) {
     return;
   }
   console.log("[ ] Adding geographic data...");
+  console.log(`Fetching all cities in France from ${GEO_API_ENDPOINT}`);
   const dataSchema = z.array(
     z.object({
       code: z.string(),
@@ -60,18 +61,22 @@ async function addGeoData(db: PostgresJsDatabase<typeof schema>) {
   );
   const parseResult = dataSchema.safeParse(await fetched.json());
   if (!parseResult.success) {
-    throw `Invalid geographic data: ${parseResult.error}`;
+    throw `Invalid data schema: ${parseResult.error}`;
   }
-  const data = parseResult.data
+  const data = parseResult.data;
+  console.log(`${data.length} cites found`);
+  const cities = data
     .filter((city) => city.population && city.population >= CITY_MIN_POPULATION)
     .map((city) => ({
       code: city.code,
       name: city.nom,
       location: city.centre.coordinates,
     }));
-  console.log(data.length);
+  console.log(
+    `Inserting ${cities.length} cites with population above ${CITY_MIN_POPULATION}`,
+  );
   try {
-    await db.insert(schema.city).values(data);
+    await db.insert(schema.city).values(cities);
   } catch {
     throw "Failed to insert geographic data";
   }
