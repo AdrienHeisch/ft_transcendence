@@ -1,13 +1,8 @@
-const env = await (async () => {
-  try {
-    return (await import("$env/dynamic/public")).env;
-  } catch {
-    return process.env as { PUBLIC_S3_BUCKET: string };
-  }
-})();
+// TODO find a way to use the environment variable in both SvelteKit and regular Bun
+const S3_BUCKET = "public";
 
 export const PublicStorage = {
-  url: (key: string) => `/${env.PUBLIC_S3_BUCKET}/${key}`,
+  url: (key: string) => `/${S3_BUCKET}/${key}`,
 };
 
 export const USER_AVATAR_PREFIX = "user/avatar/";
