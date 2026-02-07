@@ -1,7 +1,11 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import { getPerson } from "$lib/persons.remote";
-import { getUserAvatar, PUBLIC_STORAGE_ENDPOINT, USER_AVATAR_PREFIX } from "$lib/storage";
+import {
+  getUserAvatar,
+  PUBLIC_STORAGE_ENDPOINT,
+  USER_AVATAR_PREFIX,
+} from "$lib/storage";
 
 const { data } = $props();
 
