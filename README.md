@@ -16,19 +16,30 @@ _The “Instructions” section should mention all the needed prerequisites (sof
 tools, versions, configuration like .env setup, etc.), and step-by-step
 instructions to run the project._
 
+### Before anything
+
 - Docker 29.0.0 or Podman 5.7.1 (with podman aliased as docker)
 - `cp .env.example .env` and edit `.env` as necessary
+- The server will listen on port `8000`
 
 ### Release
 
+- `make build` to build the container images
 - `make up` to deploy the application
+- `make down` to remove the containers
 
 ### Development
 
 - `make dev` to start the development server
-- `make seed` to seed the database
-- `make check` to run CI checks
+- `make dev-down` to remove the development containers
+- `make check` to run CI checks before pushing
 - `make format` to format the code
+
+### Tools
+
+- `make reset` to delete the volumes
+- `make seed` to seed the database with random data, __will delete existing
+data__
 
 ## Resources
 
