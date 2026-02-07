@@ -1,11 +1,6 @@
 <script lang="ts">
 import { getPersons } from "$lib/persons.remote";
-import {
-  getUserAvatar,
-  PUBLIC_STORAGE_ENDPOINT,
-  USER_AVATAR_PREFIX,
-} from "$lib/storage";
-
+import { getUserAvatar, USER_AVATAR_PREFIX } from "$lib/storage";
 const { data } = $props();
 
 const _roles = ["Adopter", "Association", "Volunteer"];
