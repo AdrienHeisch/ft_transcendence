@@ -8,10 +8,10 @@ import {
   getUserFriends,
   removeFriend,
 } from "$lib/friends.remote";
+import { getUserAvatar, PUBLIC_STORAGE_ENDPOINT, USER_AVATAR_PREFIX } from "$lib/storage";
 import { updatePerson } from "$lib/persons.remote";
 import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
-import { getUserAvatar } from "$lib/storage";
 
 const { data } = $props();
 
