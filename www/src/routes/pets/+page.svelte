@@ -24,6 +24,16 @@ const pets = $derived(
 );
 
 const petsCount = $derived(pets.at(0)?.count ?? 0);
+
+function resetCurrentPage() {
+  currentPage = 0;
+}
+
+$effect(() => {
+  searchQuery;
+  selectedSpecies;
+  resetCurrentPage();
+});
 </script>
 
 <svelte:head>
