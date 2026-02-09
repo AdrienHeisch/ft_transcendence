@@ -2,6 +2,8 @@
 import { getPets } from "$lib/pets.remote";
 import { getPetAvatar } from "$lib/storage";
 
+const PAGE_SIZE = 12;
+
 // TODO generate this list
 const species = ["Cat", "Dog", "Cow", "Fish", "Horse"];
 
@@ -9,10 +11,19 @@ const species = ["Cat", "Dog", "Cow", "Fish", "Horse"];
 let searchQuery = $state("");
 let selectedSpecies = $state<string>();
 let sortBy = $state<"name" | "species">("name");
+let currentPage = $state(0);
 
 const pets = $derived(
-  await getPets({ search: searchQuery, species: selectedSpecies, sortBy }),
+  await getPets({
+    search: searchQuery,
+    species: selectedSpecies,
+    sortBy,
+    offset: currentPage * PAGE_SIZE,
+    limit: PAGE_SIZE,
+  }),
 );
+
+const petsCount = $derived(pets.at(0)?.count ?? 0);
 </script>
 
 <svelte:head>
@@ -87,7 +98,7 @@ const pets = $derived(
 
       <!-- Results -->
       <div class="mt-4 text-[#8B4513] font-medium">
-        {pets.length} {pets.length > 1 ? "animals" : "animal"} found
+        {petsCount} {petsCount ? "animals" : "animal"} found
       </div>
     </div>
 
@@ -154,6 +165,17 @@ const pets = $derived(
             </div>
           </a>
         {/each}
+      </div>
+      <div>
+        {#if currentPage > 0}
+          <button onclick={() => currentPage--}>←</button>
+        {/if}
+        {#if petsCount > PAGE_SIZE}
+          <span>{currentPage}</span>
+        {/if}
+        {#if (currentPage + 1) * PAGE_SIZE < petsCount}
+          <button onclick={() => currentPage++}>→</button>
+        {/if}
       </div>
     {/if}
   </div>
