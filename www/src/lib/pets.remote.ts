@@ -1,5 +1,5 @@
 import { error, redirect } from "@sveltejs/kit";
-import { and, eq, getTableColumns, ilike, inArray, or } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
 import z from "zod";
 import { resolve } from "$app/paths";
 import { form, query } from "$app/server";
@@ -24,10 +24,15 @@ export const getPets = query(
     search: z.string(),
     species: z.string().optional(),
     sortBy: z.custom<"name" | "species">(),
+    offset: z.int().optional(),
+    limit: z.int().optional(),
   }),
-  ({ owner, search, species, sortBy }) => {
-    return db
-      .select(getTableColumns(schema.pet))
+  ({ owner, search, species, sortBy, offset, limit }) => {
+    const query = db
+      .select({
+        ...getTableColumns(schema.pet),
+        count: sql`count(*) over()`.mapWith(Number),
+      })
       .from(schema.pet)
       .innerJoin(schema.user, eq(schema.user.id, schema.pet.ownerId))
       .where(
@@ -41,7 +46,11 @@ export const getPets = query(
           species ? eq(schema.pet.species, species) : undefined,
         ),
       )
-      .orderBy(sortBy === "name" ? schema.pet.name : schema.pet.species);
+      .orderBy(sortBy === "name" ? schema.pet.name : schema.pet.species)
+      .$dynamic();
+    if (offset) query.offset(offset);
+    if (limit) query.limit(limit);
+    return query;
   },
 );
 
