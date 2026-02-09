@@ -99,29 +99,29 @@ _TODO_
   - [x] A basic chat system (send/receive messages between users)
   - [x] A profile system (view user information)
   - [x] A friends system (add/remove friends, see friends list)
-- [] _Major_ A public API to interact with the database with a secured API key,
+- [ ] _Major_ A public API to interact with the database with a secured API key,
 rate limiting, documentation, and at least 5 endpoints and GET, POST, PUT and DELETE
 methods
 - [x] _Minor_ Use an ORM for the database
 - [x] _Minor_ Server-Side Rendering for improved performance and SEO
-- [] _Minor_ Implement advanced search functionality with filters, sorting and
+- [ ] _Minor_ Implement advanced search functionality with filters, sorting and
 pagination
-- [] _Minor_ File upload and management system
-  - [] Support multiple file types (images, documents, etc.)
-  - [] Client-side and server-side validation (type, size, format)
-  - [] Secure file storage with proper access control
-  - [] File preview functionality where applicable
-  - [] Progress indicators for uploads
-  - [] Ability to delete uploaded files
-- [] _Minor_ Support for additional browsers.
-  - [] Full compatibility with at least 2 additional browsers (Firefox, Safari,
+- [ ] _Minor_ File upload and management system
+  - [ ] Support multiple file types (images, documents, etc.)
+  - [ ] Client-side and server-side validation (type, size, format)
+  - [ ] Secure file storage with proper access control
+  - [ ] File preview functionality where applicable
+  - [ ] Progress indicators for uploads
+  - [ ] Ability to delete uploaded files
+- [ ] _Minor_ Support for additional browsers.
+  - [ ] Full compatibility with at least 2 additional browsers (Firefox, Safari,
   Edge, etc.)
-  - [] Test and fix all features in each browser
-  - [] Document any browser-specific limitations
-  - [] Consistent UI/UX across all supported browsers
-- [] _Major_ Standard user management and authentication
+  - [ ] Test and fix all features in each browser
+  - [ ] Document any browser-specific limitations
+  - [ ] Consistent UI/UX across all supported browsers
+- [ ] _Major_ Standard user management and authentication
   - [x] Users can update their profile information
-  - [] Users can upload an avatar (with a default avatar if none provided)
+  - [ ] Users can upload an avatar (with a default avatar if none provided)
   - [x] Users can add other users as friends and see their online status
   - [x] Users have a profile page displaying their information
 
