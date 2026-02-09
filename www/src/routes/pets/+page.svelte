@@ -8,15 +8,19 @@ const PAGE_SIZE = 12;
 const species = ["Cat", "Dog", "Cow", "Fish", "Horse"];
 
 // Filters
-let searchQuery = $state("");
-let selectedSpecies = $state<string>();
+let filters = $state<{
+  searchQuery: string;
+  selectedSpecies?: string;
+}>({
+  searchQuery: "",
+});
 let sortBy = $state<"name" | "species">("name");
 let currentPage = $state(0);
 
 const pets = $derived(
   await getPets({
-    search: searchQuery,
-    species: selectedSpecies,
+    search: filters.searchQuery,
+    species: filters.selectedSpecies,
     sortBy,
     offset: currentPage * PAGE_SIZE,
     limit: PAGE_SIZE,
@@ -30,8 +34,7 @@ function resetCurrentPage() {
 }
 
 $effect(() => {
-  searchQuery;
-  selectedSpecies;
+  filters;
   resetCurrentPage();
 });
 </script>
@@ -66,7 +69,7 @@ $effect(() => {
       <div class="mb-6">
         <input
           type="text"
-          bind:value={searchQuery}
+          bind:value={filters.searchQuery}
           placeholder="Search by name or description..."
           class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
         />
@@ -79,7 +82,7 @@ $effect(() => {
           <label class="block text-sm font-bold text-[#8B4513] mb-2" for="species">Species</label>
           <select
             id="species"
-            bind:value={selectedSpecies}
+            bind:value={filters.selectedSpecies}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
             <option value={undefined}>All</option>
