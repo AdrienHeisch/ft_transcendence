@@ -1,4 +1,4 @@
-import { and, eq, getTableColumns, ilike, inArray } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray, sql } from "drizzle-orm";
 import z from "zod";
 import { query } from "$app/server";
 import * as schema from "$lib/server/db/schema";
@@ -25,12 +25,15 @@ export const getAssociations = query(
     type: schema.associationTypeSchema.optional(),
     city: z.string().optional(),
     sortBy: z.custom<"name" | "type">(),
+    offset: z.int().optional(),
+    limit: z.int().optional(),
   }),
-  ({ search, type, city, sortBy }) => {
-    return db
+  ({ search, type, city, sortBy, offset, limit }) => {
+    const query = db
       .select({
         ...getTableColumns(schema.association),
         city: getTableColumns(schema.city),
+        count: sql`count(*) over()`.mapWith(Number),
       })
       .from(schema.association)
       .where(
@@ -41,7 +44,11 @@ export const getAssociations = query(
         ),
       )
       .innerJoin(schema.city, eq(schema.city.code, schema.association.city))
-      .orderBy(getTableColumns(schema.association)[sortBy]);
+      .orderBy(getTableColumns(schema.association)[sortBy])
+      .$dynamic();
+    if (offset) query.offset(offset);
+    if (limit) query.limit(limit);
+    return query;
   },
 );
 
