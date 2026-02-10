@@ -4,8 +4,7 @@ import { getPetAvatar } from "$lib/storage";
 
 const PAGE_SIZE = 12;
 
-// TODO generate this list
-const species = ["Cat", "Dog", "Cow", "Fish", "Horse"];
+const { data } = $props();
 
 let searchQuery = $state("");
 let selectedSpecies = $state<string>();
@@ -21,6 +20,8 @@ const pets = $derived(
     limit: PAGE_SIZE,
   }),
 );
+
+const species = $derived(await data.species);
 
 const petsCount = $derived(pets.at(0)?.count ?? 0);
 
@@ -77,8 +78,8 @@ function resetCurrentPage() {
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
             <option value={undefined}>All</option>
-            {#each species as sp}
-              <option value={sp}>{sp}</option>
+            {#each species as species}
+              <option value={species.name}>{species.name}</option>
             {/each}
           </select>
         </div>
