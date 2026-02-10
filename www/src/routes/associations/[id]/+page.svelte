@@ -1,5 +1,4 @@
 <script lang="ts">
-import { resolve } from "$app/paths";
 import type { PageData } from "./$types";
 
 let { data }: { data: PageData } = $props();
@@ -135,22 +134,22 @@ function getPostBadge(type: string) {
       alt="Farm" 
       class="w-full h-full object-cover opacity-20"
     />
-    <div class="absolute inset-0 bg-gradient-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95"></div>
+    <div class="absolute inset-0 bg-linear-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95"></div>
   </div>
 
   <!-- Cover Image -->
-  <div class="relative h-80 bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600">
+  <div class="relative h-80 bg-linear-to-r from-orange-700 via-orange-600 to-amber-600">
     <img 
       src={association.coverImage} 
       alt="Cover" 
       class="w-full h-full object-cover"
     />
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/20"></div>
+    <div class="absolute inset-0 bg-linear-to-b from-transparent to-black/20"></div>
   </div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative">
     <!-- Profile Header -->
-    <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
+    <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
       <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
         <!-- Logo -->
         <div class="relative">
@@ -166,7 +165,7 @@ function getPostBadge(type: string) {
         <div class="flex-1 text-center md:text-left">
           <h1 class="text-3xl font-bold text-gray-900" style="font-family: Georgia, serif;">{association.name}</h1>
           <p class="mt-2 text-gray-700 max-w-2xl">{association.description}</p>
-          
+
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
             <div class="flex items-center gap-1">
               <span>📍</span>
@@ -226,7 +225,7 @@ function getPostBadge(type: string) {
       <!-- Left Sidebar - About -->
       <div class="lg:col-span-1 space-y-6">
         <!-- About Card -->
-        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
+        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
           <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2">
             <span class="text-2xl">ℹ️</span>
             About
@@ -257,7 +256,7 @@ function getPostBadge(type: string) {
         </div>
 
         <!-- Quick Links -->
-        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
+        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
           <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2">
             <span class="text-2xl">🔗</span>
             Quick Links
@@ -275,7 +274,7 @@ function getPostBadge(type: string) {
       <!-- Posts Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#each posts as post (post.id)}
-          <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700">
+          <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700">
             <!-- Post Header -->
             <div class="p-4 flex items-center justify-between">
               <div class="flex items-center gap-3">
@@ -297,7 +296,7 @@ function getPostBadge(type: string) {
             <div>
               <h3 class="px-4 pb-2 text-lg font-bold text-gray-900">{post.title}</h3>
               <p class="px-4 pb-4 text-gray-700">{post.content}</p>
-              
+
               {#if post.image}
                 <img src={post.image} alt={post.title} class="w-full h-80 object-cover" />
               {/if}
