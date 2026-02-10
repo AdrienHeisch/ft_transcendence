@@ -1,4 +1,5 @@
 <script lang="ts">
+import { resolve } from "$app/paths";
 import { getPersons } from "$lib/persons.remote";
 import type { City } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
@@ -217,9 +218,9 @@ function resetCurrentPage() {
                 <a href="./{user.id}" class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
                   👁️ View profile
                 </a>
-                <button class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
-                  💬 Contact
-                </button>
+                <a href={resolve(`/messages/${user.id}`)} class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors text-center">
+                  💬 Message
+                </a>
               </div>
             </div>
           </div>
