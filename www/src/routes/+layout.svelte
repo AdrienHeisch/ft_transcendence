@@ -44,7 +44,7 @@ const sidebarMainItems = $derived(
 );
 
 const sidebarBottomItems = [
-  { label: "Help & Support", icon: "❓", href: "/" }, // TODO href
+  { label: "Help & Support", icon: "❓", href: "/help" },
   { label: "Settings", icon: "⚙️", href: resolve("/settings") },
 ];
 
