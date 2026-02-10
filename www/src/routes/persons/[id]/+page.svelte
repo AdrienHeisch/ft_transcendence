@@ -96,12 +96,12 @@ let isEditMode = $state(false);
           {#if isEditMode}
             <div class="flex">
               <textarea
-                class="text-3xl font-bold text-gray-900 border-1 rounded bg-yellow-100 resize-none"
+                class="text-3xl font-bold text-gray-900 border rounded bg-yellow-100 resize-none"
                 rows=1
                 {...updatePerson.fields.firstName.as("text")}
               >{user.firstName}</textarea>
               <textarea
-                class="text-3xl font-bold text-gray-900 border-1 rounded bg-yellow-100 resize-none"
+                class="text-3xl font-bold text-gray-900 border rounded bg-yellow-100 resize-none"
                 rows=1
                 {...updatePerson.fields.lastName.as("text")}
               >{user.lastName}</textarea>
@@ -112,7 +112,7 @@ let isEditMode = $state(false);
           <p class="text-lg text-gray-600">@{user.username}</p>
           {#if isEditMode}
             <textarea
-              class="mt-2 text-gray-700 max-w-2xl border-1 rounded bg-yellow-100 resize-none"
+              class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
               rows=1
               {...updatePerson.fields.bio.as("text")}
             >{user.bio}</textarea>

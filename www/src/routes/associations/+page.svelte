@@ -52,7 +52,7 @@ function resetCurrentPage() {
   <title>Associations - Bibi's Farm</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-orange-100">
+<div class="min-h-screen bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Page title -->
     <div class="text-center mb-8">
@@ -153,13 +153,13 @@ function resetCurrentPage() {
             class="bg-white rounded-2xl shadow-lg overflow-hidden border-4 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
           >
             <!-- Logo and type badge -->
-            <div class="relative bg-gradient-to-br from-orange-200 to-yellow-200 p-6">
+            <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
                 <div class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white flex items-center justify-center text-6xl">
                   {association.logo}
                 </div>
               </div>
-              
+
               <!-- Type badge -->
               <span class="absolute top-3 right-3 px-3 py-1 bg-orange-600 text-white rounded-lg font-bold text-sm shadow-md">
                 {association.type}
@@ -206,7 +206,7 @@ function resetCurrentPage() {
 
               <!-- Buttons -->
               <div class="flex gap-2">
-                <a href={resolve(`/associations/${association.id}`)} class="text-center flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
+                <a href={resolve(`/associations/${association.id}`)} class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
                   👁️ View profile
                 </a>
                 <button class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
