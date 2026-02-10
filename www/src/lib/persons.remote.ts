@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { and, eq, getTableColumns, ilike, inArray, or } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
 import z from "zod";
 import { form, query } from "$app/server";
 import { requireLogin } from "$lib/server/auth";
@@ -22,13 +22,17 @@ export const getPerson = query.batch(z.string(), async (persons) => {
 export const getPersons = query(
   z.object({
     search: z.string(),
+    city: z.string().optional(),
     sortBy: z.custom<"firstName" | "lastName">(),
+    offset: z.int().optional(),
+    limit: z.int().optional(),
   }),
-  ({ search, sortBy }) => {
-    return db
+  ({ search, city, sortBy, offset, limit }) => {
+    const query = db
       .select({
         ...getTableColumns(schema.user),
         city: getTableColumns(schema.city),
+        count: sql`count(*) over()`.mapWith(Number),
       })
       .from(schema.user)
       .where(
@@ -37,12 +41,17 @@ export const getPersons = query(
             ilike(schema.user.firstName, `%${search}%`),
             ilike(schema.user.lastName, `%${search}%`),
           ),
+          city ? eq(schema.user.city, city) : undefined,
         ),
       )
       .innerJoin(schema.city, eq(schema.city.code, schema.user.city))
       .orderBy(
         sortBy === "firstName" ? schema.user.firstName : schema.user.lastName,
-      );
+      )
+      .$dynamic();
+    if (offset) query.offset(offset);
+    if (limit) query.limit(limit);
+    return query;
   },
 );
 

@@ -3,6 +3,8 @@ import { getPersons } from "$lib/persons.remote";
 import type { City } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
 
+const PAGE_SIZE = 12;
+
 const { data } = $props();
 
 const _roles = ["Adopter", "Association", "Volunteer"];
@@ -15,9 +17,18 @@ let searchQuery = $state("");
 let selectedRole = $state<string>();
 let selectedCity = $state<City>();
 let sortBy = $state<"firstName" | "lastName">("firstName");
+let currentPage = $state(0);
 
 const _users = $derived(
-  (await getPersons({ search: searchQuery, sortBy }))
+  (
+    await getPersons({
+      search: searchQuery,
+      city: selectedCity?.code,
+      sortBy,
+      offset: currentPage * PAGE_SIZE,
+      limit: PAGE_SIZE,
+    })
+  )
     // TODO remove fake data
     .map((user) => ({
       ...user,
@@ -35,10 +46,15 @@ const roles = $derived(new Set(_users.map((user) => user.role)));
 const users = $derived(
   _users.filter((user) => {
     const matchRole = !selectedRole || user.role == selectedRole;
-    const matchCity = !selectedCity || user.city.code == selectedCity.code;
-    return matchRole && matchCity;
+    return matchRole;
   }),
 );
+
+const usersCount = $derived(users.at(0)?.count ?? 0);
+
+function resetCurrentPage() {
+  currentPage = 0;
+}
 </script>
 
 <svelte:head>
@@ -69,6 +85,7 @@ const users = $derived(
         <input
           type="text"
           bind:value={searchQuery}
+          onchange={resetCurrentPage}
           placeholder="Search by first name, last name, username or bio..."
           class="w-full px-4 py-3 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
         />
@@ -82,6 +99,7 @@ const users = $derived(
           <select
             id="role"
             bind:value={selectedRole}
+            onchange={resetCurrentPage}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
             <option value={undefined}>{"All roles"}</option>
@@ -97,6 +115,7 @@ const users = $derived(
           <select
             id="city"
             bind:value={selectedCity}
+            onchange={resetCurrentPage}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
             <option value={undefined}>{"All cities"}</option>
@@ -126,7 +145,7 @@ const users = $derived(
 
       <!-- Results -->
       <div class="mt-4 text-orange-900 font-medium">
-        {users.length} {users.length > 1 ? "people found" : "person found"}
+        {usersCount} {usersCount > 1 ? "people found" : "person found"}
       </div>
     </div>
 
@@ -205,6 +224,17 @@ const users = $derived(
             </div>
           </div>
         {/each}
+      </div>
+      <div>
+        {#if currentPage > 0}
+          <button onclick={() => currentPage--}>←</button>
+        {/if}
+        {#if usersCount > PAGE_SIZE}
+          <span>{currentPage}</span>
+        {/if}
+        {#if (currentPage + 1) * PAGE_SIZE < usersCount}
+          <button onclick={() => currentPage++}>→</button>
+        {/if}
       </div>
     {/if}
   </div>
