@@ -32,11 +32,6 @@ const petsCount = $derived(pets.at(0)?.count ?? 0);
 function resetCurrentPage() {
   currentPage = 0;
 }
-
-$effect(() => {
-  filters;
-  resetCurrentPage();
-});
 </script>
 
 <svelte:head>
@@ -83,6 +78,7 @@ $effect(() => {
           <select
             id="species"
             bind:value={filters.selectedSpecies}
+            onchange={resetCurrentPage}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
             <option value={undefined}>All</option>
@@ -98,6 +94,7 @@ $effect(() => {
           <select
             id="sortBy"
             bind:value={sortBy}
+            onchange={resetCurrentPage}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
             <option value="name">Name (A-Z)</option>
