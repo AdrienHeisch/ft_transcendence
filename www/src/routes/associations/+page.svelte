@@ -4,12 +4,15 @@ import { resolve } from "$app/paths";
 import { getAssociations, getPetsCount } from "$lib/associations.remote";
 import type { AssociationType, City } from "$lib/server/db/schema";
 
+const PAGE_SIZE = 12;
+
 let { data } = $props();
 
 let searchQuery = $state("");
 let selectedType = $state<AssociationType>();
 let selectedCity = $state<City>();
 let sortBy = $state<"name" | "type">("name");
+let currentPage = $state(0);
 
 const cities = $derived(
   (await data.cities).sort((a, b) => a.name.localeCompare(b.name)),
@@ -21,6 +24,8 @@ const associations = $derived(
     type: selectedType,
     city: selectedCity?.code,
     sortBy,
+    offset: currentPage * PAGE_SIZE,
+    limit: PAGE_SIZE,
   }).then((associations) =>
     associations.map((association) => ({
       ...association,
@@ -29,12 +34,18 @@ const associations = $derived(
   ),
 );
 
+const associationsCount = $derived(associations.at(0)?.count ?? 0);
+
 onMount(async () => {
   searchQuery = data.filters.search;
   selectedType = data.filters.type;
   [selectedCity] = (await data.filters.city) ?? [undefined];
   sortBy = data.filters.sort;
 });
+
+function resetCurrentPage() {
+  currentPage = 0;
+}
 </script>
 
 <svelte:head>
@@ -78,6 +89,7 @@ onMount(async () => {
           <select
             id="type"
             bind:value={selectedType}
+            onchange={resetCurrentPage}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
             <option value={undefined}>All</option>
@@ -93,6 +105,7 @@ onMount(async () => {
           <select
             id="city"
             bind:value={selectedCity}
+            onchange={resetCurrentPage}
             class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
           >
             <option value={undefined}>All</option>
@@ -122,7 +135,7 @@ onMount(async () => {
 
       <!-- Results -->
       <div class="mt-4 text-orange-900 font-medium">
-        {associations.length} {associations.length > 1 ? "associations found" : "association found"}
+        {associationsCount} {associationsCount > 1 ? "associations found" : "association found"}
       </div>
     </div>
 
@@ -203,6 +216,17 @@ onMount(async () => {
             </div>
           </div>
         {/each}
+      </div>
+      <div>
+        {#if currentPage > 0}
+          <button onclick={() => currentPage--}>←</button>
+        {/if}
+        {#if associationsCount > PAGE_SIZE}
+          <span>{currentPage}</span>
+        {/if}
+        {#if (currentPage + 1) * PAGE_SIZE < associationsCount}
+          <button onclick={() => currentPage++}>→</button>
+        {/if}
       </div>
     {/if}
   </div>
