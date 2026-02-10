@@ -7,20 +7,15 @@ const PAGE_SIZE = 12;
 // TODO generate this list
 const species = ["Cat", "Dog", "Cow", "Fish", "Horse"];
 
-// Filters
-let filters = $state<{
-  searchQuery: string;
-  selectedSpecies?: string;
-}>({
-  searchQuery: "",
-});
+let searchQuery = $state("");
+let selectedSpecies = $state<string>();
 let sortBy = $state<"name" | "species">("name");
 let currentPage = $state(0);
 
 const pets = $derived(
   await getPets({
-    search: filters.searchQuery,
-    species: filters.selectedSpecies,
+    search: searchQuery,
+    species: selectedSpecies,
     sortBy,
     offset: currentPage * PAGE_SIZE,
     limit: PAGE_SIZE,
@@ -64,7 +59,7 @@ function resetCurrentPage() {
       <div class="mb-6">
         <input
           type="text"
-          bind:value={filters.searchQuery}
+          bind:value={searchQuery}
           placeholder="Search by name or description..."
           class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
         />
@@ -77,7 +72,7 @@ function resetCurrentPage() {
           <label class="block text-sm font-bold text-[#8B4513] mb-2" for="species">Species</label>
           <select
             id="species"
-            bind:value={filters.selectedSpecies}
+            bind:value={selectedSpecies}
             onchange={resetCurrentPage}
             class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           >
