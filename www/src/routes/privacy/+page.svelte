@@ -104,7 +104,7 @@
 					<h2 class="text-2xl font-bold text-orange-800 mb-3">10. Contact</h2>
 					<p>
 						For any questions regarding this privacy policy or to exercise your rights, 
-						contact us at: <a href="mailto:privacy@lafermeabibi.com" class="text-orange-600 hover:text-orange-800 underline">privacy@lafermeabibi.com</a>
+						contact us at: <a href="mailto:privacy@bibisfarm.com" class="text-orange-600 hover:text-orange-800 underline">privacy@bibisfarm.com</a>
 					</p>
 				</section>
 

@@ -134,7 +134,7 @@
 					<h2 class="text-2xl font-bold text-orange-800 mb-3">12. Contact</h2>
 					<p>
 						For any questions regarding these terms of service, contact us at: 
-						<a href="mailto:legal@lafermeabibi.com" class="text-orange-600 hover:text-orange-800 underline">legal@lafermeabibi.com</a>
+						<a href="mailto:legal@bibisfarm.com" class="text-orange-600 hover:text-orange-800 underline">legal@bibisfarm.com</a>
 					</p>
 				</section>
 
