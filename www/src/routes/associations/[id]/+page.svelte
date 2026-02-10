@@ -170,7 +170,7 @@ function getPostBadge(type: string) {
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
             <div class="flex items-center gap-1">
               <span>📍</span>
-              <span>{association.city}</span>
+              <span>{association.city.name}</span>
             </div>
             <div class="flex items-center gap-1">
               <span>📧</span>
