@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
   return {
     associationTypes: schema.associationType.enumValues,
-    cities: db.select().from(schema.city),
+    cities: db.select().from(schema.city).orderBy(schema.city.name),
     filters: {
       search: searchQuery,
       type: selectedType,

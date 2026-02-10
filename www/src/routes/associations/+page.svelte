@@ -14,9 +14,7 @@ let selectedCity = $state<City>();
 let sortBy = $state<"name" | "type">("name");
 let currentPage = $state(0);
 
-const cities = $derived(
-  (await data.cities).sort((a, b) => a.name.localeCompare(b.name)),
-);
+const cities = $derived(await data.cities);
 
 const associations = $derived(
   await getAssociations({
