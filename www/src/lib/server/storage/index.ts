@@ -8,6 +8,7 @@ export const PublicStorage = {
   upload: async (key: string, file: Blob | File) =>
     s3.write(key, await file.bytes()),
   list: (input?: S3ListObjectsOptions) => s3.list(input),
+  delete: (key: string) => s3.delete(key),
 };
 
 const bucket = process.env.S3_BUCKET_PRIVATE;
@@ -26,4 +27,5 @@ export const PrivateStorage = {
   upload: async (key: string, file: Blob | File) =>
     s3.write(key, await file.bytes(), { bucket }),
   list: (input?: S3ListObjectsOptions) => s3.list(input, { bucket }),
+  delete: (key: string) => s3.delete(key, { bucket }),
 };
