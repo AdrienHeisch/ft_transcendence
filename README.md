@@ -104,7 +104,7 @@ rate limiting, documentation, and at least 5 endpoints and GET, POST, PUT and DE
 methods
 - [x] _Minor_ Use an ORM for the database
 - [x] _Minor_ Server-Side Rendering for improved performance and SEO
-- [ ] _Minor_ Implement advanced search functionality with filters, sorting and
+- [x] _Minor_ Implement advanced search functionality with filters, sorting and
 pagination
 - [ ] _Minor_ File upload and management system
   - [ ] Support multiple file types (images, documents, etc.)
