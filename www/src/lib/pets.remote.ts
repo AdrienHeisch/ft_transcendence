@@ -58,7 +58,7 @@ export const createPet = form(
   z.object({
     name: z.string(),
     birth: z.string(),
-    bio: z.string().optional(),
+    bio: z.string(),
     species: z.string(),
     breed: z.string(),
     avatar: z.custom<File>(),
@@ -71,7 +71,7 @@ export const createPet = form(
       ownerId: user.id,
       name,
       birth: new Date(birth),
-      bio: bio ?? "",
+      bio,
       species,
       breed,
       hasAvatar: true,
