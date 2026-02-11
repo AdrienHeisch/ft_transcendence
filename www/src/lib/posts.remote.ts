@@ -184,5 +184,6 @@ export const deletePost = command(z.string(), async (id) => {
   await db
     .delete(schema.post)
     .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
+  await PublicStorage.delete(`${POST_IMAGE_PREFIX + id}.png`);
   await getPosts({}).refresh();
 });
