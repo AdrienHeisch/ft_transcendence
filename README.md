@@ -113,7 +113,7 @@ pagination
   - [ ] File preview functionality where applicable
   - [ ] Progress indicators for uploads
   - [ ] Ability to delete uploaded files
-- [ ] _Minor_ Support for additional browsers.
+- [ ] _Minor_ Support for additional browsers
   - [ ] Full compatibility with at least 2 additional browsers (Firefox, Safari,
   Edge, etc.)
   - [ ] Test and fix all features in each browser
