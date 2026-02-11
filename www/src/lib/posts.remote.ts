@@ -2,6 +2,7 @@ import { error } from "@sveltejs/kit";
 import { and, desc, eq, getTableColumns, inArray } from "drizzle-orm";
 import z from "zod";
 import { command, form, query } from "$app/server";
+import { MAX_FILE_SIZE } from "$env/static/private";
 import { isLoggedIn, requireLogin } from "$lib/server/auth";
 import type { Post, User } from "$lib/server/db/schema";
 import * as schema from "$lib/server/db/schema";
@@ -152,16 +153,24 @@ export const createPost = form(
   async ({ content, file }) => {
     const user = requireLogin();
     const id = crypto.randomUUID();
-    await db.insert(schema.post).values({
-      id,
-      author: user.id,
-      content,
-      postedAt: new Date(),
-    });
+    if (file.size > Number(MAX_FILE_SIZE))
+      error(413);
+    const fileKey = `${POST_IMAGE_PREFIX + id}.png`;
     try {
-      await PublicStorage.upload(`${POST_IMAGE_PREFIX + id}.png`, file);
+      await PublicStorage.upload(fileKey, file);
     } catch {
-      error(500, "Failed to import file");
+      error(500, "Failed to create post");
+    }
+    try {
+      await db.insert(schema.post).values({
+        id,
+        author: user.id,
+        content,
+        postedAt: new Date(),
+      });
+    } catch {
+      await PublicStorage.delete(fileKey);
+      error(500, "Failed to create post");
     }
     await getPosts({}).refresh();
   },

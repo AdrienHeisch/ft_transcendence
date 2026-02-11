@@ -3,6 +3,7 @@ import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
 import z from "zod";
 import { resolve } from "$app/paths";
 import { command, form, query } from "$app/server";
+import { MAX_FILE_SIZE } from "$env/static/private";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
@@ -66,20 +67,28 @@ export const createPet = form(
   async ({ name, birth, bio, species, breed, avatar }) => {
     const user = requireLogin();
     const id = crypto.randomUUID();
-    await db.insert(schema.pet).values({
-      id,
-      ownerId: user.id,
-      name,
-      birth: new Date(birth),
-      bio,
-      species,
-      breed,
-      hasAvatar: true,
-    });
+    const fileKey = `${PET_AVATAR_PREFIX + id}.png`;
+    if (avatar.size > Number(MAX_FILE_SIZE))
+      error(413);
     try {
-      await PublicStorage.upload(`${PET_AVATAR_PREFIX + id}.png`, avatar);
+      await PublicStorage.upload(fileKey, avatar);
     } catch {
-      error(500, "Failed to import file");
+      error(500, "Failed to create pet profile");
+    }
+    try {
+      await db.insert(schema.pet).values({
+        id,
+        ownerId: user.id,
+        name,
+        birth: new Date(birth),
+        bio,
+        species,
+        breed,
+        hasAvatar: true,
+      });
+    } catch {
+      await PublicStorage.delete(fileKey);
+      error(500, "Failed to create pet profile");
     }
     redirect(303, resolve(`/pets/${id}`));
   },
