@@ -20,8 +20,9 @@ export const register = form(
     lastName: z.string(),
     email: z.email(),
     password: z.string(),
+    city: z.string(),
   }),
-  async ({ firstName, lastName, email, password }) => {
+  async ({ firstName, lastName, email, password, city }) => {
     // if (!validatePassword(password)) { // TODO password validation
     //   return fail(400, { message: "Invalid password" });
     // }
@@ -43,6 +44,7 @@ export const register = form(
         firstName,
         lastName,
         bio: "",
+        city,
         hasAvatar: false,
         online: false,
       });

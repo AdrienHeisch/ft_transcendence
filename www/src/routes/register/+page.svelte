@@ -1,6 +1,8 @@
 <script lang="ts">
 import * as remote from "$lib/auth.remote";
 
+const { data } = $props();
+
 let firstName = $state<string>("");
 let lastName = $state<string>("");
 
@@ -113,6 +115,23 @@ $effect(() =>
         <!--     placeholder={defaultUsername || "Enter your username"} -->
         <!--   /> -->
         <!-- </div> -->
+
+        <!-- City -->
+        <div class="space-y-2">
+          <label for="city" class="block text-sm font-medium text-gray-700">
+            City
+          </label>
+          <select
+            id="city"
+            name="city"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
+          >
+            <option disabled selected value>-- Select a city -- </option>
+            {#each await data.cities as city}
+              <option value={city.code}>{city.name}</option>
+            {/each}
+          </select>
+        </div>
 
         <!-- Email -->
         <div class="space-y-2">
