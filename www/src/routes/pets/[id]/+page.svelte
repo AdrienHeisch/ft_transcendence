@@ -1,4 +1,8 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
+    import { resolve } from '$app/paths';
+    import { deletePet } from '$lib/pets.remote.js';
+
 const { data } = $props();
 
 // TODO remove fake data
@@ -11,6 +15,8 @@ const pet = $derived({
     "https://cdn.canardware.com/2021/05/05044743/10327-vache-1200x627.jpg",
   ],
 });
+
+const isOwned = $derived(data.currentUser?.id === pet.ownerId);
 </script>
 
 <svelte:head>
@@ -35,6 +41,9 @@ const pet = $derived({
               <h1 class="text-4xl font-bold text-[#8B4513] mb-2">{pet.name}</h1>
               <p class="text-xl text-[#A0522D] font-medium">{pet.species}</p>
             </div>
+            {#if isOwned}
+              <button onclick={async () => { await deletePet(pet.id); await goto(resolve("/pets")); }}>Delete</button>
+            {/if}
             {#if pet.adopted}
               <span class="px-4 py-2 bg-orange-600 text-white rounded-lg font-medium">
                 Adopted

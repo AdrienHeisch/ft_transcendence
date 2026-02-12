@@ -2,7 +2,7 @@ import { error, redirect } from "@sveltejs/kit";
 import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
 import z from "zod";
 import { resolve } from "$app/paths";
-import { form, query } from "$app/server";
+import { command, form, query } from "$app/server";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
@@ -84,3 +84,19 @@ export const createPet = form(
     redirect(303, resolve(`/pets/${id}`));
   },
 );
+
+export const deletePet = command(z.string(), async (petId) => {
+  const user = requireLogin();
+
+  const [pet] = await db.select().from(schema.pet).where(eq(schema.pet.id, petId));
+  if (!pet) {
+    error(404);
+  }
+
+  if (pet.ownerId !== user.id) {
+    error(401);
+  }
+
+  await PublicStorage.delete(`${PET_AVATAR_PREFIX + petId}.png`);
+  await db.delete(schema.pet).where(eq(schema.pet.id, petId));
+});
