@@ -33,6 +33,26 @@ const faqs = [
       "Yes! Go to your pet's profile page and click on the 'Edit' button. You can update any information, add new photos, or change the adoption status.",
   },
   {
+    question: "How do I change my privacy settings?",
+    answer:
+      "Visit your 'Settings' page from the main menu. There you can adjust who can see your posts, who can send you messages, and manage your account privacy preferences.",
+  },
+  {
+    question: "What should I do if I see inappropriate content?",
+    answer:
+      "Please report any inappropriate content using the 'Report' button available on posts and profiles. Our moderation team will review the report and take appropriate action according to our Terms of Service.",
+  },
+  {
+    question: "How do I delete my account?",
+    answer:
+      "Go to 'Settings' and scroll down to the 'Account Management' section. Click on 'Delete Account' and follow the confirmation steps. Please note that this action is permanent and cannot be undone.",
+  },
+  {
+    question: "I forgot my password, what should I do?",
+    answer:
+      "Click on 'Forgot Password?' on the login page. Enter your email address and you'll receive a password reset link. Follow the instructions in the email to create a new password.",
+  },
+  {
     question: "Can I share photos of my pets?",
     answer:
       "Absolutely! You can share photos by creating posts on your feed. You can also add multiple photos to your pet's profile. Make sure the photos are clear and showcase your pet in the best light!",
@@ -140,6 +160,9 @@ function toggleFaq(index: number) {
 							</span>
 						</div>
 					</div>
+					<p class="text-sm text-gray-500 mt-4">
+						We typically respond within 24-48 hours during business days.
+					</p>
 				</div>
 			</div>
 
