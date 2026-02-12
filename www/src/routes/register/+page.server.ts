@@ -8,5 +8,5 @@ export const load: PageServerLoad = () => {
   if (isLoggedIn()) redirect(302, "/");
   return {
     cities: db.select().from(schema.city).orderBy(schema.city.name),
-  }
+  };
 };

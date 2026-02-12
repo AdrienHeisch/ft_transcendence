@@ -153,8 +153,9 @@ export const createPost = form(
   async ({ content, file }) => {
     const user = requireLogin();
     const id = crypto.randomUUID();
-    if (file.size > Number(MAX_FILE_SIZE))
+    if (file.size > Number(MAX_FILE_SIZE)) {
       error(413);
+    }
     const fileKey = `${POST_IMAGE_PREFIX + id}.png`;
     try {
       await PublicStorage.upload(fileKey, file);

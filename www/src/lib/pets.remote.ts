@@ -68,8 +68,9 @@ export const createPet = form(
     const user = requireLogin();
     const id = crypto.randomUUID();
     const fileKey = `${PET_AVATAR_PREFIX + id}.png`;
-    if (avatar.size > Number(MAX_FILE_SIZE))
+    if (avatar.size > Number(MAX_FILE_SIZE)) {
       error(413);
+    }
     try {
       await PublicStorage.upload(fileKey, avatar);
     } catch {
