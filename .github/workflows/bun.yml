@@ -26,6 +26,9 @@ jobs:
         run: biome ci .
         working-directory: ./www
 
+      - name: Create .env
+        run: cp .env.example .env
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
