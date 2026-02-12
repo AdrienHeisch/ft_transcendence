@@ -27,7 +27,7 @@ jobs:
         working-directory: ./www
 
       - name: Create .env
-        run: cp .env.example .env
+        run: cp .env.example ./www/.env
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
