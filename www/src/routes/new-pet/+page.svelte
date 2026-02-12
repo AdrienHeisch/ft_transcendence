@@ -159,7 +159,7 @@ $effect(() => {
               <input
                 name="avatar"
                 type="file"
-                accept="image/*"
+                accept="image/png"
                 class="hidden"
                 bind:files
               />
