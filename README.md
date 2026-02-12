@@ -41,6 +41,7 @@ instructions to run the project._
 - `make reset` to delete the volumes
 - `make seed` to seed the database with random data, __will delete existing
 data__
+- In development, the database can be inspected at [local.drizzle.studio](https://local.drizzle.studio)
 
 ## Resources
 
