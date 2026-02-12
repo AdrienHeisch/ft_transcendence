@@ -87,6 +87,7 @@ export const actions: Actions = {
         firstName: "",
         lastName: "",
         bio: "",
+        city: "75056",
         hasAvatar: false,
         online: false,
       });
