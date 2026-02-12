@@ -44,8 +44,8 @@ const sidebarMainItems = $derived(
 );
 
 const sidebarBottomItems = [
-  { label: "Help & Support", icon: "❓", href: "/help" },
-  { label: "Settings", icon: "⚙️", href: resolve("/settings") },
+  { label: "Help & Support", icon: "❓", href: "/help", requiresLogin: false },
+  { label: "Settings", icon: "⚙️", href: resolve("/settings"), requiresLogin: true },
 ];
 
 const newMessages = 0; // TODO new messages
@@ -139,21 +139,33 @@ $effect(() => {
       <div class="p-4 border-t-2 border-orange-300">
         <nav class="space-y-2">
           {#each sidebarBottomItems as item}
-            <a
-              href={item.href}
-              class="w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
-            >
-              <span class="text-xl">{item.icon}</span>
-              <span>{item.label}</span>
-            </a>
+            {#if !item.requiresLogin || data.currentUser}
+              <a
+                href={item.href}
+                class="w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
+              >
+                <span class="text-xl">{item.icon}</span>
+                <span>{item.label}</span>
+              </a>
+            {/if}
           {/each}
-            <button
-              onclick={() => auth.logout().then(() => location.reload()).catch((e) => console.log(e))}
-              class="cursor-pointer w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
-            >
-              <span class="text-xl">🚪</span>
-              <span>Logout</span>
-            </button>
+            {#if data.currentUser}
+              <button
+                onclick={() => auth.logout().then(() => location.reload()).catch((e) => console.log(e))}
+                class="cursor-pointer w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
+              >
+                <span class="text-xl">🚪</span>
+                <span>Logout</span>
+              </button>
+            {:else}
+              <a
+                href={resolve("/login")}
+                class="cursor-pointer w-full text-left px-4 py-3 rounded-lg bg-white hover:bg-orange-100 transition shadow-md border-2 border-orange-300 font-semibold text-orange-900 flex items-center gap-3"
+              >
+                <span class="text-xl">👤</span>
+                <span>Login</span>
+              </a>
+            {/if}
         </nav>
       </div>
     </aside>
