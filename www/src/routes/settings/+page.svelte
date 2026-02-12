@@ -1,5 +1,7 @@
 <script lang="ts">
-import { updateCredentials } from "$lib/auth.remote";
+import { deleteAccount, updateCredentials } from "$lib/auth.remote";
+
+type SectionName = "Profile" | "Account settings" | "Account actions";
 
 const sections = [
   // {
@@ -8,15 +10,20 @@ const sections = [
   //   description: "Manage your personal information.",
   // },
   {
-    name: "Account",
+    name: "Account settings" satisfies SectionName as SectionName,
     icon: "🔒",
     description:
       "Manage your security settings, including your password and authentication factors.",
   },
   // { name: "Privacy", icon: "🔐", description: "Set your data sharing and privacy preferences." },
+  {
+    name: "Account actions" satisfies SectionName as SectionName,
+    icon: "🔒",
+    description: "Delete your account",
+  },
 ];
 
-let selectedSection = $state(sections[0].name);
+let selectedSection = $state<SectionName>(sections[0].name);
 
 let email = $state<string>();
 let password = $state<string>("");
@@ -100,7 +107,7 @@ $effect(() =>
         </form>
       {/if}
 
-      {#if selectedSection === "Account"}
+      {#if selectedSection === "Account settings"}
         <form {...updateCredentials} class="space-y-6">
           <div>
             <label class="block text-sm font-bold text-[#8B4513] mb-2">
@@ -152,6 +159,28 @@ $effect(() =>
             class="w-full py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold text-lg hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg hover:shadow-xl"
           >
             💾 Save Changes
+          </button>
+        </form>
+      {/if}
+
+      {#if selectedSection === "Account actions"}
+        <form {...deleteAccount}>
+          <div>
+            <label class="block text-sm font-bold text-[#8B4513] mb-2">
+              Password
+              <input 
+                placeholder="Enter your current password..." 
+                required 
+                {...deleteAccount.fields.password.as("password")} 
+                class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+              />
+            </label>
+          </div>
+          <button 
+            type="submit" 
+            class="w-full py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold text-lg hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg hover:shadow-xl"
+          >
+            Delete account
           </button>
         </form>
       {/if}

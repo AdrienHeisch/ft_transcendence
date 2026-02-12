@@ -7,6 +7,12 @@ import { command, form, getRequestEvent } from "$app/server";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
+import { PublicStorage } from "./server/storage";
+import {
+  PET_AVATAR_PREFIX,
+  POST_IMAGE_PREFIX,
+  USER_AVATAR_PREFIX,
+} from "./storage";
 
 export const register = form(
   z.object({
@@ -136,5 +142,43 @@ export const updateCredentials = form(
       .update(schema.user)
       .set({ email, passwordHash })
       .where(eq(schema.user.id, user.id));
+  },
+);
+
+export const deleteAccount = form(
+  z.object({
+    password: z.string(),
+  }),
+  async ({ password }) => {
+    const user = auth.requireLogin();
+
+    //TODO extract to function (present in login)
+    const validPassword = await verify(user.passwordHash, password, {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    });
+
+    if (!validPassword) {
+      return error(400, { message: "Incorrect username or password" });
+    }
+
+    (
+      await db.select().from(schema.post).where(eq(schema.post.author, user.id))
+    ).forEach(async (post) => {
+      await PublicStorage.delete(`${POST_IMAGE_PREFIX + post.id}.png`);
+    });
+
+    (
+      await db.select().from(schema.pet).where(eq(schema.pet.ownerId, user.id))
+    ).forEach(async (pet) => {
+      await PublicStorage.delete(`${PET_AVATAR_PREFIX + pet.id}.png`);
+    });
+
+    await PublicStorage.delete(`${USER_AVATAR_PREFIX + user.id}.png`);
+
+    auth.deleteSessionTokenCookie(getRequestEvent());
+    await db.delete(schema.user).where(eq(schema.user.id, user.id));
   },
 );

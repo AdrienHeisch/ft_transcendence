@@ -17,7 +17,7 @@ export const session = pgTable("session", {
   id: text("id").primaryKey(),
   userId: uuid("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   expiresAt: timestamp("expires_at", {
     withTimezone: true,
     mode: "date",
@@ -44,7 +44,7 @@ export const pet = pgTable("pet", {
   id: uuid("id").primaryKey(),
   ownerId: uuid("owner_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   species: text("species").notNull(),
   breed: text("breed").notNull(),
@@ -86,7 +86,7 @@ export const chatMessage = pgTable("chat_message", {
     .references(() => usersPair.id, { onDelete: "cascade" }),
   author: uuid("author")
     .notNull()
-    .references(() => user.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
   sentAt: timestamp("sent_at", {
     withTimezone: true,
