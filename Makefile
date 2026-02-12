@@ -52,6 +52,7 @@ check:
 		--rm \
 		-w /app \
 		-v ./www:/app \
+		-v ./.env.example:/app/.env \
 		docker.io/oven/bun:1.3.5-debian \
 		sh -c "bun sv:check && bun biome:check"
 
