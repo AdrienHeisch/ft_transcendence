@@ -47,6 +47,15 @@ const pets = $derived(
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
 
 let isEditMode = $state(false);
+let avatarFiles = $state<FileList>();
+
+const avatarUrl = $derived.by(() => {
+  const file = avatarFiles?.item(0);
+  if (file && isEditMode) {
+    return file ? URL.createObjectURL(file) : "";
+  }
+  return getUserAvatar(user);
+});
 </script>
 
 <div class="min-h-screen relative">
@@ -73,21 +82,35 @@ let isEditMode = $state(false);
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative">
     <!-- Profile Header -->
     <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
-      <form {...updatePerson.enhance(async ({ submit }) => {
+      <form enctype="multipart/form-data" {...updatePerson.enhance(async ({ submit }) => {
         await submit();
         await data.user.refresh();
         isEditMode = false;
+        location.reload(); // TODO there might be a better way to reload all images on the page
       })} class="flex flex-col md:flex-row items-center md:items-end gap-6">
         <input {...updatePerson.fields.id.as("hidden", user.id)} />
 
         <!-- Profile Picture -->
         <div class="relative">
           <img 
-            src={getUserAvatar(user)} 
+            src={avatarUrl} 
             alt={user.username}
             class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
           />
-          <div class={[user.online ? "bg-green-500" : "bg-gray-300", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
+          {#if isEditMode}
+            <label class="block">
+              <input
+                name="avatar"
+                type="file"
+                accept="image/png"
+                class="hidden"
+                bind:files={avatarFiles}
+              />
+              <div class={["absolute", "bottom-2", "right-2", "px-1", "border-3", "rounded-2xl", "bg-gray-300", "border-white"]}>📸</div>
+            </label>
+          {:else}
+            <div class={[user.online ? "bg-green-500" : "bg-gray-300", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
+          {/if}
         </div>
 
         <!-- User Info -->

@@ -5,6 +5,8 @@ import { form, query } from "$app/server";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
+import { PublicStorage } from "./server/storage";
+import { USER_AVATAR_PREFIX } from "./storage";
 
 export const getPerson = query.batch(z.string(), async (persons) => {
   const result = await db
@@ -62,11 +64,15 @@ export const updatePerson = form(
     lastName: z.string(),
     bio: z.string(),
     city: z.string(),
+    avatar: z.custom<File>().optional(),
   }),
   async (data) => {
-    const { id, ...values } = data;
+    const { id, avatar, ...values } = data;
     if (id !== requireLogin().id) {
       error(403);
+    }
+    if (avatar) {
+      await PublicStorage.upload(`${USER_AVATAR_PREFIX + id}.png`, avatar);
     }
     await db.update(schema.user).set(values).where(eq(schema.user.id, id));
     await getPerson(id).refresh();
