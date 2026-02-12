@@ -59,7 +59,7 @@ export const register = form(
     } catch {
       return error(500, { message: "An error has occurred" });
     }
-    return redirect(302, resolve("/"));
+    return redirect(302, resolve(`/persons/${userId}`));
   },
 );
 
