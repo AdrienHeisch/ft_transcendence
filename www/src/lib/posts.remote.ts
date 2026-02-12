@@ -167,6 +167,7 @@ export const createPost = form(
         id,
         author: user.id,
         content,
+        hasImage: true,
         postedAt: new Date(),
       });
     } catch {

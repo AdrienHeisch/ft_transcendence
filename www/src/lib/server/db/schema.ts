@@ -104,6 +104,7 @@ export const post = pgTable("post", {
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
+  hasImage: boolean("has_image").notNull().default(false),
   postedAt: timestamp("posted_at", {
     withTimezone: true,
     mode: "date",
