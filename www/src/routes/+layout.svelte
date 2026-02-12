@@ -45,7 +45,12 @@ const sidebarMainItems = $derived(
 
 const sidebarBottomItems = [
   { label: "Help & Support", icon: "❓", href: "/help", requiresLogin: false },
-  { label: "Settings", icon: "⚙️", href: resolve("/settings"), requiresLogin: true },
+  {
+    label: "Settings",
+    icon: "⚙️",
+    href: resolve("/settings"),
+    requiresLogin: true,
+  },
 ];
 
 const newMessages = 0; // TODO new messages
