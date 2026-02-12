@@ -7,6 +7,10 @@ const { data } = $props();
 const posts = $derived(await getPosts({}));
 
 let files = $state<FileList>();
+const previewUrl = $derived.by(() => {
+  const file = files?.item(0);
+  return file ? URL.createObjectURL(file) : undefined;
+});
 </script>
 
 <!-- Zone de contenu principal -->
@@ -23,9 +27,8 @@ let files = $state<FileList>();
       {#if data.currentUser}
         <form enctype="multipart/form-data" {...createPost}>
           <div class="flex flex-col mb-6 p-4 bg-orange-50 rounded-lg border-2 border-orange-300">
-            {#if files && files.item(0)}
-              {@const file = files.item(0) as File}
-              <img class="p-1" alt="Uploaded" src={`data:image/png;base64,${(await file.bytes()).toBase64()}`} />
+            {#if previewUrl}
+              <img class="p-1" alt="Uploaded" src={previewUrl} />
             {/if}
             <textarea 
               class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
