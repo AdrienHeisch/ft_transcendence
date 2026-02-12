@@ -4,13 +4,14 @@ import { promiseToRemoteQuery } from "$lib/typeUtils";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({
-  data: { currentUser },
+  data: { currentUser, cities },
   params: { id },
 }) => {
   const user = getPerson(id);
   if (!(await user)) error(404);
   return {
     currentUser,
+    cities,
     user: promiseToRemoteQuery(user),
   };
 };

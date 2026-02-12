@@ -61,6 +61,7 @@ export const updatePerson = form(
     firstName: z.string(),
     lastName: z.string(),
     bio: z.string(),
+    city: z.string(),
   }),
   async (data) => {
     const { id, ...values } = data;
