@@ -88,7 +88,10 @@ export const createPet = form(
 export const deletePet = command(z.string(), async (petId) => {
   const user = requireLogin();
 
-  const [pet] = await db.select().from(schema.pet).where(eq(schema.pet.id, petId));
+  const [pet] = await db
+    .select()
+    .from(schema.pet)
+    .where(eq(schema.pet.id, petId));
   if (!pet) {
     error(404);
   }

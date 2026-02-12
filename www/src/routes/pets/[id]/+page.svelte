@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
-    import { resolve } from '$app/paths';
-    import { deletePet } from '$lib/pets.remote.js';
+import { goto } from "$app/navigation";
+import { resolve } from "$app/paths";
+import { deletePet } from "$lib/pets.remote.js";
 
 const { data } = $props();
 
