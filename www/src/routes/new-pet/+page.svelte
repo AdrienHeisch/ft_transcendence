@@ -2,14 +2,10 @@
 import { resolve } from "$app/paths";
 import { createPet } from "$lib/pets.remote";
 
-let previewUrl = $state<string>("");
 let files = $state<FileList>();
-
-$effect(() => {
-  const file = files?.[0];
-  if (file) {
-    previewUrl = URL.createObjectURL(file);
-  }
+const previewUrl = $derived.by(() => {
+  const file = files?.item(0);
+  return file ? URL.createObjectURL(file) : "";
 });
 </script>
 
@@ -133,10 +129,7 @@ $effect(() => {
                   <button
                     aria-label="Remove image"
                     type="button"
-                    onclick={() => {
-                      previewUrl = "";
-                      files = undefined;
-                    }}
+                    onclick={() => files = undefined}
                     class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
                   >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
