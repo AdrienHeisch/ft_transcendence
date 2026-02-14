@@ -44,7 +44,7 @@ const chats = $derived(data.chats);
               class="flex items-center gap-4 p-6 hover:bg-[#f5e6d3] transition-colors group"
             >
               <!-- Avatar -->
-              <div class="relative flex-shrink-0">
+              <div class="relative shrink-0">
                 <img 
                   src={getUserAvatar(friend)} 
                   alt={friend.firstName}
@@ -73,7 +73,7 @@ const chats = $derived(data.chats);
               </div>
 
               <!-- Arrow -->
-              <svg class="w-6 h-6 text-[#8B4513] group-hover:text-[#CC5500] transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 text-[#8B4513] group-hover:text-[#CC5500] transition-colors shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>
             </a>

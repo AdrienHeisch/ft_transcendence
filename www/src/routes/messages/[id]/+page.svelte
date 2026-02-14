@@ -43,7 +43,7 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
 
 <div class="h-screen bg-[#f5e6d3] flex flex-col">
   <!-- Header -->
-  <div class="bg-linear-to-r from-[#CC5500] to-[#A04000] shadow-lg flex-shrink-0">
+  <div class="bg-linear-to-r from-[#CC5500] to-[#A04000] shadow-lg shrink-0">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex items-center gap-4">
         <!-- Back button -->
@@ -109,7 +109,7 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
               {@const isOwn = message.author === data.currentUser?.id}
               <div class="flex {isOwn ? 'justify-end' : 'justify-start'}">
                 <div class="max-w-[70%] {isOwn ? 'bg-[#CC5500] text-white' : 'bg-white border-2 border-[#8B4513] text-[#8B4513]'} rounded-2xl px-4 py-3 shadow-md">
-                  <p class="break-words">{message.content}</p>
+                  <p class="wrap-break-words">{message.content}</p>
                   <p class="text-xs mt-1 {isOwn ? 'text-white/70' : 'text-[#A0522D]'}">
                     {new Date(message.sentAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                   </p>
@@ -120,7 +120,7 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
         </div>
 
         <!-- Input area -->
-        <div class="border-t-2 border-[#8B4513] p-4 flex-shrink-0">
+        <div class="border-t-2 border-[#8B4513] p-4 shrink-0">
           <form 
             onsubmit={(e) => { 
               e.preventDefault();
