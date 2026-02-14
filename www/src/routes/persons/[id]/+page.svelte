@@ -1,6 +1,7 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import Post from "$lib/components/Post.svelte";
+import PostForm from "$lib/components/PostForm.svelte";
 import {
   acceptFriend,
   addFriend,
@@ -321,6 +322,10 @@ const avatarUrl = $derived.by(() => {
 
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
+        {#if isCurrentUser}
+          <PostForm />
+        {/if}
+
         {#each posts as post (post.id)}
           <Post {post} currentUser={data.currentUser} />
         {/each}
