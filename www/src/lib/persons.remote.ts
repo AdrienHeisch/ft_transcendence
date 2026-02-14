@@ -65,9 +65,10 @@ export const updatePerson = form(
     bio: z.string(),
     city: z.string(),
     avatar: z.custom<File>().optional(),
+    removeAvatar: z.string(),
   }),
   async (data) => {
-    const { id, avatar, ...values } = data;
+    const { id, avatar, removeAvatar, ...values } = data;
     if (id !== requireLogin().id) {
       error(403);
     }
@@ -76,6 +77,12 @@ export const updatePerson = form(
       await db
         .update(schema.user)
         .set({ ...values, hasAvatar: true })
+        .where(eq(schema.user.id, id));
+    } else if (removeAvatar === "true") {
+      await PublicStorage.delete(`${USER_AVATAR_PREFIX + id}.png`);
+      await db
+        .update(schema.user)
+        .set({ ...values, hasAvatar: false })
         .where(eq(schema.user.id, id));
     } else {
       await db.update(schema.user).set(values).where(eq(schema.user.id, id));

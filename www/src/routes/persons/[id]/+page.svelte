@@ -50,12 +50,15 @@ const isCurrentUser = $derived(data.currentUser?.id === user.id);
 let isEditMode = $state(false);
 let avatarFiles = $state<FileList>();
 
+let hasAvatar = $derived(user.hasAvatar);
+let removeAvatar = $derived(!hasAvatar && avatarFiles?.item(0) === undefined);
+
 const avatarUrl = $derived.by(() => {
   const file = avatarFiles?.item(0);
   if (file && isEditMode) {
-    return file ? URL.createObjectURL(file) : "";
+    return URL.createObjectURL(file);
   }
-  return getUserAvatar(user);
+  return getUserAvatar({ id: user.id, hasAvatar });
 });
 </script>
 
@@ -99,6 +102,20 @@ const avatarUrl = $derived.by(() => {
             class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
           />
           {#if isEditMode}
+            <input
+              name="removeAvatar"
+              type="hidden"
+              bind:value={removeAvatar}
+            />
+            {#if hasAvatar}
+              <button
+                type="button"
+                onclick={() => { console.log("haha"); hasAvatar = false; }}
+                class={["absolute", "bottom-2", "left-2", "px-1", "border-3", "rounded-2xl", "bg-gray-300", "border-white"]}
+              >
+                🗑️
+              </button>
+            {/if}
             <label class="block">
               <input
                 name="avatar"
