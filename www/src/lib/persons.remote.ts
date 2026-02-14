@@ -73,7 +73,10 @@ export const updatePerson = form(
     }
     if (avatar) {
       await PublicStorage.upload(`${USER_AVATAR_PREFIX + id}.png`, avatar);
-      await db.update(schema.user).set({ ...values, hasAvatar: true }).where(eq(schema.user.id, id));
+      await db
+        .update(schema.user)
+        .set({ ...values, hasAvatar: true })
+        .where(eq(schema.user.id, id));
     } else {
       await db.update(schema.user).set(values).where(eq(schema.user.id, id));
     }
