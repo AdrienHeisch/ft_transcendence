@@ -326,6 +326,16 @@ const avatarUrl = $derived.by(() => {
           <PostForm />
         {/if}
 
+        {#if posts.length == 0}
+          <div class="text-center py-12">
+            <div class="text-6xl mb-4">💬</div>
+            <h3 class="text-2xl font-bold text-[#8B4513] mb-2">Nothing to see here</h3>
+            {#if isCurrentUser}
+              <p class="text-[#A0522D]">Create your first post !</p>
+            {/if}
+          </div>
+        {/if}
+
         {#each posts as post (post.id)}
           <Post {post} currentUser={data.currentUser} />
         {/each}
