@@ -1,7 +1,9 @@
 <script lang="ts">
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
+import Post from "$lib/components/Post.svelte";
 import { deletePet } from "$lib/pets.remote.js";
+import { getPosts } from "$lib/posts.remote.js";
 
 const { data } = $props();
 
@@ -17,6 +19,8 @@ const pet = $derived({
 });
 
 const isOwned = $derived(data.currentUser?.id === pet.ownerId);
+
+const posts = $derived(await getPosts({ pet: pet.id }));
 </script>
 
 <svelte:head>
@@ -174,6 +178,19 @@ const isOwned = $derived(data.currentUser?.id === pet.ownerId);
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="lg:col-span-2 space-y-6">
+        {#if posts.length == 0}
+          <div class="text-center py-12">
+            <div class="text-6xl mb-4">💬</div>
+            <h3 class="text-2xl font-bold text-[#8B4513] mb-2">Nothing to see here</h3>
+          </div>
+        {/if}
+
+        {#each posts as post (post.id)}
+          <Post {post} currentUser={data.currentUser} />
+        {/each}
       </div>
 
     </div>

@@ -26,15 +26,20 @@ export const getPost = query.batch(z.string(), async (posts) => {
 });
 
 export const getPosts = query(
-  z.object({ author: z.string().optional() }),
-  async ({ author }) => {
+  z.object({ author: z.string().optional(), pet: z.string().optional() }),
+  async ({ author, pet }) => {
     return db
       .select({
         ...getTableColumns(schema.post),
         author: { ...getTableColumns(schema.user) },
       })
       .from(schema.post)
-      .where(author ? eq(schema.user.id, author) : undefined)
+      .where(
+        and(
+          author ? eq(schema.user.id, author) : undefined,
+          pet ? eq(schema.post.pet, pet) : undefined,
+        ),
+      )
       .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
       .orderBy(desc(schema.post.postedAt))
       .limit(10);
