@@ -176,7 +176,7 @@ export const createPost = form(
         id,
         author: user.id,
         content,
-        pet,
+        pet: pet && pet.length > 0 ? pet : undefined,
         postedAt: new Date(),
       });
     } catch {
