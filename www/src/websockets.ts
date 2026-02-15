@@ -4,6 +4,7 @@ import { and, eq, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./lib/server/db/schema";
+import { MESSAGE_FILE_PREFIX, PrivateStorage } from "./lib/server/storage";
 
 const PORT = 3000;
 
@@ -141,13 +142,23 @@ const server = Bun.serve({
     async message(ws, content) {
       switch (ws.data.type) {
         case "messages": {
+          const isFile = content.toString().startsWith("__bin__");
+          console.log("message:", isFile ? "[file]" : content.toString());
           const message: schema.ChatMessage = {
             id: crypto.randomUUID(),
             friendsId: ws.data.chatId,
             author: ws.data.user.id,
-            content: content.toString(),
+            content: isFile ? "" : content.toString(),
+            isFile,
             sentAt: new Date(),
           };
+          if (isFile) {
+            await PrivateStorage.upload(
+              `${MESSAGE_FILE_PREFIX + message.id}.png`,
+              new Blob([(content as Buffer<ArrayBuffer>).subarray(7)]),
+            );
+            console.log("File uploaded");
+          }
           server.publish(
             `/messages/${ws.data.chatId}`,
             JSON.stringify(message),

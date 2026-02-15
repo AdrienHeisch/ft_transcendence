@@ -12,6 +12,9 @@ export const PublicStorage = {
 };
 
 const bucket = process.env.S3_BUCKET_PRIVATE;
+if (!bucket) {
+  throw "S3_BUCKET_PRIVATE is not defined";
+}
 
 export const PrivateStorage = {
   url: (key: string, expiresIn?: number) => {
@@ -29,3 +32,5 @@ export const PrivateStorage = {
   list: (input?: S3ListObjectsOptions) => s3.list(input, { bucket }),
   delete: (key: string) => s3.delete(key, { bucket }),
 };
+
+export const MESSAGE_FILE_PREFIX = "message/file/";

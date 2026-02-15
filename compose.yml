@@ -43,6 +43,7 @@ services:
     networks:
       - ws
       - db
+      - storage
     env_file: .env
   db:
     image: postgres:18

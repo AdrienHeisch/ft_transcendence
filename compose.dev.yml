@@ -54,6 +54,7 @@ services:
     networks:
       - ws
       - db
+      - storage
     volumes:
       - ./www:/app
     env_file: .env

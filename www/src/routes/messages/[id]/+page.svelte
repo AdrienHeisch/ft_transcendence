@@ -2,14 +2,21 @@
 import z from "zod";
 import { browser, dev } from "$app/environment";
 import { resolve } from "$app/paths";
+import { getMessageFile } from "$lib/messages.remote";
 import { getPerson } from "$lib/persons.remote";
-import type { ChatMessage } from "$lib/server/db/schema.js";
+import { type ChatMessage } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
 
 const { data, params } = $props();
 
 let msg = $state<string>("");
 let wsMessages = $state<ChatMessage[]>([]);
+
+let files = $state<FileList>();
+const file = $derived(files?.item(0));
+const previewUrl = $derived.by(() => {
+  return file ? URL.createObjectURL(file) : "";
+});
 
 let ws: WebSocket | undefined = (() => {
   if (!browser) return undefined;
@@ -19,13 +26,14 @@ let ws: WebSocket | undefined = (() => {
     friendsId: z.string(),
     author: z.string(),
     content: z.string(),
+    isFile: z.boolean(),
     sentAt: z.coerce.date(),
-  }); // TODO drizzle-zod
+  });
   ws.onmessage = (message) => {
     const result = messageSchema.safeParse(JSON.parse(message.data));
     if (result.success) {
       wsMessages.push(result.data);
-      wsMessages.sort((a, b) => a.sentAt.getTime() - b.sentAt.getTime());
+      wsMessages.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime());
     } else if (dev) {
       console.error(result.error);
     }
@@ -35,6 +43,26 @@ let ws: WebSocket | undefined = (() => {
 
 const friend = $derived(await getPerson(params.id));
 const allMessages = $derived([...wsMessages, ...(await data.messages)]);
+
+async function sendMessage() {
+  const BIN_PREFIX = "__bin__";
+  if (file) {
+    const bytes = new Uint8Array(
+      await new Blob([
+        new TextEncoder().encode(BIN_PREFIX).buffer,
+        await file.arrayBuffer(),
+      ]).arrayBuffer(),
+    );
+    ws?.send(bytes);
+    files = undefined;
+  } else if (msg) {
+    const noPrefix = msg.startsWith(BIN_PREFIX) ? msg.slice(7) : msg;
+    if (noPrefix.trim()) {
+      ws?.send(noPrefix.trim());
+      msg = "";
+    }
+  }
+}
 </script>
 
 <svelte:head>
@@ -109,7 +137,11 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
               {@const isOwn = message.author === data.currentUser?.id}
               <div class="flex {isOwn ? 'justify-end' : 'justify-start'}">
                 <div class="max-w-[70%] {isOwn ? 'bg-[#CC5500] text-white' : 'bg-white border-2 border-[#8B4513] text-[#8B4513]'} rounded-2xl px-4 py-3 shadow-md">
-                  <p class="wrap-break-words">{message.content}</p>
+                  {#if message.isFile}
+                    <img alt="Message" src={await getMessageFile(message.id)} />
+                  {:else}
+                    <p class="wrap-break-words">{message.content}</p>
+                  {/if}
                   <p class="text-xs mt-1 {isOwn ? 'text-white/70' : 'text-[#A0522D]'}">
                     {new Date(message.sentAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                   </p>
@@ -122,27 +154,67 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
         <!-- Input area -->
         <div class="border-t-2 border-[#8B4513] p-4 shrink-0">
           <form 
-            onsubmit={(e) => { 
+            onsubmit={async (e) => { 
               e.preventDefault();
-              if (msg.trim()) {
-                ws?.send(msg); 
-                msg = "";
-              }
+              await sendMessage();
             }}
             class="flex gap-3"
           >
-            <input
-              type="text"
-              id="msg"
-              disabled={!ws}
-              bind:value={msg}
-              placeholder="Type your message..."
-              required
-              class="flex-1 px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
-            />
-            <button 
+            <!-- Preview or placeholder -->
+            <div class="mb-6">
+              {#if previewUrl}
+                <div class="relative aspect-video rounded-xl overflow-hidden border-2 border-[#8B4513]">
+                  <img 
+                    src={previewUrl}
+                    alt="Preview"
+                    class="w-full h-full object-cover"
+                  />
+                  <button
+                    aria-label="Remove image"
+                    type="button"
+                    onclick={() => files = undefined}
+                    class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
+              {/if}
+            </div>
+
+            <!-- Upload button -->
+            <label class="block">
+              <input
+                name="avatar"
+                type="file"
+                accept="image/png"
+                class="hidden"
+                bind:files
+              />
+              {#if !file}
+                <div class="w-full py-4 px-5 bg-[#CC5500] text-white rounded-2xl font-bold text-center hover:bg-[#A04000] transition-all cursor-pointer">
+                  +
+                </div>
+              {/if}
+            </label>
+
+            {#if !file}
+              <!-- Text input -->
+              <input
+                type="text"
+                id="msg"
+                disabled={!ws}
+                bind:value={msg}
+                placeholder="Type your message..."
+                required
+                class="flex-1 px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
+              />
+            {/if}
+
+            <button
               type="submit"
-              disabled={!ws || !msg.trim()}
+              disabled={!ws || (!msg.trim() && !file)}
               class="px-6 py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Send 📤

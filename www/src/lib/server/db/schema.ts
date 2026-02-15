@@ -90,6 +90,7 @@ export const chatMessage = pgTable("chat_message", {
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
+  isFile: boolean().notNull(),
   sentAt: timestamp("sent_at", {
     withTimezone: true,
     mode: "date",

@@ -35,7 +35,6 @@ export const load: PageServerLoad = async ({ params }) => {
       })
       .returning();
   }
-  console.log(pairId);
   return {
     messages: db
       .select({ ...getTableColumns(schema.chatMessage) })
