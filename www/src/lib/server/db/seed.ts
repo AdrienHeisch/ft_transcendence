@@ -91,6 +91,7 @@ export default async function seedDb() {
       columns: {
         content: gen.loremIpsum(),
         isFile: gen.default({ defaultValue: false }),
+        read: gen.default({ defaultValue: true }),
         sentAt: gen.date({ maxDate: new Date() }),
       },
     },

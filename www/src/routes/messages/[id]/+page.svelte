@@ -27,6 +27,7 @@ let ws: WebSocket | undefined = (() => {
     author: z.string(),
     content: z.string(),
     isFile: z.boolean(),
+    read: z.boolean(),
     sentAt: z.coerce.date(),
   });
   ws.onmessage = (message) => {

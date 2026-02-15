@@ -143,13 +143,13 @@ const server = Bun.serve({
       switch (ws.data.type) {
         case "messages": {
           const isFile = content.toString().startsWith("__bin__");
-          console.log("message:", isFile ? "[file]" : content.toString());
           const message: schema.ChatMessage = {
             id: crypto.randomUUID(),
             friendsId: ws.data.chatId,
             author: ws.data.user.id,
             content: isFile ? "" : content.toString(),
             isFile,
+            read: false,
             sentAt: new Date(),
           };
           if (isFile) {
@@ -157,7 +157,6 @@ const server = Bun.serve({
               `${MESSAGE_FILE_PREFIX + message.id}.png`,
               new Blob([(content as Buffer<ArrayBuffer>).subarray(7)]),
             );
-            console.log("File uploaded");
           }
           server.publish(
             `/messages/${ws.data.chatId}`,

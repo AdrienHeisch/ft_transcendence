@@ -1,4 +1,4 @@
-import { and, desc, eq, getTableColumns, or } from "drizzle-orm";
+import { and, desc, eq, getTableColumns, ne, or } from "drizzle-orm";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
@@ -35,6 +35,15 @@ export const load: PageServerLoad = async ({ params }) => {
       })
       .returning();
   }
+  await db
+    .update(schema.chatMessage)
+    .set({ read: true })
+    .where(
+      and(
+        eq(schema.chatMessage.friendsId, pairId),
+        ne(schema.chatMessage.author, user.id),
+      ),
+    );
   return {
     messages: db
       .select({ ...getTableColumns(schema.chatMessage) })

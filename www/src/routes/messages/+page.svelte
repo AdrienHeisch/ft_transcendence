@@ -38,7 +38,7 @@ const chats = $derived(data.chats);
       <div class="divide-y-2 divide-[#8B4513]">
         {#each chats as chat}
           {@const friend = await getPerson(data.currentUser.id === chat.left ? chat.right : chat.left)}
-          {#if friend && !chat.pending}
+          {#if friend && chat.lastMessage}
             <a 
               href={resolve(`/messages/${friend.id}`)}
               class="flex items-center gap-4 p-6 hover:bg-[#f5e6d3] transition-colors group"
@@ -67,6 +67,9 @@ const chats = $derived(data.chats);
                 </div>
                 {#if chat.lastMessage}
                   <p class="text-[#8B4513] truncate">
+                    {#if chat.new}
+                      <span class="inline-block w-4 h-4 bg-blue-500 border-2 border-white rounded-full"></span>
+                    {/if}
                     {chat.lastMessage.author.firstName}: {chat.lastMessage.content}
                   </p>
                 {/if}
