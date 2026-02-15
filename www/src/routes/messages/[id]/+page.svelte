@@ -2,7 +2,7 @@
 import z from "zod";
 import { browser, dev } from "$app/environment";
 import { resolve } from "$app/paths";
-import { getMessageFile } from "$lib/messages.remote";
+import { getMessageFile, setMessageRead } from "$lib/messages.remote";
 import { getPerson } from "$lib/persons.remote";
 import { type ChatMessage } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
@@ -35,6 +35,9 @@ let ws: WebSocket | undefined = (() => {
     if (result.success) {
       wsMessages.push(result.data);
       wsMessages.sort((a, b) => b.sentAt.getTime() - a.sentAt.getTime());
+      if (result.data.author != data.currentUser.id) {
+        setMessageRead(result.data.id);
+      }
     } else if (dev) {
       console.error(result.error);
     }

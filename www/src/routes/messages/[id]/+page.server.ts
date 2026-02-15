@@ -45,6 +45,7 @@ export const load: PageServerLoad = async ({ params }) => {
       ),
     );
   return {
+    currentUser: user,
     messages: db
       .select({ ...getTableColumns(schema.chatMessage) })
       .from(schema.chatMessage)
