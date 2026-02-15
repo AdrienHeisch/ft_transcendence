@@ -25,14 +25,6 @@ const user = $derived({
     "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
   username: _user.firstName.charAt(0) + _user.lastName,
   joinedDate: "January 2025",
-  passions: [
-    { icon: "🐾", name: "Animals" },
-    { icon: "🐔", name: "Chickens" },
-    { icon: "🚜", name: "Farm" },
-    { icon: "🍽️", name: "Gastronomy" },
-    { icon: "🧠", name: "Philosophy" },
-    { icon: "📚", name: "Reading" },
-  ],
 });
 
 const posts = $derived(await getPosts({ author: _user.id }));
@@ -256,24 +248,8 @@ const avatarUrl = $derived.by(() => {
 
     <!-- Main Content -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 pb-8">
-      <!-- Left Sidebar - Passions -->
+      <!-- Left Sidebar -->
       <div class="lg:col-span-1 space-y-6">
-        <!-- Passions Card -->
-        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
-          <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2">
-            <span class="text-2xl">🌾</span>
-            Passions
-          </h2>
-          <div class="grid grid-cols-2 gap-3">
-            {#each user.passions as passion}
-              <div class="flex items-center gap-2 p-3 bg-yellow-100 rounded-lg hover:bg-orange-100 transition-all duration-200 cursor-pointer border-2 border-orange-700">
-                <span class="text-2xl">{passion.icon}</span>
-                <span class="text-sm font-medium text-gray-700">{passion.name}</span>
-              </div>
-            {/each}
-          </div>
-        </div>
-
         <!-- Friends Preview Card -->
         <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
           <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center justify-between">
