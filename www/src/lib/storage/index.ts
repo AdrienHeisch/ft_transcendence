@@ -14,8 +14,10 @@ export const getUserAvatar = (user: { id: string; hasAvatar: boolean }) =>
 
 export const PET_AVATAR_PREFIX = "pet/avatar/";
 
-export const getPetAvatar = (pet: { id: string }) =>
-  PublicStorage.url(`${PET_AVATAR_PREFIX + pet.id}.png`);
+export const getPetAvatar = (pet: { id: string; hasAvatar?: boolean }) =>
+  pet.hasAvatar
+    ? PublicStorage.url(`${PET_AVATAR_PREFIX + pet.id}.png`)
+    : `https://api.dicebear.com/7.x/avataaars/png?seed=${pet.id}`;
 
 export const POST_IMAGE_PREFIX = "post/image/";
 

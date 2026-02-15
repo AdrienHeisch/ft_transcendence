@@ -2,6 +2,7 @@
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
 import Comment from "$lib/components/Comment.svelte";
+import { getPet } from "$lib/pets.remote";
 import {
   createComment,
   deletePost,
@@ -14,7 +15,7 @@ import {
   unlikePost,
 } from "$lib/posts.remote";
 import type { Post, User } from "$lib/server/db/schema";
-import { getPostImage, getUserAvatar } from "$lib/storage";
+import { getPetAvatar, getPostImage, getUserAvatar } from "$lib/storage";
 
 interface Props {
   post: Omit<Post, "author"> & { author: User };
@@ -22,7 +23,12 @@ interface Props {
   isFullPage?: boolean;
 }
 
-const { post, currentUser, isFullPage = false }: Props = $props();
+const { post: _post, currentUser, isFullPage = false }: Props = $props();
+
+const post = $derived({
+  ..._post,
+  pet: _post.pet ? await getPet(_post.pet) : null,
+});
 
 const comments = $derived(getPostComments(post.id));
 
@@ -78,18 +84,36 @@ const closeEdit = () => {
 <div class="relative h-fit bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border-4 border-orange-700 hover:shadow-xl transition-all duration-200">
   <!-- Post Header -->
   <div class="p-4 flex items-center gap-3">
-    <a href={resolve(`/persons/${post.author.id}`)}>
-      <div class="relative">
+    <div class="relative">
+      <a href={resolve(`/persons/${post.author.id}`)}>
         <img 
           src={getUserAvatar(post.author)} 
           alt="{post.author.firstName} {post.author.lastName}"
           class="w-12 h-12 rounded-full border-2 border-orange-700"
         />
-        {#if post.author.online}
-          <div class={["bg-green-500", "absolute", "bottom-0", "right-0", "w-3", "h-3", "rounded-full", "border-2", "border-white"]}></div>
-        {/if}
-      </div>
-    </a>
+      </a>
+      {#if post.author.online}
+        <div class="bg-green-500 absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white"></div>
+      {/if}
+      {#if post.pet}
+        <a href={resolve(`/pets/${post.pet.id}`)}>
+          {#if post.pet.hasAvatar}
+            <img
+              alt="Pet"
+              src={getPetAvatar(post.pet)}
+              class="absolute -bottom-2 -left-2 w-8 h-8 rounded-full border-2 border-orange-200 bg-white"
+            />
+          {:else}
+            {@const pet = post.pet}
+            <p
+              class="text-center absolute -bottom-2 -left-2 w-8 h-8 rounded-full border-2 border-orange-200 bg-white"
+            >
+              { pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾' }
+            </p>
+          {/if}
+        </a>
+      {/if}
+    </div>
     <div class="flex-1">
       <a href={resolve(`/persons/${post.author.id}`)}>
         <p class="font-semibold text-gray-900">{post.author.firstName} {post.author.lastName}</p>
