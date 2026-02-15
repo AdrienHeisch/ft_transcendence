@@ -54,17 +54,7 @@ const avatarUrl = $derived.by(() => {
 });
 </script>
 
-<div class="min-h-screen relative">
-  <!-- Background Image de ferme -->
-  <div class="fixed inset-0">
-    <img 
-      src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1920&h=1080&fit=crop" 
-      alt="Ferme" 
-      class="w-full h-full object-cover opacity-20"
-    />
-    <div class="absolute inset-0 bg-linear-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95"></div>
-  </div>
-
+<div class="min-h-screen relative bg-linear-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95">
   <!-- Cover Image -->
   <div class="relative h-80 bg-linear-to-r from-orange-700 via-orange-600 to-amber-600">
     <img
