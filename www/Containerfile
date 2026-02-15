@@ -5,8 +5,7 @@ COPY ./www/bun.lock .
 COPY ./www/bunfig.toml .
 RUN bun ci
 COPY ./www/drizzle.config.ts .
-COPY ./www/src/lib/server/db/schema.ts ./src/lib/server/db/schema.ts
-COPY ./www/src/websockets.ts ./src/websockets.ts
+COPY ./www/src ./src
 USER bun
 CMD ["bun", "run", "src/websockets.ts"]
 
