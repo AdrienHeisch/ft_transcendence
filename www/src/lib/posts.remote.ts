@@ -149,8 +149,12 @@ export const deleteComment = command(z.string(), async (id) => {
 });
 
 export const createPost = form(
-  z.object({ content: z.string(), file: z.custom<File>() }),
-  async ({ content, file }) => {
+  z.object({
+    content: z.string(),
+    pet: z.string().optional(),
+    file: z.custom<File>(),
+  }),
+  async ({ content, pet, file }) => {
     const user = requireLogin();
     const id = crypto.randomUUID();
     if (file.size > Number(MAX_FILE_SIZE)) {
@@ -167,6 +171,7 @@ export const createPost = form(
         id,
         author: user.id,
         content,
+        pet,
         postedAt: new Date(),
       });
     } catch {

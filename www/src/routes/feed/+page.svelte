@@ -20,7 +20,7 @@ const posts = $derived(await getPosts({}));
 
       <!-- Post input -->
       {#if data.currentUser}
-        <PostForm />
+        <PostForm currentUser={data.currentUser} />
       {/if}
 
       <!-- Posts -->

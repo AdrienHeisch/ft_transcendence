@@ -1,5 +1,13 @@
 <script lang="ts">
+import { getPets } from "$lib/pets.remote";
 import { createPost } from "$lib/posts.remote";
+import { type User } from "$lib/server/db/schema";
+
+interface Props {
+  currentUser: User;
+}
+
+const { currentUser }: Props = $props();
 
 let files = $state<FileList>();
 
@@ -7,6 +15,10 @@ const previewUrl = $derived.by(() => {
   const file = files?.item(0);
   return file ? URL.createObjectURL(file) : undefined;
 });
+
+const pets = $derived(
+  await getPets({ owner: currentUser.id, search: "", sortBy: "species" }),
+);
 </script>
 
 <form enctype="multipart/form-data" {...createPost}>
@@ -22,7 +34,17 @@ const previewUrl = $derived.by(() => {
       required
     ></textarea>
     <div class="flex justify-end mt-2">
-      <label>Upload your file
+      <label>
+        Pet
+        <select
+          {...createPost.fields.pet.as("select")}
+        >
+          {#each pets as pet}
+            <option value={pet.id}>{pet.name}</option>
+          {/each}
+        </select>
+      </label>
+      <label>
         <input
           name="file"
           type="file"
@@ -30,6 +52,7 @@ const previewUrl = $derived.by(() => {
           bind:files
           required
         />
+        Upload your file
       </label>
       <button type="submit" class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
         Post
