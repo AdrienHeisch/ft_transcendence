@@ -30,16 +30,5 @@ const posts = $derived(await getPosts({}));
         {/each}
 			</div>
 		</section>
-
-    <!-- Announcements adoptions -->
-		<section class="bg-white rounded-xl shadow-lg border-3 border-orange-400 p-6">
-			<h2 class="text-2xl font-bold text-orange-900 mb-4 flex items-center gap-2">
-				<span>📢</span>
-				Announcements & Adoptions
-			</h2>
-			<div class="p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 text-center">
-				<p class="text-gray-600 italic">No announcements at the moment.</p>
-			</div>
-		</section>
 	</div>
 </main>
