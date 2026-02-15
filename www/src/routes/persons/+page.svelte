@@ -8,17 +8,15 @@ const PAGE_SIZE = 12;
 
 const { data } = $props();
 
-const _roles = ["Adopter", "Association", "Volunteer"];
 const cities = $derived(await data.cities);
 
 // Filters
 let searchQuery = $state("");
-let selectedRole = $state<string>();
 let selectedCity = $state<City>();
 let sortBy = $state<"firstName" | "lastName">("firstName");
 let currentPage = $state(0);
 
-const _users = $derived(
+const users = $derived(
   (
     await getPersons({
       search: searchQuery,
@@ -33,20 +31,9 @@ const _users = $derived(
       ...user,
       username: `${user.firstName.charAt(0)}${user.lastName}`,
       photo: getUserAvatar(user),
-      role: _roles[user.firstName.length % _roles.length],
       adoptedAnimals: user.firstName.length % 3,
       age: ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20,
     })),
-);
-
-const roles = $derived(new Set(_users.map((user) => user.role)));
-
-// TODO use SQL filtering instead of this
-const users = $derived(
-  _users.filter((user) => {
-    const matchRole = !selectedRole || user.role == selectedRole;
-    return matchRole;
-  }),
 );
 
 const usersCount = $derived(users.at(0)?.count ?? 0);
@@ -92,22 +79,6 @@ function resetCurrentPage() {
 
       <!-- Filters -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <!-- Role -->
-        <div>
-          <label class="block text-sm font-bold text-orange-900 mb-2" for="role">Role</label>
-          <select
-            id="role"
-            bind:value={selectedRole}
-            onchange={resetCurrentPage}
-            class="w-full px-4 py-2 border-2 border-orange-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none bg-white text-orange-900 font-medium"
-          >
-            <option value={undefined}>{"All roles"}</option>
-            {#each roles as role}
-              <option value={role}>{role}</option>
-            {/each}
-          </select>
-        </div>
-
         <!-- City -->
         <div>
           <label class="block text-sm font-bold text-orange-900 mb-2" for="city">City</label>
@@ -175,11 +146,6 @@ function resetCurrentPage() {
                   {/if}
                 </div>
               </div>
-
-              <!-- Role badge -->
-              <span class="absolute top-3 right-3 px-3 py-1 bg-orange-600 text-white rounded-lg font-bold text-sm shadow-md">
-                {user.role}
-              </span>
             </div>
 
             <!-- Info -->
