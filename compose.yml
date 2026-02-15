@@ -30,6 +30,10 @@ services:
       - db
       - storage
     env_file: .env
+    healthcheck:
+      test: ["CMD", "bun", "-e", "\"console.log(await fetch('${ORIGIN}:8000'));\""]
+      start_period: 30s
+      start_interval: 5s
   ws:
     image: ft-transcendence_ws
     build:
@@ -38,7 +42,11 @@ services:
       target: ws
     restart: always
     depends_on:
+      www:
+        condition: service_healthy
       db:
+        condition: service_healthy
+      storage:
         condition: service_healthy
     networks:
       - ws
