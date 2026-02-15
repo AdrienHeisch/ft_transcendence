@@ -4,7 +4,8 @@ import { and, eq, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./lib/server/db/schema";
-import { MESSAGE_FILE_PREFIX, PrivateStorage } from "./lib/server/storage";
+import { PrivateStorage } from "./lib/server/storage";
+import { MESSAGE_FILE_PREFIX } from "./lib/storage";
 
 const PORT = 3000;
 

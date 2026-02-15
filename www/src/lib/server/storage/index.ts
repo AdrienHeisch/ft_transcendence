@@ -1,5 +1,8 @@
 import { type S3ListObjectsOptions, s3 } from "bun";
-import { PublicStorage as _PublicStorage } from "../../storage";
+import {
+  PrivateStorage as _PrivateStorage,
+  PublicStorage as _PublicStorage,
+} from "../../storage";
 
 export const PublicStorage = {
   url: (key: string) => _PublicStorage.url(key),
@@ -17,7 +20,8 @@ if (!bucket) {
 }
 
 export const PrivateStorage = {
-  url: (key: string, expiresIn?: number) => {
+  url: (key: string) => _PrivateStorage.url(key),
+  presignedUrl: (key: string, expiresIn?: number) => {
     console.error(`bucket: ${bucket}`);
     return s3.presign(key, {
       endpoint: process.env.ORIGIN,
@@ -32,5 +36,3 @@ export const PrivateStorage = {
   list: (input?: S3ListObjectsOptions) => s3.list(input, { bucket }),
   delete: (key: string) => s3.delete(key, { bucket }),
 };
-
-export const MESSAGE_FILE_PREFIX = "message/file/";

@@ -2,10 +2,10 @@
 import z from "zod";
 import { browser, dev } from "$app/environment";
 import { resolve } from "$app/paths";
-import { getMessageFile, setMessageRead } from "$lib/messages.remote";
+import { setMessageRead } from "$lib/messages.remote";
 import { getPerson } from "$lib/persons.remote";
 import { type ChatMessage } from "$lib/server/db/schema";
-import { getUserAvatar } from "$lib/storage";
+import { getMessageFile, getUserAvatar } from "$lib/storage";
 
 const { data, params } = $props();
 
@@ -142,7 +142,7 @@ async function sendMessage() {
               <div class="flex {isOwn ? 'justify-end' : 'justify-start'}">
                 <div class="max-w-[70%] {isOwn ? 'bg-[#CC5500] text-white' : 'bg-white border-2 border-[#8B4513] text-[#8B4513]'} rounded-2xl px-4 py-3 shadow-md">
                   {#if message.isFile}
-                    <img alt="Message" src={await getMessageFile(message.id)} />
+                    <img alt="Message" src={getMessageFile(message)} />
                   {:else}
                     <p class="wrap-break-words">{message.content}</p>
                   {/if}

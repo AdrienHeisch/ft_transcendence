@@ -23,6 +23,7 @@ if [[ $(garage bucket list | wc -l) -lt 2 ]]; then
 
   garage bucket create private
   garage bucket allow --read --write --owner private --key $KEY_NAME
+  garage bucket website --allow private
 fi
 
 cleanup() {

@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ params }) => {
     error(404);
   }
   return {
-    src: PrivateStorage.url(`demo/${params.slug}`, 30),
+    src: PrivateStorage.presignedUrl(`demo/${params.slug}`, 30),
     bytes: file.bytes(),
   };
 };

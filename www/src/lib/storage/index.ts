@@ -1,8 +1,9 @@
-// TODO find a way to use the environment variable in both SvelteKit and regular Bun
-const S3_BUCKET = "public";
-
 export const PublicStorage = {
-  url: (key: string) => `/${S3_BUCKET}/${key}`,
+  url: (key: string) => `/public/${key}`,
+};
+
+export const PrivateStorage = {
+  url: (key: string) => `/private/${key}`,
 };
 
 export const USER_AVATAR_PREFIX = "user/avatar/";
@@ -23,3 +24,8 @@ export const POST_IMAGE_PREFIX = "post/image/";
 
 export const getPostImage = (post: { id: string }) =>
   PublicStorage.url(`${POST_IMAGE_PREFIX + post.id}.png`);
+
+export const MESSAGE_FILE_PREFIX = "message/file/";
+
+export const getMessageFile = (message: { id: string }) =>
+  PrivateStorage.url(`${MESSAGE_FILE_PREFIX + message.id}.png`);
