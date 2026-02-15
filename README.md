@@ -110,19 +110,19 @@ pagination
 - [ ] _Minor_ File upload and management system
   - [ ] Support multiple file types (images, documents, etc.)
   - [ ] Client-side and server-side validation (type, size, format)
-  - [ ] Secure file storage with proper access control
-  - [ ] File preview functionality where applicable
+  - [x] Secure file storage with proper access control
+  - [x] File preview functionality where applicable
   - [ ] Progress indicators for uploads
-  - [ ] Ability to delete uploaded files
+  - [x] Ability to delete uploaded files
 - [ ] _Minor_ Support for additional browsers
   - [ ] Full compatibility with at least 2 additional browsers (Firefox, Safari,
   Edge, etc.)
   - [ ] Test and fix all features in each browser
   - [ ] Document any browser-specific limitations
   - [ ] Consistent UI/UX across all supported browsers
-- [ ] _Major_ Standard user management and authentication
+- [x] _Major_ Standard user management and authentication
   - [x] Users can update their profile information
-  - [ ] Users can upload an avatar (with a default avatar if none provided)
+  - [x] Users can upload an avatar (with a default avatar if none provided)
   - [x] Users can add other users as friends and see their online status
   - [x] Users have a profile page displaying their information
 
