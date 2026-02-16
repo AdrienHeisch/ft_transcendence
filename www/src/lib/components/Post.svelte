@@ -27,7 +27,7 @@ const { post: _post, currentUser, isFullPage = false }: Props = $props();
 
 const post = $derived({
   ..._post,
-  pet: _post.pet ? await getPet(_post.pet) : null,
+  pet: _post.pet ? await getPet(_post.pet) : undefined,
 });
 
 const comments = $derived(getPostComments(post.id));
@@ -96,15 +96,15 @@ const closeEdit = () => {
         <div class="bg-green-500 absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white"></div>
       {/if}
       {#if post.pet}
-        <a href={resolve(`/pets/${post.pet.id}`)}>
-          {#if post.pet.hasAvatar}
+        {@const pet = post.pet}
+        <a href={resolve(`/pets/${pet.id}`)}>
+          {#if pet.hasAvatar}
             <img
               alt="Pet"
-              src={getPetAvatar(post.pet)}
+              src={getPetAvatar(pet)}
               class="absolute -bottom-2 -left-2 w-8 h-8 rounded-full border-2 border-orange-200 bg-white"
             />
           {:else}
-            {@const pet = post.pet}
             <p
               class="text-center absolute -bottom-2 -left-2 w-8 h-8 rounded-full border-2 border-orange-200 bg-white"
             >
