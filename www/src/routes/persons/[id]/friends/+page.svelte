@@ -62,7 +62,7 @@ const isCurrentUser = $derived(data.currentUser?.id === data.user?.id);
       </div>
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {#each friends as friend (friend.id)}
+        {#each friends.filter((friend) => friend.status === "friends") as friend (friend.id)}
           <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg border-4 border-orange-700 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300">
             <a href={resolve(`/persons/${friend.id}`)} class="block">
               <!-- Friend Avatar -->

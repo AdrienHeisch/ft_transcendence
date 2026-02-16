@@ -18,7 +18,6 @@ const { data } = $props();
 
 const _user = $derived(await data.user);
 
-// TODO remove fake data
 const user = $derived({
   ..._user,
   coverImage:
@@ -251,7 +250,7 @@ const avatarUrl = $derived.by(() => {
             <a href={resolve(`/persons/${user.id}/friends`)} class="text-sm text-orange-700 hover:text-orange-800 font-medium">View all</a>
           </h2>
           <div class="grid grid-cols-3 gap-2">
-            {#each friends as friend (friend.id)}
+            {#each friends.filter(friend => friend.status === "friends") as friend (friend.id)}
               <div class="aspect-square rounded-lg overflow-hidden border-2 border-orange-700 hover:border-orange-900 transition-all duration-200 cursor-pointer">
                 <a href={resolve(`/persons/${friend.id}`)}><img 
                   src={getUserAvatar(friend)}
