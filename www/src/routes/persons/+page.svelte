@@ -1,5 +1,6 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
+import Pagination from "$lib/components/Pagination.svelte";
 import { getPersons } from "$lib/persons.remote";
 import type { City } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
@@ -190,35 +191,12 @@ function resetCurrentPage() {
           </div>
         {/each}
       </div>
-      <!-- Pagination -->
-      <div class="flex justify-center items-center gap-3 mt-8">
-        {#if currentPage > 0}
-          <button 
-            onclick={() => currentPage--}
-            class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
-          >
-            ←
-          </button>
-        {/if}
-        {#if usersCount > PAGE_SIZE}
-          {#each Array.from({ length: Math.ceil(usersCount / PAGE_SIZE) }, (_, i) => i) as pageNum}
-            <button 
-              onclick={() => currentPage = pageNum}
-              class="px-4 py-2 {currentPage === pageNum ? 'bg-orange-600' : 'bg-orange-500 hover:bg-orange-600'} text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
-            >
-              {pageNum + 1}
-            </button>
-          {/each}
-        {/if}
-        {#if (currentPage + 1) * PAGE_SIZE < usersCount}
-          <button 
-            onclick={() => currentPage++}
-            class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
-          >
-            →
-          </button>
-        {/if}
-      </div>
+      <Pagination
+        pageSize={PAGE_SIZE}
+        itemsCount={usersCount}
+        currentPage={currentPage}
+        setPage={(page) => currentPage = page}
+      />
     {/if}
   </div>
 </div>

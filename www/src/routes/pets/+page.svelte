@@ -1,4 +1,5 @@
 <script lang="ts">
+import Pagination from "$lib/components/Pagination.svelte";
 import { getPets } from "$lib/pets.remote";
 import { getPetAvatar } from "$lib/storage";
 
@@ -172,35 +173,12 @@ function resetCurrentPage() {
           </a>
         {/each}
       </div>
-      <!-- Pagination -->
-      <div class="flex justify-center items-center gap-3 mt-8">
-        {#if currentPage > 0}
-          <button 
-            onclick={() => currentPage--}
-            class="px-4 py-2 bg-[#CC5500] hover:bg-[#A04000] text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
-          >
-            ←
-          </button>
-        {/if}
-        {#if petsCount > PAGE_SIZE}
-          {#each Array.from({ length: Math.ceil(petsCount / PAGE_SIZE) }, (_, i) => i) as pageNum}
-            <button 
-              onclick={() => currentPage = pageNum}
-              class="px-4 py-2 {currentPage === pageNum ? 'bg-[#A04000]' : 'bg-[#CC5500] hover:bg-[#A04000]'} text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
-            >
-              {pageNum + 1}
-            </button>
-          {/each}
-        {/if}
-        {#if (currentPage + 1) * PAGE_SIZE < petsCount}
-          <button 
-            onclick={() => currentPage++}
-            class="px-4 py-2 bg-[#CC5500] hover:bg-[#A04000] text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
-          >
-            →
-          </button>
-        {/if}
-      </div>
+      <Pagination
+        pageSize={PAGE_SIZE}
+        itemsCount={petsCount}
+        currentPage={currentPage}
+        setPage={(page) => currentPage = page}
+      />
     {/if}
   </div>
 </div>
