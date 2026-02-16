@@ -55,6 +55,7 @@ const pets = $derived(
         name="file"
         type="file"
         accept="image/png"
+        autocomplete="off"
         bind:files
         required
         class="hidden"

@@ -193,6 +193,7 @@ async function sendMessage() {
                 name="avatar"
                 type="file"
                 accept="image/png"
+                autocomplete="off"
                 class="hidden"
                 bind:files
               />
