@@ -4,6 +4,7 @@ import { resolve } from "$app/paths";
 import Post from "$lib/components/Post.svelte";
 import { deletePet } from "$lib/pets.remote.js";
 import { getPosts } from "$lib/posts.remote.js";
+import { getPetAvatar } from "$lib/storage";
 
 const { data } = $props();
 
@@ -11,12 +12,9 @@ const { data } = $props();
 const pet = $derived({
   ...(await data.pet),
   adopted: true,
-  photos: [
-    "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
-    "https://www.lozere-online.com/wp-content/uploads/2013/09/vache-race-aubrac.jpg",
-    "https://cdn.canardware.com/2021/05/05044743/10327-vache-1200x627.jpg",
-  ],
 });
+
+const petAvatar = $derived(getPetAvatar(pet));
 
 const isOwned = $derived(data.currentUser?.id === pet.ownerId);
 
@@ -29,12 +27,21 @@ const posts = $derived(await getPosts({ pet: pet.id }));
 
 <div class="min-h-screen bg-[#f5e6d3]">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <a href="/pets" class="inline-flex items-center gap-2 text-[#8B4513] hover:text-[#A0522D] font-bold transition-colors">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-      </svg>
-      Back to list
-    </a>
+    {#if isOwned}
+      <a href={resolve(`/persons/${data.currentUser?.id}`)} class="inline-flex items-center gap-2 text-[#8B4513] hover:text-[#A0522D] font-bold transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Back to profile
+      </a>
+    {:else}
+      <a href="/pets" class="inline-flex items-center gap-2 text-[#8B4513] hover:text-[#A0522D] font-bold transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Back to list
+      </a>
+    {/if}
   </div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -46,7 +53,20 @@ const posts = $derived(await getPosts({ pet: pet.id }));
               <p class="text-xl text-[#A0522D] font-medium">{pet.species}</p>
             </div>
             {#if isOwned}
-              <button onclick={async () => { await deletePet(pet.id); await goto(resolve("/pets")); }}>Delete</button>
+              <div class="flex gap-2">
+                <a
+                  href={resolve(`/edit-pet/${pet.id}`)}
+                  class="px-4 py-2 bg-[#CC5500] text-white rounded-lg font-bold hover:bg-[#A04000] transition-colors"
+                >
+                  ✏️ Edit
+                </a>
+                <button
+                  class="px-4 py-2 bg-red-500 text-white rounded-lg font-bold hover:bg-red-600 transition-colors"
+                  onclick={async () => { await deletePet(pet.id); await goto(resolve("/pets")); }}
+                >
+                  🗑️ Delete
+                </button>
+              </div>
             {/if}
             {#if pet.adopted}
               <span class="px-4 py-2 bg-orange-600 text-white rounded-lg font-medium">
@@ -139,23 +159,10 @@ const posts = $derived(await getPosts({ pet: pet.id }));
         <!-- Photo principale -->
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl overflow-hidden border-4 border-[#8B4513]">
           <img 
-            src={pet.photos[0]} 
+            src={petAvatar} 
             alt={pet.name}
             class="w-full aspect-video object-cover"
           />
-        </div>
-
-        <!-- Galerie de photos -->
-        <div class="grid grid-cols-2 gap-4">
-          {#each pet.photos.slice(1) as photo, i}
-            <div class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 cursor-pointer">
-              <img 
-                src={photo} 
-                alt="{pet.name} - Photo {i + 2}"
-                class="w-full aspect-square object-cover"
-              />
-            </div>
-          {/each}
         </div>
 
         <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-6 border-4 border-[#8B4513]">

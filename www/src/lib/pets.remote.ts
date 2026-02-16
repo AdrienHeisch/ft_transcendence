@@ -113,3 +113,62 @@ export const deletePet = command(z.string(), async (petId) => {
   await PublicStorage.delete(`${PET_AVATAR_PREFIX + petId}.png`);
   await db.delete(schema.pet).where(eq(schema.pet.id, petId));
 });
+
+export const updatePet = form(
+  z.object({
+    id: z.string(),
+    name: z.string(),
+    birth: z.string(),
+    bio: z.string(),
+    species: z.string(),
+    breed: z.string(),
+    avatar: z.custom<File>().optional(),
+  }),
+  async ({ id, name, birth, bio, species, breed, avatar }) => {
+    const user = requireLogin();
+
+    const [pet] = await db
+      .select()
+      .from(schema.pet)
+      .where(eq(schema.pet.id, id));
+    if (!pet) {
+      error(404);
+    }
+
+    if (pet.ownerId !== user.id) {
+      error(401);
+    }
+
+    const fileKey = `${PET_AVATAR_PREFIX + id}.png`;
+    let hasAvatar = pet.hasAvatar;
+
+    if (avatar && avatar.size > 0) {
+      if (avatar.size > Number(MAX_FILE_SIZE)) {
+        error(413);
+      }
+      try {
+        await PublicStorage.upload(fileKey, avatar);
+        hasAvatar = true;
+      } catch {
+        error(500, "Failed to update pet avatar");
+      }
+    }
+
+    try {
+      await db
+        .update(schema.pet)
+        .set({
+          name,
+          birth: new Date(birth),
+          bio,
+          species,
+          breed,
+          hasAvatar,
+        })
+        .where(eq(schema.pet.id, id));
+    } catch {
+      error(500, "Failed to update pet profile");
+    }
+    redirect(303, resolve(`/pets/${id}`));
+  },
+);

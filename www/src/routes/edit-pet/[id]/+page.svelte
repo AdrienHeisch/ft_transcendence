@@ -1,0 +1,209 @@
+<script lang="ts">
+import { resolve } from "$app/paths";
+import { updatePet } from "$lib/pets.remote";
+import { getPetAvatar } from "$lib/storage";
+
+const { data } = $props();
+
+const pet = data.pet;
+const petAvatar = getPetAvatar(pet);
+
+let files = $state<FileList>();
+const previewUrl = $derived.by(() => {
+  const file = files?.item(0);
+  return file ? URL.createObjectURL(file) : "";
+});
+
+// Format date for input (handle both Date object and string)
+const birthDate = (pet.birth instanceof Date ? pet.birth : new Date(pet.birth)).toISOString().split("T")[0];
+</script>
+
+<svelte:head>
+  <title>Edit {pet.name} - Bibi's Farm</title>
+</svelte:head>
+
+<div class="bg-[#f5e6d3]">
+  <!-- Header -->
+  <div class="bg-linear-to-r from-[#CC5500] to-[#A04000] py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl md:text-5xl font-bold text-white text-center mb-4">
+        ✏️ Edit {pet.name}
+      </h1>
+      <p class="text-xl text-white/90 text-center max-w-2xl mx-auto">
+        Update your pet's information
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <form enctype="multipart/form-data" {...updatePet}>
+      <input type="hidden" name="id" value={pet.id} />
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Left column - Form fields -->
+        <div class="space-y-6">
+          <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-8 border-4 border-[#8B4513]">
+            <h2 class="text-2xl font-bold text-[#8B4513] mb-6 flex items-center gap-2">
+              <span>📝</span>
+              Basic Information
+            </h2>
+
+            <div class="space-y-6">
+              <!-- Name -->
+              <div>
+                <label class="block text-sm font-bold text-[#8B4513] mb-2" for="name">
+                  Name
+                  <input
+                    {...updatePet.fields.name.as("text")}
+                    value={pet.name}
+                    placeholder="Garfield"
+                    required
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+                  />
+                </label>
+              </div>
+
+              <!-- Species -->
+              <div>
+                <label class="block text-sm font-bold text-[#8B4513] mb-2" for="species">
+                  Species
+                  <input
+                    {...updatePet.fields.species.as("text")}
+                    value={pet.species}
+                    placeholder="Cat"
+                    required
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+                  />
+                </label>
+              </div>
+
+              <!-- Breed -->
+              <div>
+                <label class="block text-sm font-bold text-[#8B4513] mb-2" for="breed">
+                  Breed
+                  <input
+                    {...updatePet.fields.breed.as("text")}
+                    value={pet.breed}
+                    placeholder="Orange Lasagna"
+                    required
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+                  />
+                </label>
+              </div>
+
+              <!-- Birth -->
+              <div>
+                <label class="block text-sm font-bold text-[#8B4513] mb-2" for="age">
+                  Birth
+                  <input
+                    {...updatePet.fields.birth.as("date")}
+                    value={birthDate}
+                    placeholder="8"
+                    required
+                    min="0"
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+                  />
+                </label>
+              </div>
+
+              <!-- Description -->
+              <div>
+                <label class="block text-sm font-bold text-[#8B4513] mb-2" for="bio">
+                  Description
+                  <textarea
+                    id="bio"
+                    {...updatePet.fields.bio.as("text")}
+                    placeholder="A friendly and playful companion..."
+                    rows="4"
+                    class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium resize-none"
+                  >{pet.bio}</textarea>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column - Photo preview -->
+        <div class="space-y-6">
+          <!-- Photo upload -->
+          <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-8 border-4 border-[#8B4513]">
+            <h2 class="text-2xl font-bold text-[#8B4513] mb-6 flex items-center gap-2">
+              <span>📸</span>
+              Photo
+            </h2>
+
+            <!-- Preview or placeholder -->
+            <div class="mb-6">
+              {#if previewUrl}
+                <div class="relative aspect-video rounded-xl overflow-hidden border-2 border-[#8B4513]">
+                  <img 
+                    src={previewUrl} 
+                    alt="Preview"
+                    class="w-full h-full object-cover"
+                  />
+                  <button
+                    aria-label="Remove image"
+                    type="button"
+                    onclick={() => files = undefined}
+                    class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                  </button>
+                </div>
+              {:else if pet.hasAvatar}
+                <div class="relative aspect-video rounded-xl overflow-hidden border-2 border-[#8B4513]">
+                  <img 
+                    src={petAvatar} 
+                    alt={pet.name}
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+              {:else}
+                <div class="aspect-video rounded-xl border-2 border-dashed border-[#8B4513] flex items-center justify-center bg-[#fef7ed]">
+                  <div class="text-center">
+                    <span class="text-6xl mb-4 block">🐾</span>
+                    <p class="text-[#8B4513] font-medium">No photo yet</p>
+                  </div>
+                </div>
+              {/if}
+            </div>
+
+            <!-- Upload button -->
+            <label class="block">
+              <input
+                name="avatar"
+                type="file"
+                accept="image/png"
+                class="hidden"
+                bind:files
+              />
+              <div class="w-full py-3 bg-[#CC5500] text-white rounded-lg font-bold text-center hover:bg-[#A04000] transition-all cursor-pointer">
+                📷 {previewUrl || pet.hasAvatar ? "Change photo" : "Add photo"}
+              </div>
+            </label>
+          </div>
+
+          <!-- Submit button -->
+          <div class="bg-[#fef7ed] rounded-2xl shadow-xl p-6 border-4 border-[#8B4513]">
+            <button
+              type="submit"
+              class="w-full py-4 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold text-lg hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg hover:shadow-xl"
+            >
+              ✏️ Save Changes
+            </button>
+
+            <div class="text-center mt-4">
+              <a
+                href={resolve(`/pets/${pet.id}`)}
+                class="text-[#8B4513] hover:text-[#CC5500] font-semibold transition-colors"
+              >
+                ← Cancel and go back
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
