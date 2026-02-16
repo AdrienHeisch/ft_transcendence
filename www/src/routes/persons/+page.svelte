@@ -26,14 +26,13 @@ const users = $derived(
       offset: currentPage * PAGE_SIZE,
       limit: PAGE_SIZE,
     })
-  )
-    .map((user) => ({
-      ...user,
-      username: `${user.firstName.charAt(0)}${user.lastName}`,
-      photo: getUserAvatar(user),
-      adoptedAnimals: user.firstName.length % 3,
-      age: ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20,
-    })),
+  ).map((user) => ({
+    ...user,
+    username: `${user.firstName.charAt(0)}${user.lastName}`,
+    photo: getUserAvatar(user),
+    adoptedAnimals: user.firstName.length % 3,
+    age: ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20,
+  })),
 );
 
 const usersCount = $derived(users.at(0)?.count ?? 0);
