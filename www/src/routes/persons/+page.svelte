@@ -190,15 +190,33 @@ function resetCurrentPage() {
           </div>
         {/each}
       </div>
-      <div>
+      <!-- Pagination -->
+      <div class="flex justify-center items-center gap-3 mt-8">
         {#if currentPage > 0}
-          <button onclick={() => currentPage--}>←</button>
+          <button 
+            onclick={() => currentPage--}
+            class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
+          >
+            ←
+          </button>
         {/if}
         {#if usersCount > PAGE_SIZE}
-          <span>{currentPage}</span>
+          {#each Array.from({ length: Math.ceil(usersCount / PAGE_SIZE) }, (_, i) => i) as pageNum}
+            <button 
+              onclick={() => currentPage = pageNum}
+              class="px-4 py-2 {currentPage === pageNum ? 'bg-orange-600' : 'bg-orange-500 hover:bg-orange-600'} text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
+            >
+              {pageNum + 1}
+            </button>
+          {/each}
         {/if}
         {#if (currentPage + 1) * PAGE_SIZE < usersCount}
-          <button onclick={() => currentPage++}>→</button>
+          <button 
+            onclick={() => currentPage++}
+            class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-lg transition-colors shadow-md flex items-center justify-center min-w-[44px]"
+          >
+            →
+          </button>
         {/if}
       </div>
     {/if}
