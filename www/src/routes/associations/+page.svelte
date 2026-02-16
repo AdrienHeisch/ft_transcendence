@@ -2,6 +2,7 @@
 import { onMount } from "svelte";
 import { resolve } from "$app/paths";
 import { getAssociations, getPetsCount } from "$lib/associations.remote";
+import Pagination from "$lib/components/Pagination.svelte";
 import type { AssociationType, City } from "$lib/server/db/schema";
 
 const PAGE_SIZE = 12;
@@ -215,17 +216,12 @@ function resetCurrentPage() {
           </div>
         {/each}
       </div>
-      <div>
-        {#if currentPage > 0}
-          <button onclick={() => currentPage--}>←</button>
-        {/if}
-        {#if associationsCount > PAGE_SIZE}
-          <span>{currentPage}</span>
-        {/if}
-        {#if (currentPage + 1) * PAGE_SIZE < associationsCount}
-          <button onclick={() => currentPage++}>→</button>
-        {/if}
-      </div>
+      <Pagination
+        pageSize={PAGE_SIZE}
+        itemsCount={associationsCount}
+        currentPage={currentPage}
+        setPage={(page) => currentPage = page}
+      />
     {/if}
   </div>
 </div>
