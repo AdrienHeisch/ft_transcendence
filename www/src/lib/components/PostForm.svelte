@@ -10,6 +10,7 @@ interface Props {
 const { currentUser }: Props = $props();
 
 let files = $state<FileList>();
+let formEl = $state<HTMLFormElement>();
 
 const previewUrl = $derived.by(() => {
   const file = files?.item(0);
@@ -19,11 +20,23 @@ const previewUrl = $derived.by(() => {
 const pets = $derived(
   await getPets({ owner: currentUser.id, search: "", sortBy: "species" }),
 );
+
+function handleSubmit() {
+  setTimeout(() => {
+    files = undefined as unknown as FileList;
+    if (formEl) {
+      const fileInput = formEl.querySelector('input[type="file"]') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+    }
+  }, 100);
+}
 </script>
 
 <form
+  bind:this={formEl}
   class="flex flex-col mb-6 p-4 bg-orange-50 rounded-2xl border-4 border-orange-300 shadow-lg"
   enctype="multipart/form-data" {...createPost}
+  onsubmit={handleSubmit}
 >
   {#if previewUrl}
     <img class="p-1" alt="Uploaded" src={previewUrl} />
