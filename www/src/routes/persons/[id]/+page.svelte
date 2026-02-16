@@ -306,7 +306,7 @@ const avatarUrl = $derived.by(() => {
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#if isCurrentUser && data.currentUser}
-          <PostForm currentUser={data.currentUser} />
+          <PostForm currentUser={data.currentUser} updates={[getPosts({ author: user.id })]} />
         {/if}
 
         {#if posts.length == 0}

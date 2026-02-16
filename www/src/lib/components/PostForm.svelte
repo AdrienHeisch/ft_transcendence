@@ -1,13 +1,15 @@
 <script lang="ts">
+import type { RemoteQuery, RemoteQueryOverride } from "@sveltejs/kit";
 import { getPets } from "$lib/pets.remote";
 import { createPost } from "$lib/posts.remote";
 import { type User } from "$lib/server/db/schema";
 
 interface Props {
   currentUser: User;
+  updates?: Array<RemoteQuery<any> | RemoteQueryOverride>;
 }
 
-const { currentUser }: Props = $props();
+const { currentUser, updates = [] }: Props = $props();
 
 let files = $state<FileList>();
 
@@ -23,7 +25,9 @@ const pets = $derived(
 
 <form
   class="flex flex-col mb-6 p-4 bg-orange-50 rounded-2xl border-4 border-orange-300 shadow-lg"
-  enctype="multipart/form-data" {...createPost}
+  enctype="multipart/form-data" {...createPost.enhance(async ({ submit }) => {
+    await submit().updates(...updates);
+  })}
 >
   {#if previewUrl}
     <img class="p-1" alt="Uploaded" src={previewUrl} />
