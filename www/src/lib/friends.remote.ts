@@ -7,7 +7,6 @@ import { getCurrentUser, isLoggedIn, requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 
-//TODO batch query ?
 export const getUserFriends = query(z.string(), (userId: string) => {
   type Side = "left" | "right";
   const select = (self: Side, other: Side) => {

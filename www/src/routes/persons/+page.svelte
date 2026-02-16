@@ -27,7 +27,6 @@ const users = $derived(
       limit: PAGE_SIZE,
     })
   )
-    // TODO remove fake data
     .map((user) => ({
       ...user,
       username: `${user.firstName.charAt(0)}${user.lastName}`,
