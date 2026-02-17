@@ -108,7 +108,7 @@ methods
 - [x] _Minor_ Implement advanced search functionality with filters, sorting and
 pagination
 - [ ] _Minor_ File upload and management system
-  - [ ] Support multiple file types (images, documents, etc.)
+  - [x] Support multiple file types (images, documents, etc.)
   - [ ] Client-side and server-side validation (type, size, format)
   - [x] Secure file storage with proper access control
   - [x] File preview functionality where applicable
