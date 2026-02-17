@@ -16,7 +16,7 @@ afterNavigate(() => (sidebarOpen = false));
 
 const sidebarMainItems = $derived(
   [
-    { label: "Home", icon: "🏠", href: "/" },
+    { label: "Home", icon: "🏠", href: data.currentUser ? "/feed" : "/" },
     data.currentUser
       ? {
           label: "Profile",
