@@ -10,9 +10,12 @@ import * as schema from "$lib/server/db/schema";
 export const getUserFriends = query(z.string(), (userId: string) => {
   type Side = "left" | "right";
   const select = (self: Side, other: Side) => {
+    const { apiKey, passwordHash, ...userColumns } = getTableColumns(
+      schema.user,
+    );
     return db
       .select({
-        ...getTableColumns(schema.user),
+        ...userColumns,
         status: sql<"friends" | "sent" | "received" | null>`
           CASE
             WHEN ${schema.usersPair.friends} THEN

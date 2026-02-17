@@ -8,10 +8,12 @@ import * as schema from "$lib/server/db/schema";
 import { PublicStorage } from "./server/storage";
 import { USER_AVATAR_PREFIX } from "./storage";
 
+const { apiKey, passwordHash, ...userColumns } = getTableColumns(schema.user);
+
 export const getPerson = query.batch(z.string(), async (persons) => {
   const result = await db
     .select({
-      ...getTableColumns(schema.user),
+      ...userColumns,
       city: getTableColumns(schema.city),
     })
     .from(schema.user)
@@ -32,7 +34,7 @@ export const getPersons = query(
   ({ search, city, sortBy, offset, limit }) => {
     const query = db
       .select({
-        ...getTableColumns(schema.user),
+        ...userColumns,
         city: getTableColumns(schema.city),
         count: sql`count(*) over()`.mapWith(Number),
       })

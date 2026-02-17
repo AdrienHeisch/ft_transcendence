@@ -12,11 +12,13 @@ import { POST_IMAGE_PREFIX } from "./storage";
 
 export type PostData = Omit<Post, "author"> & { author: User };
 
+const { apiKey, passwordHash, ...userColumns } = getTableColumns(schema.user);
+
 export const getPost = query.batch(z.string(), async (posts) => {
   const result = await db
     .select({
       ...getTableColumns(schema.post),
-      author: { ...getTableColumns(schema.user) },
+      author: userColumns,
     })
     .from(schema.post)
     .where(inArray(schema.post.id, posts))
@@ -31,7 +33,7 @@ export const getPosts = query(
     return db
       .select({
         ...getTableColumns(schema.post),
-        author: { ...getTableColumns(schema.user) },
+        author: userColumns,
       })
       .from(schema.post)
       .where(
@@ -86,7 +88,7 @@ export const getPostComments = query(z.string(), (id) => {
   return db
     .select({
       ...getTableColumns(schema.postComment),
-      author: { ...getTableColumns(schema.user) },
+      author: userColumns,
     })
     .from(schema.postComment)
     .where(eq(schema.postComment.post, id))

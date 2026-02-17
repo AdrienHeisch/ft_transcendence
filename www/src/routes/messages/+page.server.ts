@@ -6,6 +6,7 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {
   const currentUser = requireLogin();
+  const { apiKey, passwordHash, ...userColumns } = getTableColumns(schema.user);
   const chats = await Promise.all(
     (
       await db
@@ -23,7 +24,7 @@ export const load: PageServerLoad = async () => {
         await db
           .select({
             ...getTableColumns(schema.chatMessage),
-            author: getTableColumns(schema.user),
+            author: userColumns,
           })
           .from(schema.chatMessage)
           .where(eq(schema.chatMessage.friendsId, chat.id))

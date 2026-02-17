@@ -41,7 +41,10 @@ export const user = pgTable("user", {
   online: boolean("online").notNull(),
 });
 
-export type User = typeof user.$inferSelect;
+export type User = Omit<
+  Omit<typeof user.$inferSelect, "apiKey">,
+  "passwordHash"
+>;
 
 export const pet = pgTable("pet", {
   id: uuid("id").primaryKey(),
