@@ -2,14 +2,15 @@
 import type { RemoteQuery, RemoteQueryOverride } from "@sveltejs/kit";
 import { getPets } from "$lib/pets.remote";
 import { createPost } from "$lib/posts.remote";
-import { type User } from "$lib/server/db/schema";
+import { type Pet, type User } from "$lib/server/db/schema";
 
 interface Props {
   currentUser: User;
+  forcePet?: Pet;
   updates?: Array<RemoteQuery<any> | RemoteQueryOverride>;
 }
 
-const { currentUser, updates = [] }: Props = $props();
+const { currentUser, forcePet, updates = [] }: Props = $props();
 
 let files = $state<FileList>();
 
@@ -25,7 +26,8 @@ const pets = $derived(
 
 <form
   class="flex flex-col mb-6 p-4 bg-orange-50 rounded-2xl border-4 border-orange-300 shadow-lg"
-  enctype="multipart/form-data" {...createPost.enhance(async ({ submit }) => {
+  enctype="multipart/form-data" {...createPost.enhance(async ({ form, submit }) => {
+    form.reset();
     await submit().updates(...updates);
   })}
 >
@@ -44,15 +46,23 @@ const pets = $derived(
       class="px-4 py-1 bg-orange-700 text-white rounded-lg font-bold text-center divide-x-2 divide-gray-100"
     >
       <span class="pr-2">Pet</span>
-      <select
-        class="pl-1 py-1 rounded-lg hover:bg-orange-800 transition-all cursor-pointer"
-        {...createPost.fields.pet.as("select")}
-      >
-        <option value={undefined}></option>
-        {#each pets as pet}
-          <option value={pet.id}>{pet.name}</option>
-        {/each}
-      </select>
+      {#if forcePet}
+        <input
+          class="pl-1 py-1 rounded-lg hover:bg-orange-800 transition-all cursor-pointer"
+          {...createPost.fields.pet.as("hidden", forcePet.id)}
+        />
+        {forcePet.name}
+      {:else}
+        <select
+          class="pl-1 py-1 rounded-lg hover:bg-orange-800 transition-all cursor-pointer"
+          {...createPost.fields.pet.as("select")}
+        >
+          <option value={undefined}></option>
+          {#each pets as pet}
+            <option value={pet.id}>{pet.name}</option>
+          {/each}
+        </select>
+      {/if}
     </label>
     <label>
       <input

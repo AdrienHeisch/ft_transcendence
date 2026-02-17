@@ -1,16 +1,20 @@
-import { error, type RemoteQuery } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
+import { getPerson } from "$lib/persons.remote";
 import { getPet } from "$lib/pets.remote";
-import type { Pet } from "$lib/server/db/schema";
+import { promiseToRemoteQuery } from "$lib/typeUtils";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({
-  data: { currentUser },
+  data: { currentUser, cities },
   params: { id },
 }) => {
   const pet = getPet(id);
-  if (!(await pet)) error(404);
+  const loadedPet = await pet;
+  if (!loadedPet) error(404);
   return {
     currentUser,
-    pet: pet as RemoteQuery<Pet>,
+    cities,
+    pet: promiseToRemoteQuery(pet),
+    owner: promiseToRemoteQuery(getPerson(loadedPet.ownerId)),
   };
 };

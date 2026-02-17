@@ -1,9 +1,8 @@
 <script lang="ts">
-import { resolve } from "$app/paths";
 import Pagination from "$lib/components/Pagination.svelte";
+import UserCard from "$lib/components/UserCard.svelte";
 import { getPersons } from "$lib/persons.remote";
 import type { City } from "$lib/server/db/schema";
-import { getUserAvatar } from "$lib/storage";
 
 const PAGE_SIZE = 12;
 
@@ -18,21 +17,13 @@ let sortBy = $state<"firstName" | "lastName">("firstName");
 let currentPage = $state(0);
 
 const users = $derived(
-  (
-    await getPersons({
-      search: searchQuery,
-      city: selectedCity?.code,
-      sortBy,
-      offset: currentPage * PAGE_SIZE,
-      limit: PAGE_SIZE,
-    })
-  ).map((user) => ({
-    ...user,
-    username: `${user.firstName.charAt(0)}${user.lastName}`,
-    photo: getUserAvatar(user),
-    adoptedAnimals: user.firstName.length % 3,
-    age: ((20 * (user.firstName.length + user.lastName.length)) % 33) + 20,
-  })),
+  await getPersons({
+    search: searchQuery,
+    city: selectedCity?.code,
+    sortBy,
+    offset: currentPage * PAGE_SIZE,
+    limit: PAGE_SIZE,
+  }),
 );
 
 const usersCount = $derived(users.at(0)?.count ?? 0);
@@ -128,64 +119,8 @@ function resetCurrentPage() {
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each users as user (user.id)}
-          <div
-            class="bg-white rounded-2xl shadow-lg overflow-hidden border-3 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
-          >
-            <!-- Profile picture -->
-            <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
-              <div class="flex justify-center">
-                <div class="relative">
-                  <img 
-                    src={user.photo} 
-                    alt={user.firstName + ' ' + user.lastName}
-                    class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white"
-                  />
-                  {#if user.online}
-                    <div class={["bg-green-500", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
-                  {/if}
-                </div>
-              </div>
-            </div>
-
-            <!-- Info -->
-            <div class="p-5">
-              <h3 class="text-2xl font-bold text-orange-900 mb-1" style="font-family: Georgia, serif;">
-                {user.firstName} {user.lastName}
-              </h3>
-              <p class="text-orange-700 mb-2">@{user.username}</p>
-
-              <div class="flex items-center gap-4 mb-3 text-sm text-orange-800">
-                <div class="flex items-center gap-1">
-                  <span>📍</span>
-                  <span>{user.city.name}</span>
-                </div>
-                <div class="flex items-center gap-1">
-                  <span>🎂</span>
-                  <span>{user.age} years old</span>
-                </div>
-              </div>
-
-              {#if user.adoptedAnimals > 0}
-                <div class="mb-3 text-sm text-orange-800 flex items-center gap-1">
-                  <span>🐾</span>
-                  <span class="font-semibold">{user.adoptedAnimals} {user.adoptedAnimals > 1 ? "adopted pets" : "adopted pet"}</span>
-                </div>
-              {/if}
-
-              <p class="text-sm text-gray-700 mb-4 line-clamp-2 italic">
-                "{user.bio}"
-              </p>
-
-              <!-- Buttons -->
-              <div class="flex gap-2">
-                <a href="./{user.id}" class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
-                  👁️ View profile
-                </a>
-                <a href={resolve(`/messages/${user.id}`)} class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors text-center">
-                  💬 Message
-                </a>
-              </div>
-            </div>
+          <div class="transition-all duration-200 hover:-translate-y-1 *:transition-shadow *:hover:shadow-xl *:h-full">
+            <UserCard user={user} />
           </div>
         {/each}
       </div>

@@ -95,6 +95,45 @@ export const createPet = form(
   },
 );
 
+export const updatePet = form(
+  z.object({
+    id: z.string(),
+    name: z.string(),
+    bio: z.string(),
+    avatar: z.custom<File>().optional(),
+    removeAvatar: z.string(),
+  }),
+  async (data) => {
+    const { id, avatar, removeAvatar, ...values } = data;
+    const [owner] = await db
+      .select({ id: schema.pet.ownerId })
+      .from(schema.pet)
+      .where(eq(schema.pet.id, id));
+    if (owner?.id !== requireLogin().id) {
+      error(403);
+    }
+    if (avatar) {
+      await PublicStorage.upload(`${PET_AVATAR_PREFIX + id}.png`, avatar);
+      await db
+        .update(schema.pet)
+        .set({ ...values, hasAvatar: true })
+        .where(eq(schema.pet.id, id));
+    } else if (removeAvatar === "true") {
+      await PublicStorage.delete(`${PET_AVATAR_PREFIX + id}.png`);
+      await db
+        .update(schema.pet)
+        .set({ ...values, hasAvatar: false })
+        .where(eq(schema.pet.id, id));
+    } else {
+      await db
+        .update(schema.pet)
+        .set({ ...values })
+        .where(eq(schema.pet.id, id));
+    }
+    await getPet(id).refresh();
+  },
+);
+
 export const deletePet = command(z.string(), async (petId) => {
   const user = requireLogin();
 
