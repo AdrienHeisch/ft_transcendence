@@ -2,6 +2,8 @@
 import { resolve } from "$app/paths";
 import { createPet } from "$lib/pets.remote";
 
+const { data } = $props();
+
 let files = $state<FileList>();
 const previewUrl = $derived.by(() => {
   const file = files?.item(0);
@@ -174,7 +176,7 @@ const previewUrl = $derived.by(() => {
 
             <div class="text-center mt-4">
               <a
-                href={resolve("/pets")}
+                href={resolve(`/persons/${data.currentUser?.id}`)}
                 class="text-[#8B4513] hover:text-[#CC5500] font-semibold transition-colors"
               >
                 ← Cancel and go back
