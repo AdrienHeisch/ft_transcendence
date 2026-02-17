@@ -98,7 +98,7 @@ const closeEdit = () => {
       {#if post.pet}
         {@const pet = post.pet}
         <a href={resolve(`/pets/${pet.id}`)}>
-          {#if pet.hasAvatar}
+          {#if pet && pet.hasAvatar} <!-- keep `pet &&`, seems to fix a Svelte bug -->
             <img
               alt="Pet"
               src={getPetAvatar(pet)}
