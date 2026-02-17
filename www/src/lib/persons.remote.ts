@@ -2,6 +2,7 @@ import { error } from "@sveltejs/kit";
 import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
 import z from "zod";
 import { form, query } from "$app/server";
+import { MAX_FILE_SIZE } from "$env/static/private";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
@@ -75,6 +76,9 @@ export const updatePerson = form(
       error(403);
     }
     if (avatar) {
+      if (avatar.size > Number(MAX_FILE_SIZE)) {
+        error(413);
+      }
       await PublicStorage.upload(USER_AVATAR_PREFIX + id, avatar, avatar.type);
       await db
         .update(schema.user)

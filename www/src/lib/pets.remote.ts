@@ -113,6 +113,9 @@ export const updatePet = form(
       error(403);
     }
     if (avatar) {
+      if (avatar.size > Number(MAX_FILE_SIZE)) {
+        error(413);
+      }
       await PublicStorage.upload(PET_AVATAR_PREFIX + id, avatar, avatar.type);
       await db
         .update(schema.pet)

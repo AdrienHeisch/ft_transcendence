@@ -7,6 +7,12 @@ import * as schema from "./lib/server/db/schema";
 import { PrivateStorage } from "./lib/server/storage";
 import { MESSAGE_FILE_PREFIX } from "./lib/storage";
 
+if (!process.env.POSTGRES_USER) throw "Missing POSTGRES_USER environment variable";
+if (!process.env.POSTGRES_PASSWORD) throw "Missing POSTGRES_PASSWORD environment variable";
+if (!process.env.POSTGRES_HOST) throw "Missing POSTGRES_HOST environment variable";
+if (!process.env.POSTGRES_DB) throw "Missing POSTGRES_DB environment variable";
+if (!process.env.MAX_FILE_SIZE) throw "Missing MAX_FILE_SIZE environment variable";
+
 const PORT = 3000;
 
 const PRESENCE_PING_INTERVAL = 5000;
@@ -154,9 +160,13 @@ const server = Bun.serve({
             sentAt: new Date(),
           };
           if (isFile) {
+            const buffer = content as Buffer<ArrayBuffer>;
+            if (buffer.length > Number(process.env.MAX_FILE_SIZE)) {
+              return; // TODO send an error ?
+            }
             await PrivateStorage.upload(
               MESSAGE_FILE_PREFIX + message.id,
-              new Blob([(content as Buffer<ArrayBuffer>).subarray(7)]),
+              new Blob([buffer.subarray(7)]),
             );
           }
           server.publish(
