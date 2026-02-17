@@ -9,6 +9,7 @@ import {
   editPost,
   getPostCommentCount,
   getPostComments,
+  getPostFileType,
   getPostLikes,
   isPostLiked,
   likePost,
@@ -137,14 +138,20 @@ const closeEdit = () => {
   {/if}
 
   <!-- Post Image -->
-  <a href={resolve(`/post/${post.id}`)}>
-    <img 
-      src={getPostImage(post)} 
-      alt="Post"
-      class="{isImageError ? "hidden" : ""} w-full aspect-video object-cover"
-      onerror={() => isImageError = true}
-    />
-  </a>
+  {#if (await getPostFileType(post.id)).startsWith("video/")}
+    <video controls loop autoplay>
+      <source src={getPostImage(post)} />
+    </video>
+  {:else}
+    <a href={resolve(`/post/${post.id}`)}>
+      <img 
+        src={getPostImage(post)} 
+        alt="Post"
+        class="{isImageError ? "hidden" : ""} w-full aspect-video object-cover"
+        onerror={() => isImageError = true}
+      />
+    </a>
+  {/if}
 
   <!-- Post Actions -->
   <div class="p-4 space-y-3">

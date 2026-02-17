@@ -7,6 +7,7 @@ import {
 export const PublicStorage = {
   url: (key: string) => _PublicStorage.url(key),
   get: (key: string) => s3.file(key),
+  stat: (key: string) => s3.stat(key),
   exists: (key: string) => s3.exists(key),
   upload: async (key: string, file: Blob | File, type?: string) =>
     s3.write(key, await file.bytes(), { type }),
@@ -30,6 +31,7 @@ export const PrivateStorage = {
     });
   },
   get: (key: string) => s3.file(key, { bucket }),
+  stat: (key: string) => s3.stat(key),
   exists: (key: string) => s3.exists(key, { bucket }),
   upload: async (key: string, file: Blob | File, type?: string) =>
     s3.write(key, await file.bytes(), { type, bucket }),

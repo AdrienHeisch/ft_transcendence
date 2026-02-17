@@ -68,7 +68,7 @@ const pets = $derived(
       <input
         name="file"
         type="file"
-        accept="image/png"
+        accept="image/*,video/*"
         autocomplete="off"
         bind:files
         required
