@@ -71,6 +71,9 @@ export const createPet = form(
     if (avatar.size > Number(MAX_FILE_SIZE)) {
       error(413);
     }
+    if (!avatar.type.startsWith("image/")) {
+      error(415);
+    }
     try {
       await PublicStorage.upload(fileKey, avatar, avatar.type);
     } catch {
@@ -115,6 +118,9 @@ export const updatePet = form(
     if (avatar) {
       if (avatar.size > Number(MAX_FILE_SIZE)) {
         error(413);
+      }
+      if (!avatar.type.startsWith("image/")) {
+        error(415);
       }
       await PublicStorage.upload(PET_AVATAR_PREFIX + id, avatar, avatar.type);
       await db

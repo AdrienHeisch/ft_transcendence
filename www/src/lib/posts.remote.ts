@@ -167,6 +167,9 @@ export const createPost = form(
     if (file.size > Number(MAX_FILE_SIZE)) {
       error(413);
     }
+    if (!(file.type.startsWith("image/") || file.type.startsWith("video/"))) {
+      error(415);
+    }
     const fileKey = POST_IMAGE_PREFIX + id;
     try {
       await PublicStorage.upload(fileKey, file, file.type);

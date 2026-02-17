@@ -154,7 +154,7 @@ const previewUrl = $derived.by(() => {
               <input
                 name="avatar"
                 type="file"
-                accept="image/png"
+                accept="image/*"
                 autocomplete="off"
                 class="hidden"
                 bind:files

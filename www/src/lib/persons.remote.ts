@@ -79,6 +79,9 @@ export const updatePerson = form(
       if (avatar.size > Number(MAX_FILE_SIZE)) {
         error(413);
       }
+      if (!avatar.type.startsWith("image/")) {
+        error(415);
+      }
       await PublicStorage.upload(USER_AVATAR_PREFIX + id, avatar, avatar.type);
       await db
         .update(schema.user)
