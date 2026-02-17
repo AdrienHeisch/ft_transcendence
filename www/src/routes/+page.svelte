@@ -3,30 +3,33 @@ import { resolve } from "$app/paths";
 
 let currentFeature = $state(0);
 const features = [
-	{
-		icon: "🐾",
-		title: "Meet Amazing Animals",
-		description: "Discover farm animals looking for loving homes and share their stories"
-	},
-	{
-		icon: "💬",
-		title: "Connect with Others",
-		description: "Chat with animal lovers from around the world and share your passion"
-	},
-	{
-		icon: "🏡",
-		title: "Find Your Companion",
-		description: "Browse adoptable animals and connect with shelters and owners directly"
-	}
+  {
+    icon: "🐾",
+    title: "Meet Amazing Animals",
+    description:
+      "Discover farm animals looking for loving homes and share their stories",
+  },
+  {
+    icon: "💬",
+    title: "Connect with Others",
+    description:
+      "Chat with animal lovers from around the world and share your passion",
+  },
+  {
+    icon: "🏡",
+    title: "Find Your Companion",
+    description:
+      "Browse adoptable animals and connect with shelters and owners directly",
+  },
 ];
 
 // Auto-rotate features
 $effect(() => {
-	const interval = setInterval(() => {
-		currentFeature = (currentFeature + 1) % features.length;
-	}, 4000);
-	
-	return () => clearInterval(interval);
+  const interval = setInterval(() => {
+    currentFeature = (currentFeature + 1) % features.length;
+  }, 4000);
+
+  return () => clearInterval(interval);
 });
 </script>
 
