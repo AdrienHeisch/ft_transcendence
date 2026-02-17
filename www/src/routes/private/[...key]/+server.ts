@@ -16,7 +16,7 @@ export const GET: RequestHandler = async ({ params: { key } }) => {
 
 async function getMessageFile(key: string) {
   const user = requireLogin();
-  const id = key.replace(MESSAGE_FILE_PREFIX, "").replace(".png", "");
+  const id = key.replace(MESSAGE_FILE_PREFIX, "");
   const [{ chatMessage, usersPair }] = await db
     .select({
       chatMessage: getTableColumns(schema.chatMessage),

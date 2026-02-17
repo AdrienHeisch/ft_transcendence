@@ -67,12 +67,12 @@ export const createPet = form(
   async ({ name, birth, bio, species, breed, avatar }) => {
     const user = requireLogin();
     const id = crypto.randomUUID();
-    const fileKey = `${PET_AVATAR_PREFIX + id}.png`;
+    const fileKey = `${PET_AVATAR_PREFIX + id}`;
     if (avatar.size > Number(MAX_FILE_SIZE)) {
       error(413);
     }
     try {
-      await PublicStorage.upload(fileKey, avatar);
+      await PublicStorage.upload(fileKey, avatar, avatar.type);
     } catch {
       error(500, "Failed to create pet profile");
     }
@@ -113,13 +113,13 @@ export const updatePet = form(
       error(403);
     }
     if (avatar) {
-      await PublicStorage.upload(`${PET_AVATAR_PREFIX + id}.png`, avatar);
+      await PublicStorage.upload(PET_AVATAR_PREFIX + id, avatar, avatar.type);
       await db
         .update(schema.pet)
         .set({ ...values, hasAvatar: true })
         .where(eq(schema.pet.id, id));
     } else if (removeAvatar === "true") {
-      await PublicStorage.delete(`${PET_AVATAR_PREFIX + id}.png`);
+      await PublicStorage.delete(PET_AVATAR_PREFIX + id);
       await db
         .update(schema.pet)
         .set({ ...values, hasAvatar: false })
@@ -149,6 +149,6 @@ export const deletePet = command(z.string(), async (petId) => {
     error(401);
   }
 
-  await PublicStorage.delete(`${PET_AVATAR_PREFIX + petId}.png`);
+  await PublicStorage.delete(PET_AVATAR_PREFIX + petId);
   await db.delete(schema.pet).where(eq(schema.pet.id, petId));
 });

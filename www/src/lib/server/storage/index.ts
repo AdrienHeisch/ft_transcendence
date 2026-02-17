@@ -8,8 +8,8 @@ export const PublicStorage = {
   url: (key: string) => _PublicStorage.url(key),
   get: (key: string) => s3.file(key),
   exists: (key: string) => s3.exists(key),
-  upload: async (key: string, file: Blob | File) =>
-    s3.write(key, await file.bytes()),
+  upload: async (key: string, file: Blob | File, type?: string) =>
+    s3.write(key, await file.bytes(), { type }),
   list: (input?: S3ListObjectsOptions) => s3.list(input),
   delete: (key: string) => s3.delete(key),
 };
@@ -31,8 +31,8 @@ export const PrivateStorage = {
   },
   get: (key: string) => s3.file(key, { bucket }),
   exists: (key: string) => s3.exists(key, { bucket }),
-  upload: async (key: string, file: Blob | File) =>
-    s3.write(key, await file.bytes(), { bucket }),
+  upload: async (key: string, file: Blob | File, type?: string) =>
+    s3.write(key, await file.bytes(), { type, bucket }),
   list: (input?: S3ListObjectsOptions) => s3.list(input, { bucket }),
   delete: (key: string) => s3.delete(key, { bucket }),
 };

@@ -155,7 +155,7 @@ const server = Bun.serve({
           };
           if (isFile) {
             await PrivateStorage.upload(
-              `${MESSAGE_FILE_PREFIX + message.id}.png`,
+              MESSAGE_FILE_PREFIX + message.id,
               new Blob([(content as Buffer<ArrayBuffer>).subarray(7)]),
             );
           }

@@ -170,16 +170,16 @@ export const deleteAccount = form(
     (
       await db.select().from(schema.post).where(eq(schema.post.author, user.id))
     ).forEach(async (post) => {
-      await PublicStorage.delete(`${POST_IMAGE_PREFIX + post.id}.png`);
+      await PublicStorage.delete(POST_IMAGE_PREFIX + post.id);
     });
 
     (
       await db.select().from(schema.pet).where(eq(schema.pet.ownerId, user.id))
     ).forEach(async (pet) => {
-      await PublicStorage.delete(`${PET_AVATAR_PREFIX + pet.id}.png`);
+      await PublicStorage.delete(PET_AVATAR_PREFIX + pet.id);
     });
 
-    await PublicStorage.delete(`${USER_AVATAR_PREFIX + user.id}.png`);
+    await PublicStorage.delete(USER_AVATAR_PREFIX + user.id);
 
     auth.deleteSessionTokenCookie(getRequestEvent());
     await db.delete(schema.user).where(eq(schema.user.id, user.id));

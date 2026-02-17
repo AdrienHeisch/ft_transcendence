@@ -167,9 +167,9 @@ export const createPost = form(
     if (file.size > Number(MAX_FILE_SIZE)) {
       error(413);
     }
-    const fileKey = `${POST_IMAGE_PREFIX + id}.png`;
+    const fileKey = POST_IMAGE_PREFIX + id;
     try {
-      await PublicStorage.upload(fileKey, file);
+      await PublicStorage.upload(fileKey, file, file.type);
     } catch {
       error(500, "Failed to create post");
     }
@@ -206,6 +206,6 @@ export const deletePost = command(z.string(), async (id) => {
   await db
     .delete(schema.post)
     .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
-  await PublicStorage.delete(`${POST_IMAGE_PREFIX + id}.png`);
+  await PublicStorage.delete(POST_IMAGE_PREFIX + id);
   await getPosts({}).refresh();
 });
