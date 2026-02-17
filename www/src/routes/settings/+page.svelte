@@ -1,6 +1,8 @@
 <script lang="ts">
 import { deleteAccount, updateCredentials } from "$lib/auth.remote";
 
+const { data } = $props();
+
 const sections = [
   // {
   //   name: "Profile",
@@ -20,6 +22,12 @@ const sections = [
     icon: "🔒",
     description: "Delete your account",
     snippet: accountActionsSnippet,
+  },
+  {
+    name: "Developer tools",
+    icon: "🛠️",
+    description: "Get your API key",
+    snippet: developerSnippet,
   },
 ];
 
@@ -184,4 +192,19 @@ $effect(() =>
       Delete account
     </button>
   </form>
+{/snippet}
+
+{#snippet developerSnippet()}
+  <div>
+    <p>API Key :</p>
+    <p class="w-fit py-1 px-1 rounded border-2 border-gray-800 bg-gray-200">
+      <span class="px-1">{data.currentUser.apiKey}</span>
+      <button
+        class="px-1 rounded border border-gray-800 bg-gray-300"
+        onclick={async () => await navigator.clipboard.writeText(data.currentUser.apiKey)}
+      >
+        📋
+      </button>
+    </p>
+  </div>
 {/snippet}

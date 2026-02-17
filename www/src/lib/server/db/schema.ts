@@ -28,6 +28,7 @@ export type Session = typeof session.$inferSelect;
 
 export const user = pgTable("user", {
   id: uuid("id").primaryKey(),
+  apiKey: text("api_key").unique().notNull(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   firstName: text("first_name").notNull(),

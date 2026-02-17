@@ -39,6 +39,7 @@ export const register = form(
     try {
       await db.insert(schema.user).values({
         id: userId,
+        apiKey: auth.generateSessionToken(), // TODO is this ok ?
         email,
         passwordHash,
         firstName,

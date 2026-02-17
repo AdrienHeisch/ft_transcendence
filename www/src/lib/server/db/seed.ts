@@ -101,6 +101,7 @@ export default async function seedDb() {
   await db
     .update(schema.user)
     .set({
+      apiKey: "_-t0BC96e_-oogPYwDDixcvO",
       email: "mszymcza@student.42.fr",
       // TODO refactor this
       passwordHash: await hash("mszymcza", {
@@ -118,6 +119,7 @@ export default async function seedDb() {
   await db
     .update(schema.user)
     .set({
+      apiKey: "9MLdflaYQesOWbMapFEiYdiC",
       email: "aheisch@student.42.fr",
       // TODO refactor this
       passwordHash: await hash("aheisch", {
