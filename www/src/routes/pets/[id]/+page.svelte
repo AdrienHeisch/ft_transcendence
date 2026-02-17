@@ -151,6 +151,9 @@ const avatarUrl = $derived.by(() => {
                 Save profile
               </button>
             {:else}
+              <button type="button" onclick={async () => { await deletePet(pet.id); await goto(resolve(`/persons/${data.currentUser?.id}`)); }} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                Delete
+              </button>
               <button type="button" onclick={() => isEditMode = true} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
                 Edit profile
               </button>
