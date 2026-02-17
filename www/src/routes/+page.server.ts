@@ -1,9 +1,8 @@
 import { redirect } from "@sveltejs/kit";
+import { getCurrentUser } from "$lib/server/auth.js";
 
-export const load = ({ locals }) => {
-  // Redirect authenticated users to feed
-  if (locals.currentUser) {
+export const load = () => {
+  if (getCurrentUser()) {
     redirect(302, "/feed");
   }
-  // Show homepage for guests
 };
