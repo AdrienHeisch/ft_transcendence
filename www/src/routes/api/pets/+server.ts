@@ -1,6 +1,8 @@
 import { error } from "@sveltejs/kit";
 import z from "zod";
 import { getPets } from "$lib/pets.remote";
+import { getApiUser } from "$lib/server/auth";
+import { createPet } from "$lib/server/pets";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ url }) => {
@@ -14,4 +16,25 @@ export const GET: RequestHandler = async ({ url }) => {
   const sortBy = sortByParse.success ? sortByParse.data : error(400);
   const pets = await getPets({ search, owner, species, sortBy });
   return new Response(JSON.stringify(pets));
+};
+
+export const POST: RequestHandler = async ({ request }) => {
+  const user = getApiUser();
+  const requestSchema = z
+    .object({
+      name: z.string(),
+      birth: z.coerce.date(),
+      bio: z.string(),
+      species: z.string(),
+      breed: z.string(),
+      avatar: z.custom<File>(),
+    })
+    .strict();
+  const formData = Object.fromEntries((await request.formData()).entries());
+  const parsed = requestSchema.safeParse(formData);
+  if (!parsed.success) {
+    error(400, parsed.error);
+  }
+  const id = await createPet({ ...parsed.data, ownerId: user.id });
+  return new Response(JSON.stringify({ id }));
 };

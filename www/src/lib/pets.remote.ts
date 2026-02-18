@@ -7,8 +7,10 @@ import { MAX_FILE_SIZE } from "$env/static/private";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
+import * as pets from "$lib/server/pets";
 import { PublicStorage } from "$lib/server/storage";
 import { PET_AVATAR_PREFIX } from "$lib/storage";
+import { getPetOwner } from "./server/pets";
 
 export const getPet = query.batch(z.string(), async (pets) => {
   const result = await db
@@ -58,42 +60,15 @@ export const getPets = query(
 export const createPet = form(
   z.object({
     name: z.string(),
-    birth: z.string(),
+    birth: z.iso.date().transform(birth => new Date(birth)),
     bio: z.string(),
     species: z.string(),
     breed: z.string(),
     avatar: z.custom<File>(),
   }),
-  async ({ name, birth, bio, species, breed, avatar }) => {
+  async (pet) => {
     const user = requireLogin();
-    const id = crypto.randomUUID();
-    const fileKey = `${PET_AVATAR_PREFIX + id}`;
-    if (avatar.size > Number(MAX_FILE_SIZE)) {
-      error(413);
-    }
-    if (!avatar.type.startsWith("image/")) {
-      error(415);
-    }
-    try {
-      await PublicStorage.upload(fileKey, avatar, avatar.type);
-    } catch {
-      error(500, "Failed to create pet profile");
-    }
-    try {
-      await db.insert(schema.pet).values({
-        id,
-        ownerId: user.id,
-        name,
-        birth: new Date(birth),
-        bio,
-        species,
-        breed,
-        hasAvatar: true,
-      });
-    } catch {
-      await PublicStorage.delete(fileKey);
-      error(500, "Failed to create pet profile");
-    }
+    const { id } = await pets.createPet({ ...pet, ownerId: user.id });
     redirect(303, resolve(`/pets/${id}`));
   },
 );
@@ -104,42 +79,15 @@ export const updatePet = form(
     name: z.string(),
     bio: z.string(),
     avatar: z.custom<File>().optional(),
-    removeAvatar: z.string(),
+    removeAvatar: z.stringbool(),
   }),
-  async (data) => {
-    const { id, avatar, removeAvatar, ...values } = data;
-    const [owner] = await db
-      .select({ id: schema.pet.ownerId })
-      .from(schema.pet)
-      .where(eq(schema.pet.id, id));
+  async (pet) => {
+    const owner = await getPetOwner(pet);
     if (owner?.id !== requireLogin().id) {
       error(403);
     }
-    if (avatar) {
-      if (avatar.size > Number(MAX_FILE_SIZE)) {
-        error(413);
-      }
-      if (!avatar.type.startsWith("image/")) {
-        error(415);
-      }
-      await PublicStorage.upload(PET_AVATAR_PREFIX + id, avatar, avatar.type);
-      await db
-        .update(schema.pet)
-        .set({ ...values, hasAvatar: true })
-        .where(eq(schema.pet.id, id));
-    } else if (removeAvatar === "true") {
-      await PublicStorage.delete(PET_AVATAR_PREFIX + id);
-      await db
-        .update(schema.pet)
-        .set({ ...values, hasAvatar: false })
-        .where(eq(schema.pet.id, id));
-    } else {
-      await db
-        .update(schema.pet)
-        .set({ ...values })
-        .where(eq(schema.pet.id, id));
-    }
-    await getPet(id).refresh();
+    await pets.updatePet(pet.id, { ...pet });
+    await getPet(pet.id).refresh();
   },
 );
 
