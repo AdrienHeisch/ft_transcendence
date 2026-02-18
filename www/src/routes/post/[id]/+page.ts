@@ -1,5 +1,6 @@
-import { error, type RemoteQuery } from "@sveltejs/kit";
-import { getPost, type PostData } from "$lib/posts.remote";
+import { error } from "@sveltejs/kit";
+import { getPost } from "$lib/posts.remote";
+import { promiseToRemoteQuery } from "$lib/typeUtils";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({
@@ -10,6 +11,6 @@ export const load: PageLoad = async ({
   if (!(await post)) error(404);
   return {
     currentUser,
-    post: post as RemoteQuery<PostData>,
+    post: promiseToRemoteQuery(post),
   };
 };

@@ -3,7 +3,6 @@ import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
 import z from "zod";
 import { resolve } from "$app/paths";
 import { command, form, query } from "$app/server";
-import { MAX_FILE_SIZE } from "$env/static/private";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
@@ -60,7 +59,7 @@ export const getPets = query(
 export const createPet = form(
   z.object({
     name: z.string(),
-    birth: z.iso.date().transform(birth => new Date(birth)),
+    birth: z.iso.date().transform((birth) => new Date(birth)),
     bio: z.string(),
     species: z.string(),
     breed: z.string(),

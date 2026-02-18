@@ -18,16 +18,18 @@ export const GET: RequestHandler = async ({ url }) => {
 
 export const POST: RequestHandler = async ({ request }) => {
   const user = getApiUser();
-  const requestSchema = z.object({
-    content: z.string(),
-    pet: z.string().optional(),
-    file: z.custom<File>(),
-  }).strict();
+  const requestSchema = z
+    .object({
+      content: z.string(),
+      pet: z.string().optional(),
+      file: z.custom<File>(),
+    })
+    .strict();
   const formData = Object.fromEntries((await request.formData()).entries());
   const parsed = requestSchema.safeParse(formData);
   if (!parsed.success) {
     error(400, parsed.error);
   }
-  const id = await createPost({ ...parsed.data, author: user.id });
-  return new Response(JSON.stringify({ id }));
+  const post = await createPost({ ...parsed.data, author: user.id });
+  return new Response(JSON.stringify(post));
 };

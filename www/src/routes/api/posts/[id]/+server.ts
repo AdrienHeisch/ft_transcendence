@@ -31,14 +31,17 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
     .strict()
     .safeParse(formData);
   if (parsed.success) {
-    await db
-      .update(schema.post)
-      .set(parsed.data)
-      .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
+    const updated = (
+      await db
+        .update(schema.post)
+        .set(parsed.data)
+        .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)))
+        .returning()
+    ).at(0);
+    return new Response(JSON.stringify(updated));
   } else {
     error(400, parsed.error);
   }
-  return new Response();
 };
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {

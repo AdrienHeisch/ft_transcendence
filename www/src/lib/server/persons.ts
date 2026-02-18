@@ -8,7 +8,11 @@ import { USER_AVATAR_PREFIX } from "$lib/storage";
 
 export async function updatePerson(
   id: string,
-  data: {
+  {
+    avatar,
+    removeAvatar = false,
+    ...values
+  }: {
     firstName?: string;
     lastName?: string;
     bio?: string;
@@ -17,7 +21,6 @@ export async function updatePerson(
     removeAvatar?: boolean;
   },
 ) {
-  const { avatar, removeAvatar = false, ...values } = data;
   if (avatar) {
     if (avatar.size > Number(MAX_FILE_SIZE)) {
       error(413);

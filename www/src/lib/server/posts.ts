@@ -30,16 +30,20 @@ export const createPost = async ({
     error(500, "Failed to create post");
   }
   try {
-    await db.insert(schema.post).values({
-      id,
-      author,
-      content,
-      pet,
-      postedAt: new Date(),
-    });
+    return (
+      await db
+        .insert(schema.post)
+        .values({
+          id,
+          author,
+          content,
+          pet,
+          postedAt: new Date(),
+        })
+        .returning()
+    )[0];
   } catch {
     await PublicStorage.delete(fileKey);
     error(500, "Failed to create post");
   }
-  return id;
 };
