@@ -2,13 +2,13 @@ import { error } from "@sveltejs/kit";
 import { and, desc, eq, getTableColumns, inArray } from "drizzle-orm";
 import z from "zod";
 import { command, form, query } from "$app/server";
-import { MAX_FILE_SIZE } from "$env/static/private";
 import { isLoggedIn, requireLogin } from "$lib/server/auth";
+import { db } from "$lib/server/db";
 import type { Post, User } from "$lib/server/db/schema";
 import * as schema from "$lib/server/db/schema";
-import { db } from "./server/db";
-import { PublicStorage } from "./server/storage";
-import { POST_IMAGE_PREFIX } from "./storage";
+import * as posts from "$lib/server/posts";
+import { PublicStorage } from "$lib/server/storage";
+import { POST_IMAGE_PREFIX } from "$lib/storage";
 
 export type PostData = Omit<Post, "author"> & { author: User };
 
@@ -163,31 +163,12 @@ export const createPost = form(
   }),
   async ({ content, pet, file }) => {
     const user = requireLogin();
-    const id = crypto.randomUUID();
-    if (file.size > Number(MAX_FILE_SIZE)) {
-      error(413);
-    }
-    if (!(file.type.startsWith("image/") || file.type.startsWith("video/"))) {
-      error(415);
-    }
-    const fileKey = POST_IMAGE_PREFIX + id;
-    try {
-      await PublicStorage.upload(fileKey, file, file.type);
-    } catch {
-      error(500, "Failed to create post");
-    }
-    try {
-      await db.insert(schema.post).values({
-        id,
-        author: user.id,
-        content,
-        pet: pet && pet.length > 0 ? pet : undefined,
-        postedAt: new Date(),
-      });
-    } catch {
-      await PublicStorage.delete(fileKey);
-      error(500, "Failed to create post");
-    }
+    await posts.createPost({
+      author: user.id,
+      content,
+      pet: pet && pet.length > 0 ? pet : undefined,
+      file,
+    });
     await getPosts({}).refresh();
   },
 );
