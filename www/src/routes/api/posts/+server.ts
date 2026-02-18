@@ -22,13 +22,12 @@ export const POST: RequestHandler = async ({ request }) => {
     content: z.string(),
     pet: z.string().optional(),
     file: z.custom<File>(),
-  });
+  }).strict();
   const formData = Object.fromEntries((await request.formData()).entries());
-  const parseResult = requestSchema.safeParse(formData);
-  if (parseResult.success) {
-    await createPost({ ...parseResult.data, author: user.id });
-  } else {
-    error(400, parseResult.error);
+  const parsed = requestSchema.safeParse(formData);
+  if (!parsed.success) {
+    error(400, parsed.error);
   }
-  return new Response();
+  const id = await createPost({ ...parsed.data, author: user.id });
+  return new Response(JSON.stringify({ id }));
 };

@@ -41,4 +41,5 @@ export const createPost = async ({
     await PublicStorage.delete(fileKey);
     error(500, "Failed to create post");
   }
+  return id;
 };
