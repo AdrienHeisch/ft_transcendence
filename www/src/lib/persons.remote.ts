@@ -2,12 +2,10 @@ import { error } from "@sveltejs/kit";
 import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
 import z from "zod";
 import { form, query } from "$app/server";
-import { MAX_FILE_SIZE } from "$env/static/private";
 import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
-import { PublicStorage } from "./server/storage";
-import { USER_AVATAR_PREFIX } from "./storage";
+import * as persons from "$lib/server/persons";
 
 const { apiKey, passwordHash, ...userColumns } = getTableColumns(schema.user);
 
@@ -68,34 +66,13 @@ export const updatePerson = form(
     bio: z.string(),
     city: z.string(),
     avatar: z.custom<File>().optional(),
-    removeAvatar: z.string(),
+    removeAvatar: z.stringbool(),
   }),
-  async (data) => {
-    const { id, avatar, removeAvatar, ...values } = data;
-    if (id !== requireLogin().id) {
+  async (person) => {
+    if (person.id !== requireLogin().id) {
       error(403);
     }
-    if (avatar) {
-      if (avatar.size > Number(MAX_FILE_SIZE)) {
-        error(413);
-      }
-      if (!avatar.type.startsWith("image/")) {
-        error(415);
-      }
-      await PublicStorage.upload(USER_AVATAR_PREFIX + id, avatar, avatar.type);
-      await db
-        .update(schema.user)
-        .set({ ...values, hasAvatar: true })
-        .where(eq(schema.user.id, id));
-    } else if (removeAvatar === "true") {
-      await PublicStorage.delete(USER_AVATAR_PREFIX + id);
-      await db
-        .update(schema.user)
-        .set({ ...values, hasAvatar: false })
-        .where(eq(schema.user.id, id));
-    } else {
-      await db.update(schema.user).set(values).where(eq(schema.user.id, id));
-    }
-    await getPerson(id).refresh();
+    await persons.updatePerson(person.id, person);
+    await getPerson(person.id).refresh();
   },
 );

@@ -1,7 +1,51 @@
+import { error } from "@sveltejs/kit";
+import { and, eq } from "drizzle-orm";
+import z from "zod";
 import { getPerson } from "$lib/persons.remote";
+import { getApiUser } from "$lib/server/auth";
+import { db } from "$lib/server/db";
+import * as schema from "$lib/server/db/schema";
+import { updatePerson } from "$lib/server/persons";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ params: { id } }) => {
   const person = await getPerson(id);
+  if (!person) {
+    error(404);
+  }
   return new Response(JSON.stringify(person));
+};
+
+export const PUT: RequestHandler = async ({ params: { id }, request }) => {
+  const user = getApiUser();
+  if (user.id !== id) {
+    error(403);
+  }
+  const formData = Object.fromEntries((await request.formData()).entries());
+  const parsed = z
+    .object({
+      firstName: z.string().optional(),
+      lastName: z.string().optional(),
+      bio: z.string().optional(),
+      city: z.string().optional(),
+      avatar: z.file().optional(),
+      removeAvatar: z.stringbool().default(false),
+    })
+    .strict()
+    .safeParse(formData);
+  if (parsed.success) {
+    const updated = await updatePerson(id, { ...parsed.data });
+    return new Response(JSON.stringify(updated));
+  } else {
+    error(400, parsed.error);
+  }
+};
+
+export const DELETE: RequestHandler = async ({ params: { id } }) => {
+  const user = getApiUser();
+  if (user.id !== id) {
+    error(403);
+  }
+  await db.delete(schema.user).where(and(eq(schema.user.id, id)));
+  return new Response();
 };
