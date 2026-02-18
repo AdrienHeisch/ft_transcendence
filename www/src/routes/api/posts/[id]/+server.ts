@@ -49,8 +49,14 @@ export const DELETE: RequestHandler = async ({ params: { id } }) => {
   if (!z.uuid().safeParse(id).success) {
     error(404);
   }
-  await db
-    .delete(schema.post)
-    .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)));
+  const deleted = (
+    await db
+      .delete(schema.post)
+      .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)))
+      .returning()
+  ).at(0);
+  if (!deleted) {
+    error(404);
+  }
   return new Response();
 };

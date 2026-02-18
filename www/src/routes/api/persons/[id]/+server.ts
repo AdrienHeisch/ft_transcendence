@@ -55,6 +55,14 @@ export const DELETE: RequestHandler = async ({ params: { id } }) => {
   if (user.id !== id) {
     error(403);
   }
-  await db.delete(schema.user).where(and(eq(schema.user.id, id)));
+  const deleted = (
+    await db
+      .delete(schema.user)
+      .where(and(eq(schema.user.id, id)))
+      .returning()
+  ).at(0);
+  if (!deleted) {
+    error(404);
+  }
   return new Response();
 };
