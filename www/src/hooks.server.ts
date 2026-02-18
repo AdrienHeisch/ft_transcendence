@@ -1,4 +1,4 @@
-import type { Handle, RequestEvent } from "@sveltejs/kit";
+import { error, type Handle, type RequestEvent } from "@sveltejs/kit";
 import * as auth from "$lib/server/auth";
 
 const handleAuth = async (event: RequestEvent) => {
@@ -24,7 +24,10 @@ const handleAuth = async (event: RequestEvent) => {
 
 const handleApiAuth = async (event: RequestEvent) => {
   const apiKey = event.request.headers.get(auth.apiKeyHeader);
-  event.locals.user = apiKey ? await auth.validateApiKey(apiKey) : null;
+  if (!apiKey) {
+    error(401);
+  }
+  event.locals.apiUser = await auth.validateApiKey(apiKey);
 };
 
 export const handle: Handle = async ({ event, resolve }) => {

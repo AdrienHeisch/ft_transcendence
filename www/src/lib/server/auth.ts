@@ -1,7 +1,7 @@
 import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeBase64url, encodeHexLowerCase } from "@oslojs/encoding";
 import type { RequestEvent } from "@sveltejs/kit";
-import { redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
 import { db } from "$lib/server/db";
@@ -107,9 +107,22 @@ export function deleteSessionTokenCookie(event: RequestEvent) {
 export const apiKeyHeader = "Api-Key";
 
 export async function validateApiKey(apiKey: string) {
-  const [user] = await db.select().from(table.user).where(eq(table.user.apiKey, apiKey));
+  const [user] = await db
+    .select()
+    .from(table.user)
+    .where(eq(table.user.apiKey, apiKey));
   if (!user) {
-    return null;
+    error(401);
   }
   return user;
 }
+
+export function getApiUser() {
+  const event = getRequestEvent();
+  if (!event.route?.id?.startsWith("/api")) {
+    error(500);
+  }
+  return event.locals.apiUser;
+}
+
+export type ApiValidationResult = Awaited<ReturnType<typeof validateApiKey>>;

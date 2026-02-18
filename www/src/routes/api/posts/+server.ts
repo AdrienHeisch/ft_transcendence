@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
 import z from "zod";
 import { getPosts } from "$lib/posts.remote";
-import { getCurrentUser } from "$lib/server/auth";
+import { getApiUser } from "$lib/server/auth";
 import { createPost } from "$lib/server/posts";
 import type { RequestHandler } from "./$types";
 
@@ -17,10 +17,7 @@ export const GET: RequestHandler = async ({ url }) => {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-  const user = getCurrentUser();
-  if (!user) {
-    error(401);
-  }
+  const user = getApiUser();
   const requestSchema = z.object({
     content: z.string(),
     pet: z.string().optional(),
