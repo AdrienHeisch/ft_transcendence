@@ -22,7 +22,16 @@ const handleAuth = async (event: RequestEvent) => {
   event.locals.session = session;
 };
 
+const handleApiAuth = async (event: RequestEvent) => {
+  const apiKey = event.request.headers.get(auth.apiKeyHeader);
+  event.locals.user = apiKey ? await auth.validateApiKey(apiKey) : null;
+};
+
 export const handle: Handle = async ({ event, resolve }) => {
-  await handleAuth(event);
+  if (event.route.id?.startsWith("/api")) {
+    await handleApiAuth(event);
+  } else {
+    await handleAuth(event);
+  }
   return resolve(event);
 };

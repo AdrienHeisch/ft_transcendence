@@ -103,3 +103,13 @@ export function deleteSessionTokenCookie(event: RequestEvent) {
     path: "/",
   });
 }
+
+export const apiKeyHeader = "Api-Key";
+
+export async function validateApiKey(apiKey: string) {
+  const [user] = await db.select().from(table.user).where(eq(table.user.apiKey, apiKey));
+  if (!user) {
+    return null;
+  }
+  return user;
+}
