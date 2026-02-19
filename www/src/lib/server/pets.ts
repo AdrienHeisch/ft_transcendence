@@ -1,6 +1,6 @@
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
-import { MAX_FILE_SIZE } from "$env/static/private";
+import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import { PublicStorage } from "$lib/server/storage";
@@ -33,7 +33,7 @@ export async function createPet({
 }) {
   const id = crypto.randomUUID();
   const fileKey = `${PET_AVATAR_PREFIX + id}`;
-  if (avatar.size > Number(MAX_FILE_SIZE)) {
+  if (avatar.size > Number(PUBLIC_MAX_FILE_SIZE)) {
     error(413);
   }
   if (!avatar.type.startsWith("image/")) {
@@ -81,7 +81,7 @@ export async function updatePet(
   },
 ) {
   if (avatar) {
-    if (avatar.size > Number(MAX_FILE_SIZE)) {
+    if (avatar.size > Number(PUBLIC_MAX_FILE_SIZE)) {
       error(413);
     }
     if (!avatar.type.startsWith("image/")) {

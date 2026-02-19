@@ -2,6 +2,7 @@
 import z from "zod";
 import { browser, dev } from "$app/environment";
 import { resolve } from "$app/paths";
+import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
 import { setMessageRead } from "$lib/messages.remote";
 import { getPerson } from "$lib/persons.remote";
 import { type ChatMessage } from "$lib/server/db/schema";
@@ -16,6 +17,15 @@ let files = $state<FileList>();
 const file = $derived(files?.item(0));
 const previewUrl = $derived.by(() => {
   return file ? URL.createObjectURL(file) : "";
+});
+
+let fileInput = $state<HTMLInputElement>();
+$effect(() => {
+  if (file) {
+    fileInput?.setCustomValidity(
+      file.size < Number(PUBLIC_MAX_FILE_SIZE) ? "" : "File is too large",
+    );
+  }
 });
 
 let ws: WebSocket | undefined = (() => {
@@ -196,6 +206,7 @@ async function sendMessage() {
                 autocomplete="off"
                 class="hidden"
                 bind:files
+                bind:this={fileInput}
               />
               {#if !file}
                 <div class="w-full py-4 px-5 bg-[#CC5500] text-white rounded-2xl font-bold text-center hover:bg-[#A04000] transition-all cursor-pointer">

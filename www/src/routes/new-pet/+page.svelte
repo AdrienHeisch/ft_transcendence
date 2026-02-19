@@ -1,13 +1,23 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
+import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
 import { createPet } from "$lib/pets.remote";
 
 const { data } = $props();
 
 let files = $state<FileList>();
+const file = $derived(files?.item(0));
 const previewUrl = $derived.by(() => {
-  const file = files?.item(0);
   return file ? URL.createObjectURL(file) : "";
+});
+
+let fileInput = $state<HTMLInputElement>();
+$effect(() => {
+  if (file) {
+    fileInput?.setCustomValidity(
+      file.size < Number(PUBLIC_MAX_FILE_SIZE) ? "" : "File is too large",
+    );
+  }
 });
 </script>
 
@@ -158,6 +168,7 @@ const previewUrl = $derived.by(() => {
                 autocomplete="off"
                 class="hidden"
                 bind:files
+                bind:this={fileInput}
               />
               <div class="w-full py-3 bg-[#CC5500] text-white rounded-lg font-bold text-center hover:bg-[#A04000] transition-all cursor-pointer">
                 📷 {previewUrl ? "Change photo" : "Add photo"}

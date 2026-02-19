@@ -8,10 +8,10 @@ let lastName = $state<string>("");
 
 let password = $state<string>("");
 let confirm = $state<string>("");
-let confirmField: HTMLInputElement;
+let confirmField = $state<HTMLInputElement>();
 
 $effect(() =>
-  confirmField.setCustomValidity(
+  confirmField?.setCustomValidity(
     password == confirm ? "" : "Passwords do not match",
   ),
 );

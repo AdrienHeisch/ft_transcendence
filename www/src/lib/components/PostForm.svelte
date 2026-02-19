@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { RemoteQuery, RemoteQueryOverride } from "@sveltejs/kit";
+import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
 import { getPets } from "$lib/pets.remote";
 import { createPost } from "$lib/posts.remote";
 import { type Pet, type User } from "$lib/server/db/schema";
@@ -13,6 +14,7 @@ interface Props {
 const { currentUser, forcePet, updates = [] }: Props = $props();
 
 let files = $state<FileList>();
+const file = $derived(files?.item(0));
 
 const previewUrl = $derived.by(() => {
   const file = files?.item(0);
@@ -22,6 +24,15 @@ const previewUrl = $derived.by(() => {
 const pets = $derived(
   await getPets({ owner: currentUser.id, search: "", sortBy: "species" }),
 );
+
+let fileInput = $state<HTMLInputElement>();
+$effect(() => {
+  if (file) {
+    fileInput?.setCustomValidity(
+      file.size < Number(PUBLIC_MAX_FILE_SIZE) ? "" : "File is too large",
+    );
+  }
+});
 </script>
 
 <form
@@ -70,6 +81,7 @@ const pets = $derived(
         type="file"
         accept="image/*,video/*"
         autocomplete="off"
+        bind:this={fileInput}
         bind:files
         required
         class="hidden"

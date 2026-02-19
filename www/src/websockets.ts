@@ -14,8 +14,8 @@ if (!process.env.POSTGRES_PASSWORD)
 if (!process.env.POSTGRES_HOST)
   throw "Missing POSTGRES_HOST environment variable";
 if (!process.env.POSTGRES_DB) throw "Missing POSTGRES_DB environment variable";
-if (!process.env.MAX_FILE_SIZE)
-  throw "Missing MAX_FILE_SIZE environment variable";
+if (!process.env.PUBLIC_MAX_FILE_SIZE)
+  throw "Missing PUBLIC_MAX_FILE_SIZE environment variable";
 
 const PORT = 3000;
 
@@ -165,7 +165,7 @@ const server = Bun.serve({
           };
           if (isFile) {
             const buffer = content as Buffer<ArrayBuffer>;
-            if (buffer.length > Number(process.env.MAX_FILE_SIZE)) {
+            if (buffer.length > Number(process.env.PUBLIC_MAX_FILE_SIZE)) {
               return; // TODO send an error ?
             }
             if (

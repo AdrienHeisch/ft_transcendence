@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { MAX_FILE_SIZE } from "$env/static/private";
+import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import { PublicStorage } from "$lib/server/storage";
@@ -17,7 +17,7 @@ export const createPost = async ({
   file: File;
 }) => {
   const id = crypto.randomUUID();
-  if (file.size > Number(MAX_FILE_SIZE)) {
+  if (file.size > Number(PUBLIC_MAX_FILE_SIZE)) {
     error(413);
   }
   if (!(file.type.startsWith("image/") || file.type.startsWith("video/"))) {
