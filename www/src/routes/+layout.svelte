@@ -23,8 +23,7 @@ const sidebarMainItems = $derived(
           icon: "👤",
           href: `/persons/${data.currentUser.id}`,
         }
-      : 
-    { label: "Feed", icon: "📰", href: "/feed"},
+      : { label: "Feed", icon: "📰", href: "/feed" },
     // { label: "Groups", icon: "👥" },
     // { label: "Favorites", icon: "⭐" },
     // { label: "Photos", icon: "📷" },
