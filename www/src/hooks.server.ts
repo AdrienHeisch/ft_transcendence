@@ -31,7 +31,7 @@ const handleApiAuth = async (event: RequestEvent) => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-  if (event.route.id?.startsWith("/api")) {
+  if (event.route.id?.startsWith("/api/")) {
     await handleApiAuth(event);
   } else {
     await handleAuth(event);
