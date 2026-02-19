@@ -16,14 +16,15 @@ afterNavigate(() => (sidebarOpen = false));
 
 const sidebarMainItems = $derived(
   [
-    { label: "Home", icon: "🏠", href: data.currentUser ? "/feed" : "/" },
+    { label: "Home", icon: "🏠", href: "/" },
     data.currentUser
       ? {
           label: "Profile",
           icon: "👤",
           href: `/persons/${data.currentUser.id}`,
         }
-      : undefined,
+      : 
+    { label: "Feed", icon: "📰", href: "/feed"},
     // { label: "Groups", icon: "👥" },
     // { label: "Favorites", icon: "⭐" },
     // { label: "Photos", icon: "📷" },
