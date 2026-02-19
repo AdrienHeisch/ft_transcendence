@@ -125,6 +125,11 @@ pagination
   - [x] Users can upload an avatar (with a default avatar if none provided)
   - [x] Users can add other users as friends and see their online status
   - [x] Users have a profile page displaying their information
+- [ ] _Minor_ GDPR compliance features
+  - [ ] Allow users to request their data
+  - [ ] Data deletion with confirmation
+  - [ ] Export user data in a readable format
+  - [ ] Confirmation emails for data operations
 
 ## Individual Contributions
 
