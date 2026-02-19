@@ -39,6 +39,12 @@ export const user = pgTable("user", {
     .notNull(),
   hasAvatar: boolean("has_avatar").notNull(),
   online: boolean("online").notNull(),
+  joinedAt: timestamp("joined_at", {
+    withTimezone: true,
+    mode: "date",
+  })
+    .notNull()
+    .defaultNow(),
 });
 
 export type User = Omit<

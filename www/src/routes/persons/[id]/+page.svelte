@@ -15,23 +15,18 @@ import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import { getUserAvatar } from "$lib/storage";
 
+const COVER_IMAGE =
+  "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg";
+
 const { data } = $props();
 
-const _user = $derived(await data.user);
+const user = $derived(await data.user);
 
-const user = $derived({
-  ..._user,
-  coverImage:
-    "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
-  username: _user.firstName.charAt(0) + _user.lastName,
-  joinedDate: "January 2025",
-});
-
-const posts = $derived(await getPosts({ author: _user.id }));
-const friends = $derived(await getUserFriends(_user.id));
+const posts = $derived(await getPosts({ author: user.id }));
+const friends = $derived(await getUserFriends(user.id));
 const pets = $derived(
   getPets({
-    owner: _user.id,
+    owner: user.id,
     search: "",
     sortBy: "name",
   }),
@@ -67,7 +62,7 @@ $effect(() => {
   <!-- Cover Image -->
   <div class="relative h-80 bg-linear-to-r from-orange-700 via-orange-600 to-amber-600">
     <img
-      src={user.coverImage}
+      src={COVER_IMAGE}
       alt="Couverture"
        class="w-full h-full object-cover"
     />
@@ -89,7 +84,7 @@ $effect(() => {
         <div class="relative">
           <img 
             src={avatarUrl} 
-            alt={user.username}
+            alt={`${user.firstName} ${user.lastName}`}
             class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
           />
           {#if isEditMode}
@@ -142,7 +137,6 @@ $effect(() => {
           {:else}
             <h1 class="text-3xl font-bold text-gray-900">{user.firstName} {user.lastName}</h1>
           {/if}
-          <p class="text-lg text-gray-600">@{user.username}</p>
           {#if isEditMode}
             <textarea
               class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
@@ -180,7 +174,7 @@ $effect(() => {
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
               </svg>
-              <span>Member since {user.joinedDate}</span>
+              <span>Member since {user.joinedAt}</span>
             </div>
           </div>
         </div>
@@ -284,7 +278,7 @@ $effect(() => {
             {#if isCurrentUser}
               <div class="flex gap-2">
                 <a href={resolve("/new-pet")} aria-label="Add new animal" class="bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
-                  + <!-- TODO pet profile creation -->
+                  +
                 </a>
               </div>
             {:else}
