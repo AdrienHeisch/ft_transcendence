@@ -178,6 +178,7 @@ const server = Bun.serve({
             await PrivateStorage.upload(
               MESSAGE_FILE_PREFIX + message.id,
               new Blob([buffer.subarray(7)]),
+              "image/png"
             );
           }
           server.publish(
