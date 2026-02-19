@@ -33,8 +33,10 @@ export const GET: RequestHandler = async () => {
       .where(eq(schema.chatMessage.author, user.id)),
   };
   const publicFileKeys = [
-    ...user.hasAvatar ? [USER_AVATAR_PREFIX + user.id] : [],
-    ...data.pets.filter(pet => pet.hasAvatar).map((pet) => PET_AVATAR_PREFIX + pet.id),
+    ...(user.hasAvatar ? [USER_AVATAR_PREFIX + user.id] : []),
+    ...data.pets
+      .filter((pet) => pet.hasAvatar)
+      .map((pet) => PET_AVATAR_PREFIX + pet.id),
     ...data.posts.map((pet) => POST_IMAGE_PREFIX + pet.id),
   ];
   const privateFileKeys = [
@@ -55,12 +57,13 @@ export const GET: RequestHandler = async () => {
         stat: PrivateStorage.stat(key),
         file: PrivateStorage.get(key).arrayBuffer(),
       })),
-    ].map(
-      async ({ key, stat, file }) => {
-        const ext = (await stat).type.split("/")[1];
-        return [key + (ext ? "." : "") + ext, await file] satisfies readonly [string, ArrayBuffer];
-      }
-    ),
+    ].map(async ({ key, stat, file }) => {
+      const ext = (await stat).type.split("/")[1];
+      return [key + (ext ? "." : "") + ext, await file] satisfies readonly [
+        string,
+        ArrayBuffer,
+      ];
+    }),
   );
   return new Response(
     await new Bun.Archive(
