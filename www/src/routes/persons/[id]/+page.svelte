@@ -91,7 +91,7 @@ const avatarUrl = $derived.by(() => {
             {#if hasAvatar}
               <button
                 type="button"
-                onclick={() => { console.log("haha"); hasAvatar = false; }}
+                onclick={() => hasAvatar = false}
                 class={["absolute", "bottom-2", "left-2", "px-1", "border-3", "rounded-2xl", "bg-gray-300", "border-white"]}
               >
                 🗑️
