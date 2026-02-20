@@ -15,6 +15,7 @@ interface Props {
 
 const { currentUser, forcePet, updates = [] }: Props = $props();
 
+let preview = $state<FileUploadPreview>();
 let fileUpload = $state<FileUpload>();
 
 const pets = $derived(
@@ -26,8 +27,11 @@ const pets = $derived(
   class="flex flex-col mb-6 p-4 bg-orange-50 rounded-2xl border-4 border-orange-300 shadow-lg"
   function={createPost}
   updates={updates}
+  onloadstart={preview?.uploadStart}
+  onloadend={preview?.uploadDone}
+  onprogress={preview?.setProgress}
 >
-  <FileUploadPreview fileUpload={fileUpload} class="mb-1" />
+  <FileUploadPreview bind:this={preview} fileUpload={fileUpload} class="mb-1" />
   <textarea
     class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
     placeholder="What's new?"

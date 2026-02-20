@@ -7,11 +7,17 @@ const {
   class: classes,
   function: remoteFunction,
   updates,
+  onloadstart,
+  onloadend,
+  onprogress,
 }: {
   children: Snippet;
   function: RemoteForm<Input, Output>;
   updates: Array<RemoteQuery<any>>;
   class?: string;
+  onloadstart?: () => void;
+  onloadend?: () => void;
+  onprogress?: (progress: number) => void;
 } = $props();
 
 function submitXHR(data: FormData) {
@@ -24,18 +30,19 @@ function submitXHR(data: FormData) {
 
   var request = new XMLHttpRequest();
 
-  request.upload.addEventListener("progress", function (e) {
-    console.log("FormData size:", size);
+  if (onloadstart) {
+    request.upload.addEventListener("loadstart", onloadstart);
+  }
 
-    if (e.loaded <= size) {
-      var percent = Math.round((e.loaded / size) * 100);
-      console.log(`Completion: ${percent}%`);
-    }
+  if (onloadend) {
+    request.upload.addEventListener("loadend", onloadend);
+  }
 
-    if (e.loaded == e.total) {
-      console.log("Completion: 100%");
-    }
-  });
+  if (onprogress) {
+    request.upload.addEventListener("progress", (e) =>
+      onprogress(e.loaded / size),
+    );
+  }
 
   const action = remoteFunction.action.replace(
     /\?\/remote=(.+)%2F(.+)/,
