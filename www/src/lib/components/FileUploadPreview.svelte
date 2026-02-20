@@ -12,10 +12,24 @@ const {
   class?: string;
 } = $props();
 
+let progress = $state<number>();
+
 const previewUrl = $derived.by(() => {
   const file = fileUpload?.getFile();
   return file ? URL.createObjectURL(file) : "";
 });
+
+export function uploadStart() {
+  progress = 0;
+}
+
+export function uploadDone() {
+  progress = undefined;
+}
+
+export function setProgress(value: number) {
+  progress = Math.max(0, Math.min(value, 1));
+}
 </script>
 
 {#if fileUpload && fileUpload.hasFile()}
@@ -36,6 +50,10 @@ const previewUrl = $derived.by(() => {
       </svg>
     </button>
   </div>
+{:else if progress !== undefined}
+    <!-- TODO add progress bar here -->
+    <!-- progress goes from 0 to 1 as the file uploads -->
+  <div>{progress}</div>
 {:else if placeholder}
   {@render placeholder()}
 {/if}
