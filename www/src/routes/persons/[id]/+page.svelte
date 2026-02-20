@@ -39,7 +39,9 @@ const pets = $derived(
 
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
 
-const hasAvatar = $derived(!removeAvatar && user.hasAvatar || (fileUpload?.hasFile() ?? false));
+const hasAvatar = $derived(
+  (!removeAvatar && user.hasAvatar) || (fileUpload?.hasFile() ?? false),
+);
 const avatarUrl = $derived.by(() => {
   const file = fileUpload?.getFile();
   if (file && isEditMode) {
@@ -52,7 +54,7 @@ $effect(() => {
   if (fileUpload?.hasFile()) {
     removeAvatar = false;
   }
-})
+});
 </script>
 
 <div class="min-h-screen relative bg-linear-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95">

@@ -33,7 +33,9 @@ const posts = $derived(await getPosts({ pet: pet.id }));
 
 const isOwned = $derived(data.currentUser?.id === pet.ownerId);
 
-const hasAvatar = $derived(!removeAvatar && pet.hasAvatar || (fileUpload?.hasFile() ?? false));
+const hasAvatar = $derived(
+  (!removeAvatar && pet.hasAvatar) || (fileUpload?.hasFile() ?? false),
+);
 const avatarUrl = $derived.by(() => {
   const file = fileUpload?.getFile();
   if (file && isEditMode) {
@@ -46,7 +48,7 @@ $effect(() => {
   if (fileUpload?.hasFile()) {
     removeAvatar = false;
   }
-})
+});
 </script>
 
 <svelte:head>
