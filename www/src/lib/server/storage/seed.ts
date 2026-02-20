@@ -22,12 +22,9 @@ function randomImage(pet?: schema.Pet): string {
 }
 
 async function uploadPetImage(key: string, pet?: schema.Pet) {
-  const fileExists = await PublicStorage.exists(key);
-  if (!fileExists) {
-    const imageUrl = randomImage(pet);
-    const file = await fetch(imageUrl);
-    await PublicStorage.upload(key, await file.blob(), "image/jpeg");
-  }
+  const imageUrl = randomImage(pet);
+  const file = await fetch(imageUrl);
+  await PublicStorage.upload(key, await file.blob(), "image/jpeg");
 }
 
 export default async function seedStorage() {
@@ -37,14 +34,14 @@ export default async function seedStorage() {
   const db = drizzle(client, { schema });
   console.log("Seeding storage...");
   for (const user of await db.select().from(schema.user)) {
-    const key = USER_AVATAR_PREFIX + user.id;
-    const fileExists = await PublicStorage.exists(key);
-    if (!fileExists) {
-      const file = await fetch(
-        `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`,
-      );
-      await PublicStorage.upload(key, await file.blob(), "image/png");
-    }
+    const file = await fetch(
+      `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`,
+    );
+    await PublicStorage.upload(
+      USER_AVATAR_PREFIX + user.id,
+      await file.blob(),
+      "image/png",
+    );
   }
   const pets = await db.select().from(schema.pet);
   for (const pet of pets) {
