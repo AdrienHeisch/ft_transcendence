@@ -13,7 +13,7 @@ const {
 }: {
   children: Snippet;
   function: RemoteForm<Input, Output>;
-  updates: Array<RemoteQuery<any>>;
+  updates?: Array<RemoteQuery<any>>;
   class?: string;
   onloadstart?: () => void;
   onloadend?: () => void;
@@ -69,7 +69,9 @@ function submitXHR(data: FormData) {
     form.reset();
 
     console.log(updates) // TODO fix updates
-    await Promise.all(updates.map(query => query.refresh()));
+    if (updates) {
+      await Promise.all(updates.map(query => query.refresh()));
+    }
   })}
 >
  {@render children()}
