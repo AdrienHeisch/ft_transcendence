@@ -1,15 +1,16 @@
 <script lang="ts">
-import type { RemoteQuery, RemoteQueryOverride } from "@sveltejs/kit";
+import type { RemoteQuery } from "@sveltejs/kit";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { getPets } from "$lib/pets.remote";
 import { createPost } from "$lib/posts.remote";
 import { type Pet, type User } from "$lib/server/db/schema";
+import RemoteForm from "./RemoteForm.svelte";
 
 interface Props {
   currentUser: User;
   forcePet?: Pet;
-  updates?: Array<RemoteQuery<any> | RemoteQueryOverride>;
+  updates?: Array<RemoteQuery<any>>;
 }
 
 const { currentUser, forcePet, updates = [] }: Props = $props();
@@ -21,12 +22,10 @@ const pets = $derived(
 );
 </script>
 
-<form
+<RemoteForm
   class="flex flex-col mb-6 p-4 bg-orange-50 rounded-2xl border-4 border-orange-300 shadow-lg"
-  enctype="multipart/form-data" {...createPost.enhance(async ({ form, submit }) => {
-    form.reset();
-    await submit().updates(...updates);
-  })}
+  function={createPost}
+  updates={updates}
 >
   <FileUploadPreview fileUpload={fileUpload} class="mb-1" />
   <textarea
@@ -74,4 +73,4 @@ const pets = $derived(
       Post
     </button>
   </div>
-</form>
+</RemoteForm>
