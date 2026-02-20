@@ -6,6 +6,7 @@ import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import * as persons from "$lib/server/persons";
+import { bunFileSchema } from "./zodUtils";
 
 const { apiKey, passwordHash, ...userColumns } = getTableColumns(schema.user);
 
@@ -26,7 +27,7 @@ export const getPersons = query(
   z.object({
     search: z.string(),
     city: z.string().optional(),
-    sortBy: z.custom<"firstName" | "lastName">(),
+    sortBy: z.enum(["firstName", "lastName"]),
     offset: z.int().optional(),
     limit: z.int().optional(),
   }),
@@ -65,7 +66,7 @@ export const updatePerson = form(
     lastName: z.string(),
     bio: z.string(),
     city: z.string(),
-    avatar: z.custom<File>().optional(),
+    avatar: bunFileSchema().optional(),
     removeAvatar: z.stringbool(),
   }),
   async (person) => {

@@ -27,7 +27,7 @@ export const POST: RequestHandler = async ({ request }) => {
       bio: z.string(),
       species: z.string(),
       breed: z.string(),
-      avatar: z.custom<File>(),
+      avatar: z.file(),
     })
     .strict();
   const formData = Object.fromEntries((await request.formData()).entries());

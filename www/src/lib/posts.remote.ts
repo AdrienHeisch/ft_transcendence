@@ -9,6 +9,7 @@ import * as schema from "$lib/server/db/schema";
 import * as posts from "$lib/server/posts";
 import { PublicStorage } from "$lib/server/storage";
 import { POST_IMAGE_PREFIX } from "$lib/storage";
+import { bunFileSchema } from "./zodUtils";
 
 export type PostData = Omit<Post, "author"> & { author: User };
 
@@ -159,7 +160,7 @@ export const createPost = form(
   z.object({
     content: z.string(),
     pet: z.string().optional(),
-    file: z.custom<File>(),
+    file: bunFileSchema(),
   }),
   async ({ content, pet, file }) => {
     const user = requireLogin();

@@ -10,6 +10,7 @@ import * as pets from "$lib/server/pets";
 import { PublicStorage } from "$lib/server/storage";
 import { PET_AVATAR_PREFIX } from "$lib/storage";
 import { getPetOwner } from "./server/pets";
+import { bunFileSchema } from "./zodUtils";
 
 export const getPet = query.batch(z.string(), async (pets) => {
   const result = await db
@@ -25,7 +26,7 @@ export const getPets = query(
     owner: z.string().optional(),
     search: z.string(),
     species: z.string().optional(),
-    sortBy: z.custom<"name" | "species">(),
+    sortBy: z.enum(["name", "species"]),
     offset: z.int().optional(),
     limit: z.int().optional(),
   }),
@@ -63,7 +64,7 @@ export const createPet = form(
     bio: z.string(),
     species: z.string(),
     breed: z.string(),
-    avatar: z.custom<File>(),
+    avatar: bunFileSchema(),
   }),
   async (pet) => {
     const user = requireLogin();
@@ -77,7 +78,7 @@ export const updatePet = form(
     id: z.string(),
     name: z.string(),
     bio: z.string(),
-    avatar: z.custom<File>().optional(),
+    avatar: bunFileSchema().optional(),
     removeAvatar: z.stringbool(),
   }),
   async (pet) => {

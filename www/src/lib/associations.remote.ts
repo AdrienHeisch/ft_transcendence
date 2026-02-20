@@ -24,7 +24,7 @@ export const getAssociations = query(
     search: z.string(),
     type: schema.associationTypeSchema.optional(),
     city: z.string().optional(),
-    sortBy: z.custom<"name" | "type">(),
+    sortBy: z.enum(["name", "type"]),
     offset: z.int().optional(),
     limit: z.int().optional(),
   }),

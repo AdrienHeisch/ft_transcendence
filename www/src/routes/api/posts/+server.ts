@@ -22,7 +22,7 @@ export const POST: RequestHandler = async ({ request }) => {
     .object({
       content: z.string(),
       pet: z.string().optional(),
-      file: z.custom<File>(),
+      file: z.file(),
     })
     .strict();
   const formData = Object.fromEntries((await request.formData()).entries());
