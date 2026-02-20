@@ -1,6 +1,6 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
+import FileUpload from "$lib/components/FileUpload.svelte";
 import Post from "$lib/components/Post.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
 import {
@@ -20,6 +20,10 @@ const COVER_IMAGE =
 
 const { data } = $props();
 
+let isEditMode = $state(false);
+let fileUpload = $state<FileUpload>();
+let removeAvatar = $state(false);
+
 const user = $derived(await data.user);
 
 const posts = $derived(await getPosts({ author: user.id }));
@@ -34,28 +38,20 @@ const pets = $derived(
 
 const isCurrentUser = $derived(data.currentUser?.id === user.id);
 
-let isEditMode = $state(false);
-let avatarFiles = $state<FileList>();
-const avatarFile = $derived(avatarFiles?.item(0));
-
-let hasAvatar = $derived(user.hasAvatar);
-let removeAvatar = $derived(!hasAvatar && avatarFiles?.item(0) === undefined);
-
+const hasAvatar = $derived(!removeAvatar && user.hasAvatar || (fileUpload?.hasFile() ?? false));
 const avatarUrl = $derived.by(() => {
-  if (avatarFile && isEditMode) {
-    return URL.createObjectURL(avatarFile);
+  const file = fileUpload?.getFile();
+  if (file && isEditMode) {
+    return URL.createObjectURL(file);
   }
   return getUserAvatar({ id: user.id, hasAvatar });
 });
 
-let fileInput = $state<HTMLInputElement>();
 $effect(() => {
-  if (avatarFile) {
-    fileInput?.setCustomValidity(
-      avatarFile.size < Number(PUBLIC_MAX_FILE_SIZE) ? "" : "File is too large",
-    );
+  if (fileUpload?.hasFile()) {
+    removeAvatar = false;
   }
-});
+})
 </script>
 
 <div class="min-h-screen relative bg-linear-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95">
@@ -96,21 +92,20 @@ $effect(() => {
             {#if hasAvatar}
               <button
                 type="button"
-                onclick={() => hasAvatar = false}
+                onclick={() => {
+                  fileUpload?.clearFiles();
+                  removeAvatar = true;
+                }}
                 class={["absolute", "bottom-2", "left-2", "px-1", "border-3", "rounded-2xl", "bg-gray-300", "border-white"]}
               >
                 🗑️
               </button>
             {/if}
             <label class="block">
-              <input
+              <FileUpload
+                bind:this={fileUpload}
                 name="avatar"
-                type="file"
                 accept="image/*"
-                autocomplete="off"
-                class="hidden"
-                bind:files={avatarFiles}
-                bind:this={fileInput}
               />
               <div class={["absolute", "bottom-2", "right-2", "px-1", "border-3", "rounded-2xl", "bg-gray-300", "border-white"]}>📸</div>
             </label>

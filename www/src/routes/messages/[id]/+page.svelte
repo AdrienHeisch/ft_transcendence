@@ -2,7 +2,8 @@
 import z from "zod";
 import { browser, dev } from "$app/environment";
 import { resolve } from "$app/paths";
-import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
+import FileUpload from "$lib/components/FileUpload.svelte";
+import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { setMessageRead } from "$lib/messages.remote";
 import { getPerson } from "$lib/persons.remote";
 import { type ChatMessage } from "$lib/server/db/schema";
@@ -13,20 +14,7 @@ const { data, params } = $props();
 let msg = $state<string>("");
 let wsMessages = $state<ChatMessage[]>([]);
 
-let files = $state<FileList>();
-const file = $derived(files?.item(0));
-const previewUrl = $derived.by(() => {
-  return file ? URL.createObjectURL(file) : "";
-});
-
-let fileInput = $state<HTMLInputElement>();
-$effect(() => {
-  if (file) {
-    fileInput?.setCustomValidity(
-      file.size < Number(PUBLIC_MAX_FILE_SIZE) ? "" : "File is too large",
-    );
-  }
-});
+let fileUpload = $state<FileUpload>();
 
 let ws: WebSocket | undefined = (() => {
   if (!browser) return undefined;
@@ -60,6 +48,7 @@ const allMessages = $derived([...wsMessages, ...(await data.messages)]);
 
 async function sendMessage() {
   const BIN_PREFIX = "__bin__";
+  const file = fileUpload?.getFile();
   if (file) {
     const bytes = new Uint8Array(
       await new Blob([
@@ -68,7 +57,7 @@ async function sendMessage() {
       ]).arrayBuffer(),
     );
     ws?.send(bytes);
-    files = undefined;
+    fileUpload?.clearFiles();
   } else if (msg) {
     const noPrefix = msg.startsWith(BIN_PREFIX) ? msg.slice(7) : msg;
     if (noPrefix.trim()) {
@@ -175,47 +164,23 @@ async function sendMessage() {
             class="flex gap-3"
           >
             <!-- Preview or placeholder -->
-            <div class="mb-6">
-              {#if previewUrl}
-                <div class="relative aspect-video rounded-xl overflow-hidden border-2 border-[#8B4513]">
-                  <img 
-                    src={previewUrl}
-                    alt="Preview"
-                    class="w-full h-full object-cover"
-                  />
-                  <button
-                    aria-label="Remove image"
-                    type="button"
-                    onclick={() => files = undefined}
-                    class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                  </button>
-                </div>
-              {/if}
-            </div>
+            <FileUploadPreview class="mb-6" fileUpload={fileUpload} />
 
             <!-- Upload button -->
             <label class="block">
-              <input
+              <FileUpload
+                bind:this={fileUpload}
                 name="avatar"
-                type="file"
                 accept="image/png"
-                autocomplete="off"
-                class="hidden"
-                bind:files
-                bind:this={fileInput}
               />
-              {#if !file}
+              {#if !fileUpload?.hasFile()}
                 <div class="w-full py-4 px-5 bg-[#CC5500] text-white rounded-2xl font-bold text-center hover:bg-[#A04000] transition-all cursor-pointer">
                   +
                 </div>
               {/if}
             </label>
 
-            {#if !file}
+            {#if !fileUpload?.hasFile()}
               <!-- Text input -->
               <input
                 type="text"
@@ -230,7 +195,7 @@ async function sendMessage() {
 
             <button
               type="submit"
-              disabled={!ws || (!msg.trim() && !file)}
+              disabled={!ws || (!msg.trim() && !fileUpload?.hasFile())}
               class="px-6 py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Send 📤

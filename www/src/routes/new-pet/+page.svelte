@@ -1,24 +1,12 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
+import FileUpload from "$lib/components/FileUpload.svelte";
+import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { createPet } from "$lib/pets.remote";
 
 const { data } = $props();
 
-let files = $state<FileList>();
-const file = $derived(files?.item(0));
-const previewUrl = $derived.by(() => {
-  return file ? URL.createObjectURL(file) : "";
-});
-
-let fileInput = $state<HTMLInputElement>();
-$effect(() => {
-  if (file) {
-    fileInput?.setCustomValidity(
-      file.size < Number(PUBLIC_MAX_FILE_SIZE) ? "" : "File is too large",
-    );
-  }
-});
+let fileUpload = $state<FileUpload>();
 </script>
 
 <svelte:head>
@@ -131,47 +119,22 @@ $effect(() => {
 
             <!-- Preview or placeholder -->
             <div class="mb-6">
-              {#if previewUrl}
-                <div class="relative aspect-video rounded-xl overflow-hidden border-2 border-[#8B4513]">
-                  <img 
-                    src={previewUrl} 
-                    alt="Preview"
-                    class="w-full h-full object-cover"
-                  />
-                  <button
-                    aria-label="Remove image"
-                    type="button"
-                    onclick={() => files = undefined}
-                    class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                  </button>
-                </div>
-              {:else}
+              <FileUploadPreview fileUpload={fileUpload} placeholder={previewPlaceholder} />
+              {#snippet previewPlaceholder()}
                 <div class="aspect-video rounded-xl border-2 border-dashed border-[#8B4513] flex items-center justify-center bg-[#fef7ed]">
                   <div class="text-center">
                     <span class="text-6xl mb-4 block">🐾</span>
                     <p class="text-[#8B4513] font-medium">No photo yet</p>
                   </div>
                 </div>
-              {/if}
+              {/snippet}
             </div>
 
             <!-- Upload button -->
             <label class="block">
-              <input
-                name="avatar"
-                type="file"
-                accept="image/*"
-                autocomplete="off"
-                class="hidden"
-                bind:files
-                bind:this={fileInput}
-              />
+              <FileUpload bind:this={fileUpload} name="avatar" accept="image/*" />
               <div class="w-full py-3 bg-[#CC5500] text-white rounded-lg font-bold text-center hover:bg-[#A04000] transition-all cursor-pointer">
-                📷 {previewUrl ? "Change photo" : "Add photo"}
+                📷 {fileUpload?.hasFile() ? "Change photo" : "Add photo"}
               </div>
             </label>
           </div>

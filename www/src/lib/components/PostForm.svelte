@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { RemoteQuery, RemoteQueryOverride } from "@sveltejs/kit";
-import { PUBLIC_MAX_FILE_SIZE } from "$env/static/public";
+import FileUpload from "$lib/components/FileUpload.svelte";
+import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { getPets } from "$lib/pets.remote";
 import { createPost } from "$lib/posts.remote";
 import { type Pet, type User } from "$lib/server/db/schema";
@@ -13,26 +14,11 @@ interface Props {
 
 const { currentUser, forcePet, updates = [] }: Props = $props();
 
-let files = $state<FileList>();
-const file = $derived(files?.item(0));
-
-const previewUrl = $derived.by(() => {
-  const file = files?.item(0);
-  return file ? URL.createObjectURL(file) : undefined;
-});
+let fileUpload = $state<FileUpload>();
 
 const pets = $derived(
   await getPets({ owner: currentUser.id, search: "", sortBy: "species" }),
 );
-
-let fileInput = $state<HTMLInputElement>();
-$effect(() => {
-  if (file) {
-    fileInput?.setCustomValidity(
-      file.size < Number(PUBLIC_MAX_FILE_SIZE) ? "" : "File is too large",
-    );
-  }
-});
 </script>
 
 <form
@@ -42,10 +28,8 @@ $effect(() => {
     await submit().updates(...updates);
   })}
 >
-  {#if previewUrl}
-    <img class="p-1" alt="Uploaded" src={previewUrl} />
-  {/if}
-  <textarea 
+  <FileUploadPreview fileUpload={fileUpload} class="mb-1" />
+  <textarea
     class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
     placeholder="What's new?"
     rows="3"
@@ -76,15 +60,11 @@ $effect(() => {
       {/if}
     </label>
     <label>
-      <input
+      <FileUpload
+        bind:this={fileUpload}
         name="file"
-        type="file"
         accept="image/*,video/*"
-        autocomplete="off"
-        bind:this={fileInput}
-        bind:files
         required
-        class="hidden"
       />
       <div class="px-4 py-2 bg-orange-700 text-white rounded-lg font-bold text-center hover:bg-orange-800 transition-all cursor-pointer">
         📷 Upload
