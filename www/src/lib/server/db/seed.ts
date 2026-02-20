@@ -4,6 +4,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { reset, seed } from "drizzle-seed";
 import postgres from "postgres";
 import * as schema from "./schema";
+import seedTexts from "./seed-texts.json";
 
 export default async function seedDb() {
   const client = postgres(
@@ -22,7 +23,7 @@ export default async function seedDb() {
     user: {
       count: 20,
       columns: {
-        bio: gen.loremIpsum(),
+        bio: gen.valuesFromArray({ values: seedTexts.userBios }),
         online: gen.default({ defaultValue: false }),
         city: gen.valuesFromArray({ values: cities.map((city) => city.code) }),
       },
@@ -39,7 +40,7 @@ export default async function seedDb() {
         breed: gen.valuesFromArray({
           values: ["Red", "Orange", "Black", "White", "Green"],
         }),
-        bio: gen.loremIpsum(),
+        bio: gen.valuesFromArray({ values: seedTexts.petBios }),
         age: gen.int({ minValue: 1, maxValue: 5 }),
         hasAvatar: gen.default({ defaultValue: false }),
       },
@@ -50,7 +51,7 @@ export default async function seedDb() {
         logo: gen.valuesFromArray({ values: ["🐄"] }),
         city: gen.valuesFromArray({ values: cities.map((city) => city.code) }),
         animalsCount: gen.int({ minValue: 1, maxValue: 100 }),
-        description: gen.loremIpsum(),
+        description: gen.valuesFromArray({ values: seedTexts.petBios }),
         foundedYear: gen.int({ minValue: 1960, maxValue: 2025 }),
         phone: gen.phoneNumber(),
         type: gen.valuesFromArray({
@@ -60,7 +61,7 @@ export default async function seedDb() {
     },
     post: {
       columns: {
-        content: gen.loremIpsum(),
+        content: gen.valuesFromArray({ values: seedTexts.postContents }),
         postedAt: gen.date({ maxDate: new Date() }),
       },
       with: {
@@ -73,7 +74,7 @@ export default async function seedDb() {
     },
     postComment: {
       columns: {
-        content: gen.loremIpsum(),
+        content: gen.valuesFromArray({ values: seedTexts.commentContents }),
         postedAt: gen.date({ maxDate: new Date() }),
       },
     },
@@ -89,7 +90,7 @@ export default async function seedDb() {
     },
     chatMessage: {
       columns: {
-        content: gen.loremIpsum(),
+        content: gen.valuesFromArray({ values: seedTexts.chatMessages }),
         isFile: gen.default({ defaultValue: false }),
         read: gen.default({ defaultValue: true }),
         sentAt: gen.date({ maxDate: new Date() }),
