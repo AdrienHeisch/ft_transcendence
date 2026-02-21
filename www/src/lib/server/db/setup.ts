@@ -18,7 +18,6 @@ export default async function setup() {
 
 async function addTriggers(db: PostgresJsDatabase<typeof schema>) {
   console.log("[ ] Adding triggers...");
-  //TODO check what happens if left == right
   const query = `
 CREATE OR REPLACE FUNCTION canonicalize_users_pair() RETURNS trigger AS $$
 DECLARE
