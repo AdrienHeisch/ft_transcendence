@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { and, desc, eq, getTableColumns, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, getTableColumns, inArray } from "drizzle-orm";
 import z from "zod";
 import { command, form, query } from "$app/server";
 import { isLoggedIn, requireLogin } from "$lib/server/auth";
@@ -93,7 +93,8 @@ export const getPostComments = query(z.string(), (id) => {
     })
     .from(schema.postComment)
     .where(eq(schema.postComment.post, id))
-    .innerJoin(schema.user, eq(schema.user.id, schema.postComment.author));
+    .innerJoin(schema.user, eq(schema.user.id, schema.postComment.author))
+    .orderBy(asc(schema.postComment.postedAt));
 });
 
 export const createComment = form(
