@@ -32,7 +32,11 @@ export function setProgress(value: number) {
 }
 </script>
 
-{#if fileUpload && fileUpload.hasFile()}
+{#if progress !== undefined}
+    <!-- TODO add progress bar here -->
+    <!-- progress goes from 0 to 1 as the file uploads -->
+  <div>{progress}</div>
+{:else if fileUpload && fileUpload.hasFile()}
   <div class="{classes} relative aspect-video rounded-xl overflow-hidden border-2 border-[#8B4513]">
     <img
       src={previewUrl}
@@ -50,10 +54,6 @@ export function setProgress(value: number) {
       </svg>
     </button>
   </div>
-{:else if progress !== undefined}
-    <!-- TODO add progress bar here -->
-    <!-- progress goes from 0 to 1 as the file uploads -->
-  <div>{progress}</div>
 {:else if placeholder}
   {@render placeholder()}
 {/if}
