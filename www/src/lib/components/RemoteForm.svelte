@@ -20,37 +20,44 @@ const {
   onprogress?: (progress: number) => void;
 } = $props();
 
-function submitXHR(data: FormData) {
-  console.log(data);
-  var size = Array.from(data.values())
-    .map((value: FormDataEntryValue) =>
-      typeof value === "string" ? new Blob([value]).size : value.size,
-    )
-    .reduce((acc, n) => acc + n, 0);
+async function submitXHR(data: FormData) {
+  return new Promise<void>((resolve, reject) => {
+    console.log(data);
+    var size = Array.from(data.values())
+      .map((value: FormDataEntryValue) =>
+        typeof value === "string" ? new Blob([value]).size : value.size,
+      )
+      .reduce((acc, n) => acc + n, 0);
 
-  var request = new XMLHttpRequest();
+    var request = new XMLHttpRequest();
 
-  if (onloadstart) {
-    request.upload.addEventListener("loadstart", onloadstart);
-  }
+    if (onloadstart) {
+      request.upload.onloadstart = onloadstart;
+    }
 
-  if (onloadend) {
-    request.upload.addEventListener("loadend", onloadend);
-  }
+    if (onloadend) {
+      request.upload.onloadend = onloadend;
+    }
 
-  if (onprogress) {
-    request.upload.addEventListener("progress", (e) =>
-      onprogress(e.loaded / size),
+    if (onprogress) {
+      request.upload.onprogress = (e) => onprogress(e.loaded / size);
+    }
+
+    const action = remoteFunction.action.replace(
+      /\?\/remote=(.+)%2F(.+)/,
+      "$1/$2",
     );
-  }
-
-  const action = remoteFunction.action.replace(
-    /\?\/remote=(.+)%2F(.+)/,
-    "$1/$2",
-  );
-  request.open(remoteFunction.method, `/_app/remote/${action}`);
-  request.timeout = 45000;
-  request.send(data);
+    request.open(remoteFunction.method, `/_app/remote/${action}`);
+    request.timeout = 45000;
+    request.onload = () => {
+      if (request.status >= 200 && request.status < 300) {
+        resolve();
+      } else {
+        reject();
+      }
+    };
+    request.send(data);
+  });
 }
 </script>
 
@@ -65,12 +72,14 @@ function submitXHR(data: FormData) {
     for (const [key, value] of Object.entries(data)) {
       formData.append(key, value as string | Blob);
     }
-    submitXHR(formData);
-    form.reset();
-
-    console.log(updates) // TODO fix updates
-    if (updates) {
-      await Promise.all(updates.map(query => query.refresh()));
+    try {
+      await submitXHR(formData);
+      form.reset();
+      if (updates) {
+        await Promise.all(updates.map(query => query.refresh()));
+      }
+    } catch {
+      // TODO on error ?
     }
   })}
 >
