@@ -9,6 +9,7 @@ let lastName = $state<string>("");
 let password = $state<string>("");
 let confirm = $state<string>("");
 let confirmField = $state<HTMLInputElement>();
+let errorMessage = $state<string>();
 
 $effect(() =>
   confirmField?.setCustomValidity(
@@ -36,7 +37,14 @@ $effect(() =>
       </div>
 
       <!-- Form -->
-      <form {...remote.register}>
+      <form {...remote.register.enhance(async ({ submit }) => {
+        errorMessage = undefined;
+        try {
+          await submit();
+        } catch (error: any) {
+          errorMessage = error?.message || "Registration failed";
+        }
+      })}>
         <!-- First and Last name on the same line -->
         <div class="grid grid-cols-2 gap-4">
           <!-- First name -->
@@ -181,12 +189,15 @@ $effect(() =>
           />
         </div>
 
-        <!-- TODO Error Message -->
-        <!-- {#if form?.message} -->
-          <!-- <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"> -->
-            <!-- {form.message} -->
-          <!-- </div> -->
-        <!-- {/if} -->
+        <!-- Error Message -->
+        {#if errorMessage}
+          <div class="bg-red-50 border-2 border-red-400 text-red-800 px-4 py-3 rounded-lg text-sm font-medium flex items-start gap-2">
+            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>
+            <span>{errorMessage}</span>
+          </div>
+        {/if}
 
         <!-- Submit -->
         <button
