@@ -107,12 +107,12 @@ methods
 - [x] _Minor_ Server-Side Rendering for improved performance and SEO
 - [x] _Minor_ Implement advanced search functionality with filters, sorting and
 pagination
-- [ ] _Minor_ File upload and management system
+- [x] _Minor_ File upload and management system
   - [x] Support multiple file types (images, documents, etc.)
   - [x] Client-side and server-side validation (type, size, format)
   - [x] Secure file storage with proper access control
   - [x] File preview functionality where applicable
-  - [ ] Progress indicators for uploads
+  - [x] Progress indicators for uploads
   - [x] Ability to delete uploaded files
 - [ ] _Minor_ Support for additional browsers
   - [ ] Full compatibility with at least 2 additional browsers (Firefox, Safari,
