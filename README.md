@@ -42,6 +42,8 @@ instructions to run the project._
 - `make seed` to seed the database with random data, __will delete existing
 data__
 - In development, the database can be inspected at [local.drizzle.studio](https://local.drizzle.studio)
+- [yaak](https://yaak.app/) can be used to test the API (request files in `./yaak`)
+- [drawDB.app](https://www.drawdb.app/editor) can be used to visualize the database schema with `./drawdb.json`
 
 ## Resources
 
