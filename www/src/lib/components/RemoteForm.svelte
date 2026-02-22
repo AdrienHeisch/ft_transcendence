@@ -10,6 +10,7 @@ const {
   onloadstart,
   onloadend,
   onprogress,
+  onerror,
 }: {
   children: Snippet;
   function: RemoteForm<Input, Output>;
@@ -18,7 +19,14 @@ const {
   onloadstart?: () => void;
   onloadend?: () => void;
   onprogress?: (progress: number) => void;
+  onerror?: (message: string) => void;
 } = $props();
+
+let errorMessage = $state<string>();
+
+export function clearError() {
+  errorMessage = undefined;
+}
 
 async function submitXHR(data: FormData) {
   return new Promise<void>((resolve, reject) => {
@@ -53,9 +61,16 @@ async function submitXHR(data: FormData) {
       if (request.status >= 200 && request.status < 300) {
         resolve();
       } else {
-        reject();
+        try {
+          const response = JSON.parse(request.responseText);
+          reject(new Error(response.message || "Request failed"));
+        } catch {
+          reject(new Error("Request failed"));
+        }
       }
     };
+    request.onerror = () => reject(new Error("Network error"));
+    request.ontimeout = () => reject(new Error("Request timeout"));
     request.send(data);
   });
 }
@@ -73,15 +88,28 @@ async function submitXHR(data: FormData) {
       formData.append(key, value as string | Blob);
     }
     try {
+      errorMessage = undefined;
       await submitXHR(formData);
       form.reset();
       if (updates) {
         await Promise.all(updates.map(query => query.refresh()));
       }
-    } catch {
-      // TODO on error ?
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "An error occurred";
+      errorMessage = message;
+      if (onerror) {
+        onerror(message);
+      }
     }
   })}
 >
- {@render children()}
+  {#if errorMessage}
+    <div class="mb-4 bg-red-50 border-2 border-red-400 text-red-800 px-4 py-3 rounded-lg flex items-start gap-2">
+      <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+      </svg>
+      <span class="font-medium">{errorMessage}</span>
+    </div>
+  {/if}
+  {@render children()}
 </form>
