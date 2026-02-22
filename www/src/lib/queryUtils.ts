@@ -1,4 +1,4 @@
-import { type Column, type GetColumnData, getTableColumns, type SQL, sql, Table } from "drizzle-orm";
+import { type Column, type GetColumnData, type SQL, sql } from "drizzle-orm";
 import type {
   Association,
   Person,
@@ -25,19 +25,6 @@ export function formatWithOwner<T>({
   };
 }
 
-
-// export function coalesceTables(tableA: Table, tableB: Table){
-//   const columnsA = getTableColumns(tableA);
-//   const columnsB = getTableColumns(tableB);
-//   for (const columnName in columnsA) {
-//     if (columnsB[columnName] !== undefined) {
-//
-//     }
-//   }
-// }
-
-// FOLLOWING CODE FROM https://github.com/drizzle-team/drizzle-orm/issues/3708#issuecomment-3282649813
-
 type AnySql = SQL | Column;
 type Coalesce<Array extends AnySql[]> = Array extends [
   ...infer Optionals,
@@ -54,6 +41,9 @@ type ExtractSqlType<S> =
       ? GetColumnData<S, "query">
       : never;
 
+/**
+ * Copied from [here](https://github.com/drizzle-team/drizzle-orm/issues/3708#issuecomment-3282649813)
+ */
 export function coalesce<Args extends [AnySql, AnySql, ...AnySql[]]>(
   ...args: Args
 ) {
