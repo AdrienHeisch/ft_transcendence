@@ -37,7 +37,7 @@ export const register = form(
     });
 
     try {
-      // TODO associations
+      // TODO register as association
       await db.insert(schema.person).values({
         id: userId,
         firstName,
@@ -67,7 +67,7 @@ export const register = form(
     } catch {
       return error(500, { message: "An error has occurred" });
     }
-    return redirect(302, resolve(`/persons/${userId}`));
+    return redirect(302, resolve(`/persons/${userId}`)); // TODO register as association
   },
 );
 

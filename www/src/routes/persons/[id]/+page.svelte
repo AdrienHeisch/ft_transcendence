@@ -15,7 +15,7 @@ import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
-import { getFullName } from "$lib/user";
+import { getFriendsUrl, getFullName, getProfileUrl } from "$lib/user";
 import { getUser } from "$lib/user.remote";
 
 const COVER_IMAGE =
@@ -244,7 +244,7 @@ $effect(() => {
 
       <!-- Stats -->
       <div class="flex justify-center md:justify-start gap-8 mt-6 pt-6 border-t-2 border-orange-700">
-        <a href={resolve(`/persons/${user.id}/friends`)} class="text-center">
+        <a href={resolve(getFriendsUrl(user))} class="text-center">
           <div class="text-2xl font-bold text-orange-700">{friends.length}</div>
           <div class="text-sm text-amber-900">Friends</div>
         </a>
@@ -266,12 +266,12 @@ $effect(() => {
               <span class="text-2xl">👥</span>
               Friends
             </span>
-            <a href={resolve(`/persons/${user.id}/friends`)} class="text-sm text-orange-700 hover:text-orange-800 font-medium">View all</a>
+            <a href={resolve(getFriendsUrl(user))} class="text-sm text-orange-700 hover:text-orange-800 font-medium">View all</a>
           </h2>
           <div class="grid grid-cols-3 gap-2">
             {#each friends.filter(friend => friend.status === "friends") as friend (friend.id)}
               <div class="aspect-square rounded-lg overflow-hidden border-2 border-orange-700 hover:border-orange-900 transition-all duration-200 cursor-pointer">
-                <a href={resolve(`/persons/${friend.id}`)}><img 
+                <a href={resolve(getProfileUrl(friend))}><img 
                   src={getUserAvatar(friend)}
                   alt="{getFullName(friend)}"
                   title="{getFullName(friend)}"

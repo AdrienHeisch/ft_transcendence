@@ -251,9 +251,9 @@ export default async function seedDb() {
     .update(schema.user)
     .set({
       apiKey: "BVsZmVvjt_eXElFqE80AVj0p",
-      email: "association@student.42.fr",
+      email: "bibisfarm@student.42.fr",
       // TODO refactor this
-      passwordHash: await hash("association", {
+      passwordHash: await hash("bibisfarm", {
         memoryCost: 19456,
         timeCost: 2,
         outputLen: 32,
@@ -264,7 +264,7 @@ export default async function seedDb() {
   await db
     .update(schema.association)
     .set({
-      name: "Homenick and Sons",
+      name: "Bibi's Farm",
       description: "We do indeed like pets",
     })
     .where(eq(schema.association.id, userC.id));

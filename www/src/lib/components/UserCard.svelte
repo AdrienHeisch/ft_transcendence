@@ -3,6 +3,7 @@ import { resolve } from "$app/paths";
 import { getCity } from "$lib/city.remote";
 import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
+import { getProfileUrl } from "$lib/user";
 
 interface Props {
   user: UserPublic & { isAssociation: false };
@@ -59,7 +60,7 @@ const city = $derived(await getCity(user.city));
 
     <!-- Buttons -->
     <div class="flex gap-2">
-      <a href="/persons/{user.id}" class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
+      <a href={getProfileUrl(user)} class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
         👁️ View profile
       </a>
       <a href={resolve(`/messages/${user.id}`)} class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors text-center">

@@ -7,6 +7,7 @@ import { afterNavigate } from "$app/navigation";
 import { resolve } from "$app/paths";
 import * as auth from "$lib/auth.remote";
 import { startPresence } from "$lib/presence";
+import { getFriendsUrl, getProfileUrl } from "$lib/user";
 
 const { children, data } = $props();
 
@@ -21,7 +22,7 @@ const sidebarMainItems = $derived(
       ? {
           label: "Profile",
           icon: "👤",
-          href: `/${data.currentUser.association ? "associations" : "persons"}/${data.currentUser.id}`,
+          href: data.currentUser && getProfileUrl(data.currentUser),
         }
       : { label: "Feed", icon: "📰", href: "/feed" },
     // { label: "Groups", icon: "👥" },
@@ -32,7 +33,7 @@ const sidebarMainItems = $derived(
       ? {
           label: "Friends",
           icon: "🤝",
-          href: `/persons/${data.currentUser.id}/friends`,
+          href: data.currentUser && getFriendsUrl(data.currentUser),
         }
       : undefined,
     // { label: "Adopt", icon: "🐾" },

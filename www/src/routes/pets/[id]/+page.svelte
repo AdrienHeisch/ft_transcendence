@@ -8,6 +8,7 @@ import UserCard from "$lib/components/UserCard.svelte";
 import { deletePet, updatePet } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import { getPetAvatar } from "$lib/storage";
+    import { getProfileUrl } from "$lib/user";
 import { getUser } from "$lib/user.remote.js";
 
 const { data } = $props();
@@ -160,7 +161,7 @@ $effect(() => {
                 Save profile
               </button>
             {:else}
-              <button type="button" onclick={async () => { await deletePet(pet.id); await goto(resolve(`/persons/${data.currentUser?.id}`)); }} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
+              <button type="button" onclick={async () => { await deletePet(pet.id); data.currentUser && await goto(resolve(getProfileUrl(data.currentUser))); }} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
                 Delete
               </button>
               <button type="button" onclick={() => isEditMode = true} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">

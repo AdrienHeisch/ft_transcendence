@@ -4,7 +4,7 @@ import { resolve } from "$app/paths";
 import { deleteComment, editComment } from "$lib/posts.remote";
 import type { PostComment, User, UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
-import { getFullName } from "$lib/user";
+import { getFullName, getProfileUrl } from "$lib/user";
 
 interface Props {
   comment: PostComment;
@@ -38,7 +38,7 @@ const closeEdit = () => {
 
 <div transition:slide class="relative m-1 p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
   <div class="flex items-center gap-3 mb-3">
-    <a href={resolve(`/persons/${author.id}`)}>
+    <a href={resolve(getProfileUrl(author))}>
       <div class="relative">
         <img 
           src={getUserAvatar(author)}
@@ -51,7 +51,7 @@ const closeEdit = () => {
       </div>
     </a>
     <div class="flex-1">
-      <a href={resolve(`/persons/${author.id}`)}>
+      <a href={resolve(getProfileUrl(author))}>
         <div class="font-semibold text-orange-900">{getFullName(author)}</div>
       </a>
       <div class="text-xs text-gray-600">{comment.postedAt}</div>
