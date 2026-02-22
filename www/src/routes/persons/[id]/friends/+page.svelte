@@ -1,11 +1,18 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import { getUserFriends } from "$lib/friends.remote";
+import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
+import { getFullName } from "$lib/user";
 
 const { data } = $props();
 
-const friends = $derived(await getUserFriends(data.user.id));
+const friends = $derived(
+  (await getUserFriends(data.user.id)).map(({ status, ...friend }) => ({
+    status,
+    ...(friend as UserPublic),
+  })),
+);
 
 const isCurrentUser = $derived(data.currentUser?.id === data.user?.id);
 </script>
@@ -69,7 +76,7 @@ const isCurrentUser = $derived(data.currentUser?.id === data.user?.id);
               <div class="relative h-48 bg-linear-to-br from-orange-400 to-orange-600">
                 <img 
                   src={getUserAvatar(friend)}
-                  alt="{friend.firstName} {friend.lastName}"
+                  alt="{getFullName(friend)}"
                   class="w-full h-full object-cover"
                 />
                 {#if friend.online}
@@ -82,16 +89,13 @@ const isCurrentUser = $derived(data.currentUser?.id === data.user?.id);
 
               <!-- Friend Info -->
               <div class="p-5">
-                <h3 class="text-xl font-bold text-gray-900 mb-1">
-                  {friend.firstName} {friend.lastName}
-                </h3>
-                <p class="text-sm text-gray-600 mb-3">
-                  @{friend.firstName.charAt(0)}{friend.lastName}
-                </p>
-                
-                {#if friend.bio}
+                <h3 class="tdescription-xl font-bold text-gray-900 mb-1">
+                  {getFullName(friend)}
+                </h3>description
+
+                {#if friend.description.length > 0}
                   <p class="text-sm text-gray-700 line-clamp-2 mb-4">
-                    {friend.bio}
+                    {friend.description}
                   </p>
                 {/if}
 

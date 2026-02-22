@@ -1,22 +1,21 @@
 import { error } from "@sveltejs/kit";
-import { and, eq, getTableColumns, or, sql } from "drizzle-orm";
+import { and, eq, or, sql } from "drizzle-orm";
 import { union } from "drizzle-orm/pg-core";
 import * as z from "zod";
 import { command, query } from "$app/server";
 import { getCurrentUser, isLoggedIn, requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
+import { getViewColumns } from "$lib/typeUtils";
 
-export const getUserFriends = query(z.string(), (userId: string) => {
+export const getUserFriends = query(z.string(), async (userId: string) => {
   type Side = "left" | "right";
   const select = (self: Side, other: Side) => {
-    const { apiKey, passwordHash, ...userColumns } = getTableColumns(
-      schema.user,
-    );
-    return db
-      .select({
-        ...userColumns,
-        status: sql<"friends" | "sent" | "received" | null>`
+    return (
+      db
+        .select({
+          ...getViewColumns(schema.userPublic),
+          status: sql<"friends" | "sent" | "received" | null>`
           CASE
             WHEN ${schema.usersPair.friends} THEN
               CASE ${schema.usersPair.pending}
@@ -26,15 +25,20 @@ export const getUserFriends = query(z.string(), (userId: string) => {
               END
             ELSE NULL
           END`,
-      })
-      .from(schema.usersPair)
-      .where(
-        and(
-          eq(schema.usersPair.friends, true),
-          eq(schema.usersPair[self], userId),
-        ),
-      )
-      .innerJoin(schema.user, eq(schema.usersPair[other], schema.user.id));
+        })
+        // .select()
+        .from(schema.usersPair)
+        .where(
+          and(
+            eq(schema.usersPair.friends, true),
+            eq(schema.usersPair[self], userId),
+          ),
+        )
+        .innerJoin(
+          schema.userPublic,
+          eq(schema.usersPair[other], schema.userPublic.id),
+        )
+    );
   };
   return union(select("left", "right"), select("right", "left"));
 });

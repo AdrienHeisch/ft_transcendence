@@ -18,7 +18,7 @@ export async function createPet({
   ownerId,
   name,
   birth,
-  bio,
+  description,
   species,
   breed,
   avatar,
@@ -26,7 +26,7 @@ export async function createPet({
   ownerId: string;
   name: string;
   birth: Date;
-  bio: string;
+  description: string;
   species: string;
   breed: string;
   avatar: File;
@@ -53,7 +53,7 @@ export async function createPet({
           ownerId,
           name,
           birth,
-          bio,
+          description,
           species,
           breed,
           hasAvatar: true,
@@ -70,12 +70,12 @@ export async function updatePet(
   id: string,
   {
     name,
-    bio,
+    description,
     avatar,
     removeAvatar = false,
   }: {
     name?: string;
-    bio?: string;
+    description?: string;
     avatar?: File;
     removeAvatar?: boolean;
   },
@@ -91,7 +91,7 @@ export async function updatePet(
     return (
       await db
         .update(schema.pet)
-        .set({ name, bio, hasAvatar: true })
+        .set({ name, description, hasAvatar: true })
         .where(eq(schema.pet.id, id))
         .returning()
     ).at(0);
@@ -100,7 +100,7 @@ export async function updatePet(
     return (
       await db
         .update(schema.pet)
-        .set({ name, bio, hasAvatar: false })
+        .set({ name, description, hasAvatar: false })
         .where(eq(schema.pet.id, id))
         .returning()
     ).at(0);
@@ -108,7 +108,7 @@ export async function updatePet(
     return (
       await db
         .update(schema.pet)
-        .set({ name, bio })
+        .set({ name, description })
         .where(eq(schema.pet.id, id))
         .returning()
     ).at(0);

@@ -3,6 +3,7 @@ import Pagination from "$lib/components/Pagination.svelte";
 import UserCard from "$lib/components/UserCard.svelte";
 import { getPersons } from "$lib/persons.remote";
 import type { City } from "$lib/server/db/schema";
+import { getUser } from "$lib/user.remote.js";
 
 const PAGE_SIZE = 12;
 
@@ -16,7 +17,7 @@ let selectedCity = $state<City>();
 let sortBy = $state<"firstName" | "lastName">("firstName");
 let currentPage = $state(0);
 
-const users = $derived(
+const persons = $derived(
   await getPersons({
     search: searchQuery,
     city: selectedCity?.code,
@@ -26,7 +27,7 @@ const users = $derived(
   }),
 );
 
-const usersCount = $derived(users.at(0)?.count ?? 0);
+const usersCount = $derived(persons.at(0)?.count ?? 0);
 
 function resetCurrentPage() {
   currentPage = 0;
@@ -110,7 +111,7 @@ function resetCurrentPage() {
     </div>
 
     <!-- Users -->
-    {#if users.length === 0}
+    {#if persons.length === 0}
       <div class="text-center py-12">
         <div class="text-6xl mb-4">😢</div>
         <h3 class="text-2xl font-bold text-orange-900 mb-2">No people found</h3>
@@ -118,10 +119,13 @@ function resetCurrentPage() {
       </div>
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {#each users as user (user.id)}
-          <div class="transition-all duration-200 hover:-translate-y-1 *:transition-shadow *:hover:shadow-xl *:h-full">
-            <UserCard user={user} />
-          </div>
+        {#each persons as person (person.id)}
+          {@const user = await getUser(person.id)}
+          {#if user && !user.isAssociation}
+            <div class="transition-all duration-200 hover:-translate-y-1 *:transition-shadow *:hover:shadow-xl *:h-full">
+              <UserCard user={user} />
+            </div>
+          {/if}
         {/each}
       </div>
       <Pagination

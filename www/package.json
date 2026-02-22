@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",
+    "@faker-js/faker": "^10.3.0",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "@sveltejs/adapter-node": "^5.4.0",

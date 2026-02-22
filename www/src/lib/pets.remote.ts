@@ -1,5 +1,5 @@
 import { error, redirect } from "@sveltejs/kit";
-import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray, or } from "drizzle-orm";
 import z from "zod";
 import { resolve } from "$app/paths";
 import { command, form, query } from "$app/server";
@@ -32,18 +32,16 @@ export const getPets = query(
   }),
   ({ owner, search, species, sortBy, offset, limit }) => {
     const query = db
-      .select({
-        ...getTableColumns(schema.pet),
-        count: sql`count(*) over()`.mapWith(Number),
-      })
+      .select(getTableColumns(schema.pet))
       .from(schema.pet)
-      .innerJoin(schema.user, eq(schema.user.id, schema.pet.ownerId))
+      .innerJoin(schema.userPublic, eq(schema.userPublic.id, schema.pet.ownerId))
       .where(
         and(
           or(
             ilike(schema.pet.name, `%${search}%`),
-            ilike(schema.user.firstName, `%${search}%`),
-            ilike(schema.user.lastName, `%${search}%`),
+            ilike(schema.userPublic.firstName, `%${search}%`),
+            ilike(schema.userPublic.lastName, `%${search}%`),
+            ilike(schema.userPublic.name, `%${search}%`),
           ),
           owner ? eq(schema.pet.ownerId, owner) : undefined,
           species ? eq(schema.pet.species, species) : undefined,
@@ -57,11 +55,13 @@ export const getPets = query(
   },
 );
 
+export const getTotalPetsCount = query(() => db.$count(schema.pet));
+
 export const createPet = form(
   z.object({
     name: z.string(),
     birth: z.iso.date().transform((birth) => new Date(birth)),
-    bio: z.string(),
+    description: z.string(),
     species: z.string(),
     breed: z.string(),
     avatar: bunFileSchema(),
@@ -77,7 +77,7 @@ export const updatePet = form(
   z.object({
     id: z.string(),
     name: z.string(),
-    bio: z.string(),
+    description: z.string(),
     avatar: bunFileSchema().optional(),
     removeAvatar: z.stringbool(),
   }),

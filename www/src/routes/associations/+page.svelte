@@ -1,9 +1,14 @@
 <script lang="ts">
 import { onMount } from "svelte";
 import { resolve } from "$app/paths";
-import { getAssociations, getPetsCount } from "$lib/associations.remote";
+import {
+  getAssociations,
+  getPetsCount,
+  getTotalAssociationsCount,
+} from "$lib/associations.remote";
 import Pagination from "$lib/components/Pagination.svelte";
 import type { AssociationType, City } from "$lib/server/db/schema";
+import { getUser } from "$lib/user.remote.js";
 
 const PAGE_SIZE = 12;
 
@@ -25,15 +30,21 @@ const associations = $derived(
     sortBy,
     offset: currentPage * PAGE_SIZE,
     limit: PAGE_SIZE,
-  }).then((associations) =>
-    associations.map((association) => ({
-      ...association,
-      logo: "🐄",
-    })),
+  }),
+);
+
+const emails = $derived.by(async () =>
+  new Map(
+    (await Promise.all(
+      associations.map(async (association) => [
+        association.id,
+        (await getUser(association.id))?.email,
+      ]),
+    )) as [string, string | undefined][],
   ),
 );
 
-const associationsCount = $derived(associations.at(0)?.count ?? 0);
+const associationsCount = $derived(await getTotalAssociationsCount());
 
 onMount(async () => {
   searchQuery = data.filters.search;
@@ -155,7 +166,8 @@ function resetCurrentPage() {
             <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
               <div class="flex justify-center">
                 <div class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white flex items-center justify-center text-6xl">
-                  {association.logo}
+                  <!-- TODO get rid of this cow -->
+                  🐄
                 </div>
               </div>
 
@@ -195,7 +207,7 @@ function resetCurrentPage() {
               <div class="mb-4 space-y-1 text-xs text-gray-600">
                 <div class="flex items-center gap-2">
                   <span>📧</span>
-                  <span class="truncate">{association.email}</span>
+                  <span class="truncate">{(await emails).get(association.id)}</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span>📞</span>

@@ -8,6 +8,7 @@ import UserCard from "$lib/components/UserCard.svelte";
 import { deletePet, updatePet } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import { getPetAvatar } from "$lib/storage";
+import { getUser } from "$lib/user.remote.js";
 
 const { data } = $props();
 
@@ -28,7 +29,7 @@ const pet = $derived({
   ],
 });
 const owner = $derived(await data.owner);
-
+const city = $derived(await data.city);
 const posts = $derived(await getPosts({ pet: pet.id }));
 
 const isOwned = $derived(data.currentUser?.id === pet.ownerId);
@@ -131,10 +132,10 @@ $effect(() => {
             <textarea
               class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
               rows=1
-              {...updatePet.fields.bio.as("text")}
-            >{pet.bio}</textarea>
+              {...updatePet.fields.description.as("text")}
+            >{pet.description}</textarea>
           {:else}
-            <p class="mt-2 text-gray-700 max-w-2xl">{pet.bio}</p>
+            <p class="mt-2 text-gray-700 max-w-2xl">{pet.description}</p>
           {/if}
 
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
@@ -143,7 +144,7 @@ $effect(() => {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
-              <span>{owner.city.name}</span>
+              <span>{city.name}</span>
             </div>
               <div class="flex items-center gap-1">
                 🎂 {Math.floor((new Date().getTime() - pet.birth.getTime()) / 1000 / 3600 / 24 / 365)}
@@ -183,7 +184,11 @@ $effect(() => {
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 pb-8">
       <!-- Left Sidebar -->
       <div class="lg:col-span-1 space-y-6">
-        <UserCard user={owner}/>
+        {#if owner.isAssociation}
+          TODO AssociationCard
+        {:else}
+          <UserCard user={owner}/>
+        {/if}
       </div>
 
       <!-- Right Content - Feed -->
@@ -203,7 +208,10 @@ $effect(() => {
         {/if}
 
         {#each posts as post (post.id)}
-          <Post {post} currentUser={data.currentUser} />
+          {@const author = await getUser(post.author)}
+          {#if author}
+            <Post post={post} author={author} currentUser={data.currentUser} />
+          {/if}
         {/each}
 
         <!-- Load More -->

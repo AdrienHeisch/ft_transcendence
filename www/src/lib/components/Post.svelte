@@ -15,22 +15,21 @@ import {
   likePost,
   unlikePost,
 } from "$lib/posts.remote";
-import type { Post, User } from "$lib/server/db/schema";
+import type { Post, User, UserPublic } from "$lib/server/db/schema";
 import { getPetAvatar, getPostImage, getUserAvatar } from "$lib/storage";
+import { getFullName } from "$lib/user";
+import { getUser } from "$lib/user.remote";
 
 interface Props {
-  post: Omit<Post, "author"> & { author: User };
+  post: Post;
+  author: UserPublic;
   currentUser?: User;
   isFullPage?: boolean;
 }
 
-const { post: _post, currentUser, isFullPage = false }: Props = $props();
+const { post: post, author, currentUser, isFullPage = false }: Props = $props();
 
-const post = $derived({
-  ..._post,
-  pet: _post.pet ? await getPet(_post.pet) : undefined,
-});
-
+const pet = $derived(post.pet ? await getPet(post.pet) : undefined);
 const comments = $derived(getPostComments(post.id));
 
 let optionsOpen = $state(false);
@@ -40,7 +39,7 @@ let isEditing = $state(false);
 
 let isImageError = $state(false);
 
-const isOwned = $derived(currentUser?.id === post.author.id);
+const isOwned = $derived(currentUser?.id === author.id);
 const isLiked = $derived(isPostLiked(post.id));
 
 const onLikePost = async () => {
@@ -86,18 +85,17 @@ const closeEdit = () => {
   <!-- Post Header -->
   <div class="p-4 flex items-center gap-3">
     <div class="relative">
-      <a href={resolve(`/persons/${post.author.id}`)}>
+      <a href={resolve(`/persons/${author.id}`)}>
         <img 
-          src={getUserAvatar(post.author)} 
-          alt="{post.author.firstName} {post.author.lastName}"
+          src={getUserAvatar(author)}
+          alt={getFullName(author)}
           class="w-12 h-12 rounded-full border-2 border-orange-700"
         />
       </a>
-      {#if post.author.online}
+      {#if author.online}
         <div class="bg-green-500 absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white"></div>
       {/if}
-      {#if post.pet}
-        {@const pet = post.pet}
+      {#if pet}
         <a href={resolve(`/pets/${pet.id}`)}>
           {#if pet && pet.hasAvatar} <!-- keep `pet &&`, seems to fix a Svelte bug -->
             <img
@@ -116,8 +114,8 @@ const closeEdit = () => {
       {/if}
     </div>
     <div class="flex-1">
-      <a href={resolve(`/persons/${post.author.id}`)}>
-        <p class="font-semibold text-gray-900">{post.author.firstName} {post.author.lastName}</p>
+      <a href={resolve(`/persons/${author.id}`)}>
+        <p class="font-semibold text-gray-900">{getFullName(author)}</p>
       </a>
       <p class="text-sm text-gray-600">{post.postedAt}</p>
     </div>
@@ -199,7 +197,10 @@ const closeEdit = () => {
     {#if commentsOpen}
       <div class="flex flex-col content-center">
         {#each await comments as comment}
-          <Comment comment={comment} currentUser={currentUser} />
+          {@const author = await getUser(comment.author)}
+          {#if author}
+            <Comment comment={comment} author={author} currentUser={currentUser} />
+          {/if}
         {/each}
         <form class="m-1 p-4 bg-orange-50 rounded-lg border-2 border-orange-300 shadow" {...createComment}>
           <input {...createComment.fields.post.as("hidden", post.id)}/>

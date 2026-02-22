@@ -5,9 +5,10 @@ import { resolve } from "$app/paths";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { setMessageRead } from "$lib/messages.remote";
-import { getPerson } from "$lib/persons.remote";
 import { type ChatMessage } from "$lib/server/db/schema";
 import { getMessageFile, getUserAvatar } from "$lib/storage";
+import { getFullName } from "$lib/user";
+import { getUser } from "$lib/user.remote";
 
 const { data, params } = $props();
 
@@ -43,7 +44,7 @@ let ws: WebSocket | undefined = (() => {
   return ws;
 })();
 
-const friend = $derived(await getPerson(params.id));
+const friend = $derived(await getUser(params.id)); // TODO 404 if undefined
 const allMessages = $derived([...wsMessages, ...(await data.messages)]);
 
 async function sendMessage() {
@@ -69,7 +70,7 @@ async function sendMessage() {
 </script>
 
 <svelte:head>
-  <title>Chat with {friend?.firstName} - Bibi's Farm</title>
+  <title>{friend ? `Chat with ${friend.isAssociation ? friend.name : friend.firstName} - ` : ""}Bibi's Farm</title>
 </svelte:head>
 
 <div class="h-screen bg-[#f5e6d3] flex flex-col">
@@ -94,7 +95,7 @@ async function sendMessage() {
             <div class="relative">
               <img 
                 src={getUserAvatar(friend)} 
-                alt={friend.firstName}
+                alt={friend.isAssociation ? friend.name : friend.firstName}
                 class="w-12 h-12 rounded-full border-2 border-white bg-white object-cover"
               />
               {#if friend.online}
@@ -103,7 +104,7 @@ async function sendMessage() {
             </div>
             <div>
               <h1 class="text-xl font-bold text-white">
-                {friend.firstName} {friend.lastName}
+                {getFullName(friend)}
               </h1>
               <p class="text-sm text-white/80">
                 {friend.online ? "Online" : "Offline"}

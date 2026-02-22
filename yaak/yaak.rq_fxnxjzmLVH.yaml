@@ -1,0 +1,25 @@
+type: http_request
+model: http_request
+id: rq_fxnxjzmLVH
+createdAt: 2026-02-18T22:15:22.114956195
+updatedAt: 2026-02-18T22:36:32.320263288
+workspaceId: wk_2QS6rdg8gY
+folderId: fl_DGySAJzMcx
+authentication:
+  key: Api-Key
+  value: 9MLdflaYQesOWbMapFEiYdiC
+authenticationType: apikey
+body:
+  form:
+  - enabled: true
+    id: Sz4gmVUJkz
+    name: ''
+    value: ''
+bodyType: null
+description: ''
+headers: []
+method: DELETE
+name: /api/persons/[id]
+sortPriority: 4000.0
+url: http://localhost:8000/api/persons/8fd981a4-4cf6-454f-175f-448834ff977c
+urlParameters: []

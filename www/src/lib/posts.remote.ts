@@ -4,46 +4,37 @@ import z from "zod";
 import { command, form, query } from "$app/server";
 import { isLoggedIn, requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
-import type { Post, User } from "$lib/server/db/schema";
 import * as schema from "$lib/server/db/schema";
 import * as posts from "$lib/server/posts";
 import { PublicStorage } from "$lib/server/storage";
 import { POST_IMAGE_PREFIX } from "$lib/storage";
 import { bunFileSchema } from "./zodUtils";
 
-export type PostData = Omit<Post, "author"> & { author: User };
-
-const { apiKey, passwordHash, ...userColumns } = getTableColumns(schema.user);
-
 export const getPost = query.batch(z.string(), async (posts) => {
   const result = await db
-    .select({
-      ...getTableColumns(schema.post),
-      author: userColumns,
-    })
+    .select()
     .from(schema.post)
-    .where(inArray(schema.post.id, posts))
-    .innerJoin(schema.user, eq(schema.user.id, schema.post.author));
+    .where(inArray(schema.post.id, posts));
   const lookup = new Map(result.map((post) => [post.id, post]));
   return (post) => lookup.get(post);
 });
 
 export const getPosts = query(
   z.object({ author: z.string().optional(), pet: z.string().optional() }),
-  async ({ author, pet }) => {
+  ({ author, pet }) => {
     return db
-      .select({
-        ...getTableColumns(schema.post),
-        author: userColumns,
-      })
+      .select(getTableColumns(schema.post))
       .from(schema.post)
       .where(
         and(
-          author ? eq(schema.user.id, author) : undefined,
+          author ? eq(schema.userPublic.id, author) : undefined,
           pet ? eq(schema.post.pet, pet) : undefined,
         ),
       )
-      .innerJoin(schema.user, eq(schema.user.id, schema.post.author))
+      .innerJoin(
+        schema.userPublic,
+        eq(schema.post.author, schema.userPublic.id),
+      )
       .orderBy(desc(schema.post.postedAt))
       .limit(10);
   },
@@ -85,15 +76,11 @@ export const getPostCommentCount = query(z.string(), (id) => {
   return db.$count(schema.postComment, eq(schema.postComment.post, id));
 });
 
-export const getPostComments = query(z.string(), (id) => {
-  return db
-    .select({
-      ...getTableColumns(schema.postComment),
-      author: userColumns,
-    })
+export const getPostComments = query(z.string(), async (id) => {
+  return await db
+    .select()
     .from(schema.postComment)
     .where(eq(schema.postComment.post, id))
-    .innerJoin(schema.user, eq(schema.user.id, schema.postComment.author))
     .orderBy(asc(schema.postComment.postedAt));
 });
 

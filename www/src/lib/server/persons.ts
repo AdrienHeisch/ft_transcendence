@@ -31,26 +31,26 @@ export async function updatePerson(
     await PublicStorage.upload(USER_AVATAR_PREFIX + id, avatar, avatar.type);
     return (
       await db
-        .update(schema.user)
+        .update(schema.person)
         .set({ ...values, hasAvatar: true })
-        .where(eq(schema.user.id, id))
+        .where(eq(schema.person.id, id))
         .returning()
     ).at(0);
   } else if (removeAvatar) {
     await PublicStorage.delete(USER_AVATAR_PREFIX + id);
     return (
       await db
-        .update(schema.user)
+        .update(schema.person)
         .set({ ...values, hasAvatar: false })
-        .where(eq(schema.user.id, id))
+        .where(eq(schema.person.id, id))
         .returning()
     ).at(0);
   } else {
     return (
       await db
-        .update(schema.user)
+        .update(schema.person)
         .set(values)
-        .where(eq(schema.user.id, id))
+        .where(eq(schema.person.id, id))
         .returning()
     ).at(0);
   }

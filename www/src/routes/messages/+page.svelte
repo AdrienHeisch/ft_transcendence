@@ -2,6 +2,7 @@
 import { resolve } from "$app/paths";
 import { getPerson } from "$lib/persons.remote";
 import { getUserAvatar } from "$lib/storage";
+import { getUser } from "$lib/user.remote";
 
 const { data } = $props();
 
@@ -39,6 +40,7 @@ const chats = $derived(data.chats);
         {#each chats as chat}
           {@const friend = await getPerson(data.currentUser.id === chat.left ? chat.right : chat.left)}
           {#if friend && chat.lastMessage}
+            {@const isOnline = (await getUser(friend.id))?.online ?? false}
             <a 
               href={resolve(`/messages/${friend.id}`)}
               class="flex items-center gap-4 p-6 hover:bg-[#f5e6d3] transition-colors group"
@@ -50,7 +52,7 @@ const chats = $derived(data.chats);
                   alt={friend.firstName}
                   class="w-16 h-16 rounded-full border-3 border-[#8B4513] bg-white object-cover"
                 />
-                {#if friend.online}
+                {#if isOnline}
                   <div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                 {/if}
               </div>
@@ -70,7 +72,7 @@ const chats = $derived(data.chats);
                     {#if chat.new}
                       <span class="inline-block w-4 h-4 bg-blue-500 border-2 border-white rounded-full"></span>
                     {/if}
-                    {chat.lastMessage.author.firstName}: {chat.lastMessage.content}
+                    {chat.lastMessage.author.isAssociation ? chat.lastMessage.author.name : chat.lastMessage.author.firstName}: {chat.lastMessage.content}
                   </p>
                 {/if}
               </div>
