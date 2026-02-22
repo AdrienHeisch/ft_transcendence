@@ -4,7 +4,9 @@ export function getFullName(user: UserPublic) {
   return user.isAssociation ? user.name : `${user.firstName} ${user.lastName}`;
 }
 
-export function getProfileUrl(user: User | UserPublic): `/associations/${string}` | `/persons/${string}` {
+export function getProfileUrl(
+  user: User | UserPublic,
+): `/associations/${string}` | `/persons/${string}` {
   if ("isAssociation" in user) {
     return `/${user.isAssociation ? "associations" : "persons"}/${user.id}`;
   } else {
@@ -12,6 +14,8 @@ export function getProfileUrl(user: User | UserPublic): `/associations/${string}
   }
 }
 
-export function getFriendsUrl(user: User | UserPublic): `${ReturnType<typeof getProfileUrl>}/friends` {
+export function getFriendsUrl(
+  user: User | UserPublic,
+): `${ReturnType<typeof getProfileUrl>}/friends` {
   return `${getProfileUrl(user)}/friends`;
 }

@@ -8,7 +8,7 @@ import UserCard from "$lib/components/UserCard.svelte";
 import { deletePet, updatePet } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import { getPetAvatar } from "$lib/storage";
-    import { getProfileUrl } from "$lib/user";
+import { getProfileUrl } from "$lib/user";
 import { getUser } from "$lib/user.remote.js";
 
 const { data } = $props();

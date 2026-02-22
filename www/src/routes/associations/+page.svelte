@@ -33,15 +33,16 @@ const associations = $derived(
   }),
 );
 
-const emails = $derived.by(async () =>
-  new Map(
-    (await Promise.all(
-      associations.map(async (association) => [
-        association.id,
-        (await getUser(association.id))?.email,
-      ]),
-    )) as [string, string | undefined][],
-  ),
+const emails = $derived.by(
+  async () =>
+    new Map(
+      (await Promise.all(
+        associations.map(async (association) => [
+          association.id,
+          (await getUser(association.id))?.email,
+        ]),
+      )) as [string, string | undefined][],
+    ),
 );
 
 const associationsCount = $derived(await getTotalAssociationsCount());

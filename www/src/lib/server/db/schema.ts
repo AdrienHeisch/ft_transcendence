@@ -1,4 +1,4 @@
-import { eq, getTableColumns, isNotNull, lt, sql } from "drizzle-orm";
+import { eq, isNotNull, lt, sql } from "drizzle-orm";
 import {
   boolean,
   check,
@@ -106,11 +106,17 @@ export const userPublic = pgView("user_public").as((qb) => {
       id: user.id,
       email: user.email,
       online: user.online,
-      isAssociation: isNotNull(user.association).mapWith(Boolean).as("is_association"),
+      isAssociation: isNotNull(user.association)
+        .mapWith(Boolean)
+        .as("is_association"),
 
-      description: coalesce(person.description, association.description).as("description"),
+      description: coalesce(person.description, association.description).as(
+        "description",
+      ),
       city: coalesce(person.city, association.city).as("city"),
-      hasAvatar: coalesce(person.hasAvatar, association.hasAvatar).as("has_avatar"),
+      hasAvatar: coalesce(person.hasAvatar, association.hasAvatar).as(
+        "has_avatar",
+      ),
 
       firstName: person.firstName,
       lastName: person.lastName,

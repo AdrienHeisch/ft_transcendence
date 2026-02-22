@@ -34,7 +34,10 @@ export const getPets = query(
     const query = db
       .select(getTableColumns(schema.pet))
       .from(schema.pet)
-      .innerJoin(schema.userPublic, eq(schema.userPublic.id, schema.pet.ownerId))
+      .innerJoin(
+        schema.userPublic,
+        eq(schema.userPublic.id, schema.pet.ownerId),
+      )
       .where(
         and(
           or(

@@ -198,7 +198,11 @@ export default async function seedDb() {
   await db.insert(schema.usersPair).values(usersPairs);
   await db.insert(schema.chatMessage).values(chatMessages);
   console.log("Inserting default entries...");
-  const [userA, userB] = await db.select().from(schema.user).where(isNotNull(schema.user.person)).limit(2);
+  const [userA, userB] = await db
+    .select()
+    .from(schema.user)
+    .where(isNotNull(schema.user.person))
+    .limit(2);
   await db
     .update(schema.user)
     .set({
@@ -245,8 +249,12 @@ export default async function seedDb() {
       hasAvatar: true,
     })
     .where(eq(schema.person.id, userB.id));
-  const [userC] = await db.select().from(schema.user).where(isNotNull(schema.user.association)).limit(1);
-  console.log(userC)
+  const [userC] = await db
+    .select()
+    .from(schema.user)
+    .where(isNotNull(schema.user.association))
+    .limit(1);
+  console.log(userC);
   await db
     .update(schema.user)
     .set({
