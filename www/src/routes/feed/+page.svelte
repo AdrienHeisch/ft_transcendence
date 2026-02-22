@@ -2,6 +2,7 @@
 import Post from "$lib/components/Post.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
 import { getPosts } from "$lib/posts.remote";
+import { getUser } from "$lib/user.remote";
 
 const { data } = $props();
 
@@ -26,7 +27,10 @@ const posts = $derived(await getPosts({}));
       <!-- Posts -->
 			<div class="space-y-4">
         {#each posts as post}
-          <Post {post} currentUser={data.currentUser} />
+          {@const author = await getUser(post.author)}
+          {#if author}
+            <Post post={post} author={author} currentUser={data.currentUser} />
+          {/if}
         {/each}
 			</div>
 		</section>

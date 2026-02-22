@@ -1,6 +1,6 @@
 <script lang="ts">
 import Pagination from "$lib/components/Pagination.svelte";
-import { getPets } from "$lib/pets.remote";
+import { getPets, getTotalPetsCount } from "$lib/pets.remote";
 import { getPetAvatar } from "$lib/storage";
 
 const PAGE_SIZE = 12;
@@ -24,7 +24,7 @@ const pets = $derived(
 
 const species = $derived(await data.species);
 
-const petsCount = $derived(pets.at(0)?.count ?? 0);
+const petsCount = $derived(await getTotalPetsCount());
 
 function resetCurrentPage() {
   currentPage = 0;
@@ -157,7 +157,7 @@ function resetCurrentPage() {
               </div>
 
               <p class="text-sm text-[#8B4513] mb-4 line-clamp-2">
-                {pet.bio}
+                {pet.description}
               </p>
 
               <!-- Buttons -->

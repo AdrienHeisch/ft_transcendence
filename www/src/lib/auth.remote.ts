@@ -37,16 +37,23 @@ export const register = form(
     });
 
     try {
+      // TODO associations
+      await db.insert(schema.person).values({
+        id: userId,
+        firstName,
+        lastName,
+        description: "",
+        city,
+        hasAvatar: false,
+      });
+
       await db.insert(schema.user).values({
         id: userId,
         apiKey: auth.generateSessionToken(), // TODO is this ok ?
         email,
         passwordHash,
-        firstName,
-        lastName,
-        bio: "",
-        city,
-        hasAvatar: false,
+        person: userId,
+        association: null,
         online: false,
       });
 

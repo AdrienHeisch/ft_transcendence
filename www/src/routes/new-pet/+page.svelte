@@ -97,7 +97,7 @@ let fileUpload = $state<FileUpload>();
                   Description
                   <textarea
                     id="bio"
-                    {...createPet.fields.bio.as("text")}
+                    {...createPet.fields.description.as("text")}
                     placeholder="A friendly and playful companion..."
                     rows="4"
                     class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium resize-none"

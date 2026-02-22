@@ -1,4 +1,5 @@
 <script lang="ts">
+import { getUser } from "$lib/user.remote";
 import type { PageData } from "./$types";
 
 let { data }: { data: PageData } = $props();
@@ -17,6 +18,7 @@ const association = $derived({
   isFollowing: false,
 });
 
+const email = $derived((await getUser(association.id))?.email);
 const stats = [
   { icon: "🐾", value: "45", label: "Animals" },
   { icon: "👥", value: "1,247", label: "Followers" },
@@ -173,7 +175,7 @@ function getPostBadge(type: string) {
             </div>
             <div class="flex items-center gap-1">
               <span>📧</span>
-              <span>{association.email}</span>
+              <span>{email}</span>
             </div>
             <div class="flex items-center gap-1">
               <span>📞</span>

@@ -13,7 +13,10 @@ import {
 import { updatePerson } from "$lib/persons.remote";
 import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
+import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
+import { getFullName } from "$lib/user";
+import { getUser } from "$lib/user.remote";
 
 const COVER_IMAGE =
   "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg";
@@ -24,11 +27,23 @@ let isEditMode = $state(false);
 let fileUpload = $state<FileUpload>();
 let removeAvatar = $state(false);
 
-const user = $derived(await data.user);
+const user = $derived(
+  (await data.user) as UserPublic & { isAssociation: false },
+);
+const city = $derived(
+  (await data.cities).find((city) => city.code === user.city),
+);
 
 const postsQuery = $derived(getPosts({ author: user.id }));
 const posts = $derived(await postsQuery);
-const friends = $derived(await getUserFriends(user.id));
+const friends = $derived(
+  (await getUserFriends(user.id)).map(({ status, ...friend }) => {
+    return {
+      status,
+      ...(friend as UserPublic),
+    };
+  }),
+);
 const pets = $derived(
   getPets({
     owner: user.id,
@@ -141,9 +156,9 @@ $effect(() => {
               class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
               rows=1
               {...updatePerson.fields.bio.as("text")}
-            >{user.bio}</textarea>
+            >{user.description}</textarea>
           {:else}
-            <p class="mt-2 text-gray-700 max-w-2xl">{user.bio}</p>
+            <p class="mt-2 text-gray-700 max-w-2xl">{user.description}</p>
           {/if}
 
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
@@ -157,16 +172,16 @@ $effect(() => {
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
                     {...updatePerson.fields.city.as("select")}
                   >
-                    {#each await data.cities as city}
-                    {#if city.code === user.city.code}
-                      <option selected value={city.code}>{city.name}</option>
+                    {#each await data.cities as cityOption}
+                    {#if cityOption.code === city?.code}
+                      <option selected value={cityOption.code}>{cityOption.name}</option>
                     {:else}
-                      <option value={city.code}>{city.name}</option>
+                      <option value={cityOption.code}>{cityOption.name}</option>
                     {/if}
                     {/each}
                   </select>
                 {:else}
-                  <span>{user.city.name}</span>
+                  <span>{city?.name}</span>
                 {/if}
               </div>
             <div class="flex items-center gap-1">
@@ -258,8 +273,8 @@ $effect(() => {
               <div class="aspect-square rounded-lg overflow-hidden border-2 border-orange-700 hover:border-orange-900 transition-all duration-200 cursor-pointer">
                 <a href={resolve(`/persons/${friend.id}`)}><img 
                   src={getUserAvatar(friend)}
-                  alt="{friend.firstName} {friend.lastName}"
-                  title="{friend.firstName} {friend.lastName}"
+                  alt="{getFullName(friend)}"
+                  title="{getFullName(friend)}"
                   class="w-full h-full object-cover"
                 /></a>
               </div>
@@ -324,7 +339,10 @@ $effect(() => {
         {/if}
 
         {#each posts as post (post.id)}
-          <Post {post} currentUser={data.currentUser} />
+          {@const author = await getUser(post.author)}
+          {#if author}
+            <Post post={post} author={author} currentUser={data.currentUser} />
+          {/if}
         {/each}
 
         <!-- Load More -->

@@ -2,21 +2,23 @@
 import { slide } from "svelte/transition";
 import { resolve } from "$app/paths";
 import { deleteComment, editComment } from "$lib/posts.remote";
-import type { PostComment, User } from "$lib/server/db/schema";
+import type { PostComment, User, UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
+import { getFullName } from "$lib/user";
 
 interface Props {
-  comment: Omit<PostComment, "author"> & { author: User };
+  comment: PostComment;
+  author: UserPublic;
   currentUser?: User;
 }
 
-const { comment, currentUser }: Props = $props();
+const { comment, author, currentUser }: Props = $props();
 
 let optionsOpen = $state(false);
 
 let isEditing = $state(false);
 
-const isOwned = $derived(currentUser?.id === comment.author.id);
+const isOwned = $derived(currentUser?.id === author.id);
 
 const onDelete = async () => {
   optionsOpen = false;
@@ -36,21 +38,21 @@ const closeEdit = () => {
 
 <div transition:slide class="relative m-1 p-4 bg-linear-to-br from-yellow-50 to-orange-50 rounded-lg border-2 border-orange-300 shadow">
   <div class="flex items-center gap-3 mb-3">
-    <a href={resolve(`/persons/${comment.author.id}`)}>
+    <a href={resolve(`/persons/${author.id}`)}>
       <div class="relative">
         <img 
-          src={getUserAvatar(comment.author)} 
-          alt="{comment.author.firstName} {comment.author.lastName}"
+          src={getUserAvatar(author)}
+          alt={getFullName(author)}
           class="w-12 h-12 rounded-full border-2 border-orange-700"
         />
-        {#if comment.author.online}
+        {#if author.online}
           <div class={["bg-green-500", "absolute", "bottom-0", "right-0", "w-3", "h-3", "rounded-full", "border-2", "border-white"]}></div>
         {/if}
       </div>
     </a>
     <div class="flex-1">
-      <a href={resolve(`/persons/${comment.author.id}`)}>
-        <div class="font-semibold text-orange-900">{comment.author.firstName} {comment.author.lastName}</div>
+      <a href={resolve(`/persons/${author.id}`)}>
+        <div class="font-semibold text-orange-900">{getFullName(author)}</div>
       </a>
       <div class="text-xs text-gray-600">{comment.postedAt}</div>
     </div>

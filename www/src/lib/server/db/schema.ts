@@ -1,10 +1,11 @@
-import { lt } from "drizzle-orm";
+import { eq, getTableColumns, isNotNull, lt, sql } from "drizzle-orm";
 import {
   boolean,
   check,
   index,
   pgEnum,
   pgTable,
+  pgView,
   point,
   primaryKey,
   text,
@@ -12,6 +13,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
+import { coalesce } from "../../queryUtils";
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
@@ -26,19 +28,36 @@ export const session = pgTable("session", {
 
 export type Session = typeof session.$inferSelect;
 
-export const user = pgTable("user", {
+export const user = pgTable(
+  "user",
+  {
+    id: uuid("id").primaryKey(),
+    apiKey: text("api_key").unique().notNull(),
+    email: text("email").notNull().unique(),
+    passwordHash: text("password_hash").notNull(),
+    online: boolean("online").notNull(),
+    person: uuid("person").references(() => person.id),
+    association: uuid("association").references(() => association.id),
+  },
+  (table) => [
+    check(
+      "unique_profile",
+      sql`num_nonnulls(${table.person}, ${table.association}) = 1`,
+    ),
+  ],
+);
+
+export type User = typeof user.$inferSelect;
+
+export const person = pgTable("person", {
   id: uuid("id").primaryKey(),
-  apiKey: text("api_key").unique().notNull(),
-  email: text("email").notNull().unique(),
-  passwordHash: text("password_hash").notNull(),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
-  bio: text("bio").notNull(),
+  description: text("description").notNull(),
   city: text("city")
     .references(() => city.code)
     .notNull(),
   hasAvatar: boolean("has_avatar").notNull(),
-  online: boolean("online").notNull(),
   joinedAt: timestamp("joined_at", {
     withTimezone: true,
     mode: "date",
@@ -47,10 +66,72 @@ export const user = pgTable("user", {
     .defaultNow(),
 });
 
-export type User = Omit<
-  Omit<typeof user.$inferSelect, "apiKey">,
-  "passwordHash"
->;
+export type Person = typeof person.$inferSelect;
+
+export const associationType = pgEnum("association_type", [
+  "Sanctuary",
+  "Rescue",
+  "Adoption",
+  "Care",
+]);
+
+export const associationTypeSchema = createSelectSchema(associationType);
+export type AssociationType = (typeof associationType.enumValues)[number];
+
+export const association = pgTable("association", {
+  id: uuid("id").primaryKey(),
+  name: text("name").notNull(),
+  phone: text("phone").notNull(),
+  description: text("description").notNull(),
+  city: text("city")
+    .references(() => city.code)
+    .notNull(),
+  hasAvatar: boolean("has_avatar").notNull(),
+  type: associationType("type").notNull(),
+  foundedAt: timestamp("founded_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
+
+export type Association = typeof association.$inferSelect;
+
+export type PersonOrAssociation =
+  | ({ isAssociation: false } & Person)
+  | ({ isAssociation: true } & Association);
+
+export const userPublic = pgView("user_public").as((qb) => {
+  const query = qb
+    .select({
+      id: user.id,
+      email: user.email,
+      online: user.online,
+      isAssociation: isNotNull(user.association).mapWith(Boolean).as("is_association"),
+
+      description: coalesce(person.description, association.description).as("description"),
+      city: coalesce(person.city, association.city).as("city"),
+      hasAvatar: coalesce(person.hasAvatar, association.hasAvatar).as("has_avatar"),
+
+      firstName: person.firstName,
+      lastName: person.lastName,
+      joinedAt: person.joinedAt,
+
+      name: association.name,
+      phone: association.phone,
+      type: association.type,
+      foundedAt: association.foundedAt,
+    })
+    .from(user)
+    .leftJoin(person, eq(user.id, person.id))
+    .leftJoin(association, eq(user.id, association.id));
+  return query;
+});
+
+export type UserPublic = Omit<
+  typeof userPublic.$inferSelect,
+  "isAssociation" | keyof Person | keyof Association
+> &
+  PersonOrAssociation;
 
 export const pet = pgTable("pet", {
   id: uuid("id").primaryKey(),
@@ -64,7 +145,7 @@ export const pet = pgTable("pet", {
     withTimezone: true,
     mode: "date",
   }).notNull(),
-  bio: text("description").notNull(),
+  description: text("description").notNull(),
   hasAvatar: boolean("has_avatar").notNull(),
 });
 
@@ -168,31 +249,3 @@ export const city = pgTable(
 );
 
 export type City = typeof city.$inferSelect;
-
-export const associationType = pgEnum("association_type", [
-  "Sanctuary",
-  "Rescue",
-  "Adoption",
-  "Care",
-]);
-
-export const associationTypeSchema = createSelectSchema(associationType);
-export type AssociationType = (typeof associationType.enumValues)[number];
-
-export const association = pgTable("association", {
-  id: uuid("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull(),
-  phone: text("phone").notNull(),
-  description: text("description").notNull(),
-  city: text("city")
-    .references(() => city.code)
-    .notNull(),
-  type: associationType("type").notNull(),
-  foundedAt: timestamp("founded_at", {
-    withTimezone: true,
-    mode: "date",
-  }).notNull(),
-});
-
-export type Association = typeof association.$inferSelect;

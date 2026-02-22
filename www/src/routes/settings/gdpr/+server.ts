@@ -15,6 +15,15 @@ export const GET: RequestHandler = async () => {
   const { passwordHash, ...user } = requireLogin();
   const data = {
     ...user,
+    person: (
+      await db.select().from(schema.person).where(eq(schema.person.id, user.id))
+    ).at(0),
+    association: (
+      await db
+        .select()
+        .from(schema.association)
+        .where(eq(schema.association.id, user.id))
+    ).at(0),
     pets: await db
       .select()
       .from(schema.pet)
@@ -33,7 +42,7 @@ export const GET: RequestHandler = async () => {
       .where(eq(schema.chatMessage.author, user.id)),
   };
   const publicFileKeys = [
-    ...(user.hasAvatar ? [USER_AVATAR_PREFIX + user.id] : []),
+    ...(data.person?.hasAvatar ? [USER_AVATAR_PREFIX + user.id] : []),
     ...data.pets
       .filter((pet) => pet.hasAvatar)
       .map((pet) => PET_AVATAR_PREFIX + pet.id),
@@ -65,6 +74,9 @@ export const GET: RequestHandler = async () => {
       ];
     }),
   );
+  const name = data.person
+    ? `${data.person.firstName.toLowerCase()}_${data.person.lastName.toLowerCase()}`
+    : (data.association?.name ?? "");
   return new Response(
     await new Bun.Archive(
       {
@@ -75,7 +87,7 @@ export const GET: RequestHandler = async () => {
     ).blob(),
     {
       headers: {
-        "Content-Disposition": `attachment; filename="bibis_farm_data_${user.firstName.toLowerCase()}_${user.lastName.toLowerCase()}.tar.gz"`,
+        "Content-Disposition": `attachment; filename="bibis_farm_data_${name}.tar.gz"`,
         "Content-Type": "application/gzip",
       },
     },

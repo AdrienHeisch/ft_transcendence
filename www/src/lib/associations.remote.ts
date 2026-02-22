@@ -1,4 +1,4 @@
-import { and, eq, getTableColumns, ilike, inArray, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray } from "drizzle-orm";
 import z from "zod";
 import { query } from "$app/server";
 import * as schema from "$lib/server/db/schema";
@@ -33,7 +33,6 @@ export const getAssociations = query(
       .select({
         ...getTableColumns(schema.association),
         city: getTableColumns(schema.city),
-        count: sql`count(*) over()`.mapWith(Number),
       })
       .from(schema.association)
       .where(
@@ -50,6 +49,10 @@ export const getAssociations = query(
     if (limit) query.limit(limit);
     return query;
   },
+);
+
+export const getTotalAssociationsCount = query(() =>
+  db.$count(schema.association),
 );
 
 export const getPetsCount = query(z.string(), (id) => {

@@ -11,7 +11,7 @@ export const GET: RequestHandler = async ({ url }) => {
   // TODO sortBy
   const posts = (await getPosts({ author, pet })).map((post) => ({
     ...post,
-    author: post.author.id,
+    author: post.author,
   }));
   return new Response(JSON.stringify(posts));
 };

@@ -1,13 +1,16 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import type { City, User } from "$lib/server/db/schema";
+import { getCity } from "$lib/city.remote";
+import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
 
 interface Props {
-  user: Omit<User, "city"> & { city: City };
+  user: UserPublic & { isAssociation: false };
 }
 
 const { user }: Props = $props();
+
+const city = $derived(await getCity(user.city));
 </script>
 
 <div
@@ -40,7 +43,7 @@ const { user }: Props = $props();
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
         </svg>
-        <span>{user.city.name}</span>
+        <span>{city?.name}</span>
       </div>
       <div class="flex items-center gap-1">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +54,7 @@ const { user }: Props = $props();
     </div>
 
     <p class="text-sm text-gray-700 mb-4 line-clamp-2 italic">
-      "{user.bio}"
+      "{user.description}"
     </p>
 
     <!-- Buttons -->

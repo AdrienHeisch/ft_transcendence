@@ -1,0 +1,13 @@
+type: folder
+model: folder
+id: fl_7EqqShqWX2
+createdAt: 2026-02-18T23:25:08.860018024
+updatedAt: 2026-02-19T01:12:59.975533745
+workspaceId: wk_2QS6rdg8gY
+folderId: null
+authentication: {}
+authenticationType: null
+description: ''
+headers: []
+name: Posts Copy
+sortPriority: 3000.0

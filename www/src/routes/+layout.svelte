@@ -21,7 +21,7 @@ const sidebarMainItems = $derived(
       ? {
           label: "Profile",
           icon: "👤",
-          href: `/persons/${data.currentUser.id}`,
+          href: `/${data.currentUser.association ? "associations" : "persons"}/${data.currentUser.id}`,
         }
       : { label: "Feed", icon: "📰", href: "/feed" },
     // { label: "Groups", icon: "👥" },

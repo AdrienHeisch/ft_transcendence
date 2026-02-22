@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request }) => {
     .object({
       name: z.string(),
       birth: z.coerce.date(),
-      bio: z.string(),
+      description: z.string(),
       species: z.string(),
       breed: z.string(),
       avatar: z.file(),

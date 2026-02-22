@@ -8,19 +8,17 @@ import * as schema from "$lib/server/db/schema";
 import * as persons from "$lib/server/persons";
 import { bunFileSchema } from "./zodUtils";
 
-const { apiKey, passwordHash, ...userColumns } = getTableColumns(schema.user);
-
 export const getPerson = query.batch(z.string(), async (persons) => {
   const result = await db
     .select({
-      ...userColumns,
+      ...getTableColumns(schema.person),
       city: getTableColumns(schema.city),
     })
-    .from(schema.user)
-    .where(inArray(schema.user.id, persons))
-    .innerJoin(schema.city, eq(schema.city.code, schema.user.city));
-  const lookup = new Map(result.map((user) => [user.id, user]));
-  return (user) => lookup.get(user);
+    .from(schema.person)
+    .where(inArray(schema.person.id, persons))
+    .innerJoin(schema.city, eq(schema.city.code, schema.person.city));
+  const lookup = new Map(result.map((person) => [person.id, person]));
+  return (person) => lookup.get(person);
 });
 
 export const getPersons = query(
@@ -34,23 +32,25 @@ export const getPersons = query(
   ({ search, city, sortBy, offset, limit }) => {
     const query = db
       .select({
-        ...userColumns,
+        ...getTableColumns(schema.person),
         city: getTableColumns(schema.city),
         count: sql`count(*) over()`.mapWith(Number),
       })
-      .from(schema.user)
+      .from(schema.person)
       .where(
         and(
           or(
-            ilike(schema.user.firstName, `%${search}%`),
-            ilike(schema.user.lastName, `%${search}%`),
+            ilike(schema.person.firstName, `%${search}%`),
+            ilike(schema.person.lastName, `%${search}%`),
           ),
-          city ? eq(schema.user.city, city) : undefined,
+          city ? eq(schema.person.city, city) : undefined,
         ),
       )
-      .innerJoin(schema.city, eq(schema.city.code, schema.user.city))
+      .innerJoin(schema.city, eq(schema.city.code, schema.person.city))
       .orderBy(
-        sortBy === "firstName" ? schema.user.firstName : schema.user.lastName,
+        sortBy === "firstName"
+          ? schema.person.firstName
+          : schema.person.lastName,
       )
       .$dynamic();
     if (offset) query.offset(offset);
