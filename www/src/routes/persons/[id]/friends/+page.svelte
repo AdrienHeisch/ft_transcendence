@@ -3,7 +3,7 @@ import { resolve } from "$app/paths";
 import { getUserFriends } from "$lib/friends.remote";
 import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
-import { getFullName } from "$lib/user";
+import { getFullName, getProfileUrl } from "$lib/user";
 
 const { data } = $props();
 
@@ -71,7 +71,7 @@ const isCurrentUser = $derived(data.currentUser?.id === data.user?.id);
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {#each friends.filter((friend) => friend.status === "friends") as friend (friend.id)}
           <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg border-4 border-orange-700 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300">
-            <a href={resolve(`/persons/${friend.id}`)} class="block">
+            <a href={resolve(getProfileUrl(friend))} class="block">
               <!-- Friend Avatar -->
               <div class="relative h-48 bg-linear-to-br from-orange-400 to-orange-600">
                 <img 

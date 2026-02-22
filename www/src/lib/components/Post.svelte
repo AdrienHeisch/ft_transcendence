@@ -17,7 +17,7 @@ import {
 } from "$lib/posts.remote";
 import type { Post, User, UserPublic } from "$lib/server/db/schema";
 import { getPetAvatar, getPostImage, getUserAvatar } from "$lib/storage";
-import { getFullName } from "$lib/user";
+import { getFullName, getProfileUrl } from "$lib/user";
 import { getUser } from "$lib/user.remote";
 
 interface Props {
@@ -85,7 +85,7 @@ const closeEdit = () => {
   <!-- Post Header -->
   <div class="p-4 flex items-center gap-3">
     <div class="relative">
-      <a href={resolve(`/persons/${author.id}`)}>
+      <a href={resolve(getProfileUrl(author))}>
         <img 
           src={getUserAvatar(author)}
           alt={getFullName(author)}
@@ -114,7 +114,7 @@ const closeEdit = () => {
       {/if}
     </div>
     <div class="flex-1">
-      <a href={resolve(`/persons/${author.id}`)}>
+      <a href={resolve(getProfileUrl(author))}>
         <p class="font-semibold text-gray-900">{getFullName(author)}</p>
       </a>
       <p class="text-sm text-gray-600">{post.postedAt}</p>

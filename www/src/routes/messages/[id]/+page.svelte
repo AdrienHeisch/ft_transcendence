@@ -7,7 +7,7 @@ import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { setMessageRead } from "$lib/messages.remote";
 import { type ChatMessage } from "$lib/server/db/schema";
 import { getMessageFile, getUserAvatar } from "$lib/storage";
-import { getFullName } from "$lib/user";
+import { getFullName, getProfileUrl } from "$lib/user";
 import { getUser } from "$lib/user.remote";
 
 const { data, params } = $props();
@@ -114,7 +114,7 @@ async function sendMessage() {
 
           <!-- Profile button -->
           <a 
-            href={resolve(`/persons/${friend.id}`)}
+            href={resolve(getProfileUrl(friend))}
             class="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg font-semibold transition-colors"
           >
             View Profile

@@ -3,6 +3,7 @@ import { resolve } from "$app/paths";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { createPet } from "$lib/pets.remote";
+import { getProfileUrl } from "$lib/user";
 
 const { data } = $props();
 
@@ -150,7 +151,7 @@ let fileUpload = $state<FileUpload>();
 
             <div class="text-center mt-4">
               <a
-                href={resolve(`/persons/${data.currentUser?.id}`)}
+                href={data.currentUser && resolve(getProfileUrl(data.currentUser))}
                 class="text-[#8B4513] hover:text-[#CC5500] font-semibold transition-colors"
               >
                 ← Cancel and go back
