@@ -254,7 +254,6 @@ export default async function seedDb() {
     .from(schema.user)
     .where(isNotNull(schema.user.association))
     .limit(1);
-  console.log(userC);
   await db
     .update(schema.user)
     .set({
