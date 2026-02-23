@@ -17,6 +17,10 @@ const friends = $derived(
 const isCurrentUser = $derived(data.currentUser?.id === data.user?.id);
 </script>
 
+<svelte:head>
+  <title>Friends - Bibi's Farm</title>
+</svelte:head>
+
 <div class="min-h-screen relative">
   <!-- Background Image de ferme -->
   <div class="fixed inset-0">

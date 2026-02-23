@@ -9,6 +9,10 @@ const { data } = $props();
 const posts = $derived(await getPosts({}));
 </script>
 
+<svelte:head>
+  <title>Feed - Bibi's Farm</title>
+</svelte:head>
+
 <!-- Zone de contenu principal -->
 <main class="flex-1 p-6 bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
 	<div class="max-w-2xl mx-auto">

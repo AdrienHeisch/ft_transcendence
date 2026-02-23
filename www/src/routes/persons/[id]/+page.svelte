@@ -72,6 +72,10 @@ $effect(() => {
 });
 </script>
 
+<svelte:head>
+  <title>{getFullName(user)} - Bibi's Farm</title>
+</svelte:head>
+
 <div class="min-h-screen relative bg-linear-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95">
   <!-- Cover Image -->
   <div class="relative h-80 bg-linear-to-r from-orange-700 via-orange-600 to-amber-600">

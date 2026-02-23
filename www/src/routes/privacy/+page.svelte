@@ -1,6 +1,10 @@
 <script lang="ts">
 </script>
 
+<svelte:head>
+  <title>Privacy Policy - Bibi's Farm</title>
+</svelte:head>
+
 <div class="bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
 	<main class="max-w-4xl mx-auto p-8">
 		<div class="bg-white rounded-xl shadow-lg border-3 border-orange-400 p-8">
