@@ -1,7 +1,7 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import Post from "$lib/components/Post.svelte";
 import { getPetsCount } from "$lib/associations.remote";
+import Post from "$lib/components/Post.svelte";
 import { getPosts } from "$lib/posts.remote";
 import { getUser } from "$lib/user.remote";
 import type { PageData } from "./$types";
@@ -25,10 +25,10 @@ const animalsCount = $derived(await getPetsCount(association.id));
 // Use real posts from the database
 const posts = $derived(await getPosts({ author: association.id }));
 
-const stats = [
+const stats = $derived([
   { icon: "🐾", value: animalsCount.toString(), label: "Animals" },
   { icon: "📅", value: association.foundedAt.toString(), label: "Founded" },
-];
+]);
 </script>
 
 <svelte:head>
@@ -160,7 +160,10 @@ const stats = [
       <!-- Posts Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#each posts as post (post.id)}
-          <Post {post} currentUser={data.currentUser ?? undefined} />
+          {@const author = await getUser(post.author)}
+          {#if author}
+            <Post {post} author={author} currentUser={data.currentUser ?? undefined} />
+          {/if}
         {/each}
 
         {#if posts.length === 0}
