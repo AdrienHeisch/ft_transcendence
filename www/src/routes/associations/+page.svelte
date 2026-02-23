@@ -218,12 +218,12 @@ function resetCurrentPage() {
 
               <!-- Buttons -->
               <div class="flex gap-2">
-                <a href={resolve(`/associations/${association.id}`)} class="text-center flex-1 py-2 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
+                <a href={resolve(`/associations/${association.id}`)} class="text-center flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
                   👁️ View profile
                 </a>
-                <button class="flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
+                <a href={resolve(`/messages/${association.id}`)} class="text-center flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
                   💬 Contact
-                </button>
+                </a>
               </div>
             </div>
           </div>
