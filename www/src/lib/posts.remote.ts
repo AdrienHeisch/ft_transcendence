@@ -20,9 +20,14 @@ export const getPost = query.batch(z.string(), async (posts) => {
 });
 
 export const getPosts = query(
-  z.object({ author: z.string().optional(), pet: z.string().optional() }),
-  ({ author, pet }) => {
-    return db
+  z.object({
+    author: z.string().optional(),
+    pet: z.string().optional(),
+    offset: z.int().optional(),
+    limit: z.int().optional(),
+  }),
+  ({ author, pet, offset, limit }) => {
+    const query = db
       .select(getTableColumns(schema.post))
       .from(schema.post)
       .where(
@@ -36,7 +41,10 @@ export const getPosts = query(
         eq(schema.post.author, schema.userPublic.id),
       )
       .orderBy(desc(schema.post.postedAt))
-      .limit(10);
+      .$dynamic();
+    if (offset) query.offset(offset);
+    if (limit) query.limit(limit);
+    return query;
   },
 );
 

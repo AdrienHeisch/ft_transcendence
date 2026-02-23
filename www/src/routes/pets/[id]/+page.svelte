@@ -2,14 +2,13 @@
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
 import FileUpload from "$lib/components/FileUpload.svelte";
-import Post from "$lib/components/Post.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
+import PostsFeed from "$lib/components/PostsFeed.svelte";
 import UserCard from "$lib/components/UserCard.svelte";
 import { deletePet, updatePet } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import { getPetAvatar } from "$lib/storage";
 import { getProfileUrl } from "$lib/user";
-import { getUser } from "$lib/user.remote.js";
 
 const { data } = $props();
 
@@ -208,17 +207,7 @@ $effect(() => {
           </div>
         {/if}
 
-        {#each posts as post (post.id)}
-          {@const author = await getUser(post.author)}
-          {#if author}
-            <Post post={post} author={author} currentUser={data.currentUser} />
-          {/if}
-        {/each}
-
-        <!-- Load More -->
-        <button class="w-full py-4 bg-yellow-50 backdrop-blur-sm rounded-2xl shadow-lg border-4 border-orange-700 text-amber-900 font-bold hover:bg-orange-100 hover:border-orange-900 transition-all duration-200">
-          View more posts
-        </button>
+        <PostsFeed queryArgs={{ pet: pet.id }} currentUser={data.currentUser} />
       </div>
     </div>
   </div>

@@ -3,6 +3,7 @@ import { resolve } from "$app/paths";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import Post from "$lib/components/Post.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
+import PostsFeed from "$lib/components/PostsFeed.svelte";
 import {
   acceptFriend,
   addFriend,
@@ -342,17 +343,7 @@ $effect(() => {
           </div>
         {/if}
 
-        {#each posts as post (post.id)}
-          {@const author = await getUser(post.author)}
-          {#if author}
-            <Post post={post} author={author} currentUser={data.currentUser} />
-          {/if}
-        {/each}
-
-        <!-- Load More -->
-        <button class="w-full py-4 bg-yellow-50 backdrop-blur-sm rounded-2xl shadow-lg border-4 border-orange-700 text-amber-900 font-bold hover:bg-orange-100 hover:border-orange-900 transition-all duration-200">
-          View more posts
-        </button>
+        <PostsFeed queryArgs={{ author: user.id }} currentUser={data.currentUser} />
       </div>
     </div>
   </div>

@@ -1,12 +1,9 @@
 <script lang="ts">
-import Post from "$lib/components/Post.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
+import PostsFeed from "$lib/components/PostsFeed.svelte";
 import { getPosts } from "$lib/posts.remote";
-import { getUser } from "$lib/user.remote";
 
 const { data } = $props();
-
-const posts = $derived(await getPosts({}));
 </script>
 
 <svelte:head>
@@ -30,13 +27,8 @@ const posts = $derived(await getPosts({}));
 
       <!-- Posts -->
 			<div class="space-y-4">
-        {#each posts as post}
-          {@const author = await getUser(post.author)}
-          {#if author}
-            <Post post={post} author={author} currentUser={data.currentUser} />
-          {/if}
-        {/each}
-			</div>
+        <PostsFeed /> 
+      </div>
 		</section>
 	</div>
 </main>
