@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker";
 import { hash } from "@node-rs/argon2";
-import { encodeBase64url } from "@oslojs/encoding";
 import { eq, isNotNull } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { reset } from "drizzle-seed";
@@ -41,7 +40,7 @@ export default async function seedDb() {
   const postLikes: PostLike[] = [];
   const usersPairs: UsersPair[] = [];
   const chatMessages: ChatMessage[] = [];
-  const userIds = Array.from({ length: N_USERS }, () => crypto.randomUUID());
+  const userIds = Array.from({ length: N_USERS }, () => faker.string.uuid());
   for (const userId of userIds) {
     const isAssociation = faker.datatype.boolean({ probability: 0.2 });
     if (isAssociation) {
@@ -68,7 +67,7 @@ export default async function seedDb() {
     }
     users.push({
       id: userId,
-      apiKey: encodeBase64url(crypto.getRandomValues(new Uint8Array(18))), // TODO is this ok ?
+      apiKey: faker.string.sample({ min: 24, max: 24 }),
       email: faker.internet.email(),
       passwordHash: await hash(faker.internet.password(), {
         // recommended minimum parameters
@@ -91,7 +90,7 @@ export default async function seedDb() {
       });
       i++
     ) {
-      const petId = crypto.randomUUID();
+      const petId = faker.string.uuid();
       petIds.push(petId);
       pets.push({
         id: petId,
@@ -116,8 +115,16 @@ export default async function seedDb() {
         hasAvatar: false,
       });
     }
-    for (let i = 0; i < faker.number.int({ min: 0, max: 20 }); i++) {
-      const postId = crypto.randomUUID();
+    for (
+      let i = 0;
+      i <
+      faker.number.int({
+        min: isAssociation ? 10 : 0,
+        max: isAssociation ? 25 : 10,
+      });
+      i++
+    ) {
+      const postId = faker.string.uuid();
       posts.push({
         id: postId,
         author: userId,
@@ -130,7 +137,7 @@ export default async function seedDb() {
       });
       for (let j = 0; j < faker.number.int({ min: 0, max: 10 }); j++) {
         postComments.push({
-          id: crypto.randomUUID(),
+          id: faker.string.uuid(),
           author: faker.helpers.arrayElement(userIds),
           post: postId,
           content: faker.helpers.arrayElement(seedTexts.postContents),
@@ -155,7 +162,7 @@ export default async function seedDb() {
     }
   }
   const usersPairIds = Array.from({ length: N_USERS * 10 }, () =>
-    crypto.randomUUID(),
+    faker.string.uuid(),
   );
   for (const usersPairId of usersPairIds) {
     const generatePair = () => ({
@@ -185,7 +192,7 @@ export default async function seedDb() {
     });
     for (let i = 0; i < faker.number.int({ min: 0, max: 10 }); i++) {
       chatMessages.push({
-        id: crypto.randomUUID(),
+        id: faker.string.uuid(),
         friendsId: usersPairId,
         author: faker.helpers.arrayElement([pair.left, pair.right]),
         content: faker.helpers.arrayElement(seedTexts.chatMessages),
