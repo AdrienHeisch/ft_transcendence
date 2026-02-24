@@ -9,6 +9,7 @@ import * as schema from "$lib/server/db/schema";
 import * as pets from "$lib/server/pets";
 import { PublicStorage } from "$lib/server/storage";
 import { PET_AVATAR_PREFIX } from "$lib/storage";
+import { TEXT_LIMITS } from "$lib/textLimits";
 import { getPetOwner } from "./server/pets";
 import { bunFileSchema } from "./zodUtils";
 
@@ -73,9 +74,9 @@ export const getPetsCount = query(
 
 export const createPet = form(
   z.object({
-    name: z.string(),
+    name: z.string().max(TEXT_LIMITS.PET_NAME),
     birth: z.iso.date().transform((birth) => new Date(birth)),
-    description: z.string(),
+    description: z.string().max(TEXT_LIMITS.PET_DESCRIPTION),
     species: z.string(),
     breed: z.string(),
     avatar: bunFileSchema(),
@@ -90,8 +91,8 @@ export const createPet = form(
 export const updatePet = form(
   z.object({
     id: z.string(),
-    name: z.string(),
-    description: z.string(),
+    name: z.string().max(TEXT_LIMITS.PET_NAME),
+    description: z.string().max(TEXT_LIMITS.PET_DESCRIPTION),
     avatar: bunFileSchema().optional(),
     removeAvatar: z.stringbool(),
   }),

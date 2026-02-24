@@ -1,4 +1,5 @@
 <script lang="ts">
+import { TEXT_LIMITS } from "$lib/textLimits";
 import * as remote from "$lib/auth.remote";
 
 const { data } = $props();
@@ -256,6 +257,7 @@ $effect(() =>
               name="firstName"
               type="text"
               required
+              maxlength={TEXT_LIMITS.USER_FIRST_NAME}
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
               placeholder="First name"
               bind:value={firstName}
@@ -272,6 +274,7 @@ $effect(() =>
               name="lastName"
               type="text"
               required
+              maxlength={TEXT_LIMITS.USER_LAST_NAME}
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
               placeholder="Last name"
               bind:value={lastName}

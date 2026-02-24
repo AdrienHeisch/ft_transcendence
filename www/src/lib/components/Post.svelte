@@ -17,6 +17,7 @@ import {
 } from "$lib/posts.remote";
 import type { Post, User, UserPublic } from "$lib/server/db/schema";
 import { getPetAvatar, getPostImage, getUserAvatar } from "$lib/storage";
+import { TEXT_LIMITS } from "$lib/textLimits";
 import { getFullName, getProfileUrl } from "$lib/user";
 import { getUser } from "$lib/user.remote";
 
@@ -209,6 +210,7 @@ const closeEdit = () => {
             placeholder="What's new?"
             rows="3"
             required
+            maxlength={TEXT_LIMITS.COMMENT_CONTENT}
             {...createComment.fields.content.as("text")}
           ></textarea>
           <div class="flex justify-end mt-2">
