@@ -32,7 +32,11 @@ async function onLoaderVisibilityChange(isVisible: boolean) {
       isLoaderVisible = true;
       isLoadingMore = true;
       offset += PAGE_SIZE;
-      const newPosts = await getPosts({ offset, limit: PAGE_SIZE, ...queryArgs });
+      const newPosts = await getPosts({
+        offset,
+        limit: PAGE_SIZE,
+        ...queryArgs,
+      });
       posts = posts.concat(newPosts);
       isLoadingMore = false;
     }
