@@ -94,7 +94,10 @@ export const getPostComments = query(z.string(), async (id) => {
 });
 
 export const createComment = form(
-  z.object({ post: z.string(), content: z.string().max(TEXT_LIMITS.COMMENT_CONTENT) }),
+  z.object({
+    post: z.string(),
+    content: z.string().max(TEXT_LIMITS.COMMENT_CONTENT),
+  }),
   async ({ post, content }) => {
     const user = requireLogin();
     await db.insert(schema.postComment).values({
@@ -112,7 +115,10 @@ export const createComment = form(
 );
 
 export const editComment = form(
-  z.object({ id: z.string(), content: z.string().max(TEXT_LIMITS.COMMENT_CONTENT) }),
+  z.object({
+    id: z.string(),
+    content: z.string().max(TEXT_LIMITS.COMMENT_CONTENT),
+  }),
   async ({ id, content }) => {
     const user = requireLogin();
     const [comment] = await db
@@ -172,7 +178,10 @@ export const createPost = form(
 );
 
 export const editPost = form(
-  z.object({ id: z.string(), content: z.string().max(TEXT_LIMITS.POST_CONTENT) }),
+  z.object({
+    id: z.string(),
+    content: z.string().max(TEXT_LIMITS.POST_CONTENT),
+  }),
   async ({ id, content }) => {
     const user = requireLogin();
     await db

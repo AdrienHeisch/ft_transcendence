@@ -1,6 +1,6 @@
 <script lang="ts">
-import { TEXT_LIMITS } from "$lib/textLimits";
 import * as remote from "$lib/auth.remote";
+import { TEXT_LIMITS } from "$lib/textLimits";
 
 const { data } = $props();
 
