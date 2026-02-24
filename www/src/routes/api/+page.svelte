@@ -12,7 +12,7 @@ const apiRoutes: Route[] = [
   {
     route: "/api/persons",
     method: "GET",
-    description: "",
+    description: "Recupere une liste d'utilisateurs pouvant être filtrée par nom, par ville ou par prenom/nom",
     parameters: [
       {
         name: "search",
@@ -33,14 +33,20 @@ const apiRoutes: Route[] = [
   },
   {
     route: "/api/persons/[id]",
-    method: "GET",
-    description: "",
-    parameters: [],
+    method: "DELETE",
+    description: "Supprime l'utilisateur actuellement connecté.", 
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant de l'utilisateur a supprimer"
+      }
+    ],
   },
   {
     route: "/api/persons/[id]",
     method: "PUT",
-    description: "",
+    description: "Met à jour les informations de l'utilisateur actuellement connecté.",
     parameters: [
       {
         name: "firstName",
@@ -53,7 +59,7 @@ const apiRoutes: Route[] = [
         description: "Last name",
       },
       {
-        name: "bio",
+        name: "description",
         type: "string",
         description: "Profile description",
       },
@@ -76,149 +82,352 @@ const apiRoutes: Route[] = [
   },
   {
     route: "/api/persons/[id]",
-    method: "DELETE",
-    description: "",
-    parameters: [],
+    method: "GET",
+    description: "Récupère les informations de l'utilisateur identifié par l'id.",
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant de l'utilisateur a récupérer"
+      }
+    ],
   },
   {
     route: "/api/associations",
     method: "GET",
-    description: "",
-    parameters: [],
+    description: "Rend une liste d'associations filtree selon les criteres fournit",
+    parameters: [
+      {
+        name: "name",
+        type: "string",
+        description: "Recherche par Nom/mot clef(query param)",
+      },
+      {
+        name: "city",
+        type: "string",
+        description: "Recherche par nom de ville(query param)",
+      },
+      {
+        name: "sortBy",
+        type: '"name" | "type"',
+        description: "Tri des resultats par nom ou par type(query param)",
+      },
+      {
+        name: "type",
+        type: "string",
+        description: "filtre par type d'association(query param)",
+      }
+    ],
   },
   {
     route: "/api/associations/[id]",
     method: "GET",
-    description: "",
-    parameters: [],
+    description: "Recupere les informations de l'association identifiee par l'id",
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant de l'association a récupérer"
+      }
+    ],
   },
-  {
-    route: "/api/associations/[id]",
-    method: "PUT",
-    description: "",
-    parameters: [],
-  },
-  {
-    route: "/api/associations/[id]",
-    method: "DELETE",
-    description: "",
-    parameters: [],
-  },
-  {
+  { 
     route: "/api/pets",
     method: "GET",
-    description: "",
-    parameters: [],
+    description: "Retourne une liste d'animaux filtrée selon les critères fournis",
+    parameters: [
+      {
+        name: "name",
+        type: "string",
+        description: "Recherche par nom ou description(query param)",
+      },
+      {
+        name: "owner",
+        type: "string",
+        description: "Filtre par identifiant du propriétaire(query param)",
+      },
+      {
+        name: "species",
+        type: "string",
+        description: "Filtre par espèce(query param)",
+      },
+      {
+        name: "sortBy",
+        type: '"name" | "species"',
+        description: "Tri des resultats par nom ou par espèce(query param)",
+      },
+    ],
   },
   {
     route: "/api/pets",
     method: "POST",
-    description: "",
-    parameters: [],
+    description: "Creer un nouvelle animal avec les informations fournies",
+    parameters: [
+      {
+        name: "name",
+        type: "string",
+        description: "Nom de l'animal",
+      },
+      {
+        name: "birth",
+        type: "date",
+        description: "Date de naissance de l'animal",
+      },
+      {
+        name: "description",
+        type: "string",
+        description: "Description de l'animal",
+      },
+      {
+        name: "species",
+        type: "string",
+        description: "Espèce de l'animal",
+      },
+      {
+        name: "breed",
+        type: "string",
+        description: "Race de l'animal",
+      },
+      {
+        name: "avatar",
+        type: "File",
+        description: "Image de profil de l'animal",
+      },
+    ],
   },
   {
     route: "/api/pets/[id]",
     method: "GET",
-    description: "",
-    parameters: [],
+    description: "Retourne les informations de l'animal identifié par l'id",
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant de l'animal à récupérer"
+      }
+    ],
   },
   {
     route: "/api/pets/[id]",
     method: "PUT",
-    description: "",
-    parameters: [],
+    description: "Mettre a jour les informations de l'animal identifié par l'id",
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant de l'animal à mettre à jour"
+      },
+      {
+        name: "name",
+        type: "string",
+        description: "Nom de l'animal", 
+      },
+      {
+        name: "description",
+        type: "string",
+        description: "Description de l'animal",
+      },
+      {
+        name: "avatar",
+        type: "File",
+        description: "Nouvelle image de profil de l'animal",
+      },
+      {
+        name: "removeAvatar",
+        type: "boolean",
+        description: "Image a supprimer si true",
+      }
+    ],
   },
   {
     route: "/api/pets/[id]",
     method: "DELETE",
-    description: "",
-    parameters: [],
+    description: "Supprime l'animal identifié par l'id",
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant de l'animal à supprimer"
+      }
+    ],
   },
   {
     route: "/api/posts",
     method: "GET",
-    description: "",
-    parameters: [],
+    description: "Recupere une liste de posts, pouvant être filtrée par auteur ou par mot-clé",
+    parameters: [
+      {
+        name: "author",
+        type: "string",
+        description: "Filtre les posts par identifiant d'auteur(query param)",
+      },
+      {
+        name: "pet",
+        type: "string",
+        description: "Filtre les posts par nom d'animal(query param)",
+      },
+    ],
   },
   {
     route: "/api/posts",
     method: "POST",
-    description: "",
-    parameters: [],
+    description: "Creer un nouveau post avec les informations fournies",
+    parameters: [
+      {
+        name: "content",
+        type: "string",
+        description: "Contenu du post",
+      },
+      {
+        name: "pet",
+        type: "string",
+        description: "Nom de l'animal associé au post",
+      },
+      {
+        name: "file",
+        type: "File",
+        description: "Fichier joint au post (optionnel)",
+      },
+    ],
   },
   {
     route: "/api/posts/[id]",
     method: "GET",
-    description: "",
-    parameters: [],
+    description: "Recuperer un post identifié par l'id",
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant du post à récupérer"
+      }
+    ],
   },
   {
     route: "/api/posts/[id]",
     method: "PUT",
-    description: "",
-    parameters: [],
+    description: "Modifier un POST identifié par l'id",
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant du post à modifier"
+      }
+    ],
   },
   {
     route: "/api/posts/[id]",
     method: "DELETE",
-    description: "",
-    parameters: [],
+    description: "Supprime un post identifié par l'id",
+    parameters: [
+      {
+        name: "id",
+        type: "string",
+        description: "Identifiant du post à supprimer"
+      }
+    ],
   },
   {
     route: "/api/posts/[id]/comments",
     method: "GET",
-    description: "",
-    parameters: [],
+    description: "Recupere les commentaires d'un post identifié par l'idPost",
+    parameters: [
+      {
+        name: "postId",
+        type: "string",
+        description: "Identifiant du post dont on veut récupérer les commentaires"
+      }
+    ],
   },
   {
     route: "/api/posts/[id]/comments",
     method: "POST",
-    description: "",
-    parameters: [],
+    description: "Ajouter un commentaire a un post existant identifié par l'idPost",
+    parameters: [
+      {
+        name: "postId",
+        type: "string",
+        description: "Identifiant du post auquel on veut ajouter un commentaire"
+      }
+    ],
   },
   {
     route: "/api/posts/[id]/comments/[id]",
-    method: "GET",
-    description: "",
-    parameters: [],
+    method: "GET", 
+    description: "Recupere un commentaire precis",
+    parameters: [
+      {
+        name: "commentId",
+        type: "string",
+        description: "Identifiant du commentaire à récupérer"
+      }
+    ],
   },
   {
     route: "/api/posts/[id]/comments/[id]",
     method: "PUT",
-    description: "",
-    parameters: [],
-  },
+    description: "Modifie un commentaire identifié par l'idComment",
+    parameters: [
+      {
+        name: "commentId",
+        type: "string",
+        description: "Identifiant du commentaire à modifier"
+      },
+      {
+        name: "content",
+        type: "string",
+        description: "Nouveau contenu du commentaire"
+      }
+    ],
+   },
   {
     route: "/api/posts/[id]/comments/[id]",
     method: "DELETE",
-    description: "",
-    parameters: [],
+    description: "Supprime un commentaire identifié par l'idComment",
+    parameters: [
+      {
+        name: "commentId",
+        type: "string",
+        description: "Identifiant du commentaire à supprimer"
+      }
+    ],
   },
 ];
 </script>
 
-<div>
-  <h1>API documentation</h1>
-  <p>Authentication: set the "Api-Key" header in your requests to the key found in your account settings.</p>
-  <p>Parameters: GET requests take arguments in the URL query string, other requests should have a multipart/formdata encoded body.</p>
-  <h2>Routes</h2>
-  <div>
+<div class="max-w-6xl mx-auto p-6">
+  <!-- Hero section -->
+  <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-8 mb-10 shadow-lg">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-sm">API Documentation</h1>
+    <p class="text-lg md:text-xl mb-6">
+      Explore all the available routes and understand how to interact with our API.
+    </p>
+
+  </div>
+  
+  <h2 class="text-2xl font-semibold mb-4" >Routes</h2>
+  
+  <div class="space-y-6">
     {#each apiRoutes as apiRoute}
-      <div>
-        <p>{apiRoute.route}</p>
-        <p>{apiRoute.method}</p>
-        <p>{apiRoute.description}</p>
-        {#if apiRoute.method === "GET"}
-          <p>Query parameters:</p>
-        {:else}
-          <p>Parameters:</p>
-        {/if}
-        <ul>
+      <div class="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <div class="flex justify-between items-center mb-2">
+          <p class="font-medium text-lg">{apiRoute.route}</p>
+          <span class="px-3 py-1 rounded text-white text-sm font-semibold 
+            {apiRoute.method === "GET" ? 'bg-green-500' :
+             apiRoute.method === "POST" ? 'bg-blue-500' :
+             apiRoute.method === "PUT" ? 'bg-yellow-500' :
+             'bg-red-500'}"> 
+            {apiRoute.method}
+          </span>" 
+        </div>
+          
+        <p class="text-gray-700 mb-3">{apiRoute.description}</p>
+        <p class="font-semibold mb-1">Parameters </p>
+        <ul class="space-y-2">
           {#each apiRoute.parameters as param}
-            <li>
-              <p>{param.name}</p>
-              <p>{param.type}</p>
-              <p>{param.description}</p>
+            <li class="border rounded  p-2 bg-gray-50">
+              <p class="font-medium">{param.name}</p>
+              <p class="text-sm text-gray-600">Type:{param.type}</p>
+              <p class="text-gray-700">{param.description}</p>
             </li>
           {/each}
         </ul>
