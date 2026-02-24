@@ -1,16 +1,18 @@
 import { error } from "@sveltejs/kit";
-import { getAssociation } from "$lib/associations.remote";
 import { promiseToRemoteQuery } from "$lib/typeUtils";
+import { getUser } from "$lib/user.remote";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({
-  data: { currentUser },
+  data: { currentUser, cities },
   params: { id },
 }) => {
-  const association = getAssociation(id);
-  if (!(await association)) error(404);
+  const user = getUser(id);
+  const associationResult = await user;
+  if (!associationResult || !associationResult.isAssociation) error(404);
   return {
     currentUser,
-    association: promiseToRemoteQuery(association),
+    cities,
+    association: promiseToRemoteQuery(user),
   };
 };

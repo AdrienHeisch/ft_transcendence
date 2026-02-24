@@ -1,8 +1,12 @@
+import { error } from "@sveltejs/kit";
 import { and, eq, getTableColumns, ilike, inArray } from "drizzle-orm";
 import z from "zod";
-import { query } from "$app/server";
+import { form, query } from "$app/server";
+import * as associations from "$lib/server/associations";
 import * as schema from "$lib/server/db/schema";
+import { requireLogin } from "./server/auth";
 import { db } from "./server/db";
+import { bunFileSchema } from "./zodUtils";
 
 export const getAssociation = query.batch(z.string(), async (associations) => {
   const result = await db
@@ -58,3 +62,22 @@ export const getTotalAssociationsCount = query(() =>
 export const getPetsCount = query(z.string(), (id) => {
   return db.$count(schema.pet, eq(schema.pet.ownerId, id));
 });
+
+export const updateAssociation = form(
+  z.object({
+    id: z.string(),
+    name: z.string(),
+    phone: z.string(),
+    description: z.string(),
+    city: z.string(),
+    avatar: bunFileSchema().optional(),
+    removeAvatar: z.stringbool(),
+  }),
+  async (association) => {
+    if (association.id !== requireLogin().id) {
+      error(403);
+    }
+    await associations.updateAssociation(association.id, association);
+    await getAssociation(association.id).refresh();
+  },
+);

@@ -1,7 +1,6 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import FileUpload from "$lib/components/FileUpload.svelte";
-import Post from "$lib/components/Post.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
 import PostsFeed from "$lib/components/PostsFeed.svelte";
 import {
@@ -17,7 +16,6 @@ import { getPosts } from "$lib/posts.remote";
 import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
 import { getFriendsUrl, getFullName, getProfileUrl } from "$lib/user";
-import { getUser } from "$lib/user.remote";
 
 const COVER_IMAGE =
   "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg";

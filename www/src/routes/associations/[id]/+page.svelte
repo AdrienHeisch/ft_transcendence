@@ -1,34 +1,67 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { getPetsCount } from "$lib/associations.remote";
-import Post from "$lib/components/Post.svelte";
+import { getPetsCount, updateAssociation } from "$lib/associations.remote";
+import FileUpload from "$lib/components/FileUpload.svelte";
+import PostsFeed from "$lib/components/PostsFeed.svelte";
+import {
+  acceptFriend,
+  addFriend,
+  getFriends,
+  removeFriend,
+} from "$lib/friends.remote";
 import { getPosts } from "$lib/posts.remote";
+import type { UserPublic } from "$lib/server/db/schema";
+import { getUserAvatar } from "$lib/storage";
 import { getUser } from "$lib/user.remote";
 import type { PageData } from "./$types";
 
 let { data }: { data: PageData } = $props();
 
-const _association = $derived(await data.association);
+let isEditMode = $state(false);
+let fileUpload = $state<FileUpload>();
+let removeAvatar = $state(false);
 
 // TODO remove fake data
 const association = $derived({
-  ..._association,
+  ...((await data.association) as UserPublic & { isAssociation: true }),
   logo: "🐄",
   coverImage:
     "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920&h=400&fit=crop",
   website: "www.fermeheureuse.fr",
 });
+const city = $derived(
+  (await data.cities).find((city) => city.code === association.city),
+);
+
+const isCurrentUser = $derived(data.currentUser?.id === association.id);
 
 const email = $derived((await getUser(association.id))?.email);
 const animalsCount = $derived(await getPetsCount(association.id));
 
-// Use real posts from the database
-const posts = $derived(await getPosts({ author: association.id }));
+const postsQuery = $derived(getPosts({ author: association.id }));
+const posts = $derived(await postsQuery);
 
 const stats = $derived([
   { icon: "🐾", value: animalsCount.toString(), label: "Animals" },
   { icon: "📅", value: association.foundedAt.toString(), label: "Founded" },
 ]);
+
+const hasAvatar = $derived(
+  (!removeAvatar && association.hasAvatar) || (fileUpload?.hasFile() ?? false),
+);
+const avatarUrl = $derived.by(() => {
+  const file = fileUpload?.getFile();
+  if (file && isEditMode) {
+    return URL.createObjectURL(file);
+  }
+  return getUserAvatar({ id: association.id, hasAvatar });
+});
+
+$effect(() => {
+  if (fileUpload?.hasFile()) {
+    removeAvatar = false;
+  }
+});
 </script>
 
 <svelte:head>
@@ -59,26 +92,98 @@ const stats = $derived([
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative">
     <!-- Profile Header -->
     <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
-      <div class="flex flex-col md:flex-row items-center md:items-end gap-6">
-        <!-- Logo -->
+      <form enctype="multipart/form-data" {...updateAssociation.enhance(async ({ submit }) => {
+        await submit();
+        await data.association.refresh();
+        await postsQuery.refresh();
+        isEditMode = false;
+        // location.reload(); // TODO there might be a better way to reload all images on the page
+      })} class="flex flex-col md:flex-row items-center md:items-end gap-6">
+        <input {...updateAssociation.fields.id.as("hidden", association.id)} />
+
+        <!-- Profile Picture -->
         <div class="relative">
-          <div class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white flex items-center justify-center text-8xl">
-            {association.logo}
-          </div>
-          <div class="absolute bottom-2 right-2 px-3 py-1 bg-orange-600 text-white rounded-full text-xs font-bold shadow-lg">
-            {association.type}
-          </div>
+          <img 
+            src={avatarUrl} 
+            alt={association.name}
+            class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
+          />
+          {#if isEditMode}
+            <input
+              name="removeAvatar"
+              type="hidden"
+              bind:value={removeAvatar}
+            />
+            {#if hasAvatar}
+              <button
+                type="button"
+                onclick={() => {
+                  fileUpload?.clearFiles();
+                  removeAvatar = true;
+                }}
+                class={["absolute", "bottom-2", "left-2", "px-1", "border-3", "rounded-2xl", "bg-gray-300", "border-white"]}
+              >
+                🗑️
+              </button>
+            {/if}
+            <label class="block">
+              <FileUpload
+                bind:this={fileUpload}
+                name="avatar"
+                accept="image/*"
+              />
+              <div class={["absolute", "bottom-2", "right-2", "px-1", "border-3", "rounded-2xl", "bg-gray-300", "border-white"]}>📸</div>
+            </label>
+          {:else}
+            <div class={[association.online ? "bg-green-500" : "bg-gray-300", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
+          {/if}
         </div>
 
         <!-- Association Info -->
         <div class="flex-1 text-center md:text-left">
-          <h1 class="text-3xl font-bold text-gray-900" style="font-family: Georgia, serif;">{association.name}</h1>
-          <p class="mt-2 text-gray-700 max-w-2xl">{association.description}</p>
+          {#if isEditMode}
+            <div class="flex">
+              <textarea
+                class="text-3xl font-bold text-gray-900 border rounded bg-yellow-100 resize-none"
+                rows=1
+                {...updateAssociation.fields.name.as("text")}
+              >{association.name}</textarea>
+            </div>
+          {:else}
+            <h1 class="text-3xl font-bold text-gray-900" style="font-family: Georgia, serif;">{association.name}</h1>
+          {/if}
+          {#if isEditMode}
+            <textarea
+              class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
+              rows=1
+              {...updateAssociation.fields.description.as("text")}
+            >{association.description}</textarea>
+          {:else}
+            <p class="mt-2 text-gray-700 max-w-2xl">{association.description}</p>
+          {/if}
 
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
             <div class="flex items-center gap-1">
-              <span>📍</span>
-              <span>{association.city.name}</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              {#if isEditMode}
+                <select
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
+                  {...updateAssociation.fields.city.as("select")}
+                >
+                  {#each await data.cities as cityOption}
+                  {#if cityOption.code === city?.code}
+                    <option selected value={cityOption.code}>{cityOption.name}</option>
+                  {:else}
+                    <option value={cityOption.code}>{cityOption.name}</option>
+                  {/if}
+                  {/each}
+                </select>
+              {:else}
+                <span>{city?.name}</span>
+              {/if}
             </div>
             <div class="flex items-center gap-1">
               <span>📧</span>
@@ -86,7 +191,17 @@ const stats = $derived([
             </div>
             <div class="flex items-center gap-1">
               <span>📞</span>
-              <span>{association.phone}</span>
+              {#if isEditMode}
+                <div class="flex">
+                  <textarea
+                    class="text-gray-900 border rounded bg-yellow-100 resize-none"
+                    rows=1
+                    {...updateAssociation.fields.phone.as("text")}
+                  >{association.phone}</textarea>
+                </div>
+              {:else}
+                <span>{association.phone}</span>
+              {/if}
             </div>
             <div class="flex items-center gap-1">
               <span>🌐</span>
@@ -96,16 +211,54 @@ const stats = $derived([
         </div>
 
         <!-- Action Buttons -->
+        <!-- Action Buttons -->
         <div class="flex gap-3">
-          <a 
-            href={resolve(`/messages/${association.id}`)}
-            class="px-6 py-3 bg-yellow-50 border-2 border-orange-700 text-amber-900 rounded-lg font-medium hover:bg-yellow-100 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2"
-          >
-            <span>💬</span>
-            <span>Contact</span>
-          </a>
+          {#if isCurrentUser}
+            {#if isEditMode}
+              <button type="submit" class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                Save profile
+              </button>
+            {:else}
+              <button type="button" onclick={() => isEditMode = true} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                Edit profile
+              </button>
+            {/if}
+          {:else if data.currentUser}
+            {@const friend = (await getFriends()).find((friend) => association.id === friend.id)}
+            {#if friend}
+              {#if friend.status == "received"}
+                <button onclick={() => acceptFriend(association.id)} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  Accept invitation
+                </button>
+              {:else if friend.status}
+                <button onclick={() => removeFriend(association.id)} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  {#if friend.status == "sent"}
+                    Invitation sent
+                  {:else}
+                    Friends
+                  {/if}
+                </button>
+              {/if}
+            {:else}
+              <button onclick={() => addFriend(association.id)} class="px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                </svg>
+                Add friend
+              </button>
+            {/if}
+            <a href={resolve(`/messages/${association.id}`)} class="px-6 py-3 bg-yellow-50 border-2 border-orange-700 text-amber-900 rounded-lg font-medium hover:bg-yellow-100 transition-all duration-200 shadow-md hover:shadow-lg">
+              Message
+            </a>
+          {/if}
         </div>
-      </div>
+      </form>
 
       <!-- Stats -->
       <div class="flex justify-center md:justify-start gap-8 mt-6 pt-6 border-t-2 border-orange-700">
@@ -159,12 +312,7 @@ const stats = $derived([
 
       <!-- Posts Feed -->
       <div class="lg:col-span-2 space-y-6">
-        {#each posts as post (post.id)}
-          {@const author = await getUser(post.author)}
-          {#if author}
-            <Post {post} author={author} currentUser={data.currentUser ?? undefined} />
-          {/if}
-        {/each}
+        <PostsFeed queryArgs={{ author: association.id }} currentUser={data.currentUser} />
 
         {#if posts.length === 0}
           <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-12 border-4 border-orange-700 text-center">
