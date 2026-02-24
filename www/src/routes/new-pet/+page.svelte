@@ -3,6 +3,7 @@ import { resolve } from "$app/paths";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { createPet } from "$lib/pets.remote";
+import { TEXT_LIMITS } from "$lib/textLimits";
 import { getProfileUrl } from "$lib/user";
 
 const { data } = $props();
@@ -47,6 +48,7 @@ let fileUpload = $state<FileUpload>();
                     {...createPet.fields.name.as("text")}
                     placeholder="Garfield"
                     required
+                    maxlength={TEXT_LIMITS.PET_NAME}
                     class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
                   />
                 </label>
@@ -98,6 +100,7 @@ let fileUpload = $state<FileUpload>();
                   Description
                   <textarea
                     {...createPet.fields.description.as("text")}
+                    maxlength={TEXT_LIMITS.PET_DESCRIPTION}
                     placeholder="A friendly and playful companion..."
                     rows="4"
                     class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium resize-none"

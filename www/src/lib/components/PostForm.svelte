@@ -5,6 +5,7 @@ import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { getPets } from "$lib/pets.remote";
 import { createPost } from "$lib/posts.remote";
 import { type Pet, type User } from "$lib/server/db/schema";
+import { TEXT_LIMITS } from "$lib/textLimits";
 import RemoteForm from "./RemoteForm.svelte";
 
 interface Props {
@@ -36,6 +37,7 @@ const pets = $derived(
     class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white"
     placeholder="What's new?"
     rows="3"
+    maxlength={TEXT_LIMITS.POST_CONTENT}
     {...createPost.fields.content.as("text")}
     required
   ></textarea>

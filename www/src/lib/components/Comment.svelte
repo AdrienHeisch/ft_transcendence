@@ -4,6 +4,7 @@ import { resolve } from "$app/paths";
 import { deleteComment, editComment } from "$lib/posts.remote";
 import type { PostComment, User, UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
+import { TEXT_LIMITS } from "$lib/textLimits";
 import { getFullName, getProfileUrl } from "$lib/user";
 
 interface Props {
@@ -75,7 +76,10 @@ const closeEdit = () => {
   {#if isEditing}
     <form {...editComment} onsubmit={closeEdit}>
       <input {...editComment.fields.id.as("hidden", comment.id)}/>
-      <textarea class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white" {...editComment.fields.content.as("text")}
+      <textarea 
+        class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white" 
+        maxlength={TEXT_LIMITS.COMMENT_CONTENT}
+        {...editComment.fields.content.as("text")}
       >{comment.content}</textarea>
       <div class="flex mt-1">
         <div class="flex-1"></div>

@@ -7,6 +7,7 @@ import { command, form, getRequestEvent } from "$app/server";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
+import { TEXT_LIMITS } from "$lib/textLimits";
 import { PublicStorage } from "./server/storage";
 import {
   PET_AVATAR_PREFIX,
@@ -51,8 +52,8 @@ export const registerPerson = form(
   z.object({
     email: z.email(),
     password: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().max(TEXT_LIMITS.USER_FIRST_NAME),
+    lastName: z.string().max(TEXT_LIMITS.USER_LAST_NAME),
     city: z.string(),
   }),
   async ({ email, password, firstName, lastName, city }) => {
@@ -82,7 +83,7 @@ export const registerAssociation = form(
   z.object({
     email: z.email(),
     password: z.string(),
-    name: z.string(),
+    name: z.string().max(TEXT_LIMITS.ASSOCIATION_NAME),
     phone: z.string(),
     type: schema.associationTypeSchema,
     foundedAt: z.iso.date().transform((foundedAt) => new Date(foundedAt)),

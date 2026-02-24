@@ -6,6 +6,7 @@ import { requireLogin } from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import * as persons from "$lib/server/persons";
+import { TEXT_LIMITS } from "$lib/textLimits";
 import { bunFileSchema } from "./zodUtils";
 
 export const getPerson = query.batch(z.string(), async (persons) => {
@@ -70,9 +71,9 @@ export const getPersonsCount = query(
 export const updatePerson = form(
   z.object({
     id: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
-    description: z.string(),
+    firstName: z.string().max(TEXT_LIMITS.USER_FIRST_NAME),
+    lastName: z.string().max(TEXT_LIMITS.USER_LAST_NAME),
+    description: z.string().max(TEXT_LIMITS.USER_DESCRIPTION),
     city: z.string(),
     avatar: bunFileSchema().optional(),
     removeAvatar: z.stringbool(),

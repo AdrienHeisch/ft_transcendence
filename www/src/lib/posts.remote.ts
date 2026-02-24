@@ -8,6 +8,7 @@ import * as schema from "$lib/server/db/schema";
 import * as posts from "$lib/server/posts";
 import { PublicStorage } from "$lib/server/storage";
 import { POST_IMAGE_PREFIX } from "$lib/storage";
+import { TEXT_LIMITS } from "$lib/textLimits";
 import { bunFileSchema } from "./zodUtils";
 
 export const getPost = query.batch(z.string(), async (posts) => {
@@ -93,7 +94,7 @@ export const getPostComments = query(z.string(), async (id) => {
 });
 
 export const createComment = form(
-  z.object({ post: z.string(), content: z.string() }),
+  z.object({ post: z.string(), content: z.string().max(TEXT_LIMITS.COMMENT_CONTENT) }),
   async ({ post, content }) => {
     const user = requireLogin();
     await db.insert(schema.postComment).values({
@@ -111,7 +112,7 @@ export const createComment = form(
 );
 
 export const editComment = form(
-  z.object({ id: z.string(), content: z.string() }),
+  z.object({ id: z.string(), content: z.string().max(TEXT_LIMITS.COMMENT_CONTENT) }),
   async ({ id, content }) => {
     const user = requireLogin();
     const [comment] = await db
@@ -154,7 +155,7 @@ export const deleteComment = command(z.string(), async (id) => {
 
 export const createPost = form(
   z.object({
-    content: z.string(),
+    content: z.string().max(TEXT_LIMITS.POST_CONTENT),
     pet: z.string().optional(),
     file: bunFileSchema(),
   }),
@@ -171,7 +172,7 @@ export const createPost = form(
 );
 
 export const editPost = form(
-  z.object({ id: z.string(), content: z.string() }),
+  z.object({ id: z.string(), content: z.string().max(TEXT_LIMITS.POST_CONTENT) }),
   async ({ id, content }) => {
     const user = requireLogin();
     await db
