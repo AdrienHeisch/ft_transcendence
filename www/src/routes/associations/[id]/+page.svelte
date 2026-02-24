@@ -9,6 +9,7 @@ import {
   getFriends,
   removeFriend,
 } from "$lib/friends.remote";
+import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
@@ -31,6 +32,13 @@ const association = $derived({
 });
 const city = $derived(
   (await data.cities).find((city) => city.code === association.city),
+);
+const pets = $derived(
+  getPets({
+    owner: association.id,
+    search: "",
+    sortBy: "name",
+  }),
 );
 
 const isCurrentUser = $derived(data.currentUser?.id === association.id);
@@ -306,6 +314,43 @@ $effect(() => {
                 <div class="text-gray-600">{animalsCount} animals currently in care</div>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
+          <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <span class="text-2xl">🐾</span>
+              Animals
+            </span>
+            {#if isCurrentUser}
+              <div class="flex gap-2">
+                <a href={resolve("/new-pet")} aria-label="Add new animal" class="bg-orange-600 text-white px-3 py-1 rounded-lg hover:bg-orange-700 font-medium transition-colors">
+                  +
+                </a>
+              </div>
+            {:else}
+              <span class="text-sm text-orange-700 font-medium">{(await pets).length} animals</span>
+            {/if}
+          </h2>
+          <div class="grid grid-cols-2 gap-3">
+            {#each await pets as pet (pet.id)}
+              <a href={resolve(`/pets/${pet.id}`)} class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
+                  <span class="font-bold text-gray-900">{pet.name}</span>
+                </div>
+                <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>
+              </a>
+            {/each}
+            {#if (await pets).length == 0}
+              <div class="col-span-2 text-center py-4 text-gray-600">
+                {#if isCurrentUser}
+                  No animals yet. Add your first one!
+                {:else}
+                  No animals registered
+                {/if}
+              </div>
+            {/if}
           </div>
         </div>
       </div>
