@@ -52,6 +52,16 @@ export const getFriends = query(() => {
 export const addFriend = command(z.string(), async (friendId) => {
   const user = getCurrentUser();
   if (!user) error(401);
+
+  // Check if the friend is an association
+  const friendUser = await db
+    .select()
+    .from(schema.user)
+    .where(eq(schema.user.id, friendId))
+    .limit(1);
+
+  const isAssociation = friendUser[0]?.association !== null;
+
   try {
     await db
       .insert(schema.usersPair)
@@ -60,13 +70,15 @@ export const addFriend = command(z.string(), async (friendId) => {
         left: user.id,
         right: friendId,
         friends: true,
-        pending: friendId,
+        // If friend is an association, don't set pending (auto-accept)
+        pending: isAssociation ? null : friendId,
       })
       .onConflictDoUpdate({
         target: [schema.usersPair.left, schema.usersPair.right],
         set: {
           friends: true,
-          pending: friendId,
+          // If friend is an association, don't set pending (auto-accept)
+          pending: isAssociation ? null : friendId,
         },
       });
   } catch {
@@ -118,7 +130,6 @@ export const removeFriend = command(z.string(), async (friendId) => {
     .where(
       and(
         eq(schema.usersPair.friends, true),
-        eq(schema.usersPair.pending, user.id),
         and(
           or(
             eq(schema.usersPair.left, user.id),
