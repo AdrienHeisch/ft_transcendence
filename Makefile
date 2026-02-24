@@ -54,6 +54,6 @@ check:
 		-v ./www:/app \
 		-v ./.env.example:/app/.env \
 		docker.io/oven/bun:1.3.9-debian \
-		sh -c "bun sv:check && bun biome:check"
+		sh -c "bun biome:check && bun sv:check"
 
 .PHONY: build up re down dev dev-down reset seed format check
