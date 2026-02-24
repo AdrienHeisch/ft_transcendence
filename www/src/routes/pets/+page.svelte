@@ -2,6 +2,8 @@
 import Pagination from "$lib/components/Pagination.svelte";
 import { getPets, getPetsCount } from "$lib/pets.remote";
 import { getPetAvatar } from "$lib/storage";
+import { getProfileUrl } from "$lib/user";
+import { getUser } from "$lib/user.remote";
 
 const PAGE_SIZE = 12;
 
@@ -123,10 +125,8 @@ function resetCurrentPage() {
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each pets as pet (pet.id)}
-          <a
-            href="./{pet.id}"
-            class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
-          >
+        {@const owner = await getUser(pet.ownerId)}
+          <div class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <!-- Animal image -->
             <div class="relative">
               {#if pet.hasAvatar}
@@ -140,9 +140,11 @@ function resetCurrentPage() {
                   <span class="text-6xl">🐾</span>
                 </div>
               {/if}
-              <span class="absolute top-3 right-3 px-3 py-1 bg-[#CC5500] text-white rounded-lg font-bold text-sm">
-                ⭐ AVAILABLE
-              </span>
+              {#if owner?.isAssociation}
+                <span class="absolute top-3 right-3 px-3 py-1 bg-[#CC5500] text-white rounded-lg font-bold text-sm">
+                  ⭐ AVAILABLE
+                </span>
+              {/if }
             </div>
 
             <!-- Information -->
@@ -166,15 +168,21 @@ function resetCurrentPage() {
 
               <!-- Buttons -->
               <div class="flex gap-2">
-                <button class="flex-1 py-2 bg-[#CC5500] text-white rounded-lg font-bold hover:bg-[#A04000] transition-colors">
-                  🏠 Adopt
-                </button>
-                <button class="flex-1 py-2 bg-white border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-bold hover:bg-[#fef7ed] transition-colors">
+                <a
+                  class="text-center flex-1 py-2 bg-[#CC5500] text-white rounded-lg font-bold hover:bg-[#A04000] transition-colors"
+                  href="./{pet.id}"
+                >
                   👁️ View profile
-                </button>
+                </a>
+                <a
+                  href={owner && getProfileUrl(owner)}
+                  class="text-center flex-1 py-2 bg-white border-2 border-[#8B4513] text-[#8B4513] rounded-lg font-bold hover:bg-[#fef7ed] transition-colors"
+                >
+                  {owner?.isAssociation ? "🏠" : "👤"} View owner
+                </a>
               </div>
             </div>
-          </a>
+          </div>
         {/each}
       </div>
       <Pagination
