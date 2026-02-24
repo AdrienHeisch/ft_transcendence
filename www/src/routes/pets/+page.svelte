@@ -1,6 +1,8 @@
 <script lang="ts">
+import { getCity } from "$lib/city.remote";
 import Pagination from "$lib/components/Pagination.svelte";
 import { getPets, getPetsCount } from "$lib/pets.remote";
+import type { City } from "$lib/server/db/schema";
 import { getPetAvatar } from "$lib/storage";
 import { getProfileUrl } from "$lib/user";
 import { getUser } from "$lib/user.remote";
@@ -11,12 +13,14 @@ const { data } = $props();
 
 let searchQuery = $state("");
 let selectedSpecies = $state<string>();
+let selectedCity = $state<City>();
 let sortBy = $state<"name" | "species">("name");
 let currentPage = $state(0);
 
 const filters = $derived({
   search: searchQuery,
   species: selectedSpecies,
+  city: selectedCity?.code,
   sortBy,
 });
 
@@ -29,6 +33,7 @@ const pets = $derived(
 );
 
 const species = $derived(await data.species);
+const cities = $derived(await data.cities);
 
 const petsCount = $derived(await getPetsCount(filters));
 
@@ -91,6 +96,22 @@ function resetCurrentPage() {
           </select>
         </div>
 
+        <!-- City -->
+        <div>
+          <label class="block text-sm font-bold text-[#8B4513] mb-2" for="city">City</label>
+          <select
+            id="city"
+            bind:value={selectedCity}
+            onchange={resetCurrentPage}
+            class="w-full px-4 py-2 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
+          >
+            <option value={undefined}>{"All cities"}</option>
+            {#each cities as city}
+              <option value={city}>{city.name}</option>
+            {/each}
+          </select>
+        </div>
+
         <!-- Sort -->
         <div>
           <label class="block text-sm font-bold text-[#8B4513] mb-2" for="sortBy">Sort by</label>
@@ -125,7 +146,8 @@ function resetCurrentPage() {
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each pets as pet (pet.id)}
-        {@const owner = await getUser(pet.ownerId)}
+          {@const owner = await getUser(pet.ownerId)}
+          {@const city = owner && await getCity(owner.city)}
           <div class="bg-[#fef7ed] rounded-2xl shadow-lg overflow-hidden border-4 border-[#8B4513] hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <!-- Animal image -->
             <div class="relative">
@@ -158,8 +180,17 @@ function resetCurrentPage() {
                 {/if}
               </div>
 
-              <div class="text-sm text-[#A0522D] mb-2">
-                🎂 {Math.floor((new Date().getTime() - pet.birth.getTime()) / 1000 / 3600 / 24 / 365)}
+              <div class="flex items-center gap-4 mb-3 text-sm text-orange-800">
+                  <div class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <span>{city?.name}</span>
+                </div>
+                <div>
+                  🎂 {Math.floor((new Date().getTime() - pet.birth.getTime()) / 1000 / 3600 / 24 / 365)}
+                </div>
               </div>
 
               <p class="text-sm text-[#8B4513] mb-4 line-clamp-2">

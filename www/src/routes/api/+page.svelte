@@ -158,6 +158,11 @@ const apiRoutes: Route[] = [
         description: "Filtre par espèce(query param)",
       },
       {
+        name: "city",
+        type: "string",
+        description: "Filtre par ville du propriétaire(query param)",
+      },
+      {
         name: "sortBy",
         type: '"name" | "species"',
         description: "Tri des resultats par nom ou par espèce(query param)",

@@ -7,6 +7,7 @@ export const load: PageServerLoad = () => ({
     .selectDistinct({ name: schema.pet.species })
     .from(schema.pet)
     .orderBy(schema.pet.species),
+  cities: db.select().from(schema.city).orderBy(schema.city.name),
 });
 
 export const trailingSlash = "always";

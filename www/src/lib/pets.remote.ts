@@ -26,11 +26,12 @@ export const getPets = query(
     owner: z.string().optional(),
     search: z.string(),
     species: z.string().optional(),
+    city: z.string().optional(),
     sortBy: z.enum(["name", "species"]),
     offset: z.int().optional(),
     limit: z.int().optional(),
   }),
-  ({ owner, search, species, sortBy, offset, limit }) => {
+  ({ owner, search, species, city, sortBy, offset, limit }) => {
     const query = db
       .select(getTableColumns(schema.pet))
       .from(schema.pet)
@@ -48,6 +49,7 @@ export const getPets = query(
           ),
           owner ? eq(schema.pet.ownerId, owner) : undefined,
           species ? eq(schema.pet.species, species) : undefined,
+          city ? eq(schema.userPublic.city, city) : undefined,
         ),
       )
       .orderBy(sortBy === "name" ? schema.pet.name : schema.pet.species)
@@ -63,6 +65,7 @@ export const getPetsCount = query(
     owner: z.string().optional(),
     search: z.string(),
     species: z.string().optional(),
+    city: z.string().optional(),
     sortBy: z.enum(["name", "species"]),
   }),
   async (params) => (await getPets(params)).length,
