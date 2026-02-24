@@ -82,7 +82,15 @@ export default async function seedDb() {
       online: false,
     });
     const petIds = [];
-    for (let i = 0; i < faker.number.int({ min: 0, max: 5 }); i++) {
+    for (
+      let i = 0;
+      i <
+      faker.number.int({
+        min: isAssociation ? 5 : 0,
+        max: isAssociation ? 25 : 5,
+      });
+      i++
+    ) {
       const petId = crypto.randomUUID();
       petIds.push(petId);
       pets.push({
@@ -108,7 +116,7 @@ export default async function seedDb() {
         hasAvatar: false,
       });
     }
-    for (let i = 0; i < faker.number.int({ min: 0, max: 10 }); i++) {
+    for (let i = 0; i < faker.number.int({ min: 0, max: 20 }); i++) {
       const postId = crypto.randomUUID();
       posts.push({
         id: postId,
