@@ -14,8 +14,12 @@ import {
   USER_AVATAR_PREFIX,
 } from "./storage";
 
-async function register(email: string, password: string) {
-  const userId = crypto.randomUUID();
+async function register(
+  id: string,
+  email: string,
+  password: string,
+  isAssociation: boolean,
+) {
   const passwordHash = await hash(password, {
     // recommended minimum parameters
     memoryCost: 19456,
@@ -25,24 +29,22 @@ async function register(email: string, password: string) {
   });
 
   await db.insert(schema.user).values({
-    id: userId,
+    id,
     apiKey: auth.generateSessionToken(), // TODO is this ok ?
     email,
     passwordHash,
-    person: userId,
-    association: null,
+    person: isAssociation ? null : id,
+    association: isAssociation ? id : null,
     online: false,
   });
 
   const sessionToken = auth.generateSessionToken();
-  const session = await auth.createSession(sessionToken, userId);
+  const session = await auth.createSession(sessionToken, id);
   auth.setSessionTokenCookie(
     getRequestEvent(),
     sessionToken,
     session.expiresAt,
   );
-
-  return userId;
 }
 
 export const registerPerson = form(
@@ -58,20 +60,21 @@ export const registerPerson = form(
     //   return fail(400, { message: "Invalid password" });
     // }
 
+    const id = crypto.randomUUID();
     try {
-      const userId = await register(email, password);
       await db.insert(schema.person).values({
-        id: userId,
+        id,
         firstName,
         lastName,
         description: "",
         city,
         hasAvatar: false,
       });
-      return redirect(302, resolve(`/persons/${userId}`)); // TODO register as association
+      await register(id, email, password, false);
     } catch {
-      return error(500, { message: "An error has occurred" });
+      error(500, { message: "An error has occurred" });
     }
+    redirect(302, resolve(`/persons/${id}`)); // TODO register as association
   },
 );
 
@@ -90,10 +93,10 @@ export const registerAssociation = form(
     //   return fail(400, { message: "Invalid password" });
     // }
 
+    const id = crypto.randomUUID();
     try {
-      const userId = await register(email, password);
       await db.insert(schema.association).values({
-        id: userId,
+        id,
         name,
         phone,
         type,
@@ -102,10 +105,11 @@ export const registerAssociation = form(
         city,
         hasAvatar: false,
       });
-      return redirect(302, resolve(`/associations/${userId}`)); // TODO register as association
+      await register(id, email, password, true);
     } catch {
-      return error(500, { message: "An error has occurred" });
+      error(500, { message: "An error has occurred" });
     }
+    redirect(302, resolve(`/associations/${id}`)); // TODO register as association
   },
 );
 
