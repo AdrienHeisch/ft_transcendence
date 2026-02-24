@@ -1,7 +1,7 @@
 <script lang="ts">
 import Pagination from "$lib/components/Pagination.svelte";
 import UserCard from "$lib/components/UserCard.svelte";
-import { getPersons } from "$lib/persons.remote";
+import { getPersons, getPersonsCount } from "$lib/persons.remote";
 import type { City } from "$lib/server/db/schema";
 import { getUser } from "$lib/user.remote.js";
 
@@ -17,17 +17,21 @@ let selectedCity = $state<City>();
 let sortBy = $state<"firstName" | "lastName">("firstName");
 let currentPage = $state(0);
 
+const filters = $derived({
+  search: searchQuery,
+  city: selectedCity?.code,
+  sortBy,
+});
+
 const persons = $derived(
   await getPersons({
-    search: searchQuery,
-    city: selectedCity?.code,
-    sortBy,
+    ...filters,
     offset: currentPage * PAGE_SIZE,
     limit: PAGE_SIZE,
   }),
 );
 
-const usersCount = $derived(persons.at(0)?.count ?? 0);
+const personsCount = $derived(await getPersonsCount(filters));
 
 function resetCurrentPage() {
   currentPage = 0;
@@ -106,7 +110,7 @@ function resetCurrentPage() {
 
       <!-- Results -->
       <div class="mt-4 text-orange-900 font-medium">
-        {usersCount} {usersCount > 1 ? "people found" : "person found"}
+        {personsCount} {personsCount > 1 ? "people found" : "person found"}
       </div>
     </div>
 
@@ -130,7 +134,7 @@ function resetCurrentPage() {
       </div>
       <Pagination
         pageSize={PAGE_SIZE}
-        itemsCount={usersCount}
+        itemsCount={personsCount}
         currentPage={currentPage}
         setPage={(page) => currentPage = page}
       />

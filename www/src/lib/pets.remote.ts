@@ -58,7 +58,15 @@ export const getPets = query(
   },
 );
 
-export const getTotalPetsCount = query(() => db.$count(schema.pet));
+export const getPetsCount = query(
+  z.object({
+    owner: z.string().optional(),
+    search: z.string(),
+    species: z.string().optional(),
+    sortBy: z.enum(["name", "species"]),
+  }),
+  async (params) => (await getPets(params)).length,
+);
 
 export const createPet = form(
   z.object({

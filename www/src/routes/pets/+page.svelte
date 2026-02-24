@@ -1,6 +1,6 @@
 <script lang="ts">
 import Pagination from "$lib/components/Pagination.svelte";
-import { getPets, getTotalPetsCount } from "$lib/pets.remote";
+import { getPets, getPetsCount } from "$lib/pets.remote";
 import { getPetAvatar } from "$lib/storage";
 
 const PAGE_SIZE = 12;
@@ -12,11 +12,15 @@ let selectedSpecies = $state<string>();
 let sortBy = $state<"name" | "species">("name");
 let currentPage = $state(0);
 
+const filters = $derived({
+  search: searchQuery,
+  species: selectedSpecies,
+  sortBy,
+});
+
 const pets = $derived(
   await getPets({
-    search: searchQuery,
-    species: selectedSpecies,
-    sortBy,
+    ...filters,
     offset: currentPage * PAGE_SIZE,
     limit: PAGE_SIZE,
   }),
@@ -24,7 +28,7 @@ const pets = $derived(
 
 const species = $derived(await data.species);
 
-const petsCount = $derived(await getTotalPetsCount());
+const petsCount = $derived(await getPetsCount(filters));
 
 function resetCurrentPage() {
   currentPage = 0;

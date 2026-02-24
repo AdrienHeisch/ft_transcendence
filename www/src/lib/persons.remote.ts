@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray, or } from "drizzle-orm";
 import z from "zod";
 import { form, query } from "$app/server";
 import { requireLogin } from "$lib/server/auth";
@@ -34,7 +34,6 @@ export const getPersons = query(
       .select({
         ...getTableColumns(schema.person),
         city: getTableColumns(schema.city),
-        count: sql`count(*) over()`.mapWith(Number),
       })
       .from(schema.person)
       .where(
@@ -57,6 +56,15 @@ export const getPersons = query(
     if (limit) query.limit(limit);
     return query;
   },
+);
+
+export const getPersonsCount = query(
+  z.object({
+    search: z.string(),
+    city: z.string().optional(),
+    sortBy: z.enum(["firstName", "lastName"]),
+  }),
+  async (params) => (await getPersons(params)).length,
 );
 
 export const updatePerson = form(

@@ -55,8 +55,14 @@ export const getAssociations = query(
   },
 );
 
-export const getTotalAssociationsCount = query(() =>
-  db.$count(schema.association),
+export const getAssociationsCount = query(
+  z.object({
+    search: z.string(),
+    type: schema.associationTypeSchema.optional(),
+    city: z.string().optional(),
+    sortBy: z.enum(["name", "type"]),
+  }),
+  async (params) => (await getAssociations(params)).length,
 );
 
 export const getPetsCount = query(z.string(), (id) => {

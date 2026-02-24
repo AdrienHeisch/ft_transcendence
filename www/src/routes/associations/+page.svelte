@@ -3,8 +3,8 @@ import { onMount } from "svelte";
 import { resolve } from "$app/paths";
 import {
   getAssociations,
+  getAssociationsCount,
   getPetsCount,
-  getTotalAssociationsCount,
 } from "$lib/associations.remote";
 import Pagination from "$lib/components/Pagination.svelte";
 import type { AssociationType, City } from "$lib/server/db/schema";
@@ -22,12 +22,16 @@ let currentPage = $state(0);
 
 const cities = $derived(await data.cities);
 
+const filters = $derived({
+  search: searchQuery,
+  type: selectedType,
+  city: selectedCity?.code,
+  sortBy,
+});
+
 const associations = $derived(
   await getAssociations({
-    search: searchQuery,
-    type: selectedType,
-    city: selectedCity?.code,
-    sortBy,
+    ...filters,
     offset: currentPage * PAGE_SIZE,
     limit: PAGE_SIZE,
   }),
@@ -45,7 +49,7 @@ const emails = $derived.by(
     ),
 );
 
-const associationsCount = $derived(await getTotalAssociationsCount());
+const associationsCount = $derived(await getAssociationsCount(filters));
 
 onMount(async () => {
   searchQuery = data.filters.search;
