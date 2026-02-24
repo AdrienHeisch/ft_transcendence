@@ -14,30 +14,52 @@ import {
   USER_AVATAR_PREFIX,
 } from "./storage";
 
-export const register = form(
+async function register(email: string, password: string) {
+  const userId = crypto.randomUUID();
+  const passwordHash = await hash(password, {
+    // recommended minimum parameters
+    memoryCost: 19456,
+    timeCost: 2,
+    outputLen: 32,
+    parallelism: 1,
+  });
+
+  await db.insert(schema.user).values({
+    id: userId,
+    apiKey: auth.generateSessionToken(), // TODO is this ok ?
+    email,
+    passwordHash,
+    person: userId,
+    association: null,
+    online: false,
+  });
+
+  const sessionToken = auth.generateSessionToken();
+  const session = await auth.createSession(sessionToken, userId);
+  auth.setSessionTokenCookie(
+    getRequestEvent(),
+    sessionToken,
+    session.expiresAt,
+  );
+
+  return userId;
+}
+
+export const registerPerson = form(
   z.object({
-    firstName: z.string(),
-    lastName: z.string(),
     email: z.email(),
     password: z.string(),
+    firstName: z.string(),
+    lastName: z.string(),
     city: z.string(),
   }),
-  async ({ firstName, lastName, email, password, city }) => {
+  async ({ email, password, firstName, lastName, city }) => {
     // if (!validatePassword(password)) { // TODO password validation
     //   return fail(400, { message: "Invalid password" });
     // }
 
-    const userId = crypto.randomUUID();
-    const passwordHash = await hash(password, {
-      // recommended minimum parameters
-      memoryCost: 19456,
-      timeCost: 2,
-      outputLen: 32,
-      parallelism: 1,
-    });
-
     try {
-      // TODO register as association
+      const userId = await register(email, password);
       await db.insert(schema.person).values({
         id: userId,
         firstName,
@@ -46,28 +68,44 @@ export const register = form(
         city,
         hasAvatar: false,
       });
-
-      await db.insert(schema.user).values({
-        id: userId,
-        apiKey: auth.generateSessionToken(), // TODO is this ok ?
-        email,
-        passwordHash,
-        person: userId,
-        association: null,
-        online: false,
-      });
-
-      const sessionToken = auth.generateSessionToken();
-      const session = await auth.createSession(sessionToken, userId);
-      auth.setSessionTokenCookie(
-        getRequestEvent(),
-        sessionToken,
-        session.expiresAt,
-      );
+      return redirect(302, resolve(`/persons/${userId}`)); // TODO register as association
     } catch {
       return error(500, { message: "An error has occurred" });
     }
-    return redirect(302, resolve(`/persons/${userId}`)); // TODO register as association
+  },
+);
+
+export const registerAssociation = form(
+  z.object({
+    email: z.email(),
+    password: z.string(),
+    name: z.string(),
+    phone: z.string(),
+    type: schema.associationTypeSchema,
+    foundedAt: z.iso.date().transform((foundedAt) => new Date(foundedAt)),
+    city: z.string(),
+  }),
+  async ({ email, password, name, phone, type, foundedAt, city }) => {
+    // if (!validatePassword(password)) { // TODO password validation
+    //   return fail(400, { message: "Invalid password" });
+    // }
+
+    try {
+      const userId = await register(email, password);
+      await db.insert(schema.association).values({
+        id: userId,
+        name,
+        phone,
+        type,
+        foundedAt,
+        description: "",
+        city,
+        hasAvatar: false,
+      });
+      return redirect(302, resolve(`/associations/${userId}`)); // TODO register as association
+    } catch {
+      return error(500, { message: "An error has occurred" });
+    }
   },
 );
 

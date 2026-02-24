@@ -41,7 +41,7 @@ $effect(() =>
       </div>
 
       <!-- Form -->
-      <form {...remote.register.enhance(async ({ submit }) => {
+      <form {...remote.registerPerson.enhance(async ({ submit }) => {
         errorMessage = undefined;
         try {
           await submit();
