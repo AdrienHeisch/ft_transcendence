@@ -36,6 +36,7 @@ let optionsOpen = $state(false);
 let commentsOpen = $state((() => isFullPage)());
 
 let isEditing = $state(false);
+let copied = $state(false);
 
 let isImageError = $state(false);
 
@@ -68,6 +69,10 @@ const onDelete = async () => {
 const onShare = async () => {
   const postUrl = `${window.location.origin}/post/${post.id}`;
   await navigator.clipboard.writeText(postUrl);
+  copied = true;
+  setTimeout(() => {
+    copied = false;
+  }, 2000);
 };
 
 const onEditStart = () => {
@@ -166,10 +171,15 @@ const closeEdit = () => {
         </svg>
         <span class="font-medium">{await getPostCommentCount(post.id)}</span>
       </button>
-      <button onclick={() => onShare()} class="flex items-center gap-2 text-amber-900 hover:text-orange-700 transition-colors group ml-auto" aria-label="Share">
+      <button onclick={() => onShare()} class="flex items-center gap-2 text-amber-900 hover:text-orange-700 transition-colors group ml-auto relative" aria-label="Share">
         <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
         </svg>
+        {#if copied}
+          <span class="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-lg shadow-lg whitespace-nowrap animate-bounce">
+            ✓ Copied!
+          </span>
+        {/if}
       </button>
     </div>
 
