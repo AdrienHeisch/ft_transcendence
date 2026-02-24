@@ -40,7 +40,7 @@ $effect(() =>
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-linear-to-br from-amber-300/20 to-yellow-400/20 rounded-full blur-3xl"></div>
   </div>
 
-  <div class="w-full max-w-md relative z-10">
+  <div class="w-full max-w-md relative">
     <!-- Card -->
     <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 space-y-6 border-2 border-amber-200">
       <!-- Header -->
