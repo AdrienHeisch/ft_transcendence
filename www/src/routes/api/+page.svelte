@@ -12,7 +12,8 @@ const apiRoutes: Route[] = [
   {
     route: "/api/persons",
     method: "GET",
-    description: "Recupere une liste d'utilisateurs pouvant être filtrée par nom, par ville ou par prenom/nom",
+    description:
+      "Recupere une liste d'utilisateurs pouvant être filtrée par nom, par ville ou par prenom/nom",
     parameters: [
       {
         name: "search",
@@ -34,19 +35,20 @@ const apiRoutes: Route[] = [
   {
     route: "/api/persons/[id]",
     method: "DELETE",
-    description: "Supprime l'utilisateur actuellement connecté.", 
+    description: "Supprime l'utilisateur actuellement connecté.",
     parameters: [
       {
         name: "id",
         type: "string",
-        description: "Identifiant de l'utilisateur a supprimer"
-      }
+        description: "Identifiant de l'utilisateur a supprimer",
+      },
     ],
   },
   {
     route: "/api/persons/[id]",
     method: "PUT",
-    description: "Met à jour les informations de l'utilisateur actuellement connecté.",
+    description:
+      "Met à jour les informations de l'utilisateur actuellement connecté.",
     parameters: [
       {
         name: "firstName",
@@ -83,19 +85,21 @@ const apiRoutes: Route[] = [
   {
     route: "/api/persons/[id]",
     method: "GET",
-    description: "Récupère les informations de l'utilisateur identifié par l'id.",
+    description:
+      "Récupère les informations de l'utilisateur identifié par l'id.",
     parameters: [
       {
         name: "id",
         type: "string",
-        description: "Identifiant de l'utilisateur a récupérer"
-      }
+        description: "Identifiant de l'utilisateur a récupérer",
+      },
     ],
   },
   {
     route: "/api/associations",
     method: "GET",
-    description: "Rend une liste d'associations filtree selon les criteres fournit",
+    description:
+      "Rend une liste d'associations filtree selon les criteres fournit",
     parameters: [
       {
         name: "name",
@@ -116,25 +120,27 @@ const apiRoutes: Route[] = [
         name: "type",
         type: "string",
         description: "filtre par type d'association(query param)",
-      }
+      },
     ],
   },
   {
     route: "/api/associations/[id]",
     method: "GET",
-    description: "Recupere les informations de l'association identifiee par l'id",
+    description:
+      "Recupere les informations de l'association identifiee par l'id",
     parameters: [
       {
         name: "id",
         type: "string",
-        description: "Identifiant de l'association a récupérer"
-      }
+        description: "Identifiant de l'association a récupérer",
+      },
     ],
   },
-  { 
+  {
     route: "/api/pets",
     method: "GET",
-    description: "Retourne une liste d'animaux filtrée selon les critères fournis",
+    description:
+      "Retourne une liste d'animaux filtrée selon les critères fournis",
     parameters: [
       {
         name: "name",
@@ -203,24 +209,25 @@ const apiRoutes: Route[] = [
       {
         name: "id",
         type: "string",
-        description: "Identifiant de l'animal à récupérer"
-      }
+        description: "Identifiant de l'animal à récupérer",
+      },
     ],
   },
   {
     route: "/api/pets/[id]",
     method: "PUT",
-    description: "Mettre a jour les informations de l'animal identifié par l'id",
+    description:
+      "Mettre a jour les informations de l'animal identifié par l'id",
     parameters: [
       {
         name: "id",
         type: "string",
-        description: "Identifiant de l'animal à mettre à jour"
+        description: "Identifiant de l'animal à mettre à jour",
       },
       {
         name: "name",
         type: "string",
-        description: "Nom de l'animal", 
+        description: "Nom de l'animal",
       },
       {
         name: "description",
@@ -236,7 +243,7 @@ const apiRoutes: Route[] = [
         name: "removeAvatar",
         type: "boolean",
         description: "Image a supprimer si true",
-      }
+      },
     ],
   },
   {
@@ -247,14 +254,15 @@ const apiRoutes: Route[] = [
       {
         name: "id",
         type: "string",
-        description: "Identifiant de l'animal à supprimer"
-      }
+        description: "Identifiant de l'animal à supprimer",
+      },
     ],
   },
   {
     route: "/api/posts",
     method: "GET",
-    description: "Recupere une liste de posts, pouvant être filtrée par auteur ou par mot-clé",
+    description:
+      "Recupere une liste de posts, pouvant être filtrée par auteur ou par mot-clé",
     parameters: [
       {
         name: "author",
@@ -298,8 +306,8 @@ const apiRoutes: Route[] = [
       {
         name: "id",
         type: "string",
-        description: "Identifiant du post à récupérer"
-      }
+        description: "Identifiant du post à récupérer",
+      },
     ],
   },
   {
@@ -310,8 +318,8 @@ const apiRoutes: Route[] = [
       {
         name: "id",
         type: "string",
-        description: "Identifiant du post à modifier"
-      }
+        description: "Identifiant du post à modifier",
+      },
     ],
   },
   {
@@ -322,8 +330,8 @@ const apiRoutes: Route[] = [
       {
         name: "id",
         type: "string",
-        description: "Identifiant du post à supprimer"
-      }
+        description: "Identifiant du post à supprimer",
+      },
     ],
   },
   {
@@ -334,32 +342,35 @@ const apiRoutes: Route[] = [
       {
         name: "postId",
         type: "string",
-        description: "Identifiant du post dont on veut récupérer les commentaires"
-      }
+        description:
+          "Identifiant du post dont on veut récupérer les commentaires",
+      },
     ],
   },
   {
     route: "/api/posts/[id]/comments",
     method: "POST",
-    description: "Ajouter un commentaire a un post existant identifié par l'idPost",
+    description:
+      "Ajouter un commentaire a un post existant identifié par l'idPost",
     parameters: [
       {
         name: "postId",
         type: "string",
-        description: "Identifiant du post auquel on veut ajouter un commentaire"
-      }
+        description:
+          "Identifiant du post auquel on veut ajouter un commentaire",
+      },
     ],
   },
   {
     route: "/api/posts/[id]/comments/[id]",
-    method: "GET", 
+    method: "GET",
     description: "Recupere un commentaire precis",
     parameters: [
       {
         name: "commentId",
         type: "string",
-        description: "Identifiant du commentaire à récupérer"
-      }
+        description: "Identifiant du commentaire à récupérer",
+      },
     ],
   },
   {
@@ -370,15 +381,15 @@ const apiRoutes: Route[] = [
       {
         name: "commentId",
         type: "string",
-        description: "Identifiant du commentaire à modifier"
+        description: "Identifiant du commentaire à modifier",
       },
       {
         name: "content",
         type: "string",
-        description: "Nouveau contenu du commentaire"
-      }
+        description: "Nouveau contenu du commentaire",
+      },
     ],
-   },
+  },
   {
     route: "/api/posts/[id]/comments/[id]",
     method: "DELETE",
@@ -387,8 +398,8 @@ const apiRoutes: Route[] = [
       {
         name: "commentId",
         type: "string",
-        description: "Identifiant du commentaire à supprimer"
-      }
+        description: "Identifiant du commentaire à supprimer",
+      },
     ],
   },
 ];
