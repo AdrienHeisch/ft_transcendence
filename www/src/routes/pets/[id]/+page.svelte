@@ -10,6 +10,9 @@ import { getPosts } from "$lib/posts.remote";
 import { getPetAvatar } from "$lib/storage";
 import { getProfileUrl } from "$lib/user";
 
+const COVER_IMAGE =
+  "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg";
+
 const { data } = $props();
 
 let isEditMode = $state(false);
@@ -17,17 +20,7 @@ let fileUpload = $state<FileUpload>();
 let removeAvatar = $state(false);
 
 // TODO remove fake data
-const pet = $derived({
-  ...(await data.pet),
-  coverImage:
-    "https://lafermeducoudray.com/wp-content/uploads/2024/03/La-ferme-du-Coudray-Arnaud-Delaunay-2.jpg",
-  adopted: true,
-  photos: [
-    "https://www.l214.com/wp-content/uploads/2021/06/vache-meugle-1024x535.jpg",
-    "https://www.lozere-online.com/wp-content/uploads/2013/09/vache-race-aubrac.jpg",
-    "https://cdn.canardware.com/2021/05/05044743/10327-vache-1200x627.jpg",
-  ],
-});
+const pet = $derived(await data.pet);
 const owner = $derived(await data.owner);
 const city = $derived(await data.city);
 const posts = $derived(await getPosts({ pet: pet.id }));
@@ -60,7 +53,7 @@ $effect(() => {
   <!-- Cover Image -->
   <div class="relative h-80 bg-linear-to-r from-orange-700 via-orange-600 to-amber-600">
     <img
-      src={pet.coverImage}
+      src={COVER_IMAGE}
       alt="Couverture"
        class="w-full h-full object-cover"
     />

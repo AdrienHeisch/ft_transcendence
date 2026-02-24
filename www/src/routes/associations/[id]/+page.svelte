@@ -16,6 +16,9 @@ import { getUserAvatar } from "$lib/storage";
 import { getUser } from "$lib/user.remote";
 import type { PageData } from "./$types";
 
+const COVER_IMAGE =
+  "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920&h=400&fit=crop";
+
 let { data }: { data: PageData } = $props();
 
 let isEditMode = $state(false);
@@ -25,9 +28,6 @@ let removeAvatar = $state(false);
 // TODO remove fake data
 const association = $derived({
   ...((await data.association) as UserPublic & { isAssociation: true }),
-  logo: "🐄",
-  coverImage:
-    "https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=1920&h=400&fit=crop",
   website: "www.fermeheureuse.fr",
 });
 const city = $derived(
@@ -90,7 +90,7 @@ $effect(() => {
   <!-- Cover Image -->
   <div class="relative h-80 bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600">
     <img 
-      src={association.coverImage} 
+      src={COVER_IMAGE} 
       alt="Cover" 
       class="w-full h-full object-cover"
     />
