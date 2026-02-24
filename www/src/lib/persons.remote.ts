@@ -72,7 +72,7 @@ export const updatePerson = form(
     id: z.string(),
     firstName: z.string(),
     lastName: z.string(),
-    bio: z.string(),
+    description: z.string(),
     city: z.string(),
     avatar: bunFileSchema().optional(),
     removeAvatar: z.stringbool(),

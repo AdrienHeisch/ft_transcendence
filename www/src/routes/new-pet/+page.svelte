@@ -94,10 +94,9 @@ let fileUpload = $state<FileUpload>();
 
               <!-- Description -->
               <div>
-                <label class="block text-sm font-bold text-[#8B4513] mb-2" for="bio">
+                <label class="block text-sm font-bold text-[#8B4513] mb-2" for="description">
                   Description
                   <textarea
-                    id="bio"
                     {...createPet.fields.description.as("text")}
                     placeholder="A friendly and playful companion..."
                     rows="4"

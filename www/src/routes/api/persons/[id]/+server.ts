@@ -32,7 +32,7 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
     .object({
       firstName: z.string().optional(),
       lastName: z.string().optional(),
-      bio: z.string().optional(),
+      description: z.string().optional(),
       city: z.string().optional(),
       avatar: z.file().optional(),
       removeAvatar: z.stringbool().default(false),

@@ -158,8 +158,8 @@ $effect(() => {
             <textarea
               class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
               rows=1
-              {...updatePerson.fields.bio.as("text")}
-            >{user.description}</textarea>
+              {...updatePerson.fields.description.as("text")}
+            ></textarea>
           {:else}
             <p class="mt-2 text-gray-700 max-w-2xl">{user.description}</p>
           {/if}

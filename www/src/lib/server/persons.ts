@@ -15,7 +15,7 @@ export async function updatePerson(
   }: {
     firstName?: string;
     lastName?: string;
-    bio?: string;
+    description?: string;
     city?: string;
     avatar?: File;
     removeAvatar?: boolean;
