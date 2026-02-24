@@ -1,11 +1,10 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import { resolve } from "$app/paths";
 import {
   getAssociations,
   getAssociationsCount,
-  getPetsCount,
 } from "$lib/associations.remote";
+import AssociationCard from "$lib/components/AssociationCard.svelte";
 import Pagination from "$lib/components/Pagination.svelte";
 import type { AssociationType, City } from "$lib/server/db/schema";
 import { getUser } from "$lib/user.remote.js";
@@ -35,18 +34,6 @@ const associations = $derived(
     offset: currentPage * PAGE_SIZE,
     limit: PAGE_SIZE,
   }),
-);
-
-const emails = $derived.by(
-  async () =>
-    new Map(
-      (await Promise.all(
-        associations.map(async (association) => [
-          association.id,
-          (await getUser(association.id))?.email,
-        ]),
-      )) as [string, string | undefined][],
-    ),
 );
 
 const associationsCount = $derived(await getAssociationsCount(filters));
@@ -164,73 +151,10 @@ function resetCurrentPage() {
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {#each associations as association (association.id)}
-          <div
-            class="bg-white rounded-2xl shadow-lg overflow-hidden border-4 border-orange-400 hover:shadow-xl transition-all duration-200 hover:-translate-y-1"
-          >
-            <!-- Logo and type badge -->
-            <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
-              <div class="flex justify-center">
-                <div class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white flex items-center justify-center text-6xl">
-                  <!-- TODO get rid of this cow -->
-                  🐄
-                </div>
-              </div>
-
-              <!-- Type badge -->
-              <span class="absolute top-3 right-3 px-3 py-1 bg-orange-600 text-white rounded-lg font-bold text-sm shadow-md">
-                {association.type}
-              </span>
-            </div>
-
-            <!-- Info -->
-            <div class="p-5">
-              <h3 class="text-xl font-bold text-orange-900 mb-2" style="font-family: Georgia, serif;">
-                {association.name}
-              </h3>
-
-              <div class="flex items-center gap-4 mb-3 text-sm text-orange-800">
-                <div class="flex items-center gap-1">
-                  <span>📍</span>
-                  <span>{association.city.name}</span>
-                </div>
-                <div class="flex items-center gap-1">
-                  <span>📅</span>
-                  <span>Since {association.foundedAt}</span>
-                </div>
-              </div>
-
-              <div class="mb-3 text-sm text-orange-800 flex items-center gap-1">
-                <span>🐾</span>
-                <span class="font-semibold">{await getPetsCount(association.id)} animals</span>
-              </div>
-
-              <p class="text-sm text-gray-700 mb-4 line-clamp-3 italic">
-                "{association.description}"
-              </p>
-
-              <!-- Contact info -->
-              <div class="mb-4 space-y-1 text-xs text-gray-600">
-                <div class="flex items-center gap-2">
-                  <span>📧</span>
-                  <span class="truncate">{(await emails).get(association.id)}</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span>📞</span>
-                  <span>{association.phone}</span>
-                </div>
-              </div>
-
-              <!-- Buttons -->
-              <div class="flex gap-2">
-                <a href={resolve(`/associations/${association.id}`)} class="text-center flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
-                  👁️ View profile
-                </a>
-                <a href={resolve(`/messages/${association.id}`)} class="text-center flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
-                  💬 Contact
-                </a>
-              </div>
-            </div>
-          </div>
+          {@const user = await getUser(association.id)}
+          {#if user && user.isAssociation}
+            <AssociationCard association={user} />
+          {/if}
         {/each}
       </div>
       <Pagination

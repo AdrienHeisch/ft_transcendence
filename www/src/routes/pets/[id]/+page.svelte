@@ -1,6 +1,7 @@
 <script lang="ts">
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
+import AssociationCard from "$lib/components/AssociationCard.svelte";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
 import PostsFeed from "$lib/components/PostsFeed.svelte";
@@ -178,7 +179,7 @@ $effect(() => {
       <!-- Left Sidebar -->
       <div class="lg:col-span-1 space-y-6">
         {#if owner.isAssociation}
-          TODO AssociationCard
+          <AssociationCard association={owner}/>
         {:else}
           <UserCard user={owner}/>
         {/if}
