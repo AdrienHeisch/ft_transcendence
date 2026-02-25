@@ -112,10 +112,9 @@ $effect(() => {
         <div class="flex-1 text-center md:text-left">
           {#if isEditMode}
             <div class="space-y-3 max-w-xl">
-
               <!-- Name -->
-              <div class="relative">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label class="relative block text-sm font-medium text-gray-700 mb-1">
+                Name
                 <input
                   type="text"
                   class="w-full text-2xl font-bold px-4 py-2 rounded-xl
@@ -125,11 +124,11 @@ $effect(() => {
                   {...updatePet.fields.name.as("text")}
                   value={pet.name}
                 />
-              </div>
+              </label>
 
               <!-- Description -->
-              <div class="relative">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label class=" relative block text-sm font-medium text-gray-700 mb-1">
+                Description
                 <textarea
                   rows="3"
                   class="w-full px-4 py-2 rounded-xl
@@ -138,8 +137,7 @@ $effect(() => {
                         outline-none transition shadow-sm resize-none"
                   {...updatePet.fields.description.as("text")}
                 >{pet.description}</textarea>
-              </div>
-
+              </label>
             </div>
           {:else}
             <h1 class="text-3xl font-bold text-gray-900">{pet.name}</h1>
