@@ -2,7 +2,7 @@
 import { getCity } from "$lib/city.remote";
 import Pagination from "$lib/components/Pagination.svelte";
 import { getPets, getPetsCount } from "$lib/pets.remote";
-import type { City } from "$lib/server/db/schema";
+import type { City, PetSpecies } from "$lib/server/db/schema";
 import { getPetAvatar } from "$lib/storage";
 import { getProfileUrl } from "$lib/user";
 import { getUser } from "$lib/user.remote";
@@ -12,7 +12,7 @@ const PAGE_SIZE = 12;
 const { data } = $props();
 
 let searchQuery = $state("");
-let selectedSpecies = $state<string>();
+let selectedSpecies = $state<PetSpecies>();
 let selectedCity = $state<City>();
 let sortBy = $state<"name" | "species">("name");
 let currentPage = $state(0);

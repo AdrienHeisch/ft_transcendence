@@ -26,7 +26,7 @@ export const getPets = query(
   z.object({
     owner: z.string().optional(),
     search: z.string(),
-    species: z.string().optional(),
+    species: schema.petSpeciesSchema.optional(),
     city: z.string().optional(),
     sortBy: z.enum(["name", "species"]),
     offset: z.int().optional(),
@@ -65,7 +65,7 @@ export const getPetsCount = query(
   z.object({
     owner: z.string().optional(),
     search: z.string(),
-    species: z.string().optional(),
+    species: schema.petSpeciesSchema.optional(),
     city: z.string().optional(),
     sortBy: z.enum(["name", "species"]),
   }),
@@ -77,7 +77,7 @@ export const createPet = form(
     name: z.string().max(TEXT_LIMITS.PET_NAME),
     birth: z.iso.date().transform((birth) => new Date(birth)),
     description: z.string().max(TEXT_LIMITS.PET_DESCRIPTION),
-    species: z.string(),
+    species: schema.petSpeciesSchema,
     breed: z.string(),
     avatar: bunFileSchema(),
   }),

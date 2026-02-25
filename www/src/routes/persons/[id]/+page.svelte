@@ -11,6 +11,7 @@ import {
   removeFriend,
 } from "$lib/friends.remote";
 import { updatePerson } from "$lib/persons.remote";
+import { SPECIES_DEFAULT_ICON, SPECIES_ICONS } from "$lib/pets";
 import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import type { UserPublic } from "$lib/server/db/schema";
@@ -306,7 +307,7 @@ $effect(() => {
             {#each await pets as pet (pet.id)}
               <a href={resolve(`/pets/${pet.id}`)} class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
+                  <span class="text-2xl">{SPECIES_ICONS.get(pet.species) ?? SPECIES_DEFAULT_ICON}</span>
                   <span class="font-bold text-gray-900">{pet.name}</span>
                 </div>
                 <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>

@@ -58,12 +58,17 @@ let fileUpload = $state<FileUpload>();
               <div>
                 <label class="block text-sm font-bold text-[#8B4513] mb-2" for="species">
                   Species
-                  <input
-                    {...createPet.fields.species.as("text")}
-                    placeholder="Cat"
+                  <select
+                    id="city"
+                    {...createPet.fields.species.as("select")}
                     required
                     class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
-                  />
+                  >
+                    <option disabled selected value>-- Select a species -- </option>
+                    {#each await data.species as species}
+                      <option value={species.name}>{species.name}</option>
+                    {/each}
+                  </select>
                 </label>
               </div>
 

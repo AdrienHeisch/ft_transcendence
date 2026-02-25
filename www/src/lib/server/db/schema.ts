@@ -139,13 +139,24 @@ export type UserPublic = Omit<
 > &
   PersonOrAssociation;
 
+export const petSpecies = pgEnum("pet_species", [
+  "Cat",
+  "Cow",
+  "Dog",
+  "Fish",
+  "Horse",
+]);
+
+export const petSpeciesSchema = createSelectSchema(petSpecies);
+export type PetSpecies = (typeof petSpecies.enumValues)[number];
+
 export const pet = pgTable("pet", {
   id: uuid("id").primaryKey(),
   ownerId: uuid("owner_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
-  species: text("species").notNull(),
+  species: petSpecies("species").notNull(),
   breed: text("breed").notNull(),
   birth: timestamp("birth", {
     withTimezone: true,

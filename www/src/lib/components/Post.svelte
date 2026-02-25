@@ -1,7 +1,7 @@
 <script lang="ts">
-import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
 import Comment from "$lib/components/Comment.svelte";
+import { SPECIES_DEFAULT_ICON, SPECIES_ICONS } from "$lib/pets";
 import { getPet } from "$lib/pets.remote";
 import {
   createComment,
@@ -103,7 +103,7 @@ const closeEdit = () => {
             <p
               class="text-center absolute -bottom-2 -left-2 w-8 h-8 rounded-full border-2 border-orange-200 bg-white"
             >
-              { pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾' }
+              {SPECIES_ICONS.get(pet.species) ?? SPECIES_DEFAULT_ICON}
             </p>
           {/if}
         </a>

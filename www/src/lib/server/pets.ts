@@ -27,7 +27,7 @@ export async function createPet({
   name: string;
   birth: Date;
   description: string;
-  species: string;
+  species: schema.PetSpecies;
   breed: string;
   avatar: File;
 }) {
