@@ -1,5 +1,5 @@
-import { and, eq, gt } from "drizzle-orm";
 import { error, redirect } from "@sveltejs/kit";
+import { and, eq, gt } from "drizzle-orm";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
 import { PrivateStorage, PublicStorage } from "$lib/server/storage";
@@ -34,17 +34,35 @@ export const GET: RequestHandler = async ({ params }) => {
     .where(eq(schema.user.id, user.id));
 
   if (action === "export") {
-    const { passwordHash, gdprToken, gdprTokenExpiresAt, gdprTokenAction, ...safeUser } = user;
+    const {
+      passwordHash,
+      gdprToken,
+      gdprTokenExpiresAt,
+      gdprTokenAction,
+      ...safeUser
+    } = user;
     const data = {
       ...safeUser,
       person: (
-        await db.select().from(schema.person).where(eq(schema.person.id, user.id))
+        await db
+          .select()
+          .from(schema.person)
+          .where(eq(schema.person.id, user.id))
       ).at(0),
       association: (
-        await db.select().from(schema.association).where(eq(schema.association.id, user.id))
+        await db
+          .select()
+          .from(schema.association)
+          .where(eq(schema.association.id, user.id))
       ).at(0),
-      pets: await db.select().from(schema.pet).where(eq(schema.pet.ownerId, user.id)),
-      posts: await db.select().from(schema.post).where(eq(schema.post.author, user.id)),
+      pets: await db
+        .select()
+        .from(schema.pet)
+        .where(eq(schema.pet.ownerId, user.id)),
+      posts: await db
+        .select()
+        .from(schema.post)
+        .where(eq(schema.post.author, user.id)),
       comments: await db
         .select()
         .from(schema.postComment)
@@ -57,7 +75,9 @@ export const GET: RequestHandler = async ({ params }) => {
 
     const publicFileKeys = [
       ...(data.person?.hasAvatar ? [USER_AVATAR_PREFIX + user.id] : []),
-      ...data.pets.filter((p) => p.hasAvatar).map((p) => PET_AVATAR_PREFIX + p.id),
+      ...data.pets
+        .filter((p) => p.hasAvatar)
+        .map((p) => PET_AVATAR_PREFIX + p.id),
       ...data.posts.map((p) => POST_IMAGE_PREFIX + p.id),
     ];
     const privateFileKeys = data.messages
