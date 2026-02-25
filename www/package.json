@@ -39,6 +39,7 @@
     "drizzle-seed": "^0.3.1",
     "drizzle-zod": "^0.8.3",
     "postgres": "^3.4.7",
+    "resend": "^6.9.2",
     "svelte": "^5.46.0",
     "svelte-check": "^4.3.5",
     "sveltekit-rate-limiter": "^0.7.0",
