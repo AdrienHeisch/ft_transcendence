@@ -117,10 +117,7 @@ $effect(() => {
                 Name
                 <input
                   type="text"
-                  class="w-full text-2xl font-bold px-4 py-2 rounded-xl
-                        border border-orange-300 bg-yellow-50
-                        focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-                        outline-none transition shadow-sm"
+                  class="w-full text-2xl font-bold px-4 py-2 rounded-xl border border-orange-300 bg-yellow-50 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm"
                   {...updatePet.fields.name.as("text")}
                   value={pet.name}
                 />
@@ -131,10 +128,7 @@ $effect(() => {
                 Description
                 <textarea
                   rows="3"
-                  class="w-full px-4 py-2 rounded-xl
-                        border border-orange-300 bg-yellow-50
-                        focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-                        outline-none transition shadow-sm resize-none"
+                  class="w-full px-4 py-2 rounded-xl border border-orange-300 bg-yellow-50 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm resize-none"
                   {...updatePet.fields.description.as("text")}
                 >{pet.description}</textarea>
               </label>

@@ -171,9 +171,7 @@ $effect(() => {
               Description
               <textarea
                 rows="3"
-                class="px-4 py-2 rounded-lg border border-gray-300 bg-white
-                      focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-                      outline-none transition resize-none"
+                class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition resize-none"
                 {...updatePerson.fields.description.as("text")}
                 >{user.description}</textarea>
             </label>
@@ -189,9 +187,7 @@ $effect(() => {
                 </svg>
                 {#if isEditMode}
                   <select
-                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white
-                          focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-                          outline-none transition"
+                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
                     {...updatePerson.fields.city.as("select")}
                   >
                     {#each await data.cities as cityOption}
