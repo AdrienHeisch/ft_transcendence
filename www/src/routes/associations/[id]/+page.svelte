@@ -151,22 +151,27 @@ $effect(() => {
         <!-- Association Info -->
         <div class="flex-1 text-center md:text-left">
           {#if isEditMode}
-            <div class="flex">
-              <textarea
-                class="text-3xl font-bold text-gray-900 border rounded bg-yellow-100 resize-none"
-                rows=1
+            <label class="block text-gray-700">
+              <span class="text-sm font-semibold">Name</span>
+              <input
+                type="text"
+                class="w-full text-xl font-semibold px-4 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm"
                 {...updateAssociation.fields.name.as("text")}
-              >{association.name}</textarea>
-            </div>
+                value={association.name}
+              />
+            </label>
           {:else}
             <h1 class="text-3xl font-bold text-gray-900" style="font-family: Georgia, serif;">{association.name}</h1>
           {/if}
           {#if isEditMode}
-            <textarea
-              class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
-              rows=1
-              {...updateAssociation.fields.description.as("text")}
-            >{association.description}</textarea>
+            <label class="block text-gray-700">
+              <span class="text-sm font-semibold">Description</span>
+              <textarea
+                rows="3"
+                class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm resize-none"
+                {...updateAssociation.fields.description.as("text")}
+              >{association.description}</textarea>
+            </label>
           {:else}
             <p class="mt-2 text-gray-700 max-w-2xl">{association.description}</p>
           {/if}
@@ -179,7 +184,7 @@ $effect(() => {
               </svg>
               {#if isEditMode}
                 <select
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
+                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none shadow-sm transition"
                   {...updateAssociation.fields.city.as("select")}
                 >
                   {#each await data.cities as cityOption}
@@ -195,15 +200,11 @@ $effect(() => {
               {/if}
             </div>
             <div class="flex items-center gap-1">
-              <span>📧</span>
-              <span>{email}</span>
-            </div>
-            <div class="flex items-center gap-1">
               <span>📞</span>
               {#if isEditMode}
                 <div class="flex">
                   <textarea
-                    class="text-gray-900 border rounded bg-yellow-100 resize-none"
+                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none shadow-sm transition resize-none"
                     rows=1
                     {...updateAssociation.fields.phone.as("text")}
                   >{association.phone}</textarea>
@@ -213,13 +214,16 @@ $effect(() => {
               {/if}
             </div>
             <div class="flex items-center gap-1">
+              <span>📧</span>
+              <span>{email}</span>
+            </div>
+            <div class="flex items-center gap-1">
               <span>🌐</span>
               <span>{association.website}</span>
             </div>
           </div>
         </div>
 
-        <!-- Action Buttons -->
         <!-- Action Buttons -->
         <div class="flex gap-3">
           {#if isCurrentUser}
