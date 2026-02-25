@@ -1,8 +1,8 @@
 import { Resend } from "resend";
-import { env } from "$env/dynamic/private";
+import { RESEND_API_KEY } from "$env/static/private";
 
 export async function sendGdprExportEmail(to: string, confirmUrl: string) {
-  const resend = new Resend(env.RESEND_API_KEY);
+  const resend = new Resend(RESEND_API_KEY);
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to,
@@ -16,7 +16,7 @@ export async function sendGdprExportEmail(to: string, confirmUrl: string) {
 }
 
 export async function sendGdprDeleteEmail(to: string, confirmUrl: string) {
-  const resend = new Resend(env.RESEND_API_KEY);
+  const resend = new Resend(RESEND_API_KEY);
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to,
