@@ -101,10 +101,10 @@ $effect(() => {
     <!-- Profile Header -->
     <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
       <form enctype="multipart/form-data" {...updateAssociation.enhance(async ({ submit }) => {
+        isEditMode = false;
         await submit();
         await data.association.refresh();
         await postsQuery.refresh();
-        isEditMode = false;
         // location.reload(); // TODO there might be a better way to reload all images on the page
       })} class="flex flex-col md:flex-row items-center md:items-end gap-6">
         <input {...updateAssociation.fields.id.as("hidden", association.id)} />
