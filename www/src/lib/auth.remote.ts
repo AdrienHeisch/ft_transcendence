@@ -7,13 +7,12 @@ import { command, form, getRequestEvent } from "$app/server";
 import * as auth from "$lib/server/auth";
 import { db } from "$lib/server/db";
 import * as schema from "$lib/server/db/schema";
+import { sendGdprDeleteEmail, sendGdprExportEmail } from "$lib/server/email";
 import { TEXT_LIMITS } from "$lib/textLimits";
-import { PublicStorage } from "./server/storage";
-import {
-  PET_AVATAR_PREFIX,
-  POST_IMAGE_PREFIX,
-  USER_AVATAR_PREFIX,
-} from "./storage";
+
+function generateGdprToken() {
+  return crypto.randomUUID();
+}
 
 async function register(
   id: string,
@@ -198,6 +197,28 @@ export const updateCredentials = form(
   },
 );
 
+export const requestGdprExport = form(
+  z.object({}),
+  async () => {
+    const user = auth.requireLogin();
+    const token = generateGdprToken();
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+
+    await db
+      .update(schema.user)
+      .set({ gdprToken: token, gdprTokenExpiresAt: expiresAt, gdprTokenAction: "export" })
+      .where(eq(schema.user.id, user.id));
+
+    const event = getRequestEvent();
+    await sendGdprExportEmail(
+      user.email,
+      `${event.url.origin}/settings/gdpr/confirm/${token}`,
+    );
+
+    redirect(302, "/settings/gdpr/requested");
+  },
+);
+
 export const deleteAccount = form(
   z.object({
     password: z.string(),
@@ -205,7 +226,6 @@ export const deleteAccount = form(
   async ({ password }) => {
     const user = auth.requireLogin();
 
-    //TODO extract to function (present in login)
     const validPassword = await verify(user.passwordHash, password, {
       memoryCost: 19456,
       timeCost: 2,
@@ -217,21 +237,20 @@ export const deleteAccount = form(
       return error(400, { message: "Incorrect username or password" });
     }
 
-    (
-      await db.select().from(schema.post).where(eq(schema.post.author, user.id))
-    ).forEach(async (post) => {
-      await PublicStorage.delete(POST_IMAGE_PREFIX + post.id);
-    });
+    const token = generateGdprToken();
+    const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
 
-    (
-      await db.select().from(schema.pet).where(eq(schema.pet.ownerId, user.id))
-    ).forEach(async (pet) => {
-      await PublicStorage.delete(PET_AVATAR_PREFIX + pet.id);
-    });
+    await db
+      .update(schema.user)
+      .set({ gdprToken: token, gdprTokenExpiresAt: expiresAt, gdprTokenAction: "delete" })
+      .where(eq(schema.user.id, user.id));
 
-    await PublicStorage.delete(USER_AVATAR_PREFIX + user.id);
+    const event = getRequestEvent();
+    await sendGdprDeleteEmail(
+      user.email,
+      `${event.url.origin}/settings/gdpr/confirm/${token}`,
+    );
 
-    auth.deleteSessionTokenCookie(getRequestEvent());
-    await db.delete(schema.user).where(eq(schema.user.id, user.id));
+    redirect(302, "/settings/gdpr/requested");
   },
 );
