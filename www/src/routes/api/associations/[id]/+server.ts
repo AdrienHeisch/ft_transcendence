@@ -9,6 +9,9 @@ import * as schema from "$lib/server/db/schema";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ params: { id } }) => {
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   const association = await getAssociation(id);
   if (!association) {
     error(404);
@@ -18,6 +21,9 @@ export const GET: RequestHandler = async ({ params: { id } }) => {
 
 export const PUT: RequestHandler = async ({ params: { id }, request }) => {
   const user = getApiUser();
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   if (user.id !== id) {
     error(403);
   }
@@ -46,6 +52,9 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {
   const user = getApiUser();
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   if (user.id !== id) {
     error(403);
   }

@@ -8,8 +8,8 @@ import * as schema from "$lib/server/db/schema";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ params: { id } }) => {
-  if (!z.uuid().safeParse(id).success) {
-    error(404);
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
   }
   const post = await getPost(id);
   if (!post) {
@@ -20,8 +20,8 @@ export const GET: RequestHandler = async ({ params: { id } }) => {
 
 export const PUT: RequestHandler = async ({ params: { id }, request }) => {
   const user = getApiUser();
-  if (!z.uuid().safeParse(id).success) {
-    error(404);
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
   }
   const formData = Object.fromEntries((await request.formData()).entries());
   const parsed = z
@@ -38,6 +38,9 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
         .where(and(eq(schema.post.id, id), eq(schema.post.author, user.id)))
         .returning()
     ).at(0);
+    if (!updated) {
+      error(404);
+    }
     return new Response(JSON.stringify(updated));
   } else {
     error(400, parsed.error);
@@ -46,8 +49,8 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {
   const user = getApiUser();
-  if (!z.uuid().safeParse(id).success) {
-    error(404);
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
   }
   const deleted = (
     await db

@@ -7,10 +7,16 @@ import * as schema from "$lib/server/db/schema";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ params: { commentId: id } }) => {
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   const comment = await db
     .select()
     .from(schema.postComment)
     .where(eq(schema.postComment.id, id));
+  if (!comment) {
+    error(404);
+  }
   return new Response(JSON.stringify(comment));
 };
 
@@ -19,9 +25,9 @@ export const PUT: RequestHandler = async ({
   request,
 }) => {
   const user = getApiUser();
-  // if (!z.uuid().safeParse(id).success) {
-  //   error(404);
-  // }
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   const formData = Object.fromEntries((await request.formData()).entries());
   const parsed = z
     .object({
@@ -42,6 +48,9 @@ export const PUT: RequestHandler = async ({
         )
         .returning()
     ).at(0);
+    if (!updated) {
+      error(404);
+    }
     return new Response(JSON.stringify(updated));
   } else {
     error(400, parsed.error);
@@ -50,9 +59,9 @@ export const PUT: RequestHandler = async ({
 
 export const DELETE: RequestHandler = async ({ params: { commentId: id } }) => {
   const user = getApiUser();
-  // if (!z.uuid().safeParse(id).success) {
-  //   error(404);
-  // }
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   const deleted = (
     await db
       .delete(schema.postComment)

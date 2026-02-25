@@ -9,6 +9,9 @@ import { getPetOwner, updatePet } from "$lib/server/pets";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ params: { id } }) => {
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   const pet = await getPet(id);
   if (!pet) {
     error(404);
@@ -18,9 +21,9 @@ export const GET: RequestHandler = async ({ params: { id } }) => {
 
 export const PUT: RequestHandler = async ({ params: { id }, request }) => {
   const user = getApiUser();
-  // if (!z.uuid().safeParse(id).success) {
-  //   error(404);
-  // }
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   const owner = await getPetOwner({ id });
   if (user.id !== owner.id) {
     error(403);
@@ -37,6 +40,9 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
     .safeParse(formData);
   if (parsed.success) {
     const updated = await updatePet(id, parsed.data);
+    if (!updated) {
+      error(404);
+    }
     return new Response(JSON.stringify(updated));
   } else {
     error(400, parsed.error);
@@ -45,9 +51,9 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {
   const user = getApiUser();
-  // if (!z.uuid().safeParse(id).success) {
-  //   error(404);
-  // }
+  if (!z.uuidv4().safeParse(id).success) {
+    error(400);
+  }
   const owner = await getPetOwner({ id });
   if (user.id !== owner.id) {
     error(403);
