@@ -28,6 +28,14 @@ export const session = pgTable("session", {
 
 export type Session = typeof session.$inferSelect;
 
+export const gdprTokenAction = pgEnum("gdpr_token_action", [
+  "export",
+  "delete",
+]);
+
+export const gdprTokenActionSchema = createSelectSchema(gdprTokenAction);
+export type GdprTokenAction = (typeof gdprTokenAction.enumValues)[number];
+
 export const user = pgTable(
   "user",
   {
@@ -41,7 +49,7 @@ export const user = pgTable(
       withTimezone: true,
       mode: "date",
     }),
-    gdprTokenAction: text("gdpr_token_action"),
+    gdprTokenAction: gdprTokenAction("gdpr_token_action"),
     person: uuid("person").references(() => person.id),
     association: uuid("association").references(() => association.id),
   },
