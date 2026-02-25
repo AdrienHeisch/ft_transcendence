@@ -11,6 +11,7 @@ import {
   removeFriend,
 } from "$lib/friends.remote";
 import { updatePerson } from "$lib/persons.remote";
+import { SPECIES_DEFAULT_ICON, SPECIES_ICONS } from "$lib/pets";
 import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import type { UserPublic } from "$lib/server/db/schema";
@@ -141,26 +142,25 @@ $effect(() => {
           {#if isEditMode}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             <!-- First Name-->
-             <div class="flex flex-col">
-                <label class="text-sm font-semibold text-gray-700 mb-1">First Name</label>
-                <input
-                  type="text"
-                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
-                  {...updatePerson.fields.firstName.as("text")}
-                  value={user.firstName}
-                />
-             </div>
+            <label class="flex flex-col text-sm font-semibold text-gray-700 mb-1">
+              First Name
+              <input
+                type="text"
+                class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
+                {...updatePerson.fields.firstName.as("text")}
+                value={user.firstName}
+              />
+            </label>
             <!-- Last Name -->
-             <div class="flex flex-col">
-                <label class="text-sm font-semibold text-gray-700 mb-1">Last Name</label>
-                <input
-                  type="text"
-                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
-                  {...updatePerson.fields.lastName.as("text")}
-                  value={user.lastName}
-                />
-             </div>
-
+            <label class="flex flex-col text-sm font-semibold text-gray-700 mb-1">
+              Last Name
+              <input
+                type="text"
+                class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
+                {...updatePerson.fields.lastName.as("text")}
+                value={user.lastName}
+              />
+            </label>
 
             <!-- City -->
             <div class="flex items-center gap-1">
@@ -170,10 +170,6 @@ $effect(() => {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
-
-
-
-
 
               {#if isEditMode}
                 <select
@@ -199,16 +195,16 @@ $effect(() => {
           {/if}
           <!--Description-->
           {#if isEditMode}
-            <div class="mt-4 flex flex-col">
-              <label class="text-sm font-semibold text-gray-700 mb-1">Description</label>
+            <label class="mt-4 flex flex-col text-sm font-semibold text-gray-700 mb-1">
+              Description
               <textarea
                 rows="3"
                 class="px-4 py-2 rounded-lg border border-gray-300 bg-white
                       focus:ring-2 focus:ring-orange-500 focus:border-orange-500
                       outline-none transition resize-none"
-                {...updatePerson.fields.description.as("textarea")}
+                {...updatePerson.fields.description.as("text")}
                 >{user.description}</textarea>
-            </div>
+            </label>
           {:else}
             <p class="mt-2 text-gray-700 max-w-2xl">{user.description}</p>
           {/if}
@@ -342,7 +338,7 @@ $effect(() => {
             {#each await pets as pet (pet.id)}
               <a href={resolve(`/pets/${pet.id}`)} class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
+                  <span class="text-2xl">{SPECIES_ICONS.get(pet.species) ?? SPECIES_DEFAULT_ICON}</span>
                   <span class="font-bold text-gray-900">{pet.name}</span>
                 </div>
                 <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>
