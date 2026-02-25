@@ -44,20 +44,10 @@ const isOwned = $derived(currentUser?.id === author.id);
 const isLiked = $derived(isPostLiked(post.id));
 
 const onLikePost = async () => {
-  try {
-    if (await isLiked) {
-      await unlikePost(post.id);
-    } else {
-      await likePost(post.id);
-    }
-  } catch (e: any) {
-    switch (e.status) {
-      case 401:
-        goto(resolve("/login"));
-        break;
-      default:
-        console.log(e);
-    }
+  if (await isLiked) {
+    await unlikePost(post.id);
+  } else {
+    await likePost(post.id);
   }
 };
 

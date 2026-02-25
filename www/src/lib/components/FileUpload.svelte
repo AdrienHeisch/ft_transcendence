@@ -23,7 +23,6 @@ export function hasFile() {
 
 export function clearFiles() {
   files = new DataTransfer().files;
-  console.log(files);
 }
 
 $effect(() => {

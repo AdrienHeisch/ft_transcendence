@@ -53,7 +53,6 @@ export const GET: RequestHandler = async () => {
       .filter((message) => message.isFile)
       .map((message) => MESSAGE_FILE_PREFIX + message.id),
   ];
-  console.log(publicFileKeys, privateFileKeys);
   const files = await Promise.all(
     [
       ...publicFileKeys.map((key) => ({

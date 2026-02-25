@@ -3,6 +3,5 @@ export function startPresence() {
   ws.onmessage = () => {
     ws.send("pong");
   };
-  console.log("presence started");
   return ws;
 }

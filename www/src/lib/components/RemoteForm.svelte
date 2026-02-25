@@ -30,7 +30,6 @@ export function clearError() {
 
 async function submitXHR(data: FormData) {
   return new Promise<void>((resolve, reject) => {
-    console.log(data);
     var size = Array.from(data.values())
       .map((value: FormDataEntryValue) =>
         typeof value === "string" ? new Blob([value]).size : value.size,
