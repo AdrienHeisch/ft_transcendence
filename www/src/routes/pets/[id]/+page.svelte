@@ -65,9 +65,9 @@ $effect(() => {
     <!-- Profile Header -->
     <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
       <form enctype="multipart/form-data" {...updatePet.enhance(async ({ submit }) => {
-        isEditMode = false;
         await submit();
         await data.pet.refresh();
+        isEditMode = false;
         // location.reload(); // TODO there might be a better way to reload all images on the page
       })} class="flex flex-col md:flex-row items-center md:items-end gap-6">
         <input {...updatePet.fields.id.as("hidden", pet.id)} />
@@ -77,7 +77,7 @@ $effect(() => {
           <img 
             src={avatarUrl} 
             alt={pet.name}
-            class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white object-cover"
+            class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
           />
           {#if isEditMode}
             <input
@@ -111,27 +111,40 @@ $effect(() => {
         <!-- User Info -->
         <div class="flex-1 text-center md:text-left">
           {#if isEditMode}
-            <div class="flex">
-              <textarea
-                class="text-3xl font-bold text-gray-900 border rounded bg-yellow-100 resize-none"
-                rows=1
-                {...updatePet.fields.name.as("text")}
-              >{pet.name}</textarea>
+            <div class="space-y-3 max-w-xl">
+
+              <!-- Name -->
+              <div class="relative">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input
+                  type="text"
+                  class="w-full text-2xl font-bold px-4 py-2 rounded-xl
+                        border border-orange-300 bg-yellow-50
+                        focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                        outline-none transition shadow-sm"
+                  {...updatePet.fields.name.as("text")}
+                  value={pet.name}
+                />
+              </div>
+
+              <!-- Description -->
+              <div class="relative">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea
+                  rows="3"
+                  class="w-full px-4 py-2 rounded-xl
+                        border border-orange-300 bg-yellow-50
+                        focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                        outline-none transition shadow-sm resize-none"
+                  {...updatePet.fields.description.as("text")}
+                >{pet.description}</textarea>
+              </div>
+
             </div>
           {:else}
             <h1 class="text-3xl font-bold text-gray-900">{pet.name}</h1>
-          {/if}
-          <p class="text-lg text-gray-600">{pet.species}</p>
-          {#if isEditMode}
-            <textarea
-              class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
-              rows=1
-              {...updatePet.fields.description.as("text")}
-            >{pet.description}</textarea>
-          {:else}
             <p class="mt-2 text-gray-700 max-w-2xl">{pet.description}</p>
           {/if}
-
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
             <div class="flex items-center gap-1">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
