@@ -36,6 +36,12 @@ export const user = pgTable(
     email: text("email").notNull().unique(),
     passwordHash: text("password_hash").notNull(),
     online: boolean("online").notNull(),
+    gdprToken: text("gdpr_token"),
+    gdprTokenExpiresAt: timestamp("gdpr_token_expires_at", {
+      withTimezone: true,
+      mode: "date",
+    }),
+    gdprTokenAction: text("gdpr_token_action"),
     person: uuid("person").references(() => person.id),
     association: uuid("association").references(() => association.id),
   },

@@ -79,6 +79,9 @@ export default async function seedDb() {
       person: isAssociation ? null : userId,
       association: isAssociation ? userId : null,
       online: false,
+      gdprToken: null,
+      gdprTokenExpiresAt: null,
+      gdprTokenAction: null,
     });
     const petIds = [];
     for (

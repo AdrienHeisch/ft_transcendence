@@ -1,6 +1,5 @@
 <script lang="ts">
-import { resolve } from "$app/paths";
-import { deleteAccount, updateCredentials } from "$lib/auth.remote";
+import { deleteAccount, requestGdprExport, updateCredentials } from "$lib/auth.remote";
 
 const { data } = $props();
 
@@ -177,28 +176,31 @@ $effect(() =>
   <div class="flex flex-col space-y-3">
     <div class="flex flex-col">
       <p class="block text-sm font-bold text-[#8B4513] mb-2">GDPR data request</p>
-      <a
-        href={resolve("/settings/gdpr")}
-        download
-        class="w-full text-center py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold text-lg hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg hover:shadow-xl"
-      >
-        Download your data
-      </a>
+      <p class="text-sm text-[#A0522D] mb-2">A confirmation link will be sent to your email.</p>
+      <form {...requestGdprExport}>
+        <button
+          type="submit"
+          class="w-full text-center py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold text-lg hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg hover:shadow-xl"
+        >
+          Download your data
+        </button>
+      </form>
     </div>
     <form {...deleteAccount}>
       <div>
         <label class="block text-sm font-bold text-[#8B4513] mb-2">
           Password
-          <input 
-            placeholder="Enter your current password..." 
-            required 
-            {...deleteAccount.fields.password.as("password")} 
+          <input
+            placeholder="Enter your current password..."
+            required
+            {...deleteAccount.fields.password.as("password")}
             class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
           />
         </label>
       </div>
-      <button 
-        type="submit" 
+      <p class="text-sm text-[#A0522D] mb-2">A confirmation link will be sent to your email.</p>
+      <button
+        type="submit"
         class="w-full py-3 bg-linear-to-r from-[#CC5500] to-[#A04000] text-white rounded-lg font-bold text-lg hover:from-[#DD6611] hover:to-[#B05011] transition-all shadow-lg hover:shadow-xl"
       >
         Delete account
