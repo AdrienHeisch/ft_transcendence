@@ -96,6 +96,7 @@ $effect(() =>
             name="name"
             type="text"
             required
+            maxlength={TEXT_LIMITS.ASSOCIATION_NAME}
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
             placeholder="Farm Animals Sanctuary"
             bind:value={associationName}
