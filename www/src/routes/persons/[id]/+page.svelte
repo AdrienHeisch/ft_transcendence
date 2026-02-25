@@ -193,12 +193,13 @@ $effect(() => {
                           focus:ring-2 focus:ring-orange-500 focus:border-orange-500
                           outline-none transition"
                     {...updatePerson.fields.city.as("select")}
-                    value={user.city}
                   >
                     {#each await data.cities as cityOption}
-                      <option value={cityOption.code}>
-                        {cityOption.name}
-                      </option>
+                      {#if cityOption.code === city?.code}
+                        <option selected value={cityOption.code}>{cityOption.name}</option>
+                      {:else}
+                        <option value={cityOption.code}>{cityOption.name}</option>
+                      {/if}
                     {/each}
                   </select>
                 {:else}
