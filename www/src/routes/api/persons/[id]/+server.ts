@@ -9,9 +9,6 @@ import { updatePerson } from "$lib/server/persons";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ params: { id } }) => {
-  // if (!z.uuidv4().safeParse(id).success) {
-  //   error(404);
-  // }
   const person = await getPerson(id);
   if (!person) {
     error(404);
