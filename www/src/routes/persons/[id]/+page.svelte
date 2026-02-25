@@ -141,54 +141,26 @@ $effect(() => {
         <div class="flex-1 text-center md:text-left">
           {#if isEditMode}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            <!-- First Name-->
-            <label class="flex flex-col text-sm font-semibold text-gray-700 mb-1">
-              First Name
-              <input
-                type="text"
-                class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
-                {...updatePerson.fields.firstName.as("text")}
-                value={user.firstName}
-              />
-            </label>
-            <!-- Last Name -->
-            <label class="flex flex-col text-sm font-semibold text-gray-700 mb-1">
-              Last Name
-              <input
-                type="text"
-                class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
-                {...updatePerson.fields.lastName.as("text")}
-                value={user.lastName}
-              />
-            </label>
-
-            <!-- City -->
-            <div class="flex items-center gap-1">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-
-              {#if isEditMode}
-                <select
-                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white
-                        focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-                        outline-none transition"
-                  {...updatePerson.fields.city.as("select")}
-                  value={user.city}
-                >
-                  {#each await data.cities as cityOption}
-                    <option value={cityOption.code}>
-                      {cityOption.name}
-                    </option>
-                  {/each}
-                </select>
-              {:else}
-                <span>{city?.name}</span>
-              {/if}
-            </div>
+              <!-- First Name-->
+              <label class="flex flex-col text-sm font-semibold text-gray-700 mb-1">
+                First Name
+                <input
+                  type="text"
+                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
+                  {...updatePerson.fields.firstName.as("text")}
+                  value={user.firstName}
+                />
+              </label>
+              <!-- Last Name -->
+              <label class="flex flex-col text-sm font-semibold text-gray-700 mb-1">
+                Last Name
+                <input
+                  type="text"
+                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
+                  {...updatePerson.fields.lastName.as("text")}
+                  value={user.lastName}
+                />
+              </label>
             </div>
           {:else}
             <h1 class="text-3xl font-bold text-gray-900">{user.firstName} {user.lastName}</h1>
@@ -215,7 +187,21 @@ $effect(() => {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
-                {#if !isEditMode}
+                {#if isEditMode}
+                  <select
+                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white
+                          focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                          outline-none transition"
+                    {...updatePerson.fields.city.as("select")}
+                    value={user.city}
+                  >
+                    {#each await data.cities as cityOption}
+                      <option value={cityOption.code}>
+                        {cityOption.name}
+                      </option>
+                    {/each}
+                  </select>
+                {:else}
                   <span>{city?.name}</span>
                 {/if}
               </div>
