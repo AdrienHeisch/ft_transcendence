@@ -142,7 +142,7 @@ async function sendMessage() {
               <div class="flex {isOwn ? 'justify-end' : 'justify-start'}">
                 <div class="max-w-[70%] {isOwn ? 'bg-[#CC5500] text-white' : 'bg-white border-2 border-[#8B4513] text-[#8B4513]'} rounded-2xl px-4 py-3 shadow-md">
                   {#if message.isFile}
-                    <img alt="Message" src={getMessageFile(message)} />
+                    <img alt="Message" class="object-cover" src={getMessageFile(message)} />
                   {:else}
                     <p class="wrap-break-words">{message.content}</p>
                   {/if}

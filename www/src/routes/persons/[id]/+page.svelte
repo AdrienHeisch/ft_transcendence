@@ -103,7 +103,7 @@ $effect(() => {
           <img 
             src={avatarUrl} 
             alt={`${user.firstName} ${user.lastName}`}
-            class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white"
+            class="w-40 h-40 rounded-full border-4 border-white shadow-lg bg-white object-cover"
           />
           {#if isEditMode}
             <input

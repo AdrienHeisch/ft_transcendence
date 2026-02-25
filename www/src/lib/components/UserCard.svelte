@@ -24,7 +24,7 @@ const city = $derived(await getCity(user.city));
         <img 
           src={getUserAvatar(user)} 
           alt={user.firstName + ' ' + user.lastName}
-          class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white"
+          class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white object-cover"
         />
         {#if user.online}
           <div class={["bg-green-500", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>

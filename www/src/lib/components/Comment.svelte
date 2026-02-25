@@ -44,7 +44,7 @@ const closeEdit = () => {
         <img 
           src={getUserAvatar(author)}
           alt={getFullName(author)}
-          class="w-12 h-12 rounded-full border-2 border-orange-700"
+          class="w-12 h-12 rounded-full border-2 border-orange-700 object-cover"
         />
         {#if author.online}
           <div class={["bg-green-500", "absolute", "bottom-0", "right-0", "w-3", "h-3", "rounded-full", "border-2", "border-white"]}></div>

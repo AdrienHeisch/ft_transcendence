@@ -85,7 +85,7 @@ const closeEdit = () => {
         <img 
           src={getUserAvatar(author)}
           alt={getFullName(author)}
-          class="w-12 h-12 rounded-full border-2 border-orange-700"
+          class="w-12 h-12 rounded-full border-2 border-orange-700 object-cover"
         />
       </a>
       {#if author.online}
@@ -97,7 +97,7 @@ const closeEdit = () => {
             <img
               alt="Pet"
               src={getPetAvatar(pet)}
-              class="absolute -bottom-2 -left-2 w-8 h-8 rounded-full border-2 border-orange-200 bg-white"
+              class="absolute -bottom-2 -left-2 w-8 h-8 rounded-full border-2 border-orange-200 bg-white object-cover"
             />
           {:else}
             <p
