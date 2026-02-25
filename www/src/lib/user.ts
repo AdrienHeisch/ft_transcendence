@@ -7,7 +7,7 @@ export function getFullName(user: UserPublic) {
 export function getProfileUrl(
   user: User | UserPublic,
 ): `/associations/${string}` | `/persons/${string}` {
-  if ("isAssociation" in user) {
+  if (typeof user === "object" && "isAssociation" in user) {
     return `/${user.isAssociation ? "associations" : "persons"}/${user.id}`;
   } else {
     return `/${user.association ? "associations" : "persons"}/${user.id}`;
