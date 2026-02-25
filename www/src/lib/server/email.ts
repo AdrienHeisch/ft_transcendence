@@ -1,5 +1,5 @@
-import { env } from "$env/dynamic/private";
 import { Resend } from "resend";
+import { env } from "$env/dynamic/private";
 
 export async function sendGdprExportEmail(to: string, confirmUrl: string) {
   const resend = new Resend(env.RESEND_API_KEY);

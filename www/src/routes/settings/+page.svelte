@@ -1,5 +1,9 @@
 <script lang="ts">
-import { deleteAccount, requestGdprExport, updateCredentials } from "$lib/auth.remote";
+import {
+  deleteAccount,
+  requestGdprExport,
+  updateCredentials,
+} from "$lib/auth.remote";
 
 const { data } = $props();
 

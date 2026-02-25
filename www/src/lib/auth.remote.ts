@@ -197,27 +197,28 @@ export const updateCredentials = form(
   },
 );
 
-export const requestGdprExport = form(
-  z.object({}),
-  async () => {
-    const user = auth.requireLogin();
-    const token = generateGdprToken();
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+export const requestGdprExport = form(z.object({}), async () => {
+  const user = auth.requireLogin();
+  const token = generateGdprToken();
+  const expiresAt = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
 
-    await db
-      .update(schema.user)
-      .set({ gdprToken: token, gdprTokenExpiresAt: expiresAt, gdprTokenAction: "export" })
-      .where(eq(schema.user.id, user.id));
+  await db
+    .update(schema.user)
+    .set({
+      gdprToken: token,
+      gdprTokenExpiresAt: expiresAt,
+      gdprTokenAction: "export",
+    })
+    .where(eq(schema.user.id, user.id));
 
-    const event = getRequestEvent();
-    await sendGdprExportEmail(
-      user.email,
-      `${event.url.origin}/settings/gdpr/confirm/${token}`,
-    );
+  const event = getRequestEvent();
+  await sendGdprExportEmail(
+    user.email,
+    `${event.url.origin}/settings/gdpr/confirm/${token}`,
+  );
 
-    redirect(302, "/settings/gdpr/requested");
-  },
-);
+  redirect(302, "/settings/gdpr/requested");
+});
 
 export const deleteAccount = form(
   z.object({
@@ -242,7 +243,11 @@ export const deleteAccount = form(
 
     await db
       .update(schema.user)
-      .set({ gdprToken: token, gdprTokenExpiresAt: expiresAt, gdprTokenAction: "delete" })
+      .set({
+        gdprToken: token,
+        gdprTokenExpiresAt: expiresAt,
+        gdprTokenAction: "delete",
+      })
       .where(eq(schema.user.id, user.id));
 
     const event = getRequestEvent();
