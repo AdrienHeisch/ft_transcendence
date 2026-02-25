@@ -140,23 +140,23 @@ $effect(() => {
         <!-- User Info -->
         <div class="flex-1 text-center md:text-left">
           {#if isEditMode}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
               <!-- First Name-->
-              <label class="flex flex-col text-sm font-semibold text-gray-700 mb-1">
-                First Name
+              <label class="flex flex-col text-gray-700">
+                <span class="text-sm font-semibold">First Name</span>
                 <input
                   type="text"
-                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
+                  class="px-4 py-2 text-xl font-semibold rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none shadow-sm transition"
                   {...updatePerson.fields.firstName.as("text")}
                   value={user.firstName}
                 />
               </label>
               <!-- Last Name -->
-              <label class="flex flex-col text-sm font-semibold text-gray-700 mb-1">
-                Last Name
+              <label class="flex flex-col text-gray-700">
+                <span class="text-sm font-semibold">Last Name</span>
                 <input
                   type="text"
-                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
+                  class="px-4 py-2 text-xl font-semibold rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none shadow-sm transition"
                   {...updatePerson.fields.lastName.as("text")}
                   value={user.lastName}
                 />
@@ -167,11 +167,11 @@ $effect(() => {
           {/if}
           <!--Description-->
           {#if isEditMode}
-            <label class="mt-4 flex flex-col text-sm font-semibold text-gray-700 mb-1">
-              Description
+            <label class="mt-2 flex flex-col text-gray-700 mb-1">
+              <span class="text-sm font-semibold">Description</span>
               <textarea
                 rows="3"
-                class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition resize-none"
+                class="px-4 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm resize-none"
                 {...updatePerson.fields.description.as("text")}
                 >{user.description}</textarea>
             </label>
@@ -187,7 +187,7 @@ $effect(() => {
                 </svg>
                 {#if isEditMode}
                   <select
-                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                    class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none shadow-sm transition"
                     {...updatePerson.fields.city.as("select")}
                   >
                     {#each await data.cities as cityOption}

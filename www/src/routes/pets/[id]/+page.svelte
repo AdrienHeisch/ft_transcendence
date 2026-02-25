@@ -111,24 +111,24 @@ $effect(() => {
         <!-- User Info -->
         <div class="flex-1 text-center md:text-left">
           {#if isEditMode}
-            <div class="space-y-3 max-w-xl">
+            <div class="flex flex-col space-y-2 max-w-xl">
               <!-- Name -->
-              <label class="relative block text-sm font-medium text-gray-700 mb-1">
-                Name
+              <label class="block text-gray-700">
+                <span class="text-sm font-semibold">Name</span>
                 <input
                   type="text"
-                  class="w-full text-2xl font-bold px-4 py-2 rounded-xl border border-orange-300 bg-yellow-50 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm"
+                  class="w-full text-xl font-semibold px-4 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm"
                   {...updatePet.fields.name.as("text")}
                   value={pet.name}
                 />
               </label>
 
               <!-- Description -->
-              <label class=" relative block text-sm font-medium text-gray-700 mb-1">
-                Description
+              <label class="block text-gray-700">
+                <span class="text-sm font-semibold">Description</span>
                 <textarea
                   rows="3"
-                  class="w-full px-4 py-2 rounded-xl border border-orange-300 bg-yellow-50 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm resize-none"
+                  class="w-full px-4 py-2 rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition shadow-sm resize-none"
                   {...updatePet.fields.description.as("text")}
                 >{pet.description}</textarea>
               </label>
