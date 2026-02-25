@@ -11,7 +11,6 @@ import {
   removeFriend,
 } from "$lib/friends.remote";
 import { updatePerson } from "$lib/persons.remote";
-import { SPECIES_DEFAULT_ICON, SPECIES_ICONS } from "$lib/pets";
 import { getPets } from "$lib/pets.remote";
 import { getPosts } from "$lib/posts.remote";
 import type { UserPublic } from "$lib/server/db/schema";
@@ -140,27 +139,76 @@ $effect(() => {
         <!-- User Info -->
         <div class="flex-1 text-center md:text-left">
           {#if isEditMode}
-            <div class="flex">
-              <textarea
-                class="text-3xl font-bold text-gray-900 border rounded bg-yellow-100 resize-none"
-                rows=1
-                {...updatePerson.fields.firstName.as("text")}
-              >{user.firstName}</textarea>
-              <textarea
-                class="text-3xl font-bold text-gray-900 border rounded bg-yellow-100 resize-none"
-                rows=1
-                {...updatePerson.fields.lastName.as("text")}
-              >{user.lastName}</textarea>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+            <!-- First Name-->
+             <div class="flex flex-col">
+                <label class="text-sm font-semibold text-gray-700 mb-1">First Name</label>
+                <input
+                  type="text"
+                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
+                  {...updatePerson.fields.firstName.as("text")}
+                  value={user.firstName}
+                />
+             </div>
+            <!-- Last Name -->
+             <div class="flex flex-col">
+                <label class="text-sm font-semibold text-gray-700 mb-1">Last Name</label>
+                <input
+                  type="text"
+                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none trabnsition"
+                  {...updatePerson.fields.lastName.as("text")}
+                  value={user.lastName}
+                />
+             </div>
+
+
+            <!-- City -->
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+
+
+
+
+
+              {#if isEditMode}
+                <select
+                  class="px-4 py-2 rounded-lg border border-gray-300 bg-white
+                        focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                        outline-none transition"
+                  {...updatePerson.fields.city.as("select")}
+                  value={user.city}
+                >
+                  {#each await data.cities as cityOption}
+                    <option value={cityOption.code}>
+                      {cityOption.name}
+                    </option>
+                  {/each}
+                </select>
+              {:else}
+                <span>{city?.name}</span>
+              {/if}
+            </div>
             </div>
           {:else}
             <h1 class="text-3xl font-bold text-gray-900">{user.firstName} {user.lastName}</h1>
           {/if}
+          <!--Description-->
           {#if isEditMode}
-            <textarea
-              class="mt-2 text-gray-700 max-w-2xl border rounded bg-yellow-100 resize-none"
-              rows=1
-              {...updatePerson.fields.description.as("text")}
-            >{user.description}</textarea>
+            <div class="mt-4 flex flex-col">
+              <label class="text-sm font-semibold text-gray-700 mb-1">Description</label>
+              <textarea
+                rows="3"
+                class="px-4 py-2 rounded-lg border border-gray-300 bg-white
+                      focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                      outline-none transition resize-none"
+                {...updatePerson.fields.description.as("textarea")}
+                >{user.description}</textarea>
+            </div>
           {:else}
             <p class="mt-2 text-gray-700 max-w-2xl">{user.description}</p>
           {/if}
@@ -171,20 +219,7 @@ $effect(() => {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
-                {#if isEditMode}
-                  <select
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
-                    {...updatePerson.fields.city.as("select")}
-                  >
-                    {#each await data.cities as cityOption}
-                    {#if cityOption.code === city?.code}
-                      <option selected value={cityOption.code}>{cityOption.name}</option>
-                    {:else}
-                      <option value={cityOption.code}>{cityOption.name}</option>
-                    {/if}
-                    {/each}
-                  </select>
-                {:else}
+                {#if !isEditMode}
                   <span>{city?.name}</span>
                 {/if}
               </div>
@@ -307,7 +342,7 @@ $effect(() => {
             {#each await pets as pet (pet.id)}
               <a href={resolve(`/pets/${pet.id}`)} class="p-3 bg-yellow-100 rounded-lg border-2 border-orange-700 hover:bg-orange-100 transition-all duration-200">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="text-2xl">{SPECIES_ICONS.get(pet.species) ?? SPECIES_DEFAULT_ICON}</span>
+                  <span class="text-2xl">{pet.species === 'Cow' ? '🐄' : pet.species === 'Chicken' ? '🐔' : pet.species === 'Pig' ? '🐷' : pet.species === 'Sheep' ? '🐑' : pet.species === 'Goat' ? '🐐' : pet.species === 'Horse' ? '🐴' : pet.species === 'Dog' ? '🐕' : pet.species === 'Cat' ? '🐈' : pet.species === 'Fish' ? '🐟' : '🐾'}</span>
                   <span class="font-bold text-gray-900">{pet.name}</span>
                 </div>
                 <div class="text-xs text-gray-600">{pet.species} • {pet.breed}</div>
