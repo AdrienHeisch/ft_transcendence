@@ -1,9 +1,9 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { formatDate } from "$lib/dateUtils";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
 import PostsFeed from "$lib/components/PostsFeed.svelte";
+import { formatDate } from "$lib/dateUtils";
 import {
   acceptFriend,
   addFriend,
