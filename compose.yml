@@ -1,6 +1,5 @@
 name: ft-transcendence
 
-version: "3"
 services:
   rproxy:
     image: caddy:2.11
