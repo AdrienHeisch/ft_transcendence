@@ -51,7 +51,7 @@ export default async function seedDb() {
         description: faker.company.catchPhrase(),
         foundedAt: faker.date.past({ years: 25 }),
         phone: faker.phone.number({ style: "international" }),
-        hasAvatar: false,
+        hasAvatar: true,
         type: faker.helpers.arrayElement(schema.associationType.enumValues),
       });
     } else {
@@ -61,7 +61,7 @@ export default async function seedDb() {
         lastName: faker.person.lastName(),
         description: faker.helpers.arrayElement(seedTexts.userBios),
         city: faker.helpers.arrayElement(cities.map((city) => city.code)),
-        hasAvatar: false,
+        hasAvatar: true,
         joinedAt: new Date(),
       });
     }
