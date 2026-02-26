@@ -16,7 +16,7 @@ import {
   likePost,
   unlikePost,
 } from "$lib/posts.remote";
-import type { Post, User, UserPublic } from "$lib/server/db/schema";
+import type { Post, UserPublic } from "$lib/server/db/schema";
 import { getPetAvatar, getPostImage, getUserAvatar } from "$lib/storage";
 import { TEXT_LIMITS } from "$lib/textLimits";
 import { getFullName, getProfileUrl } from "$lib/user";
@@ -25,7 +25,7 @@ import { getUser } from "$lib/user.remote";
 interface Props {
   post: Post;
   author: UserPublic;
-  currentUser?: User;
+  currentUser?: UserPublic;
   isFullPage?: boolean;
 }
 

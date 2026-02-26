@@ -167,7 +167,17 @@ export const updateCredentials = form(
     if (email?.length === 0) email = undefined;
     if (password?.length === 0) password = undefined;
 
-    const user = auth.requireLogin();
+    const userId = getRequestEvent().locals.user?.id;
+    if (!userId) {
+      redirect(302, "/login");
+    }
+    const [user] = await db
+      .select()
+      .from(schema.user)
+      .where(eq(schema.user.id, userId));
+    if (!userId) {
+      redirect(302, "/login");
+    }
 
     //TODO extract to function (present in login)
     const validPassword = await verify(user.passwordHash, currentPassword, {
@@ -225,7 +235,17 @@ export const deleteAccount = form(
     password: z.string(),
   }),
   async ({ password }) => {
-    const user = auth.requireLogin();
+    const userId = getRequestEvent().locals.user?.id;
+    if (!userId) {
+      redirect(302, "/login");
+    }
+    const [user] = await db
+      .select()
+      .from(schema.user)
+      .where(eq(schema.user.id, userId));
+    if (!userId) {
+      redirect(302, "/login");
+    }
 
     const validPassword = await verify(user.passwordHash, password, {
       memoryCost: 19456,

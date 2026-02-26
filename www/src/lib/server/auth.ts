@@ -6,9 +6,10 @@ import { eq } from "drizzle-orm";
 import { getRequestEvent } from "$app/server";
 import { db } from "$lib/server/db";
 import * as table from "$lib/server/db/schema";
+import { getUser } from "$lib/user.remote";
 
 export function getCurrentUser() {
-  return getRequestEvent().locals.user;
+  return getRequestEvent().locals.user ?? undefined;
 }
 
 export function requireLogin() {
@@ -57,14 +58,14 @@ export async function validateSessionToken(token: string) {
     .where(eq(table.session.id, sessionId));
 
   if (!result) {
-    return { session: null, user: null };
+    return { session: undefined, user: undefined };
   }
   const { session, user } = result;
 
   const sessionExpired = Date.now() >= session.expiresAt.getTime();
   if (sessionExpired) {
     await db.delete(table.session).where(eq(table.session.id, session.id));
-    return { session: null, user: null };
+    return { session: undefined, user: undefined };
   }
 
   const renewSession = Date.now() >= session.expiresAt.getTime() - RENEW_TIME;
@@ -76,7 +77,7 @@ export async function validateSessionToken(token: string) {
       .where(eq(table.session.id, session.id));
   }
 
-  return { session, user };
+  return { session, user: await getUser(user.id) };
 }
 
 export type SessionValidationResult = Awaited<

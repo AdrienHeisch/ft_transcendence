@@ -3,7 +3,7 @@ import { slide } from "svelte/transition";
 import { resolve } from "$app/paths";
 import { formatRelativeTime } from "$lib/dateUtils";
 import { deleteComment, editComment } from "$lib/posts.remote";
-import type { PostComment, User, UserPublic } from "$lib/server/db/schema";
+import type { PostComment, UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
 import { TEXT_LIMITS } from "$lib/textLimits";
 import { getFullName, getProfileUrl } from "$lib/user";
@@ -11,7 +11,7 @@ import { getFullName, getProfileUrl } from "$lib/user";
 interface Props {
   comment: PostComment;
   author: UserPublic;
-  currentUser?: User;
+  currentUser?: UserPublic;
 }
 
 const { comment, author, currentUser }: Props = $props();

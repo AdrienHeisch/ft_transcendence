@@ -24,13 +24,13 @@ const PRESENCE_DISCONNECTION_DELAY = PRESENCE_PING_INTERVAL * 3;
 
 type MessagesData = {
   type: "messages";
-  user: schema.User;
+  user: schema.UserPublic;
   chatId: string;
 };
 
 type PresenceData = {
   type: "presence";
-  user: schema.User;
+  user: schema.UserPublic;
   interval?: NodeJS.Timeout;
 };
 
@@ -225,15 +225,25 @@ async function validateSessionToken(token: string) {
     .where(eq(schema.session.id, sessionId));
 
   if (!result) {
-    return { session: null, user: null };
+    return { session: undefined, user: undefined };
   }
   const { session, user } = result;
 
   const sessionExpired = Date.now() >= session.expiresAt.getTime();
   if (sessionExpired) {
     await db.delete(schema.session).where(eq(schema.session.id, session.id));
-    return { session: null, user: null };
+    return { session: undefined, user: undefined };
   }
 
-  return { session, user };
+  return { session, user: await getUser(user.id) };
+}
+
+async function getUser(userId: string) {
+  return (
+    await db
+      .select()
+      .from(schema.userPublic)
+      .where(eq(schema.userPublic.id, userId))
+      .limit(1)
+  ).at(0) as schema.UserPublic;
 }

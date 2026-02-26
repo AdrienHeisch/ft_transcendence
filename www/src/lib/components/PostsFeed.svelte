@@ -1,7 +1,7 @@
 <script lang="ts">
 import Post from "$lib/components/Post.svelte";
 import { getPosts } from "$lib/posts.remote";
-import { type User } from "$lib/server/db/schema";
+import { type UserPublic } from "$lib/server/db/schema";
 import { getUser } from "$lib/user.remote";
 
 const PAGE_SIZE = 10;
@@ -14,7 +14,7 @@ const {
     author?: string;
     pet?: string;
   };
-  currentUser?: User;
+  currentUser?: UserPublic;
 } = $props();
 
 let offset = $state(0);

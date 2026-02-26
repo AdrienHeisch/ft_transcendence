@@ -4,6 +4,7 @@ import {
   requestGdprExport,
   updateCredentials,
 } from "$lib/auth.remote";
+import { getApiKey } from "$lib/user.remote.js";
 
 const { data } = $props();
 
@@ -218,13 +219,14 @@ $effect(() =>
 {/snippet}
 
 {#snippet developerSnippet()}
+  {@const apiKey = await getApiKey(data.currentUser.id)}
   <div>
     <p>API Key :</p>
     <p class="w-fit py-1 px-1 rounded border-2 border-gray-800 bg-gray-200">
-      <span class="px-1">{data.currentUser.apiKey}</span>
+      <span class="px-1">{apiKey}</span>
       <button
         class="px-1 rounded border border-gray-800 bg-gray-300"
-        onclick={async () => await navigator.clipboard.writeText(data.currentUser.apiKey)}
+        onclick={async () => apiKey && await navigator.clipboard.writeText(apiKey)}
       >
         📋
       </button>

@@ -6,8 +6,8 @@ const handleAuth = async (event: RequestEvent) => {
   const sessionToken = event.cookies.get(auth.sessionCookieName);
 
   if (!sessionToken) {
-    event.locals.user = null;
-    event.locals.session = null;
+    event.locals.user = undefined;
+    event.locals.session = undefined;
     return;
   }
 

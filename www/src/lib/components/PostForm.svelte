@@ -4,12 +4,12 @@ import FileUpload from "$lib/components/FileUpload.svelte";
 import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
 import { getPets } from "$lib/pets.remote";
 import { createPost } from "$lib/posts.remote";
-import { type Pet, type User } from "$lib/server/db/schema";
+import { type Pet, type UserPublic } from "$lib/server/db/schema";
 import { TEXT_LIMITS } from "$lib/textLimits";
 import RemoteForm from "./RemoteForm.svelte";
 
 interface Props {
-  currentUser: User;
+  currentUser: UserPublic;
   forcePet?: Pet;
   updates?: Array<RemoteQuery<any>>;
   then?: () => void | Promise<void>;
