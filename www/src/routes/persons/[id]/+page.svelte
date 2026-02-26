@@ -177,7 +177,7 @@ $effect(() => {
                 >{user.description}</textarea>
             </label>
           {:else}
-            <p class="mt-2 text-gray-700 max-w-2xl">{user.description}</p>
+            <p class="mt-2 text-gray-700 max-w-2xl break-words">{user.description}</p>
           {/if}
 
           <div class="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm text-gray-600">
