@@ -24,7 +24,8 @@ let removeAvatar = $state(false);
 const pet = $derived(await data.pet);
 const owner = $derived(await data.owner);
 const city = $derived(await data.city);
-const posts = $derived(await getPosts({ pet: pet.id }));
+const postsQuery = $derived(getPosts({ pet: pet.id }));
+const posts = $derived(await postsQuery);
 
 const isOwned = $derived(data.currentUser?.id === pet.ownerId);
 
@@ -67,6 +68,7 @@ $effect(() => {
       <form enctype="multipart/form-data" {...updatePet.enhance(async ({ submit }) => {
         await submit();
         await data.pet.refresh();
+        await postsQuery.refresh();
         isEditMode = false;
         // location.reload(); // TODO there might be a better way to reload all images on the page
       })} class="flex flex-col md:flex-row items-center md:items-end gap-6">
