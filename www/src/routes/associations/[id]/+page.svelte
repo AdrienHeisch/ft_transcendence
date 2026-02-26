@@ -85,22 +85,22 @@ $effect(() => {
       alt="Farm" 
       class="w-full h-full object-cover opacity-20"
     />
-    <div class="absolute inset-0 bg-gradient-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95"></div>
+    <div class="absolute inset-0 bg-linear-to-br from-yellow-50/95 via-orange-50/95 to-amber-100/95"></div>
   </div>
 
   <!-- Cover Image -->
-  <div class="relative h-80 bg-gradient-to-r from-orange-700 via-orange-600 to-amber-600">
+  <div class="relative h-80 bg-linear-to-r from-orange-700 via-orange-600 to-amber-600">
     <img 
       src={COVER_IMAGE} 
       alt="Cover" 
       class="w-full h-full object-cover"
     />
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/20"></div>
+    <div class="absolute inset-0 bg-linear-to-b from-transparent to-black/20"></div>
   </div>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative">
     <!-- Profile Header -->
-    <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
+    <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-xl p-6 border-4 border-orange-700">
       <form enctype="multipart/form-data" {...updateAssociation.enhance(async ({ submit }) => {
         isEditMode = false;
         await submit();
@@ -292,7 +292,7 @@ $effect(() => {
       <!-- Left Sidebar - About -->
       <div class="lg:col-span-1 space-y-6">
         <!-- About Card -->
-        <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
+        <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-4 border-orange-700">
           <h2 class="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2">
             <span class="text-2xl">ℹ️</span>
             About
@@ -365,7 +365,7 @@ $effect(() => {
         <PostsFeed queryArgs={{ author: association.id }} currentUser={data.currentUser} />
 
         {#if posts.length === 0}
-          <div class="bg-gradient-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-12 border-4 border-orange-700 text-center">
+          <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-12 border-4 border-orange-700 text-center">
             <div class="text-6xl mb-4">📝</div>
             <h3 class="text-2xl font-bold text-orange-900 mb-2">No posts yet</h3>
             <p class="text-gray-700">This association hasn't shared anything yet.</p>
