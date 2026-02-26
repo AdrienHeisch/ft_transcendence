@@ -26,11 +26,9 @@ let isEditMode = $state(false);
 let fileUpload = $state<FileUpload>();
 let removeAvatar = $state(false);
 
-// TODO remove fake data
-const association = $derived({
-  ...((await data.association) as UserPublic & { isAssociation: true }),
-  website: "www.fermeheureuse.fr",
-});
+const association = $derived(
+  (await data.association) as UserPublic & { isAssociation: true },
+);
 const city = $derived(
   (await data.cities).find((city) => city.code === association.city),
 );
@@ -216,10 +214,6 @@ $effect(() => {
             <div class="flex items-center gap-1">
               <span>📧</span>
               <span>{email}</span>
-            </div>
-            <div class="flex items-center gap-1">
-              <span>🌐</span>
-              <span>{association.website}</span>
             </div>
           </div>
         </div>
