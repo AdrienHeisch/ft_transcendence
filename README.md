@@ -88,7 +88,7 @@ _TODO_
 
 ## Database Schema
 
-Import `drawdb.json` into this web application to view the schema : [https://www.drawdb.app/editor](https://www.drawdb.app/editor)
+![Database schema](./database_schema.png)
 
 ## Features List
 
