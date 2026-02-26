@@ -24,7 +24,7 @@ export function uploadStart() {
 }
 
 export function uploadDone() {
-  progress = undefined;
+  setTimeout(() => (progress = undefined), 500);
 }
 
 export function setProgress(value: number) {
