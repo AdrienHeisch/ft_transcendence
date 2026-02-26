@@ -202,5 +202,9 @@ export const deletePost = command(z.string(), async (id) => {
 });
 
 export const getPostFileType = query(z.string(), async (id) => {
-  return (await PublicStorage.stat(POST_IMAGE_PREFIX + id)).type;
+  try {
+    return (await PublicStorage.stat(POST_IMAGE_PREFIX + id)).type;
+  } catch {
+    return undefined;
+  }
 });
