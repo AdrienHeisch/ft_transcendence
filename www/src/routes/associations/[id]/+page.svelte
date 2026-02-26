@@ -1,6 +1,7 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import { getPetsCount, updateAssociation } from "$lib/associations.remote";
+import { formatDate } from "$lib/dateUtils";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import PostForm from "$lib/components/PostForm.svelte";
 import PostsFeed from "$lib/components/PostsFeed.svelte";
@@ -52,7 +53,7 @@ const posts = $derived(await postsQuery);
 
 const stats = $derived([
   { icon: "🐾", value: animalsCount.toString(), label: "Animals" },
-  { icon: "📅", value: association.foundedAt.toString(), label: "Founded" },
+  { icon: "📅", value: formatDate(association.foundedAt), label: "Founded" },
 ]);
 
 const hasAvatar = $derived(
@@ -305,7 +306,7 @@ $effect(() => {
               <span class="text-xl">📅</span>
               <div>
                 <div class="font-semibold text-gray-700">Founded</div>
-                <div class="text-gray-600">{association.foundedAt}</div>
+                <div class="text-gray-600">{formatDate(association.foundedAt)}</div>
               </div>
             </div>
             <div class="flex items-start gap-3">

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import Comment from "$lib/components/Comment.svelte";
+import { formatRelativeTime } from "$lib/dateUtils";
 import { SPECIES_DEFAULT_ICON, SPECIES_ICONS } from "$lib/pets";
 import { getPet } from "$lib/pets.remote";
 import {
@@ -113,7 +114,7 @@ const closeEdit = () => {
       <a href={resolve(getProfileUrl(author))}>
         <p class="font-semibold text-gray-900">{getFullName(author)}</p>
       </a>
-      <p class="text-sm text-gray-600">{post.postedAt}</p>
+      <p class="text-sm text-gray-600">{formatRelativeTime(post.postedAt)}</p>
     </div>
     {#if isOwned}
       <button onclick={() => optionsOpen = !optionsOpen} class="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Actions">

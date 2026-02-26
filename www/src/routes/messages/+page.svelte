@@ -1,5 +1,6 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
+import { formatRelativeTime } from "$lib/dateUtils";
 import { getPerson } from "$lib/persons.remote";
 import { getUserAvatar } from "$lib/storage";
 import { getUser } from "$lib/user.remote";
@@ -64,7 +65,7 @@ const chats = $derived(data.chats);
                     {friend.firstName} {friend.lastName}
                   </h3>
                   {#if chat.lastMessage}
-                    <span class="text-sm text-[#A0522D] font-medium">{chat.lastMessage.sentAt}</span>
+                    <span class="text-sm text-[#A0522D] font-medium">{formatRelativeTime(chat.lastMessage.sentAt)}</span>
                   {/if}
                 </div>
                 {#if chat.lastMessage}
