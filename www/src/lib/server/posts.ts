@@ -14,20 +14,25 @@ export const createPost = async ({
   author: string;
   content: string;
   pet?: string;
-  file: File;
+  file?: File;
 }) => {
   const id = crypto.randomUUID();
-  if (file.size > Number(PUBLIC_MAX_FILE_SIZE)) {
+  if (file && file.size > Number(PUBLIC_MAX_FILE_SIZE)) {
     error(413);
   }
-  if (!(file.type.startsWith("image/") || file.type.startsWith("video/"))) {
+  if (
+    file &&
+    !(file.type.startsWith("image/") || file.type.startsWith("video/"))
+  ) {
     error(415);
   }
   const fileKey = POST_IMAGE_PREFIX + id;
-  try {
-    await PublicStorage.upload(fileKey, file, file.type);
-  } catch {
-    error(500, "Failed to create post");
+  if (file) {
+    try {
+      await PublicStorage.upload(fileKey, file, file.type);
+    } catch {
+      error(500, "Failed to create post");
+    }
   }
   try {
     return (
@@ -38,6 +43,7 @@ export const createPost = async ({
           author,
           content,
           pet,
+          hasFile: file !== undefined,
           postedAt: new Date(),
         })
         .returning()

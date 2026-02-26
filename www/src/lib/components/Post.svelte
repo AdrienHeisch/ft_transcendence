@@ -132,19 +132,25 @@ const closeEdit = () => {
   {/if}
 
   <!-- Post Image -->
-  {#if (await getPostFileType(post.id)).startsWith("video/")}
-    <video controls loop autoplay>
-      <source src={getPostImage(post)} />
-    </video>
+  {#if post.hasFile}
+    {#if (await getPostFileType(post.id))?.startsWith("video/")}
+      <video controls loop autoplay>
+        <source src={getPostImage(post)} />
+      </video>
+    {:else}
+      <a href={resolve(`/post/${post.id}`)}>
+        <img 
+          src={getPostImage(post)}
+          alt="Post"
+          class="{isImageError ? "hidden" : ""} w-full aspect-video object-cover"
+          onerror={() => isImageError = true}
+        />
+      </a>
+    {/if}
   {:else}
-    <a href={resolve(`/post/${post.id}`)}>
-      <img 
-        src={getPostImage(post)} 
-        alt="Post"
-        class="{isImageError ? "hidden" : ""} w-full aspect-video object-cover"
-        onerror={() => isImageError = true}
-      />
-    </a>
+    <div class="ml-4">
+      {@render caption()}
+    </div>
   {/if}
 
   <!-- Post Actions -->
@@ -175,23 +181,8 @@ const closeEdit = () => {
     </div>
 
     <!-- Caption -->
-    {#if isEditing}
-      <form {...editPost} onsubmit={closeEdit}>
-        <input {...editPost.fields.id.as("hidden", post.id)}/>
-        <textarea class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white" {...editPost.fields.content.as("text")}
-        >{post.content}</textarea>
-        <div class="flex mt-1">
-          <div class="flex-1"></div>
-          <button onclick={closeEdit} class="px-6 py-2 mr-1 bg-linear-to-r from-gray-600 to-gray-700 text-white rounded-lg font-semibold hover:from-gray-700 hover:to-gray-800 transition shadow-md">
-            Cancel
-          </button>
-          <button type="submit" class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
-            Post
-          </button>
-        </div>
-      </form>
-    {:else}
-      <p class="text-gray-800">{post.content}</p>
+    {#if post.hasFile}
+      {@render caption()}
     {/if}
 
     <!-- Comments -->
@@ -226,3 +217,24 @@ const closeEdit = () => {
     {/if}
   </div>
 </div>
+
+{#snippet caption()}
+  {#if isEditing}
+    <form {...editPost} onsubmit={closeEdit}>
+      <input {...editPost.fields.id.as("hidden", post.id)}/>
+      <textarea class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white" {...editPost.fields.content.as("text")}
+      >{post.content}</textarea>
+      <div class="flex mt-1">
+        <div class="flex-1"></div>
+        <button onclick={closeEdit} class="px-6 py-2 mr-1 bg-linear-to-r from-gray-600 to-gray-700 text-white rounded-lg font-semibold hover:from-gray-700 hover:to-gray-800 transition shadow-md">
+          Cancel
+        </button>
+        <button type="submit" class="px-6 py-2 bg-linear-to-r from-orange-600 to-orange-700 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-orange-800 transition shadow-md">
+          Post
+        </button>
+      </div>
+    </form>
+  {:else}
+    <p class="text-gray-800">{post.content}</p>
+  {/if}
+{/snippet}

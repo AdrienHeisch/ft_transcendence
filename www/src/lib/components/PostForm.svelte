@@ -69,7 +69,6 @@ const pets = $derived(
         bind:this={fileUpload}
         name="file"
         accept="image/*,video/*"
-        required
       />
       <div class="px-4 py-2 bg-orange-700 text-white rounded-lg font-bold text-center hover:bg-orange-800 transition-all cursor-pointer">
         📷 Upload

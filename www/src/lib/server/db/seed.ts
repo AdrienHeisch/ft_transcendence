@@ -136,6 +136,7 @@ export default async function seedDb() {
             ? faker.helpers.arrayElement(petIds)
             : null,
         content: faker.helpers.arrayElement(seedTexts.postContents),
+        hasFile: true,
         postedAt: faker.date.past({ years: 3 }),
       });
       for (let j = 0; j < faker.number.int({ min: 0, max: 10 }); j++) {

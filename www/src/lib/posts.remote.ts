@@ -163,7 +163,7 @@ export const createPost = form(
   z.object({
     content: z.string().max(TEXT_LIMITS.POST_CONTENT),
     pet: z.string().optional(),
-    file: bunFileSchema(),
+    file: bunFileSchema().or(z.literal("undefined").transform(() => undefined)),
   }),
   async ({ content, pet, file }) => {
     const user = requireLogin();

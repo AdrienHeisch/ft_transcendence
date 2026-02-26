@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_HhnPCo3dR6
 createdAt: 2026-02-18T16:29:36.015875257
-updatedAt: 2026-02-18T22:17:44.682043453
+updatedAt: 2026-02-26T00:50:59.761711616
 workspaceId: wk_2QS6rdg8gY
 folderId: fl_VzRDih4HXu
 authentication:
@@ -15,16 +15,16 @@ body:
     id: Uqk2NHpXhH
     name: content
     value: Super le cat
-  - enabled: true
+  - enabled: false
     id: vEzaYPyc6i
     name: pet
     value: 838cdfed-b82a-4112-c248-dd1ccfbf99a4
-  - enabled: true
+  - enabled: false
     file: /home/adrien/Downloads/dog small.png
     id: 8aVWwiN66y
     name: file
   - enabled: true
-    id: m0RtIyPCRm
+    id: 4XZXJSqyvI
     name: ''
     value: ''
 bodyType: multipart/form-data
