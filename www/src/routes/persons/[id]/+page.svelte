@@ -345,7 +345,7 @@ $effect(() => {
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#if isCurrentUser && data.currentUser}
-          <PostForm currentUser={data.currentUser} then={feed?.reset} />
+          <PostForm currentUser={data.currentUser} then={() => location.reload()} />
         {/if}
 
         {#if posts.length == 0}

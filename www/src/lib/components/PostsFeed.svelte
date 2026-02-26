@@ -71,23 +71,12 @@ $effect(() => {
   }
   return () => observer.disconnect();
 });
-
-export async function reset() {
-  offset = 0;
-  isLoaderVisible = false;
-  isLoadingMore = false;
-  nothingToLoad = false;
-  const query = getPosts({ offset: 0, limit: PAGE_SIZE, ...queryArgs });
-  await query.refresh();
-  posts = [];
-  posts = await query;
-}
 </script>
 
 {#each posts as post}
   {@const author = await getUser(post.author)}
   {#if author}
-    <Post post={post} author={author} currentUser={currentUser} />
+    <Post post={post} author={author} currentUser={currentUser} onDelete={() => location.reload()} />
   {/if}
 {/each}
 

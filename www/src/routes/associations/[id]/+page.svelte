@@ -360,7 +360,7 @@ $effect(() => {
       <!-- Posts Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#if isCurrentUser && data.currentUser}
-          <PostForm currentUser={data.currentUser} then={feed?.reset} />
+          <PostForm currentUser={data.currentUser} then={() => location.reload()} />
         {/if}
 
         <PostsFeed bind:this={feed} queryArgs={{ author: association.id }} currentUser={data.currentUser} />

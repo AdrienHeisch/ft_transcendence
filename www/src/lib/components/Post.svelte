@@ -27,9 +27,16 @@ interface Props {
   author: UserPublic;
   currentUser?: UserPublic;
   isFullPage?: boolean;
+  onDelete?: () => void | Promise<void>;
 }
 
-const { post: post, author, currentUser, isFullPage = false }: Props = $props();
+const {
+  post: post,
+  author,
+  currentUser,
+  isFullPage = false,
+  onDelete: onDeleteCallback,
+}: Props = $props();
 
 const pet = $derived(post.pet ? await getPet(post.pet) : undefined);
 const comments = $derived(getPostComments(post.id));
@@ -56,6 +63,9 @@ const onLikePost = async () => {
 const onDelete = async () => {
   optionsOpen = false;
   await deletePost(post.id);
+  if (onDeleteCallback) {
+    await onDeleteCallback();
+  }
 };
 
 const onShare = async () => {

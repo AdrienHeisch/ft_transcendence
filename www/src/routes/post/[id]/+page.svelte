@@ -1,4 +1,6 @@
 <script lang="ts">
+import { goto } from "$app/navigation";
+import { resolve } from "$app/paths";
 import Post from "$lib/components/Post.svelte";
 
 const { data } = $props();
@@ -9,5 +11,5 @@ const { data } = $props();
 </svelte:head>
 
 <div class="flex w-full p-12 items-center justify-center">
-  <Post post={data.post} author={data.author} currentUser={data.currentUser} isFullPage={true} />
+  <Post post={data.post} author={data.author} currentUser={data.currentUser} isFullPage={true} onDelete={async () => await goto(resolve("/feed"))} />
 </div>

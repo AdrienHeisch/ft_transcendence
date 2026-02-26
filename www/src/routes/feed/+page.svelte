@@ -23,7 +23,7 @@ let feed = $state<PostsFeed>();
 
       <!-- Post input -->
       {#if data.currentUser}
-        <PostForm currentUser={data.currentUser} then={feed?.reset} />
+        <PostForm currentUser={data.currentUser} then={() => location.reload()} />
       {/if}
 
       <!-- Posts -->

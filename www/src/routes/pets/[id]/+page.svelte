@@ -196,7 +196,7 @@ $effect(() => {
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#if isOwned && data.currentUser}
-          <PostForm currentUser={data.currentUser} forcePet={pet} then={feed?.reset} />
+          <PostForm currentUser={data.currentUser} forcePet={pet} then={() => location.reload()} />
         {/if}
 
         {#if posts.length == 0}
