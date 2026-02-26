@@ -248,9 +248,9 @@ $effect(() => {
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                   </svg>
                   {#if friend.status == "sent"}
-                    En attente
+                    Invitation sent
                   {:else}
-                    Suivi
+                    Followed
                   {/if}
                 </button>
               {/if}
@@ -259,7 +259,7 @@ $effect(() => {
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
-                Suivre
+                Follow
               </button>
             {/if}
             <a href={resolve(`/messages/${association.id}`)} class="px-6 py-3 bg-yellow-50 border-2 border-orange-700 text-amber-900 rounded-lg font-medium hover:bg-yellow-100 transition-all duration-200 shadow-md hover:shadow-lg">
