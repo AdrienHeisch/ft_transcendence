@@ -12,9 +12,10 @@ interface Props {
   currentUser: User;
   forcePet?: Pet;
   updates?: Array<RemoteQuery<any>>;
+  then?: () => void | Promise<void>;
 }
 
-const { currentUser, forcePet, updates = [] }: Props = $props();
+const { currentUser, forcePet, updates = [], then }: Props = $props();
 
 let preview = $state<FileUploadPreview>();
 let fileUpload = $state<FileUpload>();
@@ -28,6 +29,7 @@ const pets = $derived(
   class="flex flex-col mb-6 p-4 bg-orange-50 rounded-2xl border-4 border-orange-300 shadow-lg"
   function={createPost}
   updates={updates}
+  then={then}
   onloadstart={preview?.uploadStart}
   onloadend={preview?.uploadDone}
   onprogress={preview?.setProgress}

@@ -2,6 +2,7 @@
 import { resolve } from "$app/paths";
 import { getPetsCount, updateAssociation } from "$lib/associations.remote";
 import FileUpload from "$lib/components/FileUpload.svelte";
+import PostForm from "$lib/components/PostForm.svelte";
 import PostsFeed from "$lib/components/PostsFeed.svelte";
 import {
   acceptFriend,
@@ -25,6 +26,7 @@ let { data }: { data: PageData } = $props();
 let isEditMode = $state(false);
 let fileUpload = $state<FileUpload>();
 let removeAvatar = $state(false);
+let feed = $state<PostsFeed>();
 
 const association = $derived(
   (await data.association) as UserPublic & { isAssociation: true },
@@ -356,7 +358,11 @@ $effect(() => {
 
       <!-- Posts Feed -->
       <div class="lg:col-span-2 space-y-6">
-        <PostsFeed queryArgs={{ author: association.id }} currentUser={data.currentUser} />
+        {#if isCurrentUser && data.currentUser}
+          <PostForm currentUser={data.currentUser} then={feed?.reset} />
+        {/if}
+
+        <PostsFeed bind:this={feed} queryArgs={{ author: association.id }} currentUser={data.currentUser} />
 
         {#if posts.length === 0}
           <div class="bg-linear-to-br from-yellow-50 to-orange-50 backdrop-blur-sm rounded-2xl shadow-lg p-12 border-4 border-orange-700 text-center">

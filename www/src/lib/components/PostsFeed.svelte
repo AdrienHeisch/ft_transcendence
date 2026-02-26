@@ -39,9 +39,11 @@ async function onLoaderVisibilityChange(isVisible: boolean) {
         limit: PAGE_SIZE,
         ...queryArgs,
       });
-      nothingToLoad = newPosts.length === 0;
-      posts = posts.concat(newPosts);
-      setTimeout(() => (isLoadingMore = false), 1000);
+      if (isLoadingMore) {
+        nothingToLoad = newPosts.length === 0;
+        posts = posts.concat(newPosts);
+        setTimeout(() => (isLoadingMore = false), 1000);
+      }
     }
   } else {
     isLoaderVisible = false;
@@ -69,6 +71,17 @@ $effect(() => {
   }
   return () => observer.disconnect();
 });
+
+export async function reset() {
+  offset = 0;
+  isLoaderVisible = false;
+  isLoadingMore = false;
+  nothingToLoad = false;
+  const query = getPosts({ offset: 0, limit: PAGE_SIZE, ...queryArgs });
+  await query.refresh();
+  posts = [];
+  posts = await query;
+}
 </script>
 
 {#each posts as post}

@@ -19,6 +19,7 @@ const { data } = $props();
 let isEditMode = $state(false);
 let fileUpload = $state<FileUpload>();
 let removeAvatar = $state(false);
+let feed = $state<PostsFeed>();
 
 // TODO remove fake data
 const pet = $derived(await data.pet);
@@ -195,7 +196,7 @@ $effect(() => {
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#if isOwned && data.currentUser}
-          <PostForm currentUser={data.currentUser} forcePet={pet} updates={[getPosts({ pet: pet.id })]} />
+          <PostForm currentUser={data.currentUser} forcePet={pet} then={feed?.reset} />
         {/if}
 
         {#if posts.length == 0}
@@ -208,7 +209,7 @@ $effect(() => {
           </div>
         {/if}
 
-        <PostsFeed queryArgs={{ pet: pet.id }} currentUser={data.currentUser} />
+        <PostsFeed bind:this={feed} queryArgs={{ pet: pet.id }} currentUser={data.currentUser} />
       </div>
     </div>
   </div>

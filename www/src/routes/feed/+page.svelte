@@ -1,9 +1,10 @@
 <script lang="ts">
 import PostForm from "$lib/components/PostForm.svelte";
 import PostsFeed from "$lib/components/PostsFeed.svelte";
-import { getPosts } from "$lib/posts.remote";
 
 const { data } = $props();
+
+let feed = $state<PostsFeed>();
 </script>
 
 <svelte:head>
@@ -22,12 +23,12 @@ const { data } = $props();
 
       <!-- Post input -->
       {#if data.currentUser}
-        <PostForm currentUser={data.currentUser} updates={[getPosts({})]} />
+        <PostForm currentUser={data.currentUser} then={feed?.reset} />
       {/if}
 
       <!-- Posts -->
 			<div class="space-y-4">
-        <PostsFeed /> 
+        <PostsFeed bind:this={feed} />
       </div>
 		</section>
 	</div>

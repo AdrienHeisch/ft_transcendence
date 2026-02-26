@@ -7,6 +7,7 @@ const {
   class: classes,
   function: remoteFunction,
   updates,
+  then,
   onloadstart,
   onloadend,
   onprogress,
@@ -15,6 +16,7 @@ const {
   children: Snippet;
   function: RemoteForm<Input, Output>;
   updates?: Array<RemoteQuery<any>>;
+  then?: () => void | Promise<void>;
   class?: string;
   onloadstart?: () => void;
   onloadend?: () => void;
@@ -92,6 +94,9 @@ async function submitXHR(data: FormData) {
       form.reset();
       if (updates) {
         await Promise.all(updates.map(query => query.refresh()));
+      }
+      if (then) {
+        await then();
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : "An error occurred";

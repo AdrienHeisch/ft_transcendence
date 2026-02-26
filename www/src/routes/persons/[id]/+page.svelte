@@ -26,6 +26,7 @@ const { data } = $props();
 let isEditMode = $state(false);
 let fileUpload = $state<FileUpload>();
 let removeAvatar = $state(false);
+let feed = $state<PostsFeed>();
 
 const user = $derived(
   (await data.user) as UserPublic & { isAssociation: false },
@@ -343,7 +344,7 @@ $effect(() => {
       <!-- Right Content - Feed -->
       <div class="lg:col-span-2 space-y-6">
         {#if isCurrentUser && data.currentUser}
-          <PostForm currentUser={data.currentUser} updates={[getPosts({ author: user.id })]} />
+          <PostForm currentUser={data.currentUser} then={feed?.reset} />
         {/if}
 
         {#if posts.length == 0}
@@ -356,7 +357,7 @@ $effect(() => {
           </div>
         {/if}
 
-        <PostsFeed queryArgs={{ author: user.id }} currentUser={data.currentUser} />
+        <PostsFeed bind:this={feed} queryArgs={{ author: user.id }} currentUser={data.currentUser} />
       </div>
     </div>
   </div>
