@@ -170,11 +170,6 @@ $effect(() => {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
-
-
-
-
-
               {#if isEditMode}
                 <select
                   class="px-4 py-2 rounded-lg border border-gray-300 bg-white

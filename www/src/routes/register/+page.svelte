@@ -19,14 +19,29 @@ let foundedAt = $state<string>("");
 let password = $state<string>("");
 let confirm = $state<string>("");
 let confirmField = $state<HTMLInputElement>();
+let passwordField = $state<HTMLInputElement>();
 let errorMessage = $state<string>();
 
-$effect(() =>
-  confirmField?.setCustomValidity(
-    password == confirm ? "" : "Passwords do not match",
-  ),
-);
+$effect(() => {
+  if (!passwordField || !confirmField) 
+    return;
+  passwordField.setCustomValidity("");
+  confirmField.setCustomValidity("");
 
+  if (password.length < 8) {
+    passwordField.setCustomValidity("Password must be at least 8 characters long");
+  }
+  else if (!/[a-z]/.test(password)) {
+    passwordField.setCustomValidity("Password must contain at least one lowercase letter");
+  }
+  else if (!/[0-9]/.test(password)) {
+    passwordField.setCustomValidity("Password must contain at least one number");
+  }
+  else if (password !== confirm) {
+    confirmField.setCustomValidity("Passwords do not match");
+  }
+});
+ 
 // const defaultUsername = $derived(`${firstName.toLowerCase()}${lastName.toLowerCase()}`);
 </script>
 
@@ -199,6 +214,7 @@ $effect(() =>
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
             placeholder="••••••••"
             bind:value={password}
+            bind:this={passwordField}
           />
         </div>
 
@@ -372,6 +388,7 @@ $effect(() =>
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
             placeholder="••••••••"
             bind:value={password}
+            bind:this={passwordField}
           />
         </div>
 

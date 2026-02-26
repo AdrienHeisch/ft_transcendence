@@ -43,11 +43,26 @@ let email = $state<string>();
 let password = $state<string>("");
 let confirmPassword = $state<string>("");
 let confirmPasswordField = $state<HTMLInputElement>();
+let passwordField = $state<HTMLInputElement>();
 
-$effect(() =>
-  confirmPasswordField?.setCustomValidity(
-    password == confirmPassword ? "" : "Passwords do not match",
-  ),
+$effect(() => {
+  if (!passwordField || !confirmPasswordField) 
+    return;
+  passwordField.setCustomValidity("");
+  confirmPasswordField.setCustomValidity("");
+  if (password.length < 8) {
+    passwordField.setCustomValidity("Password must be at least 8 characters long");
+  }
+  else if (!/[a-z]/.test(password)) {
+    passwordField.setCustomValidity("Password must contain at least one lowercase letter");
+  }
+  else if (!/[0-9]/.test(password)) {
+    passwordField.setCustomValidity("Password must contain at least one number");
+  }
+  else if (password !== confirmPassword) {
+    confirmPasswordField.setCustomValidity("Passwords do not match");
+  }
+}
 );
 </script>
 
@@ -150,6 +165,7 @@ $effect(() =>
         <input 
           placeholder="Enter your new password..." 
           bind:value={password} 
+          bind:this={passwordField}
           {...updateCredentials.fields.password.as("password")} 
           class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
         />
