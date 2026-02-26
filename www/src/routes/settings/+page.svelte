@@ -147,13 +147,17 @@ $effect(() =>
     <div>
       <label class="block text-sm font-bold text-[#8B4513] mb-2">
         New Password
-        <input 
-          placeholder="Enter your new password..." 
-          bind:value={password} 
-          {...updateCredentials.fields.password.as("password")} 
+        <input
+          placeholder="Enter your new password..."
+          bind:value={password}
+          minlength={8}
+          pattern={"(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}"}
+          title="Min. 8 characters with uppercase, lowercase, digit and special character"
+          {...updateCredentials.fields.password.as("password")}
           class="w-full px-4 py-3 border-2 border-[#8B4513] rounded-lg focus:ring-2 focus:ring-[#CC5500] focus:border-transparent outline-none bg-white text-[#8B4513] font-medium"
         />
       </label>
+      <p class="text-xs text-[#A0522D] mt-1">Min. 8 characters with uppercase, lowercase, digit and special character.</p>
     </div>
     <div>
       <label class="block text-sm font-bold text-[#8B4513] mb-2">

@@ -10,6 +10,14 @@ import * as schema from "$lib/server/db/schema";
 import { sendGdprDeleteEmail, sendGdprExportEmail } from "$lib/server/email";
 import { TEXT_LIMITS } from "$lib/textLimits";
 
+const strongPassword = z
+  .string()
+  .min(8, "Password must be at least 8 characters")
+  .regex(
+    /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9])/,
+    "Password must contain at least one uppercase letter, lowercase letter, digit and special character",
+  );
+
 function generateGdprToken() {
   return crypto.randomUUID();
 }
@@ -50,16 +58,12 @@ async function register(
 export const registerPerson = form(
   z.object({
     email: z.email(),
-    password: z.string(),
+    password: strongPassword,
     firstName: z.string().max(TEXT_LIMITS.USER_FIRST_NAME),
     lastName: z.string().max(TEXT_LIMITS.USER_LAST_NAME),
     city: z.string(),
   }),
   async ({ email, password, firstName, lastName, city }) => {
-    // if (!validatePassword(password)) { // TODO password validation
-    //   return fail(400, { message: "Invalid password" });
-    // }
-
     const id = crypto.randomUUID();
     try {
       await db.insert(schema.person).values({
@@ -81,7 +85,7 @@ export const registerPerson = form(
 export const registerAssociation = form(
   z.object({
     email: z.email(),
-    password: z.string(),
+    password: strongPassword,
     name: z.string().max(TEXT_LIMITS.ASSOCIATION_NAME),
     phone: z.string(),
     type: schema.associationTypeSchema,
@@ -89,10 +93,6 @@ export const registerAssociation = form(
     city: z.string(),
   }),
   async ({ email, password, name, phone, type, foundedAt, city }) => {
-    // if (!validatePassword(password)) { // TODO password validation
-    //   return fail(400, { message: "Invalid password" });
-    // }
-
     const id = crypto.randomUUID();
     try {
       await db.insert(schema.association).values({
@@ -161,7 +161,7 @@ export const updateCredentials = form(
   z.object({
     currentPassword: z.string(),
     email: z.email().or(z.string().max(0)).optional(),
-    password: z.string().optional(),
+    password: strongPassword.or(z.literal("")).optional(),
   }),
   async ({ currentPassword, email, password }) => {
     if (email?.length === 0) email = undefined;

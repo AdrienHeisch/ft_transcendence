@@ -196,10 +196,14 @@ $effect(() =>
             name="password"
             type="password"
             required
+            minlength={8}
+            pattern={"(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}"}
+            title="Min. 8 characters with uppercase, lowercase, digit and special character"
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
             placeholder="••••••••"
             bind:value={password}
           />
+          <p class="text-xs text-gray-500">Min. 8 characters with uppercase, lowercase, digit and special character.</p>
         </div>
 
         <!-- Confirm Password -->
@@ -369,10 +373,14 @@ $effect(() =>
             name="password"
             type="password"
             required
+            minlength={8}
+            pattern={"(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}"}
+            title="Min. 8 characters with uppercase, lowercase, digit and special character"
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all duration-200 hover:border-gray-400"
             placeholder="••••••••"
             bind:value={password}
           />
+          <p class="text-xs text-gray-500">Min. 8 characters with uppercase, lowercase, digit and special character.</p>
         </div>
 
         <!-- Confirm Password -->
