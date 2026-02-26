@@ -129,7 +129,7 @@ async function sendMessage() {
     <div class="max-w-5xl mx-auto h-full px-4 sm:px-6 lg:px-8 py-6">
       <div class="bg-[#fef7ed] rounded-2xl shadow-xl border-4 border-[#8B4513] h-full flex flex-col">
         <!-- Messages area -->
-        <div class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col-reverse">
+        <div class="flex-1 overflow-y-auto p-6 flex flex-col-reverse gap-4">
           {#if allMessages.length === 0}
             <div class="text-center py-12">
               <div class="text-6xl mb-4">💬</div>
@@ -157,6 +157,9 @@ async function sendMessage() {
 
         <!-- Input area -->
         <div class="border-t-2 border-[#8B4513] p-4 shrink-0">
+          <!-- Preview or placeholder -->
+          <FileUploadPreview class="mb-3" fileUpload={fileUpload} />
+          
           <form 
             onsubmit={async (e) => { 
               e.preventDefault();
@@ -164,9 +167,6 @@ async function sendMessage() {
             }}
             class="flex gap-3"
           >
-            <!-- Preview or placeholder -->
-            <FileUploadPreview class="mb-6" fileUpload={fileUpload} />
-
             <!-- Upload button -->
             <label class="block">
               <FileUpload
