@@ -28,7 +28,7 @@ let feed = $state<PostsFeed>();
 
       <!-- Posts -->
 			<div class="space-y-4">
-        <PostsFeed bind:this={feed} />
+        <PostsFeed bind:this={feed} currentUser={data.currentUser} />
       </div>
 		</section>
 	</div>
