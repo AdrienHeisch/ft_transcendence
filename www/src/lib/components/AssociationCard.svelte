@@ -2,6 +2,7 @@
 import { resolve } from "$app/paths";
 import { getPetsCount } from "$lib/associations.remote";
 import { getCity } from "$lib/city.remote";
+import { formatDate } from "$lib/dateUtils";
 import type { UserPublic } from "$lib/server/db/schema";
 
 const { association }: { association: UserPublic & { isAssociation: true } } =
@@ -41,7 +42,7 @@ const city = $derived(await getCity(association.city));
       </div>
       <div class="flex items-center gap-1">
         <span>📅</span>
-        <span>Since {association.foundedAt}</span>
+        <span>Since {formatDate(association.foundedAt)}</span>
       </div>
     </div>
 

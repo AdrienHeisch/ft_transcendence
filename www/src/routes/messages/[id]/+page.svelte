@@ -4,6 +4,7 @@ import { browser, dev } from "$app/environment";
 import { resolve } from "$app/paths";
 import FileUpload from "$lib/components/FileUpload.svelte";
 import FileUploadPreview from "$lib/components/FileUploadPreview.svelte";
+import { formatTime } from "$lib/dateUtils";
 import { setMessageRead } from "$lib/messages.remote";
 import { type ChatMessage } from "$lib/server/db/schema";
 import { getMessageFile, getUserAvatar } from "$lib/storage";
@@ -147,7 +148,7 @@ async function sendMessage() {
                     <p class="wrap-break-words">{message.content}</p>
                   {/if}
                   <p class="text-xs mt-1 {isOwn ? 'text-white/70' : 'text-[#A0522D]'}">
-                    {new Date(message.sentAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                    {formatTime(message.sentAt)}
                   </p>
                 </div>
               </div>

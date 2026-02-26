@@ -1,6 +1,7 @@
 <script lang="ts">
 import { slide } from "svelte/transition";
 import { resolve } from "$app/paths";
+import { formatRelativeTime } from "$lib/dateUtils";
 import { deleteComment, editComment } from "$lib/posts.remote";
 import type { PostComment, User, UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
@@ -55,7 +56,7 @@ const closeEdit = () => {
       <a href={resolve(getProfileUrl(author))}>
         <div class="font-semibold text-orange-900">{getFullName(author)}</div>
       </a>
-      <div class="text-xs text-gray-600">{comment.postedAt}</div>
+      <div class="text-xs text-gray-600">{formatRelativeTime(comment.postedAt)}</div>
     </div>
     {#if isOwned}
       <button onclick={() => optionsOpen = !optionsOpen} class="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Actions">
