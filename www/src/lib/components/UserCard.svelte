@@ -1,6 +1,7 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import { getCity } from "$lib/city.remote";
+import { formatDate } from "$lib/dateUtils";
 import type { UserPublic } from "$lib/server/db/schema";
 import { getUserAvatar } from "$lib/storage";
 import { getProfileUrl } from "$lib/user";
