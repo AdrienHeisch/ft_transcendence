@@ -1,9 +1,11 @@
+const LOCALE = "en-US";
+
 /**
  * Formats a date to a localized date string (e.g., "Feb 26, 2026")
  */
 export function formatDate(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleDateString("fr-FR", {
+  return d.toLocaleDateString(LOCALE, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -15,7 +17,7 @@ export function formatDate(date: Date | string): string {
  */
 export function formatTime(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleTimeString("fr-FR", {
+  return d.toLocaleTimeString(LOCALE, {
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -26,7 +28,7 @@ export function formatTime(date: Date | string): string {
  */
 export function formatDateTime(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleDateString("fr-FR", {
+  return d.toLocaleDateString(LOCALE, {
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -46,11 +48,11 @@ export function formatRelativeTime(date: Date | string): string {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return "À l'instant";
-  if (diffMins < 60) return `Il y a ${diffMins} min`;
-  if (diffHours < 24) return `Il y a ${diffHours}h`;
-  if (diffDays === 1) return "Hier";
-  if (diffDays < 7) return `Il y a ${diffDays} jours`;
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins} minutes ago`;
+  if (diffHours < 24) return `${diffHours} hours ago`;
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
 
   return formatDate(d);
 }
