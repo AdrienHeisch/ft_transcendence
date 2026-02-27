@@ -1,4 +1,4 @@
-:80, :443 {
+{$CADDY_SITE} {
 	log {
 		output file /var/log/caddy/access.log {
 			roll_size 1Mib
