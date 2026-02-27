@@ -61,7 +61,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "local"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
       start_period: 30s
       start_interval: 5s
   storage:
