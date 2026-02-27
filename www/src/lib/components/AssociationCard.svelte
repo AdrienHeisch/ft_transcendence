@@ -5,7 +5,7 @@ import { getCity } from "$lib/city.remote";
 import { formatDate } from "$lib/dateUtils";
 import type { UserPublic } from "$lib/server/db/schema";
 
-const { association }: { association: UserPublic & { isAssociation: true } } =
+const { association, currentUser }: { association: UserPublic & { isAssociation: true }, currentUser?: UserPublic } =
   $props();
 
 const city = $derived(await getCity(association.city));
@@ -72,9 +72,11 @@ const city = $derived(await getCity(association.city));
       <a href={resolve(`/associations/${association.id}`)} class="text-center flex-1 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-bold hover:from-orange-600 hover:to-orange-700 transition-colors shadow-md">
         👁️ View profile
       </a>
-      <a href={resolve(`/messages/${association.id}`)} class="text-center flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
-        💬 Contact
-      </a>
+      {#if currentUser?.id !== association.id}
+        <a href={resolve(`/messages/${association.id}`)} class="text-center flex-1 py-2 bg-white border-2 border-orange-400 text-orange-900 rounded-lg font-bold hover:bg-orange-50 transition-colors">
+          💬 Contact
+        </a>
+      {/if}
     </div>
   </div>
 </div>

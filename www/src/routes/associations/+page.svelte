@@ -153,7 +153,7 @@ function resetCurrentPage() {
         {#each associations as association (association.id)}
           {@const user = await getUser(association.id)}
           {#if user && user.isAssociation}
-            <AssociationCard association={user} />
+            <AssociationCard association={user} currentUser={data.currentUser} />
           {/if}
         {/each}
       </div>

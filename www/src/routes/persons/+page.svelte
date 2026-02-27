@@ -127,7 +127,7 @@ function resetCurrentPage() {
           {@const user = await getUser(person.id)}
           {#if user && !user.isAssociation}
             <div class="transition-all duration-200 hover:-translate-y-1 *:transition-shadow *:hover:shadow-xl *:h-full">
-              <UserCard user={user} />
+              <UserCard user={user} currentUser={data.currentUser} />
             </div>
           {/if}
         {/each}

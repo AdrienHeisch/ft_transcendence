@@ -187,9 +187,9 @@ $effect(() => {
       <!-- Left Sidebar -->
       <div class="lg:col-span-1 space-y-6">
         {#if owner.isAssociation}
-          <AssociationCard association={owner}/>
+          <AssociationCard association={owner} currentUser={data.currentUser}/>
         {:else}
-          <UserCard user={owner}/>
+          <UserCard user={owner} currentUser={data.currentUser}/>
         {/if}
       </div>
 
