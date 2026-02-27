@@ -57,6 +57,12 @@ export const load: PageServerLoad = async () => {
   );
   return {
     currentUser,
-    chats,
+    chats: chats.sort(
+      (a, b) =>
+        (a.lastMessage?.sentAt &&
+          b.lastMessage?.sentAt &&
+          b.lastMessage.sentAt.getTime() - a.lastMessage.sentAt.getTime()) ??
+        0,
+    ),
   };
 };
