@@ -164,7 +164,7 @@ const closeEdit = () => {
       </a>
     {/if}
   {:else}
-    <div class="ml-4">
+    <div class="p-4">
       {@render caption()}
     </div>
   {/if}
@@ -236,7 +236,11 @@ const closeEdit = () => {
 
 {#snippet caption()}
   {#if isEditing}
-    <form {...editPost} onsubmit={closeEdit}>
+    <form {...editPost.enhance(async ({submit}) => {
+      await submit();
+      closeEdit();
+      location.reload();
+    })}>
       <input {...editPost.fields.id.as("hidden", post.id)}/>
       <textarea class="w-full p-3 rounded-lg border-2 border-orange-300 focus:border-orange-500 focus:outline-none resize-none bg-white" {...editPost.fields.content.as("text")}
       >{post.content}</textarea>
