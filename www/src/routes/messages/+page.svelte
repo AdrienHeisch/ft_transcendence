@@ -1,8 +1,8 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import { formatRelativeTime } from "$lib/dateUtils";
-import { getPerson } from "$lib/persons.remote";
 import { getUserAvatar } from "$lib/storage";
+import { getFullName } from "$lib/user";
 import { getUser } from "$lib/user.remote";
 
 const { data } = $props();
@@ -39,9 +39,9 @@ const chats = $derived(data.chats);
 
       <div class="divide-y-2 divide-[#8B4513]">
         {#each chats as chat}
-          {@const friend = await getPerson(data.currentUser.id === chat.left ? chat.right : chat.left)}
+          {@const friend = await getUser(data.currentUser.id === chat.left ? chat.right : chat.left)}
           {#if friend && chat.lastMessage}
-            {@const isOnline = (await getUser(friend.id))?.online ?? false}
+            {@const isOnline = friend.online ?? false}
             <a 
               href={resolve(`/messages/${friend.id}`)}
               class="flex items-center gap-4 p-6 hover:bg-[#f5e6d3] transition-colors group"
@@ -50,7 +50,7 @@ const chats = $derived(data.chats);
               <div class="relative shrink-0">
                 <img 
                   src={getUserAvatar(friend)} 
-                  alt={friend.firstName}
+                  alt={getFullName(friend)}
                   class="w-16 h-16 rounded-full border-3 border-[#8B4513] bg-white object-cover"
                 />
                 {#if isOnline}
@@ -62,7 +62,7 @@ const chats = $derived(data.chats);
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between mb-1">
                   <h3 class="text-lg font-bold text-[#8B4513] group-hover:text-[#CC5500] transition-colors">
-                    {friend.firstName} {friend.lastName}
+                    {getFullName(friend)}
                   </h3>
                   {#if chat.lastMessage}
                     <span class="text-sm text-[#A0522D] font-medium">{formatRelativeTime(chat.lastMessage.sentAt)}</span>
