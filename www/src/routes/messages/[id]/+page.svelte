@@ -145,7 +145,7 @@ async function sendMessage() {
                   {#if message.isFile}
                     <img alt="Message" class="object-cover" src={getMessageFile(message)} />
                   {:else}
-                    <p class="wrap-break-words">{message.content}</p>
+                    <p class="wrap-break-word">{message.content}</p>
                   {/if}
                   <p class="text-xs mt-1 {isOwn ? 'text-white/70' : 'text-[#A0522D]'}">
                     {formatTime(message.sentAt)}

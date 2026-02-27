@@ -251,6 +251,6 @@ const closeEdit = () => {
       </div>
     </form>
   {:else}
-    <p class="text-gray-800 break-words">{post.content}</p>
+    <p class="text-gray-800 wrap-break-word">{post.content}</p>
   {/if}
 {/snippet}
