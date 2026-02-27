@@ -116,7 +116,7 @@ $effect(() => {
 
   <!-- Sidebar -->
   {#if sidebarOpen}
-    <aside transition:fly={{x:-50, y:0, delay:0, duration:100}} class="z-30 fixed top-0 bottom-0 overflow-scroll w-72 bg-linear-to-b from-orange-50 to-yellow-50 shadow-xl border-r-4 border-orange-600 flex flex-col">
+    <aside transition:fly={{x:-50, y:0, delay:0, duration:100}} class="z-30 fixed top-0 bottom-0 overflow-auto w-72 bg-linear-to-b from-orange-50 to-yellow-50 shadow-xl border-r-4 border-orange-600 flex flex-col">
       <div class="p-4 flex-1">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-xl font-bold text-orange-900">Menu</h2>
