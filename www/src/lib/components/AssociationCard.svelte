@@ -4,9 +4,15 @@ import { getPetsCount } from "$lib/associations.remote";
 import { getCity } from "$lib/city.remote";
 import { formatDate } from "$lib/dateUtils";
 import type { UserPublic } from "$lib/server/db/schema";
+import { getUserAvatar } from "$lib/storage";
 
-const { association, currentUser }: { association: UserPublic & { isAssociation: true }, currentUser?: UserPublic } =
-  $props();
+const {
+  association,
+  currentUser,
+}: {
+  association: UserPublic & { isAssociation: true };
+  currentUser?: UserPublic;
+} = $props();
 
 const city = $derived(await getCity(association.city));
 </script>
@@ -18,8 +24,14 @@ const city = $derived(await getCity(association.city));
   <div class="relative bg-linear-to-br from-orange-200 to-yellow-200 p-6">
     <div class="flex justify-center">
       <div class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white flex items-center justify-center text-6xl">
-        <!-- TODO get rid of this cow -->
-        🐄
+        <img 
+          src={getUserAvatar(association)} 
+          alt={association.name}
+          class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white object-cover"
+        />
+        {#if association.online}
+          <div class={["bg-green-500", "absolute", "bottom-2", "right-2", "w-6", "h-6", "rounded-full", "border-4", "border-white"]}></div>
+        {/if}
       </div>
     </div>
 
