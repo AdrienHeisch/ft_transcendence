@@ -10,6 +10,13 @@ import * as schema from "../db/schema";
 import { PublicStorage } from "../storage";
 import petImages from "./pet-images.json";
 
+export const ASSOCIATION_ICONS = {
+  Adoption: Bun.file((await import("../../assets/adoption.png")).default),
+  Care: Bun.file((await import("../../assets/care.png")).default),
+  Rescue: Bun.file((await import("../../assets/rescue.png")).default),
+  Sanctuary: Bun.file((await import("../../assets/sanctuary.png")).default),
+};
+
 const allSpecies = Object.keys(petImages) as (keyof typeof petImages)[];
 
 function randomImage(pet?: schema.Pet): string {
@@ -34,14 +41,22 @@ export default async function seedStorage() {
   const db = drizzle(client, { schema });
   console.log("Seeding storage...");
   for (const user of await db.select().from(schema.user)) {
-    const file = await fetch(
-      `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`,
-    );
-    await PublicStorage.upload(
-      USER_AVATAR_PREFIX + user.id,
-      await file.blob(),
-      "image/png",
-    );
+    const file =
+      user.association !== null
+        ? ASSOCIATION_ICONS[
+            (
+              await db
+                .select()
+                .from(schema.association)
+                .where(eq(schema.association.id, user.id))
+            )[0].type
+          ]
+        : await (
+            await fetch(
+              `https://api.dicebear.com/7.x/avataaars/png?seed=${user.id}`,
+            )
+          ).blob();
+    await PublicStorage.upload(USER_AVATAR_PREFIX + user.id, file, "image/png");
   }
   const pets = await db.select().from(schema.pet);
   for (const pet of pets) {
