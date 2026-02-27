@@ -264,7 +264,7 @@ $effect(() => {
               </button>
             {/if}
             <a href={resolve(`/messages/${association.id}`)} class="px-6 py-3 bg-yellow-50 border-2 border-orange-700 text-amber-900 rounded-lg font-medium hover:bg-yellow-100 transition-all duration-200 shadow-md hover:shadow-lg">
-              Message
+              💬 Message
             </a>
           {/if}
         </div>
