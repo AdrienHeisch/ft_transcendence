@@ -56,7 +56,7 @@ const city = $derived(await getCity(user.city));
       </div>
     </div>
 
-    <p class="text-sm text-gray-700 mb-4 line-clamp-2 italic">
+    <p class="text-sm text-gray-700 mb-4 line-clamp-2 italic h-10">
       "{user.description}"
     </p>
 
