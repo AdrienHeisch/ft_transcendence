@@ -10,6 +10,6 @@ const { data } = $props();
   <title>Post - Bibi's Farm</title>
 </svelte:head>
 
-<div class="flex w-full p-12 items-center justify-center">
+<div class="flex w-full p-12 items-center justify-center bg-linear-to-br from-orange-50 via-yellow-50 to-orange-100">
   <Post post={data.post} author={data.author} currentUser={data.currentUser} isFullPage={true} onDelete={async () => await goto(resolve("/feed"))} />
 </div>
