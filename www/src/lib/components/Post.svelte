@@ -1,4 +1,5 @@
 <script lang="ts">
+import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
 import Comment from "$lib/components/Comment.svelte";
 import { formatRelativeTime } from "$lib/dateUtils";
@@ -53,10 +54,14 @@ const isOwned = $derived(currentUser?.id === author.id);
 const isLiked = $derived(isPostLiked(post.id));
 
 const onLikePost = async () => {
-  if (await isLiked) {
-    await unlikePost(post.id);
-  } else {
-    await likePost(post.id);
+  try {
+    if (await isLiked) {
+      await unlikePost(post.id);
+    } else {
+      await likePost(post.id);
+    }
+  } catch {
+    await goto(resolve("/login"));
   }
 };
 
