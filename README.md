@@ -18,8 +18,10 @@ exchange pictures of their pets and interact with animal well-being related asso
 - `cp .env.example .env` and edit `.env` as necessary.
 Some variables might be missing from the example file !
 - The server will listen on port `8000` by default
+- The production server will run on HTTPS. To test it with HTTP, change the 443
+port in `compose.yml` to 80
 
-### Release
+### Production
 
 - `make build` to build the container images
 - `make up` to deploy the application
