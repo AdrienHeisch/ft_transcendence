@@ -17,7 +17,7 @@ exchange pictures of their pets and interact with animal well-being related asso
 `podman` in `Makefile`)
 - `cp .env.example .env` and edit `.env` as necessary.
 Some variables might be missing from the example file !
-- The server will listen on port `8000`
+- The server will listen on port `8000` by default
 
 ### Release
 

@@ -9,7 +9,7 @@ services:
       - ws
       - storage
     ports:
-      - "8000:443"
+      - "${PORT}:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
     env_file: .env
